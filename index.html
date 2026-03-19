@@ -37,7 +37,7 @@
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
   .cursor { animation:blink 1s infinite; }
   .header-year { font-family:'Press Start 2P',monospace; font-size:clamp(11px,3vw,15px); color:var(--yellow); text-shadow:0 0 10px var(--yellow); letter-spacing:5px; margin-bottom:22px; }
-  .header-intro { font-size:13px; color:var(--text-dim); line-height:2; text-align:left; }
+  .header-intro { font-size:clamp(13px,2vw,16px); color:var(--text-dim); line-height:2; text-align:left; }
   .header-intro strong { color:var(--green); }
   .header-intro .highlight { color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:11px; }
 
@@ -48,7 +48,7 @@
   .countdown-label { font-size:8px; color:var(--text-dim); letter-spacing:1px; margin-top:5px; display:block; }
 
   .total-section { border:2px solid var(--green); padding:18px 16px; margin-bottom:24px; background:var(--card-bg); position:relative; }
-  .total-section::before { content:' ОБЩИЙ ПРОГРЕСС ОТРАСЛИ '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-size:9px; color:var(--green); letter-spacing:2px; }
+  .total-section::before { content:' ОБЩИЙ ПРОГРЕСС '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-size:clamp(10px,2vw,14px); color:var(--green); letter-spacing:2px; }
   .total-numbers { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px; flex-wrap:wrap; gap:6px; }
   .total-count { font-family:'Press Start 2P',monospace; font-size:clamp(22px,6vw,38px); color:var(--green); text-shadow:0 0 20px var(--green); }
   .total-goal { font-size:12px; color:var(--text-dim); }
@@ -80,7 +80,8 @@
   .op-bar-fill { height:100%; background:var(--green); transition:width 1.5s ease; box-shadow:0 0 4px var(--green); }
 
   .vote-section { border:2px solid var(--yellow); padding:20px 16px; margin-bottom:24px; background:#1a1500; position:relative; }
-  .vote-section::before { content:' СДЕЛАЙ СТАВКУ '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-family:'Press Start 2P',monospace; font-size:8px; color:var(--yellow); letter-spacing:2px; }
+  .start-point { text-align:center; font-family:'Press Start 2P',monospace; font-size:clamp(12px,3vw,22px); color:#00ffff; text-shadow:0 0 15px #00ffff, 0 0 30px rgba(0,255,255,.3); line-height:1.5; padding:16px 0 20px; letter-spacing:2px; }
+  .vote-section::before { content:' СДЕЛАЙ СТАВКУ '; position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--bg); padding:0 10px; font-family:'Press Start 2P',monospace; font-size:clamp(10px,2.5vw,14px); color:var(--yellow); letter-spacing:2px; white-space:nowrap; }
   .vote-question { font-size:clamp(12px,2.5vw,15px); color:var(--yellow); letter-spacing:1px; margin-bottom:18px; line-height:1.9; }
   .vote-options { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin-bottom:14px; }
   .vote-btn { border:1px solid var(--yellow); background:transparent; color:var(--yellow); font-family:'Share Tech Mono',monospace; font-size:10px; padding:10px 6px; cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column; align-items:center; gap:6px; -webkit-tap-highlight-color:transparent; }
@@ -173,6 +174,8 @@
     <div class="countdown-block"><span class="countdown-num" id="cd-sec">00</span><span class="countdown-label">СЕКУНД</span></div>
   </div>
 
+  <div class="start-point">ТОЧКА ОТСЧЁТА — 18 марта 2026</div>
+
   <div class="total-section">
     <div class="total-numbers">
       <div>
@@ -231,10 +234,6 @@
   <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">...</span> РАЗ</div>
 
   <div class="footer">
-    <div class="footer-links">
-      <a href="https://t.me/imeyuskazat_evnews" target="_blank">▶ TELEGRAM</a>
-      <a href="https://instagram.com/imeyuskazat_evnews" target="_blank">▶ INSTAGRAM</a>
-    </div>
     <div class="footer-disclaimer">Эта страница создана исключительно в развлекательных целях. Все данные об установленных станциях носят информационный характер и не являются официальной статистикой. Прогнозы пользователей — это игра, а не инвестиционная рекомендация. 🎮</div>
     <div class="footer-privacy">Страница не запрашивает и не хранит ваши личные данные.</div>
     <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
@@ -280,14 +279,16 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-function medalSVG(rank) {
+function medalSVG(rank, hasCount) {
+  if (!hasCount) {
+    return `<span style="font-family:'Press Start 2P',monospace;font-size:8px;color:#333">#${rank}</span>`;
+  }
   const colors = {
     1: { outer:'#ffd700', inner:'#ffec6e', text:'#7a5c00', ribbon:'#e6a800' },
     2: { outer:'#c0c0c0', inner:'#e8e8e8', text:'#555', ribbon:'#999' },
     3: { outer:'#cd7f32', inner:'#e8a96e', text:'#5a2d00', ribbon:'#a0522d' },
   };
   const c = colors[rank] || { outer:'#333', inner:'#555', text:'#aaa', ribbon:'#222' };
-  const num = rank <= 3 ? rank : rank;
   if (rank <= 3) {
     return `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
       <rect x="6" y="0" width="4" height="2" fill="${c.ribbon}"/>
@@ -300,14 +301,17 @@ function medalSVG(rank) {
       <rect x="2" y="5" width="12" height="8" fill="${c.inner}"/>
       <rect x="3" y="4" width="10" height="1" fill="${c.inner}"/>
       <rect x="3" y="13" width="10" height="1" fill="${c.inner}"/>
-      <text x="8" y="11" font-family="monospace" font-size="6" font-weight="bold" fill="${c.text}" text-anchor="middle">${num}</text>
+      <text x="8" y="11" font-family="monospace" font-size="6" font-weight="bold" fill="${c.text}" text-anchor="middle">${rank}</text>
     </svg>`;
   }
-  return `<span style="font-family:'Press Start 2P',monospace;font-size:8px;color:#444">#${rank}</span>`;
+  return `<span style="font-family:'Press Start 2P',monospace;font-size:8px;color:#555">#${rank}</span>`;
 }
 
 function renderOperators() {
-  const sorted = [...OPERATORS].sort((a,b) => b.count - a.count);
+  const anyCount = OPERATORS.some(o => o.count > 0);
+  const sorted = anyCount
+    ? [...OPERATORS].sort((a,b) => b.count - a.count)
+    : [...OPERATORS];
   const total = sorted.reduce((s,o) => s+o.count, 0);
   const pct = Math.round(total/TOTAL_GOAL*100);
   document.getElementById('total-count').textContent = total;
@@ -337,7 +341,7 @@ function renderOperators() {
     const card = document.createElement('div');
     card.className = 'op-card';
     card.innerHTML = `
-      <div class="op-rank"><div class="medal">${medalSVG(i+1)}</div></div>
+      <div class="op-rank"><div class="medal">${medalSVG(i+1, op.count > 0)}</div></div>
       <div class="op-top">
         <img class="op-logo ${op.darkBg ? 'dark-bg' : ''}" src="${op.logo}" alt="${op.name}">
         <div class="op-name">${op.name}</div>
