@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>EV RACE: БЕЛАРУСЬ 2026</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830', 'ym');
+    ym(108141830, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00ff41; --green-dim: #00aa2b; --green-dark: #003d0f;
+    --yellow: #ffd700; --bg: #0a0a0a; --card-bg: #0d1f0d; --text: #00ff41; --text-dim: #00aa2b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Share Tech Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; top:0;left:0;right:0;bottom:0; background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.1) 2px,rgba(0,0,0,.1) 4px); pointer-events:none; z-index:1000; }
+  @keyframes flicker { 0%,100%{opacity:1} 93%{opacity:.87} 96%{opacity:.93} }
+  body { animation: flicker 8s infinite; }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 16px 14px; }
+
+  .header { text-align:center; padding:32px 0 24px; border-bottom:2px solid var(--green); margin-bottom:20px; }
+  .header-subtitle { font-size:10px; color:var(--text-dim); letter-spacing:3px; margin-bottom:14px; line-height:1.6; }
+  .header-title { font-family:'Press Start 2P',monospace; font-size:clamp(22px,6vw,38px); color:var(--green); text-shadow:0 0 20px var(--green),0 0 40px var(--green-dim); line-height:1.3; margin-bottom:10px; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .cursor { animation:blink 1s infinite; }
+  .header-year { font-family:'Press Start 2P',monospace; font-size:clamp(11px,3vw,15px); color:var(--yellow); text-shadow:0 0 10px var(--yellow); letter-spacing:5px; margin-bottom:22px; }
+  .header-intro { font-size:13px; color:var(--text-dim); line-height:2; text-align:left; }
+  .header-intro strong { color:var(--green); }
+  .header-intro .highlight { color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:11px; }
+
+  .countdown-title { text-align:center; font-size:clamp(12px,2.5vw,18px); color:var(--text-dim); letter-spacing:3px; margin:24px 0 10px; }
+  .countdown-section { display:flex; justify-content:center; gap:10px; margin-bottom:24px; }
+  .countdown-block { text-align:center; border:1px solid var(--green-dim); padding:10px 8px; flex:1; max-width:90px; background:var(--card-bg); }
+  .countdown-num { font-family:'Press Start 2P',monospace; font-size:clamp(14px,4vw,22px); color:var(--yellow); text-shadow:0 0 10px var(--yellow); display:block; }
+  .countdown-label { font-size:8px; color:var(--text-dim); letter-spacing:1px; margin-top:5px; display:block; }
+
+  .total-section { border:2px solid var(--green); padding:18px 16px; margin-bottom:24px; background:var(--card-bg); position:relative; }
+  .total-section::before { content:' ОБЩИЙ ПРОГРЕСС ОТРАСЛИ '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-size:9px; color:var(--green); letter-spacing:2px; }
+  .total-numbers { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px; flex-wrap:wrap; gap:6px; }
+  .total-count { font-family:'Press Start 2P',monospace; font-size:clamp(22px,6vw,38px); color:var(--green); text-shadow:0 0 20px var(--green); }
+  .total-goal { font-size:12px; color:var(--text-dim); }
+  .total-goal span { color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:10px; }
+  .progress-bar-wrap { background:#001a00; border:1px solid var(--green-dim); height:22px; position:relative; overflow:hidden; }
+  @keyframes shine { 0%{left:-100%} 100%{left:200%} }
+  .progress-bar-fill { height:100%; background:linear-gradient(90deg,var(--green-dim),var(--green)); transition:width 1.5s ease; position:relative; overflow:hidden; }
+  .progress-bar-fill::after { content:''; position:absolute; top:0;bottom:0; width:40px; background:rgba(255,255,255,.12); animation:shine 2.5s infinite; }
+  .progress-bar-stacked { display:flex; height:100%; width:100%; }
+  .stack-seg { height:100%; flex-shrink:0; }
+  .progress-pct { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:10px; color:#fff; text-shadow:0 0 4px #000; z-index:2; }
+  .op-meta { font-size:9px; color:var(--text-dim); margin-top:6px; letter-spacing:1px; }
+  .updated { text-align:right; font-size:9px; color:var(--text-dim); margin-top:7px; }
+
+  .operators-title { font-family:'Press Start 2P',monospace; font-size:clamp(12px,2.5vw,18px); color:var(--text-dim); letter-spacing:3px; margin-bottom:14px; text-align:center; }
+  .operators-grid { display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }
+  .op-card { border:1px solid var(--green-dim); background:var(--card-bg); padding:14px 16px; transition:border-color .3s,box-shadow .3s; position:relative; }
+  .op-card:hover { border-color:var(--green); box-shadow:0 0 12px rgba(0,255,65,.1); }
+  .op-rank { position:absolute; top:10px; right:14px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-family:'Press Start 2P',monospace; font-size:8px; image-rendering:pixelated; }
+  .medal { width:28px; height:28px; position:relative; display:inline-block; image-rendering:pixelated; }
+  .medal svg { width:28px; height:28px; image-rendering:pixelated; shape-rendering:crispEdges; }
+  .op-top { display:flex; align-items:center; gap:14px; margin-bottom:10px; }
+  .op-logo { width:80px; height:38px; object-fit:contain; flex-shrink:0; }
+  .op-logo.dark-bg { background:#111; padding:4px; }
+  .op-name { font-size:12px; color:var(--text); letter-spacing:1px; flex:1; min-width:0; }
+  .op-score { font-family:'Press Start 2P',monospace; font-size:clamp(13px,3vw,17px); color:var(--green); text-shadow:0 0 10px var(--green); white-space:nowrap; }
+  .op-score .score-x { color:var(--text-dim); font-size:.6em; }
+  .op-bar-wrap { background:#001a00; border:1px solid #003d0f; height:5px; overflow:hidden; }
+  .op-bar-fill { height:100%; background:var(--green); transition:width 1.5s ease; box-shadow:0 0 4px var(--green); }
+
+  .vote-section { border:2px solid var(--yellow); padding:20px 16px; margin-bottom:24px; background:#1a1500; position:relative; }
+  .vote-section::before { content:' СДЕЛАЙ СТАВКУ '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-family:'Press Start 2P',monospace; font-size:8px; color:var(--yellow); letter-spacing:2px; }
+  .vote-question { font-size:clamp(12px,2.5vw,15px); color:var(--yellow); letter-spacing:1px; margin-bottom:18px; line-height:1.9; }
+  .vote-options { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin-bottom:14px; }
+  .vote-btn { border:1px solid var(--yellow); background:transparent; color:var(--yellow); font-family:'Share Tech Mono',monospace; font-size:10px; padding:10px 6px; cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column; align-items:center; gap:6px; -webkit-tap-highlight-color:transparent; }
+  .vote-btn:hover,.vote-btn:active { background:rgba(255,215,0,.08); }
+  .vote-btn.selected { background:rgba(255,215,0,.15); border-width:2px; box-shadow:0 0 12px rgba(255,215,0,.25); }
+  .vote-btn img { width:65px; height:30px; object-fit:contain; background:#111; padding:3px; }
+  .vote-submit { display:block; width:100%; border:2px solid var(--yellow); background:transparent; color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:10px; padding:14px; cursor:pointer; letter-spacing:2px; transition:all .2s; -webkit-tap-highlight-color:transparent; }
+  .vote-submit:hover:not(:disabled),.vote-submit:active:not(:disabled) { background:var(--yellow); color:#000; }
+  .vote-submit:disabled { opacity:.35; cursor:not-allowed; }
+  .vote-results { display:none; }
+  .vote-result-item { margin-bottom:12px; }
+  .vote-result-top { display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px; }
+  .vote-result-top .rname { color:var(--text); }
+  .vote-result-top .rpct { color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:9px; }
+  .vote-result-bar-wrap { background:#1a1000; height:10px; border:1px solid #3d3000; }
+  .vote-result-bar { height:100%; background:var(--yellow); transition:width 1s ease; box-shadow:0 0 5px var(--yellow); }
+  .vote-result-bar.mine { background:var(--green); box-shadow:0 0 6px var(--green); }
+  .vote-message { font-family:'Press Start 2P',monospace; font-size:9px; color:var(--green); text-align:center; margin-bottom:18px; line-height:1.9; text-shadow:0 0 10px var(--green); }
+  .vote-total-players { text-align:center; font-size:10px; color:var(--text-dim); margin-top:12px; letter-spacing:2px; }
+
+  .author-section { border:1px solid var(--green-dim); padding:20px 16px; margin-bottom:24px; background:var(--card-bg); position:relative; }
+  .author-section::before { content:' ARTSIOM KRIVTSOFF | АВТОР ПРОЕКТА '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-size:9px; color:var(--green-dim); letter-spacing:2px; }
+  .author-about-btn { display:block; width:100%; border:1px solid var(--green); background:transparent; color:var(--green); font-family:'Share Tech Mono',monospace; font-size:13px; padding:14px; cursor:pointer; letter-spacing:2px; text-align:center; text-decoration:none; margin-bottom:18px; transition:all .2s; -webkit-tap-highlight-color:transparent; box-sizing:border-box; }
+  .author-about-btn:hover,.author-about-btn:active { background:rgba(0,255,65,.08); box-shadow:0 0 10px rgba(0,255,65,.12); }
+  .section-label { font-size:9px; color:var(--text-dim); letter-spacing:3px; margin-bottom:10px; }
+  .author-links { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:18px; width:100%; box-sizing:border-box; }
+  .author-link-btn { border:1px solid var(--green-dim); background:transparent; color:var(--text-dim); font-family:'Share Tech Mono',monospace; font-size:11px; padding:12px 4px; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; transition:all .2s; -webkit-tap-highlight-color:transparent; width:100%; min-height:44px; box-sizing:border-box; white-space:normal; word-break:break-word; line-height:1.4; }
+  .author-link-btn:hover,.author-link-btn:active { border-color:var(--green); color:var(--green); background:rgba(0,255,65,.05); }
+  .author-contacts { display:grid; grid-template-columns:1fr 1fr; gap:8px; width:100%; box-sizing:border-box; }
+  .author-contact-btn { border:1px solid var(--green-dim); background:transparent; color:var(--text-dim); font-family:'Share Tech Mono',monospace; font-size:11px; padding:13px 6px; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; transition:all .2s; -webkit-tap-highlight-color:transparent; width:100%; min-height:44px; box-sizing:border-box; white-space:normal; word-break:break-word; line-height:1.4; }
+  .author-contact-btn:hover,.author-contact-btn:active { border-color:var(--green); color:var(--green); }
+  .big-phrase { text-align:center; font-family:'Press Start 2P',monospace; font-size:clamp(14px,4vw,28px); color:var(--yellow); text-shadow:0 0 20px var(--yellow),0 0 40px rgba(255,215,0,.3); line-height:1.5; padding:24px 0; letter-spacing:2px; }
+  @media (max-width:400px) {
+    .author-links { grid-template-columns:1fr; }
+    .author-contacts { grid-template-columns:1fr; }
+  }
+
+  .visit-counter { text-align:center; font-size:11px; color:var(--text-dim); margin-bottom:20px; letter-spacing:2px; line-height:1.8; }
+  .visit-counter span { color:var(--green); font-family:'Press Start 2P',monospace; font-size:11px; }
+
+  .cookie-banner { position:fixed; bottom:0; left:0; right:0; background:#0d1f0d; border-top:2px solid var(--green); padding:12px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; z-index:9999; flex-wrap:wrap; }
+  .cookie-text { font-size:10px; color:var(--text-dim); line-height:1.6; flex:1; min-width:180px; }
+  .cookie-btn { border:1px solid var(--green); background:transparent; color:var(--green); font-family:'Share Tech Mono',monospace; font-size:11px; padding:8px 18px; cursor:pointer; white-space:nowrap; -webkit-tap-highlight-color:transparent; }
+  .cookie-btn:hover,.cookie-btn:active { background:var(--green); color:#000; }
+
+  .footer { border-top:1px solid var(--green-dark); padding:18px 0 90px; text-align:center; color:var(--text-dim); line-height:2; }
+  .footer-links { font-size:12px; margin-bottom:10px; }
+  .footer-links a { color:var(--green-dim); text-decoration:none; margin:0 8px; }
+  .footer-links a:hover { color:var(--green); }
+  .footer-disclaimer { font-size:12px; line-height:1.9; margin-bottom:6px; }
+  .footer-privacy { font-size:11px; color:#006615; margin-bottom:6px; }
+  .footer-copy { font-size:9px; }
+
+  @media (max-width:480px) {
+    .vote-options { grid-template-columns:1fr 1fr; }
+    .author-links { grid-template-columns:1fr 1fr 1fr; }
+  }
+  @media (min-width:640px) {
+    .vote-options { grid-template-columns:repeat(5,1fr); }
+    .author-links { grid-template-columns:repeat(5,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-text">Эта страница использует localStorage для запоминания твоего голоса. Продолжая использование страницы, ты соглашаешься с этим.</div>
+  <button class="cookie-btn" onclick="acceptCookies()">ПОНЯТНО ✓</button>
+</div>
+
+<div class="container">
+
+  <div class="header">
+    <div class="header-subtitle">▶ #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ ◀</div>
+    <div class="header-title">EV RACE<span class="cursor">_</span></div>
+    <div class="header-year">БЕЛАРУСЬ 2026</div>
+    <div class="header-intro">
+      <strong>18 марта 2026 года</strong> в Министерстве энергетики Республики Беларусь прошёл круглый стол по развитию зарядной инфраструктуры. Пять частных операторов озвучили министру свои планы по запуску быстрых зарядных станций до конца 2026 года.<br><br>
+      Планы каждого озвучивать не стану, НО...<br><br>
+      Суммарно все обещали ввести в работу до конца 2026 года <span class="highlight">1010 DC зарядных станций</span>.<br><br>
+      Эта страница считает. Сравним заявленное с реальным 31 декабря!
+    </div>
+  </div>
+
+  <div class="countdown-title">◈ ДО КОНЦА ГОНКИ ОСТАЛОСЬ ◈</div>
+  <div class="countdown-section">
+    <div class="countdown-block"><span class="countdown-num" id="cd-days">000</span><span class="countdown-label">ДНЕЙ</span></div>
+    <div class="countdown-block"><span class="countdown-num" id="cd-hours">00</span><span class="countdown-label">ЧАСОВ</span></div>
+    <div class="countdown-block"><span class="countdown-num" id="cd-min">00</span><span class="countdown-label">МИНУТ</span></div>
+    <div class="countdown-block"><span class="countdown-num" id="cd-sec">00</span><span class="countdown-label">СЕКУНД</span></div>
+  </div>
+
+  <div class="total-section">
+    <div class="total-numbers">
+      <div>
+        <div class="total-count" id="total-count">0</div>
+        <div class="total-goal">из <span>1010</span> DC станций</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--text-dim)">ВЫПОЛНЕНО</div>
+        <div style="font-family:'Press Start 2P',monospace;font-size:20px;color:var(--yellow);text-shadow:0 0 10px var(--yellow)" id="total-pct">0%</div>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-stacked" id="total-bar-stacked"></div>
+      <span class="progress-pct" id="total-pct-bar">0%</span>
+    </div>
+    <div class="updated" id="updated-date">ОБНОВЛЕНО: —</div>
+  </div>
+
+  <div class="operators-title">▼ УЧАСТНИКИ ГОНКИ ▼</div>
+  <div class="operators-grid" id="operators-grid"></div>
+
+  <div class="vote-section">
+    <div class="vote-question">КТО УСТАНОВИТ БОЛЬШЕ ВСЕХ СТАНЦИЙ К 31.12.2026?<br>СДЕЛАЙ СВОЮ СТАВКУ — ОДИН ИГРОК, ОДИН ГОЛОС:</div>
+    <div class="vote-options" id="vote-options"></div>
+    <button class="vote-submit" id="vote-submit" onclick="submitVote()" disabled>▶ ПОСТАВИТЬ ◀</button>
+    <div class="vote-results" id="vote-results">
+      <div class="vote-message" id="vote-message"></div>
+      <div id="vote-bars"></div>
+      <div class="vote-total-players" id="vote-total"></div>
+    </div>
+  </div>
+
+  <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
+
+  <div class="author-section">
+    <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank">▶ ОБО МНЕ ◀</a>
+    <div class="section-label">▼ TG-КАНАЛЫ #ИМЕЮСКАЗАТЬ ▼</div>
+    <div class="author-links">
+      <a class="author-link-btn" href="https://t.me/imeyuskazat" target="_blank">EV ОПЫТ</a>
+      <a class="author-link-btn" href="https://t.me/imeyuskazat_lifestyle" target="_blank">EV LIFE</a>
+      <a class="author-link-btn" href="https://t.me/imeyuskazat_evnews" target="_blank">EV WORLD NEWS</a>
+    </div>
+    <div class="section-label">▼ ИНОЕ #НЕТЕЛЕГА ▼</div>
+    <div class="author-links">
+      <a class="author-link-btn" href="https://www.instagram.com/artsiomkrivtsoff/" target="_blank">Instagram</a>
+      <a class="author-link-btn" href="http://tiktok.com/@artsiomkrivtsoff" target="_blank">TikTok</a>
+      <a class="author-link-btn" href="https://www.youtube.com/@imeyuskazat" target="_blank">YouTube</a>
+    </div>
+    <div class="section-label">▼ СВЯЗАТЬСЯ | УСТАНОВИТЬ ЗАРЯДНУЮ СТАНЦИЮ | ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ ▼</div>
+    <div class="author-contacts">
+      <a class="author-contact-btn" href="tel:+375295170067">📞 +375 29 517-00-67</a>
+      <a class="author-contact-btn" href="https://t.me/Krivtsoffag" target="_blank">✈ TELEGRAM</a>
+    </div>
+  </div>
+
+  <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">...</span> РАЗ</div>
+
+  <div class="footer">
+    <div class="footer-links">
+      <a href="https://t.me/imeyuskazat_evnews" target="_blank">▶ TELEGRAM</a>
+      <a href="https://instagram.com/imeyuskazat_evnews" target="_blank">▶ INSTAGRAM</a>
+    </div>
+    <div class="footer-disclaimer">Эта страница создана исключительно в развлекательных целях. Все данные об установленных станциях носят информационный характер и не являются официальной статистикой. Прогнозы пользователей — это игра, а не инвестиционная рекомендация. 🎮</div>
+    <div class="footer-privacy">Страница не запрашивает и не хранит ваши личные данные.</div>
+    <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// РЕДАКТИРУЙ ТОЛЬКО ЭТОТ БЛОК
+// ============================================================
+const OPERATORS = [
+  { id: 'batteryfly', name: 'BatteryFly',      count: 0, added: 0, updated: '18.03.2026', color: '#005EEB', logo: 'logos/batteryfly.png', darkBg: true  },
+  { id: 'forevo',     name: 'forEVo',           count: 0, added: 0, updated: '18.03.2026', color: '#b44fff', logo: 'logos/forevo.png',     darkBg: true  },
+  { id: 'zaryadka',   name: 'Zaryadka',         count: 0, added: 0, updated: '18.03.2026', color: '#00cfff', logo: 'logos/zaryadka.svg',   darkBg: false },
+  { id: 'united',     name: 'United Company',   count: 0, added: 0, updated: '18.03.2026', color: '#F5821F', logo: 'logos/united.png',     darkBg: true  },
+  { id: 'grodno',     name: 'Гродненский ЦСМС', count: 0, added: 0, updated: '18.03.2026', color: '#FF6B6B', logo: 'logos/csms.png',       darkBg: false },
+];
+const TOTAL_GOAL = 1010;
+const LAST_UPDATED = '18.03.2026';
+// ============================================================
+
+const SUPABASE_URL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
+
+const VOTE_MESSAGES = {
+  batteryfly: ['МОЩНЫЙ ВЫБОР!', 'СТАВКА НА ЛИДЕРА!', 'ВЕРИШЬ В ЛИДЕРА!'],
+  forevo:     ['СМЕЛАЯ СТАВКА!', 'ВЕРИШЬ В forEVo!', 'ИНТЕРЕСНЫЙ ВЫБОР!'],
+  zaryadka:   ['ОРИГИНАЛЬНЫЙ ВЫБОР!', 'ВЕРИШЬ В ZARYADKA!', 'НЕОЖИДАННО!'],
+  united:     ['РИСКОВАННАЯ СТАВКА!', 'ТЁМНАЯ ЛОШАДКА!', 'ПРОТИВ ТЕЧЕНИЯ!'],
+  grodno:     ['ОЧЕНЬ СМЕЛАЯ СТАВКА!', 'ВЕРИШЬ В РЕГИОНЫ!', 'НЕОЖИДАННЫЙ ВЫБОР!'],
+};
+let selectedOperator = null;
+
+function updateCountdown() {
+  const diff = new Date('2026-12-31T23:59:59') - new Date();
+  if (diff <= 0) return;
+  document.getElementById('cd-days').textContent  = String(Math.floor(diff/86400000)).padStart(3,'0');
+  document.getElementById('cd-hours').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-min').textContent   = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-sec').textContent   = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+function medalSVG(rank) {
+  const colors = {
+    1: { outer:'#ffd700', inner:'#ffec6e', text:'#7a5c00', ribbon:'#e6a800' },
+    2: { outer:'#c0c0c0', inner:'#e8e8e8', text:'#555', ribbon:'#999' },
+    3: { outer:'#cd7f32', inner:'#e8a96e', text:'#5a2d00', ribbon:'#a0522d' },
+  };
+  const c = colors[rank] || { outer:'#333', inner:'#555', text:'#aaa', ribbon:'#222' };
+  const num = rank <= 3 ? rank : rank;
+  if (rank <= 3) {
+    return `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="0" width="4" height="2" fill="${c.ribbon}"/>
+      <rect x="5" y="2" width="6" height="1" fill="${c.ribbon}"/>
+      <rect x="2" y="3" width="12" height="2" fill="${c.outer}"/>
+      <rect x="1" y="5" width="14" height="1" fill="${c.outer}"/>
+      <rect x="0" y="6" width="16" height="6" fill="${c.outer}"/>
+      <rect x="1" y="12" width="14" height="1" fill="${c.outer}"/>
+      <rect x="2" y="13" width="12" height="1" fill="${c.outer}"/>
+      <rect x="2" y="5" width="12" height="8" fill="${c.inner}"/>
+      <rect x="3" y="4" width="10" height="1" fill="${c.inner}"/>
+      <rect x="3" y="13" width="10" height="1" fill="${c.inner}"/>
+      <text x="8" y="11" font-family="monospace" font-size="6" font-weight="bold" fill="${c.text}" text-anchor="middle">${num}</text>
+    </svg>`;
+  }
+  return `<span style="font-family:'Press Start 2P',monospace;font-size:8px;color:#444">#${rank}</span>`;
+}
+
+function renderOperators() {
+  const sorted = [...OPERATORS].sort((a,b) => b.count - a.count);
+  const total = sorted.reduce((s,o) => s+o.count, 0);
+  const pct = Math.round(total/TOTAL_GOAL*100);
+  document.getElementById('total-count').textContent = total;
+  document.getElementById('total-pct').textContent = pct + '%';
+  document.getElementById('total-pct-bar').textContent = pct + '%';
+  document.getElementById('updated-date').textContent = 'ОБНОВЛЕНО: ' + LAST_UPDATED;
+
+  // Stacked progress bar
+  const stackedBar = document.getElementById('total-bar-stacked');
+  stackedBar.innerHTML = '';
+  if (total > 0) {
+    sorted.forEach(op => {
+      if (op.count <= 0) return;
+      const seg = document.createElement('div');
+      seg.className = 'stack-seg';
+      seg.style.cssText = `width:0%;background:${op.color};transition:width 1.5s ease;`;
+      seg.title = `${op.name}: ${op.count}`;
+      stackedBar.appendChild(seg);
+      setTimeout(() => { seg.style.width = (op.count/TOTAL_GOAL*100) + '%'; }, 150);
+    });
+  }
+
+  const grid = document.getElementById('operators-grid');
+  grid.innerHTML = '';
+  sorted.forEach((op, i) => {
+    const barPct = Math.min(op.count/TOTAL_GOAL*100, 100);
+    const card = document.createElement('div');
+    card.className = 'op-card';
+    card.innerHTML = `
+      <div class="op-rank"><div class="medal">${medalSVG(i+1)}</div></div>
+      <div class="op-top">
+        <img class="op-logo ${op.darkBg ? 'dark-bg' : ''}" src="${op.logo}" alt="${op.name}">
+        <div class="op-name">${op.name}</div>
+        <div class="op-score">${op.count}<span class="score-x"> / X</span></div>
+      </div>
+      <div class="op-bar-wrap"><div class="op-bar-fill" style="width:0%;background:${op.color};box-shadow:0 0 6px ${op.color}80"></div></div>
+      <div class="op-meta">Обновлено: ${op.updated} · Добавлено: +${op.added} ст.</div>`;
+    grid.appendChild(card);
+    setTimeout(() => { card.querySelector('.op-bar-fill').style.width = barPct + '%'; }, 150 + i*100);
+  });
+}
+
+function renderVoteOptions() {
+  const c = document.getElementById('vote-options');
+  c.innerHTML = '';
+  OPERATORS.forEach(op => {
+    const btn = document.createElement('button');
+    btn.className = 'vote-btn';
+    btn.dataset.id = op.id;
+    btn.innerHTML = `<img src="${op.logo}" alt="${op.name}"><span>${op.name}</span>`;
+    btn.onclick = () => selectVote(op.id);
+    c.appendChild(btn);
+  });
+}
+
+function selectVote(id) {
+  selectedOperator = id;
+  document.querySelectorAll('.vote-btn').forEach(b => b.classList.toggle('selected', b.dataset.id === id));
+  document.getElementById('vote-submit').disabled = false;
+}
+
+async function submitVote() {
+  if (!selectedOperator) return;
+  const btn = document.getElementById('vote-submit');
+  btn.disabled = true; btn.textContent = '... ОБРАБОТКА ...';
+  localStorage.setItem('ev_race_vote', selectedOperator);
+  localStorage.setItem('ev_race_voted', '1');
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/votes', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ operator: selectedOperator })
+    });
+  } catch(e) { console.log('Vote error', e); }
+  await showResults(selectedOperator);
+}
+
+async function showResults(myVote) {
+  let votes = {};
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/votes?select=operator', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    const data = await res.json();
+    if (Array.isArray(data)) data.forEach(v => { votes[v.operator] = (votes[v.operator]||0)+1; });
+  } catch(e) { console.log('Fetch error', e); }
+  const total = Object.values(votes).reduce((s,v)=>s+v,0) || 1;
+  document.getElementById('vote-options').style.display = 'none';
+  document.getElementById('vote-submit').style.display = 'none';
+  document.getElementById('vote-results').style.display = 'block';
+  const myCount = votes[myVote] || 1;
+  const myPct = Math.round(myCount/total*100);
+  const msgs = VOTE_MESSAGES[myVote] || ['СТАВКА СДЕЛАНА!'];
+  const msg = msgs[Math.floor(Math.random()*msgs.length)];
+  const opName = OPERATORS.find(o=>o.id===myVote)?.name || myVote;
+  const subtext = myPct>=40 ? `${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
+                  myPct>=20 ? `ТОЛЬКО ${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
+                              `ЛИШЬ ${myPct}% ИГРОКОВ ВЕРЯТ В ${opName.toUpperCase()}`;
+  document.getElementById('vote-message').innerHTML = `${msg}<br><span style="font-size:8px;color:var(--text-dim)">${subtext}</span>`;
+  const barsDiv = document.getElementById('vote-bars');
+  barsDiv.innerHTML = '';
+  [...OPERATORS].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0)).forEach(op => {
+    const cnt = votes[op.id]||0;
+    const pct = Math.round(cnt/total*100);
+    const isMe = op.id === myVote;
+    const div = document.createElement('div');
+    div.className = 'vote-result-item';
+    div.innerHTML = `
+      <div class="vote-result-top">
+        <span class="rname" style="${isMe?'color:var(--yellow)':''}">${isMe?'▶ ':''}${op.name}</span>
+        <span class="rpct">${pct}%</span>
+      </div>
+      <div class="vote-result-bar-wrap"><div class="vote-result-bar ${isMe?'mine':''}" style="width:0%"></div></div>`;
+    barsDiv.appendChild(div);
+    setTimeout(() => { div.querySelector('.vote-result-bar').style.width = pct+'%'; }, 200);
+  });
+  document.getElementById('vote-total').textContent = `▶ ВСЕГО СТАВОК: ${total} ◀`;
+}
+
+async function checkVoted() {
+  const voted = localStorage.getItem('ev_race_voted');
+  const myVote = localStorage.getItem('ev_race_vote');
+  if (voted && myVote) {
+    document.getElementById('vote-submit').style.display = 'none';
+    document.querySelectorAll('.vote-btn').forEach(b => { b.disabled=true; if(b.dataset.id===myVote) b.classList.add('selected'); });
+    await showResults(myVote);
+  }
+}
+
+async function trackVisit() {
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/visits', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ visited_at: new Date().toISOString() })
+    });
+    const res = await fetch(SUPABASE_URL + '/rest/v1/visits?select=id', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'count=exact', 'Range': '0-0' }
+    });
+    const count = res.headers.get('content-range')?.split('/')[1] || '...';
+    document.getElementById('visit-count').textContent = Number(count).toLocaleString('ru');
+  } catch(e) {
+    document.getElementById('visit-count').textContent = '...';
+  }
+}
+
+function acceptCookies() {
+  localStorage.setItem('ev_race_cookies','1');
+  document.getElementById('cookieBanner').style.display = 'none';
+}
+if (localStorage.getItem('ev_race_cookies')) document.getElementById('cookieBanner').style.display='none';
+
+renderOperators();
+renderVoteOptions();
+checkVoted();
+trackVisit();
+</script>
+</body>
+</html>
