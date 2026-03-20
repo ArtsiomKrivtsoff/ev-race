@@ -418,14 +418,20 @@ async function submitVote() {
 
 async function showResults(myVote) {
   let votes = {};
+  let total = 0;
   try {
-    const res = await fetch(SUPABASE_URL + '/rest/v1/votes?select=operator', {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_vote_counts', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
     });
     const data = await res.json();
-    if (Array.isArray(data)) data.forEach(v => { votes[v.operator] = (votes[v.operator]||0)+1; });
+    if (Array.isArray(data)) {
+      data.forEach(row => { votes[row.operator] = parseInt(row.count); });
+      total = data.reduce((s,r) => s + parseInt(r.count), 0);
+    }
   } catch(e) { console.log('Fetch error', e); }
-  const total = Object.values(votes).reduce((s,v)=>s+v,0) || 1;
+  if (total === 0) total = 1;
   document.getElementById('vote-options').style.display = 'none';
   document.getElementById('vote-submit').style.display = 'none';
   document.getElementById('vote-results').style.display = 'block';
