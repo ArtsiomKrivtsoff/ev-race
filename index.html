@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>EV RACE: БЕЛАРУСЬ 2026</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -213,6 +214,7 @@
   <div class="vote-section">
     <div class="vote-question">КТО УСТАНОВИТ БОЛЬШЕ ВСЕХ СТАНЦИЙ К 31.12.2026?<br>СДЕЛАЙ СВОЮ СТАВКУ — ОДИН ИГРОК, ОДИН ГОЛОС:</div>
     <div class="vote-options" id="vote-options"></div>
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAACtvG988gnpS7YBa" data-theme="dark" data-size="flexible" style="margin-bottom:10px"></div>
     <button class="vote-submit" id="vote-submit" onclick="submitVote()" disabled>▶ ПОСТАВИТЬ ◀</button>
     <div class="vote-results" id="vote-results">
       <div class="vote-message" id="vote-message"></div>
@@ -392,6 +394,14 @@ function selectVote(id) {
 
 async function submitVote() {
   if (!selectedOperator) return;
+
+  // Check Turnstile token
+  const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
+  if (!token) {
+    alert('Пожалуйста, подождите проверки безопасности...');
+    return;
+  }
+
   const btn = document.getElementById('vote-submit');
   btn.disabled = true; btn.textContent = '... ОБРАБОТКА ...';
   localStorage.setItem('ev_race_vote', selectedOperator);
@@ -400,7 +410,7 @@ async function submitVote() {
     await fetch(SUPABASE_URL + '/rest/v1/votes', {
       method: 'POST',
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ operator: selectedOperator })
+      body: JSON.stringify({ operator: selectedOperator, cf_token: token })
     });
   } catch(e) { console.log('Vote error', e); }
   await showResults(selectedOperator);
