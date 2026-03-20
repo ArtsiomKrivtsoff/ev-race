@@ -214,7 +214,7 @@
   <div class="vote-section">
     <div class="vote-question">КТО УСТАНОВИТ БОЛЬШЕ ВСЕХ СТАНЦИЙ К 31.12.2026?<br>СДЕЛАЙ СВОЮ СТАВКУ — ОДИН ИГРОК, ОДИН ГОЛОС:</div>
     <div class="vote-options" id="vote-options"></div>
-    <div class="cf-turnstile" data-sitekey="0x4AAAAAACtvG988gnpS7YBa" data-theme="dark" data-size="flexible" style="margin-bottom:10px"></div>
+    <div class="cf-turnstile" id="vote-turnstile" data-sitekey="0x4AAAAAACtvG988gnpS7YBa" data-theme="dark" data-size="flexible" style="margin-bottom:10px"></div>
     <button class="vote-submit" id="vote-submit" onclick="submitVote()" disabled>▶ ПОСТАВИТЬ ◀</button>
     <div class="vote-results" id="vote-results">
       <div class="vote-message" id="vote-message"></div>
@@ -433,6 +433,7 @@ async function showResults(myVote) {
   if (total === 0) total = 1;
   document.getElementById('vote-options').style.display = 'none';
   document.getElementById('vote-submit').style.display = 'none';
+  document.getElementById('vote-turnstile').style.display = 'none';
   document.getElementById('vote-results').style.display = 'block';
   const myCount = votes[myVote] || 1;
   const myPct = Math.round(myCount/total*100);
