@@ -50,7 +50,7 @@
   .total-section { border:2px solid var(--green); padding:18px 16px; margin-bottom:24px; background:var(--card-bg); position:relative; }
   .total-section::before { content:' ОБЩИЙ ПРОГРЕСС '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-size:clamp(10px,2vw,14px); color:var(--green); letter-spacing:2px; }
   .total-numbers { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px; flex-wrap:wrap; gap:6px; }
-  .total-count { font-family:'Press Start 2P',monospace; font-size:clamp(22px,6vw,38px); color:var(--green); text-shadow:0 0 20px var(--green); }
+  .total-count { font-family:'Press Start 2P',monospace; font-size:clamp(22px,6vw,38px); color:var(--green); text-shadow:0 0 20px var(--green); margin-bottom:8px; }
   .total-goal { font-size:12px; color:var(--text-dim); }
   .total-goal span { color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:10px; }
   .progress-bar-wrap { background:#001a00; border:1px solid var(--green-dim); height:22px; position:relative; overflow:hidden; }
@@ -59,7 +59,7 @@
   .progress-bar-fill::after { content:''; position:absolute; top:0;bottom:0; width:40px; background:rgba(255,255,255,.12); animation:shine 2.5s infinite; }
   .progress-bar-stacked { display:flex; height:100%; width:100%; }
   .stack-seg { height:100%; flex-shrink:0; }
-  .progress-pct { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:10px; color:#fff; text-shadow:0 0 4px #000; z-index:2; }
+  .progress-pct { display:none; }
   .op-meta { font-size:9px; color:var(--text-dim); margin-top:6px; letter-spacing:1px; }
   .updated { text-align:right; font-size:9px; color:var(--text-dim); margin-top:7px; }
 
@@ -74,7 +74,7 @@
   .op-logo { width:80px; height:38px; object-fit:contain; flex-shrink:0; }
   .op-logo.dark-bg { background:#111; padding:4px; }
   .op-name { font-size:12px; color:var(--text); letter-spacing:1px; flex:1; min-width:0; }
-  .op-score { font-family:'Press Start 2P',monospace; font-size:clamp(13px,3vw,17px); color:var(--green); text-shadow:0 0 10px var(--green); white-space:nowrap; }
+  .op-score { font-family:'Press Start 2P',monospace; font-size:clamp(13px,3vw,17px); color:var(--green); text-shadow:0 0 10px var(--green); white-space:nowrap; margin-right:36px; }
   .op-score .score-x { color:var(--text-dim); font-size:.6em; }
   .op-bar-wrap { background:#001a00; border:1px solid #003d0f; height:5px; overflow:hidden; }
   .op-bar-fill { height:100%; background:var(--green); transition:width 1.5s ease; box-shadow:0 0 4px var(--green); }
@@ -187,7 +187,7 @@
         <div class="total-goal">из <span>1010</span> DC станций</div>
       </div>
       <div style="text-align:right">
-        <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--text-dim)">ВЫПОЛНЕНО</div>
+        <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--text-dim);margin-bottom:6px">ВЫПОЛНЕНО</div>
         <div style="font-family:'Press Start 2P',monospace;font-size:20px;color:var(--yellow);text-shadow:0 0 10px var(--yellow)" id="total-pct">0%</div>
       </div>
     </div>
@@ -258,11 +258,11 @@
 // РЕДАКТИРУЙ ТОЛЬКО ЭТОТ БЛОК
 // ============================================================
 const OPERATORS = [
-  { id: 'batteryfly', name: 'BatteryFly',      count: 0, added: 0, updated: '18.03.2026', color: '#005EEB', logo: 'logos/batteryfly.png', darkBg: true  },
-  { id: 'forevo',     name: 'forEVo',           count: 1, added: 1, updated: '19.03.2026', color: '#b44fff', logo: 'logos/forevo.png',     darkBg: true  },
-  { id: 'zaryadka',   name: 'Zaryadka',         count: 0, added: 0, updated: '18.03.2026', color: '#00cfff', logo: 'logos/zaryadka.svg',   darkBg: false },
-  { id: 'united',     name: 'United Company',   count: 0, added: 0, updated: '18.03.2026', color: '#F5821F', logo: 'logos/united.png',     darkBg: true  },
-  { id: 'grodno',     name: 'Гродненский ЦСМС', count: 0, added: 0, updated: '18.03.2026', color: '#FF6B6B', logo: 'logos/csms.png',       darkBg: false },
+  { id: 'batteryfly', name: 'BatteryFly',      count: 0, added: 0, updated: '18.03.2026', goal: 500, color: '#005EEB', logo: 'logos/batteryfly.png', darkBg: true  },
+  { id: 'forevo',     name: 'forEVo',           count: 1, added: 1, updated: '19.03.2026', goal: 300, color: '#b44fff', logo: 'logos/forevo.png',     darkBg: true  },
+  { id: 'zaryadka',   name: 'Zaryadka',         count: 0, added: 0, updated: '18.03.2026', goal: 100, color: '#00cfff', logo: 'logos/zaryadka.svg',   darkBg: false },
+  { id: 'united',     name: 'United Company',   count: 0, added: 0, updated: '18.03.2026', goal: 10,  color: '#F5821F', logo: 'logos/united.png',     darkBg: true  },
+  { id: 'grodno',     name: 'Гродненский ЦСМС', count: 0, added: 0, updated: '18.03.2026', goal: 100, color: '#FF6B6B', logo: 'logos/csms.png',       darkBg: false },
 ];
 const TOTAL_GOAL = 1010;
 const LAST_UPDATED = '18.03.2026';
@@ -349,7 +349,7 @@ function renderOperators() {
   const grid = document.getElementById('operators-grid');
   grid.innerHTML = '';
   sorted.forEach((op, i) => {
-    const barPct = Math.min(op.count/TOTAL_GOAL*100, 100);
+    const barPct = Math.min(op.count / op.goal * 100, 100);
     const card = document.createElement('div');
     card.className = 'op-card';
     card.innerHTML = `
