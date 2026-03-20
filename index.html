@@ -246,8 +246,12 @@
   <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">...</span> РАЗ</div>
 
   <div class="footer">
-    <div class="footer-disclaimer">Эта страница создана исключительно в развлекательных целях. Все данные об установленных станциях носят информационный характер и не являются официальной статистикой. Прогнозы пользователей — это игра, а не инвестиционная рекомендация. 🎮</div>
-    <div class="footer-privacy">Страница не запрашивает и не хранит ваши личные данные.</div>
+    <div class="footer-disclaimer">
+      Эта страница создана исключительно в развлекательных целях.<br>
+      Все данные об установленных станциях носят информационный характер и не являются официальной статистикой.<br>
+      Прогнозы пользователей — это игра, а не инвестиционная рекомендация. 🎮<br>
+      Страница не запрашивает и не хранит ваши личные данные.
+    </div>
     <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
   </div>
 
@@ -481,7 +485,9 @@ async function trackVisit() {
     name: op.name,
     color: op.color,
     x: 40 + Math.random() * 200,
+    baseSpeed: 0.3 + Math.random() * 0.65,
     speed: 0.3 + Math.random() * 0.65,
+    speedTimer: Math.floor(Math.random() * 200),
   }));
 
   function resizeRace() {
@@ -553,6 +559,11 @@ async function trackVisit() {
       const laneY = y + (LANE_H - carH) / 2 - p;
       drawPixelCar(car.x, laneY, car.color, p);
       car.x += car.speed;
+      car.speedTimer--;
+      if (car.speedTimer <= 0) {
+        car.speed = car.baseSpeed * (0.4 + Math.random() * 1.4);
+        car.speedTimer = 150 + Math.floor(Math.random() * 150);
+      }
       if (car.x > rc.width + 40) car.x = -40;
     });
 
