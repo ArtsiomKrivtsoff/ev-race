@@ -408,7 +408,10 @@ async function submitVote() {
   try {
     await fetch('https://uvrboxrddqlasgrnnnne.supabase.co/functions/v1/submit-vote', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + SUPABASE_KEY
+      },
       body: JSON.stringify({ operator: selectedOperator, cf_token: token })
     });
   } catch(e) { console.log('Vote error', e); }
