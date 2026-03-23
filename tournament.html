@@ -239,15 +239,21 @@ function opSpan(op){ return `<span style="color:${opColor(op)}">${opName(op)}</s
 // Round logic
 function getRoundForDate(dateStr) {
   const d = new Date(dateStr + 'T12:00:00');
-  const r1start = new Date('2026-03-18');
-  const r1end   = new Date('2026-03-20');
+  const r1start = new Date('2026-03-18T00:00:00');
+  const r1end   = new Date('2026-03-20T23:59:59');
   if (d >= r1start && d <= r1end) return 1;
-  const dow = d.getDay();
-  const isSat = dow === 6;
-  const isSun = dow === 0;
-  const diff = Math.ceil((d - new Date('2026-03-20')) / (7*24*3600*1000));
-  const round = Math.max(2, diff + 1);
-  return (isSat || isSun) ? round + 1 : round;
+
+  // For weekends, shift date forward to the next Monday
+  let effective = new Date(d);
+  const dow = effective.getDay();
+  if (dow === 6) effective.setDate(effective.getDate() + 2); // Saturday → Monday
+  if (dow === 0) effective.setDate(effective.getDate() + 1); // Sunday → Monday
+
+  // Round 2 starts Monday 23 March; each subsequent round is +7 days
+  const r2start = new Date('2026-03-23T00:00:00');
+  const diffDays = (effective - r2start) / (24*3600*1000);
+  const round = Math.floor(diffDays / 7) + 2;
+  return Math.max(2, Math.min(round, TOTAL_ROUNDS));
 }
 
 function getCurrentRound() {
