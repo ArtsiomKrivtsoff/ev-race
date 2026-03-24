@@ -8,7 +8,7 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <meta name="description" content="Турнирная таблица EV RACE 2026 — кто побеждает в гонке зарядных станций Беларуси">
 <meta property="og:title" content="EV RACE 2026 — Турнирная таблица">
-<meta property="og:description" content="43 круга, 5 операторов, финал 31 декабря. Следим за гонкой зарядных станций Беларуси.">
+<meta property="og:description" content="42 круга, 5 операторов, финал 31 декабря. Следим за гонкой зарядных станций Беларуси.">
 <meta property="og:image" content="https://evrace.imeyuskazat.by/og.png">
 <meta property="og:url" content="https://evrace.imeyuskazat.by/tournament.html">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@ body{animation:flicker 8s infinite;}
 .cursor{animation:blink 1s infinite;}
 .header-year{font-size:clamp(10px,2.5vw,14px);color:var(--yellow);text-shadow:0 0 10px var(--yellow);letter-spacing:5px;}
 
-.meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}
+.meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:32px;}
 .meta-card{background:var(--card-bg);border:1px solid var(--green-dark);padding:10px 8px;text-align:center;}
 .meta-label{font-size:8px;color:var(--green-dim);letter-spacing:1px;margin-bottom:5px;}
 .meta-val{font-family:'Press Start 2P',monospace;font-size:clamp(8px,1.5vw,10px);color:var(--yellow);text-shadow:0 0 8px var(--yellow);line-height:1.6;}
@@ -45,16 +45,16 @@ body{animation:flicker 8s infinite;}
 .section-head{font-size:9px;color:var(--green-dim);letter-spacing:2px;border-bottom:1px solid var(--green-dark);padding-bottom:6px;margin-bottom:12px;}
 
 /* CURRENT ROUND BLOCK */
-.cur-round{border:2px solid var(--yellow);background:#1a1500;padding:18px 16px;margin-bottom:20px;position:relative;}
-.cur-round::before{content:' ТЕКУЩИЙ КРУГ ';position:absolute;top:-10px;left:14px;background:var(--bg);padding:0 6px;font-family:'Press Start 2P',monospace;font-size:8px;color:var(--yellow);letter-spacing:2px;}
-.cur-round-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
-.cur-round-num{font-family:'Press Start 2P',monospace;font-size:clamp(14px,3vw,20px);color:var(--yellow);}
-.cur-round-dates{font-size:10px;color:var(--green-dim);text-align:right;}
-.cur-round-table{width:100%;border-collapse:collapse;font-size:12px;}
-.cur-round-table th{font-size:8px;color:var(--green-dim);letter-spacing:1px;padding:6px 6px;border-bottom:1px solid #3d3000;text-align:left;}
-.cur-round-table td{padding:8px 6px;border-bottom:1px solid #1a1000;vertical-align:middle;}
+.cur-round{border:2px solid var(--yellow);background:#1a1500;padding:22px 18px;margin-bottom:24px;position:relative;}
+.cur-round::before{content:' ТЕКУЩИЙ КРУГ ';position:absolute;top:-10px;left:14px;background:var(--bg);padding:0 6px;font-family:'Press Start 2P',monospace;font-size:9px;color:var(--yellow);letter-spacing:2px;}
+.cur-round-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.cur-round-num{font-family:'Press Start 2P',monospace;font-size:clamp(18px,4vw,26px);color:var(--yellow);}
+.cur-round-dates{font-size:12px;color:var(--green-dim);text-align:right;}
+.cur-round-table{width:100%;border-collapse:collapse;font-size:13px;}
+.cur-round-table th{font-size:9px;color:var(--green-dim);letter-spacing:1px;padding:8px 6px;border-bottom:1px solid #3d3000;text-align:left;}
+.cur-round-table td{padding:10px 6px;border-bottom:1px solid #1a1000;vertical-align:middle;}
 .cur-round-table tr:last-child td{border-bottom:none;}
-.cur-no-data{font-size:11px;color:#3d3000;letter-spacing:2px;padding:10px 0;}
+.cur-no-data{font-size:12px;color:#3d3000;letter-spacing:2px;padding:14px 0;}
 
 /* STANDINGS */
 .standings{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px;table-layout:fixed;}
@@ -119,6 +119,9 @@ body{animation:flicker 8s infinite;}
   .author-links{grid-template-columns:1fr 1fr 1fr;}
   .author-contacts{grid-template-columns:1fr;}
   .standings th:nth-child(4),.standings td:nth-child(4){display:none;}
+  .standings th:nth-child(6),.standings td:nth-child(6){display:none;}
+  .cur-round-table th:nth-child(4),.cur-round-table td:nth-child(4){display:none;}
+  .cur-round-table th:nth-child(5),.cur-round-table td:nth-child(5){font-size:9px;}
 }
 </style>
 </head>
@@ -161,7 +164,7 @@ body{animation:flicker 8s infinite;}
   <div class="rules-section">
     <div class="rule-block">
       <div class="rule-h">► КРУГИ</div>
-      <div class="rule-t">Сезон 2026 разделён на <span>43 круга</span>. Один круг — одна рабочая неделя (пн–пт). Финал гонки: <span>31 декабря 2026 в 18:00</span>.</div>
+      <div class="rule-t">Сезон 2026 разделён на <span>42 круга</span>. Один круг — одна рабочая неделя (пн–пт). Финал гонки: <span>31 декабря 2026 в 18:00</span>.</div>
     </div>
     <div class="rule-block">
       <div class="rule-h">► УЧЁТ СТАНЦИЙ</div>
@@ -225,7 +228,7 @@ body{animation:flicker 8s infinite;}
 <script>
 const SURL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
 const SKEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
-const TOTAL_ROUNDS = 43;
+const TOTAL_ROUNDS = 42;
 const FINAL = new Date('2026-12-31T18:00:00');
 
 const OP_COLORS = { batteryfly:'#005EEB', forevo:'#b44fff', zaryadka:'#00cfff', united:'#F5821F', csms:'#FF6B6B' };
@@ -243,13 +246,13 @@ function getRoundForDate(dateStr) {
   const r1end   = new Date('2026-03-20T23:59:59');
   if (d >= r1start && d <= r1end) return 1;
 
-  // For weekends, shift date forward to the next Monday
+  // Weekends → shift to next Monday (next round)
   let effective = new Date(d);
   const dow = effective.getDay();
-  if (dow === 6) effective.setDate(effective.getDate() + 2); // Saturday → Monday
-  if (dow === 0) effective.setDate(effective.getDate() + 1); // Sunday → Monday
+  if (dow === 6) effective.setDate(effective.getDate() + 2); // Sat → Mon
+  if (dow === 0) effective.setDate(effective.getDate() + 1); // Sun → Mon
 
-  // Round 2 starts Monday 23 March; each subsequent round is +7 days
+  // Round 2 starts Mon 23 March; each round is +7 days
   const r2start = new Date('2026-03-23T00:00:00');
   const diffDays = (effective - r2start) / (24*3600*1000);
   const round = Math.floor(diffDays / 7) + 2;
@@ -259,7 +262,16 @@ function getRoundForDate(dateStr) {
 function getCurrentRound() {
   const now = new Date();
   const today = now.toISOString().split('T')[0];
-  return getRoundForDate(today);
+  const baseRound = getRoundForDate(today);
+
+  // Round closes Friday at 19:00 (1hr buffer after 18:00 rule)
+  // If it's Friday after 19:00, Saturday, or Sunday → advance to next round
+  const dow = now.getDay();
+  const hour = now.getHours();
+  if ((dow === 5 && hour >= 19) || dow === 6 || dow === 0) {
+    return Math.min(baseRound + 1, TOTAL_ROUNDS);
+  }
+  return baseRound;
 }
 
 function getRoundDates(rn) {
@@ -267,6 +279,9 @@ function getRoundDates(rn) {
   const s = new Date('2026-03-23');
   s.setDate(s.getDate() + (rn-2)*7);
   const e = new Date(s); e.setDate(e.getDate()+4);
+  // Last round (42) ends Dec 31
+  const finale = new Date('2026-12-31');
+  if (e > finale) { e.setTime(finale.getTime()); }
   const M = ['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
   const sm = M[s.getMonth()], em = M[e.getMonth()];
   const label = sm===em ? `${s.getDate()}–${e.getDate()} ${sm}` : `${s.getDate()} ${sm}–${e.getDate()} ${em}`;
@@ -289,9 +304,10 @@ function processData(stations) {
   stations.forEach(s => {
     const rn = getRoundForDate(s.station_date);
     if (!byRound[rn]) byRound[rn] = {};
-    if (!byRound[rn][s.operator]) byRound[rn][s.operator] = { stations:0, power:0 };
+    if (!byRound[rn][s.operator]) byRound[rn][s.operator] = { stations:0, power:0, lastDate:s.station_date };
     byRound[rn][s.operator].stations += s.count;
     byRound[rn][s.operator].power += s.total_power||0;
+    if (s.station_date > byRound[rn][s.operator].lastDate) byRound[rn][s.operator].lastDate = s.station_date;
   });
 
   const points = {}, wins = {}, totalSt = {}, totalPow = {};
@@ -303,7 +319,7 @@ function processData(stations) {
   Object.keys(byRound).map(Number).forEach(rn => {
     const ops = Object.entries(byRound[rn]).sort((a,b) => b[1].stations - a[1].stations);
     const pts = [3,2,1];
-    roundResults[rn] = ops.map(([op,d],i) => ({ op, stations:d.stations, power:d.power, place:i+1, points:pts[i]||0 }));
+    roundResults[rn] = ops.map(([op,d],i) => ({ op, stations:d.stations, power:d.power, lastDate:d.lastDate, place:i+1, points:pts[i]||0 }));
 
     // Only count completed rounds for standings
     if (rn < curRound) {
@@ -336,6 +352,11 @@ function renderCurrentRound(data) {
   const curData = byRound[curRound] || {};
   const ops = Object.entries(curData).sort((a,b) => b[1].stations - a[1].stations);
 
+  function fmtDate(ds) {
+    const p = ds.split('-');
+    return p[2].replace(/^0/,'')+'.'+p[1].replace(/^0/,'');
+  }
+
   let inner = '';
   if (ops.length === 0) {
     inner = `<div class="cur-no-data">ПОКА НЕТ ДАННЫХ ЗА ЭТУ НЕДЕЛЮ</div>`;
@@ -344,10 +365,11 @@ function renderCurrentRound(data) {
     const placeIcons = ['★','▲','▲'];
     inner = `<table class="cur-round-table">
       <thead><tr>
-        <th style="width:30px">#</th>
+        <th style="width:28px">#</th>
         <th>ОПЕРАТОР</th>
-        <th style="text-align:right;width:80px">СТАНЦИЙ</th>
-        <th style="text-align:right;width:60px">КВТ</th>
+        <th style="text-align:right">СТАНЦИЙ</th>
+        <th style="text-align:right">ОБЩ. МОЩНОСТЬ</th>
+        <th style="text-align:right">ПОСЛ. ОБНОВЛЕНИЕ</th>
       </tr></thead><tbody>`;
     ops.forEach(([op,d],i) => {
       const ic = placeIcons[i]||'';
@@ -356,7 +378,8 @@ function renderCurrentRound(data) {
         <td style="color:${pc}">${ic}</td>
         <td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></td>
         <td style="text-align:right;color:${pc};font-family:'Press Start 2P',monospace;font-size:11px">${d.stations}</td>
-        <td style="text-align:right;color:var(--green-dim);font-size:11px">${d.power||'—'}</td>
+        <td style="text-align:right;color:var(--green-dim);font-size:12px">${d.power ? d.power+' кВт' : '—'}</td>
+        <td style="text-align:right;color:var(--green-dim);font-size:11px">${d.lastDate ? fmtDate(d.lastDate) : '—'}</td>
       </tr>`;
     });
     inner += '</tbody></table>';
@@ -366,14 +389,14 @@ function renderCurrentRound(data) {
     <div class="cur-round">
       <div class="cur-round-header">
         <div class="cur-round-num">КРУГ #${curRound} / ${TOTAL_ROUNDS}</div>
-        <div class="cur-round-dates">${dates.label}<br><span style="color:var(--yellow);font-size:9px">ИДЁТ</span></div>
+        <div class="cur-round-dates">${dates.label}<br><span style="color:var(--yellow);font-size:10px">ИДЁТ</span></div>
       </div>
       ${inner}
     </div>`;
 }
 
 function renderStandings(data) {
-  const { points, wins, totalSt } = data;
+  const { points, wins, totalSt, totalPow } = data;
   const sorted = [...ALL_OPS].sort((a,b) => {
     if (points[b]!==points[a]) return points[b]-points[a];
     return wins[b]-wins[a];
@@ -386,7 +409,8 @@ function renderStandings(data) {
       <th>ОПЕРАТОР</th>
       <th style="width:45px">ОЧК</th>
       <th style="width:55px">ПОБЕД</th>
-      <th style="width:70px">ВСЕГО СТ.</th>
+      <th style="width:50px">ВСЕГО СТ.</th>
+      <th style="width:70px">Σ МОЩНОСТЬ</th>
     </tr></thead><tbody>`;
 
   sorted.forEach((op,i) => {
@@ -396,6 +420,7 @@ function renderStandings(data) {
       <td><span class="pts">${points[op]}</span></td>
       <td style="color:var(--green-dim)">${wins[op]}</td>
       <td style="color:var(--green);font-family:'Press Start 2P',monospace;font-size:9px">${totalSt[op]||0}</td>
+      <td style="color:var(--green-dim);font-size:11px">${totalPow[op] ? totalPow[op]+' кВт' : '—'}</td>
     </tr>`;
   });
   html += '</tbody></table>';
@@ -420,11 +445,11 @@ function renderRoundsGrid(data) {
     if (i===11) {
       html += `<div class="round-cell future" style="opacity:.15">
         <div class="r-num">· · ·</div>
-        <div class="r-win" style="font-size:8px;color:#222">43 КРУГА</div>
+        <div class="r-win" style="font-size:8px;color:#222">42 КРУГА</div>
         <div class="r-date">ДО ДЕК</div>
       </div>
       <div class="round-cell future">
-        <div class="r-num">КР 43</div>
+        <div class="r-num">КР 42</div>
         <div class="r-win">—</div>
         <div class="r-date">28–31 ДЕК</div>
       </div>`;
