@@ -32,6 +32,10 @@
   body { animation: flicker 8s infinite; }
 
   .container { max-width: 860px; margin: 0 auto; padding: 16px 14px; }
+  .nav { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--green-dark); }
+  .nav-btn { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:2px; padding:8px 12px; border:1px solid var(--green-dark); background:transparent; color:var(--green-dim); text-decoration:none; transition:all .2s; -webkit-tap-highlight-color:transparent; }
+  .nav-btn:hover,.nav-btn:active { border-color:var(--green-dim); color:var(--green); }
+  .nav-btn.active { border-color:var(--green); color:var(--green); background:rgba(0,255,65,.05); }
 
   .header { text-align:center; padding:32px 0 24px; border-bottom:2px solid var(--green); margin-bottom:20px; }
   .header-subtitle { font-size:10px; color:var(--text-dim); letter-spacing:3px; margin-bottom:14px; line-height:1.6; }
@@ -159,6 +163,11 @@
 </div>
 
 <div class="container">
+
+  <div class="nav">
+    <a class="nav-btn active" href="#">ГЛАВНАЯ</a>
+    <a class="nav-btn" href="tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+  </div>
 
   <div class="header">
     <div class="header-subtitle">▶ #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ ◀</div>
@@ -521,9 +530,9 @@ async function trackVisit() {
     await fetch(SUPABASE_URL + '/rest/v1/visits', {
       method: 'POST',
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ visited_at: new Date().toISOString() })
+      body: JSON.stringify({ visited_at: new Date().toISOString(), page: 'main' })
     });
-    const res = await fetch(SUPABASE_URL + '/rest/v1/visits?select=id', {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/visits?select=id&page=eq.main', {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'count=exact', 'Range': '0-0' }
     });
     const count = res.headers.get('content-range')?.split('/')[1] || '...';
