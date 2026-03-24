@@ -26,12 +26,12 @@ body{animation:flicker 8s infinite;}
 .container{max-width:860px;margin:0 auto;padding:16px 14px;}
 
 .nav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--green-dark);}
-.nav-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:8px 12px;border:1px solid var(--green-dark);background:transparent;color:var(--green-dim);text-decoration:none;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.nav-btn{font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:2px;padding:10px 14px;border:1px solid var(--green-dark);background:transparent;color:var(--green-dim);text-decoration:none;transition:all .2s;-webkit-tap-highlight-color:transparent;}
 .nav-btn:hover,.nav-btn:active{border-color:var(--green-dim);color:var(--green);}
 .nav-btn.active{border-color:var(--green);color:var(--green);background:rgba(0,255,65,.05);}
 
 .header{text-align:center;padding:24px 0 20px;border-bottom:2px solid var(--green);margin-bottom:20px;}
-.header-sub{font-size:10px;color:var(--green-dim);letter-spacing:3px;margin-bottom:12px;}
+.header-sub{font-size:11px;color:var(--green-dim);letter-spacing:3px;margin-bottom:12px;}
 .header-title{font-family:'Press Start 2P',monospace;font-size:clamp(20px,5vw,34px);color:var(--green);text-shadow:0 0 20px var(--green);line-height:1.3;margin-bottom:8px;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .cursor{animation:blink 1s infinite;}
@@ -39,10 +39,10 @@ body{animation:flicker 8s infinite;}
 
 .meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:32px;}
 .meta-card{background:var(--card-bg);border:1px solid var(--green-dark);padding:10px 8px;text-align:center;}
-.meta-label{font-size:8px;color:var(--green-dim);letter-spacing:1px;margin-bottom:5px;}
-.meta-val{font-family:'Press Start 2P',monospace;font-size:clamp(8px,1.5vw,10px);color:var(--yellow);text-shadow:0 0 8px var(--yellow);line-height:1.6;}
+.meta-label{font-size:9px;color:var(--green-dim);letter-spacing:1px;margin-bottom:5px;}
+.meta-val{font-family:'Press Start 2P',monospace;font-size:clamp(9px,1.8vw,12px);color:var(--yellow);text-shadow:0 0 8px var(--yellow);line-height:1.6;}
 
-.section-head{font-size:9px;color:var(--green-dim);letter-spacing:2px;border-bottom:1px solid var(--green-dark);padding-bottom:6px;margin-bottom:12px;}
+.section-head{font-size:11px;color:var(--green-dim);letter-spacing:2px;border-bottom:1px solid var(--green-dark);padding-bottom:8px;margin-bottom:14px;}
 
 /* CURRENT ROUND BLOCK */
 .cur-round{border:2px solid var(--yellow);background:#1a1500;padding:22px 18px;margin-bottom:24px;position:relative;}
@@ -57,45 +57,45 @@ body{animation:flicker 8s infinite;}
 .cur-no-data{font-size:12px;color:#3d3000;letter-spacing:2px;padding:14px 0;}
 
 /* STANDINGS */
-.standings{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px;table-layout:fixed;}
-.standings th{font-size:8px;color:var(--green-dim);letter-spacing:1px;padding:7px 6px;border-bottom:1px solid var(--green-dark);text-align:left;}
-.standings td{padding:9px 6px;border-bottom:1px solid #001a00;vertical-align:middle;}
+.standings{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px;table-layout:fixed;}
+.standings th{font-size:10px;color:var(--green-dim);letter-spacing:1px;padding:9px 6px;border-bottom:1px solid var(--green-dark);text-align:left;}
+.standings td{padding:11px 6px;border-bottom:1px solid #001a00;vertical-align:middle;}
 .standings tr:last-child td{border-bottom:none;}
-.rank{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--green-dim);}
+.rank{font-family:'Press Start 2P',monospace;font-size:10px;color:var(--green-dim);}
 .r1{color:var(--yellow);} .r2{color:#c0c0c0;} .r3{color:#cd7f32;}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;flex-shrink:0;}
-.pts{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--green);}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;flex-shrink:0;}
+.pts{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--green);}
 
 /* ROUNDS GRID */
-.rounds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:20px;}
-.round-cell{background:var(--card-bg);border:1px solid #001a00;padding:7px 4px;text-align:center;}
+.rounds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:24px;}
+.round-cell{background:var(--card-bg);border:1px solid #001a00;padding:9px 5px;text-align:center;}
 .round-cell.active{border-color:var(--green);background:rgba(0,255,65,.06);}
 .round-cell.future{opacity:.3;}
-.r-num{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--green-dim);margin-bottom:4px;}
-.r-win{font-size:9px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.r-date{font-size:8px;color:var(--green-dim);}
+.r-num{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--green-dim);margin-bottom:5px;}
+.r-win{font-size:11px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.r-date{font-size:10px;color:var(--green-dim);}
 
 /* HISTORY */
-.hist-row{padding:9px 0;border-bottom:1px solid #001a00;}
+.hist-row{padding:11px 0;border-bottom:1px solid #001a00;}
 .hist-row:last-child{border-bottom:none;}
-.hist-meta{display:flex;align-items:baseline;gap:10px;margin-bottom:5px;flex-wrap:wrap;}
-.hist-round{font-size:10px;color:var(--yellow);min-width:65px;}
-.hist-dates{font-size:9px;color:var(--green-dark);}
+.hist-meta{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+.hist-round{font-size:12px;color:var(--yellow);min-width:75px;}
+.hist-dates{font-size:11px;color:var(--green-dark);}
 .hist-ops{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
-.hist-op{display:flex;align-items:center;gap:4px;font-size:11px;white-space:nowrap;}
-.sep{color:var(--green-dark);font-size:10px;}
+.hist-op{display:flex;align-items:center;gap:4px;font-size:13px;white-space:nowrap;}
+.sep{color:var(--green-dark);font-size:11px;}
 
 /* RULES */
 .rules-title{font-size:clamp(12px,2.5vw,16px);color:var(--green-dim);letter-spacing:3px;text-align:center;margin-bottom:16px;}
 .rules-section{border:1px solid var(--green-dark);background:var(--bg);padding:18px 16px;margin-bottom:20px;}
 .rule-block{margin-bottom:16px;}
 .rule-block:last-child{margin-bottom:0;}
-.rule-h{font-size:12px;color:var(--green);letter-spacing:3px;margin-bottom:8px;border-bottom:1px solid var(--green-dark);padding-bottom:5px;}
-.rule-t{font-size:12px;color:var(--green-dim);line-height:2;}
+.rule-h{font-size:13px;color:var(--green);letter-spacing:3px;margin-bottom:8px;border-bottom:1px solid var(--green-dark);padding-bottom:5px;}
+.rule-t{font-size:13px;color:var(--green-dim);line-height:2;}
 .rule-t span{color:var(--yellow);}
-.rule-note{font-size:11px;color:#00ffff;line-height:1.8;margin-top:8px;}
-.pts-row{display:flex;align-items:center;gap:10px;padding:3px 0;font-size:12px;color:var(--green-dim);}
-.pts-v{margin-left:auto;font-size:11px;}
+.rule-note{font-size:12px;color:#00ffff;line-height:1.8;margin-top:8px;}
+.pts-row{display:flex;align-items:center;gap:10px;padding:3px 0;font-size:13px;color:var(--green-dim);}
+.pts-v{margin-left:auto;font-size:12px;}
 
 /* AUTHOR */
 .author-section{border:1px solid var(--green-dim);padding:20px 16px;margin-bottom:24px;background:var(--card-bg);position:relative;}
@@ -108,10 +108,10 @@ body{animation:flicker 8s infinite;}
 .author-contact{border:1px solid var(--green-dark);background:transparent;color:var(--green-dim);font-family:'Share Tech Mono',monospace;font-size:11px;padding:13px 6px;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;}
 
 .footer{border-top:1px solid var(--green-dark);padding:18px 0 60px;text-align:center;color:var(--green-dim);line-height:2;}
-.footer-disclaimer{font-size:12px;line-height:1.9;margin-bottom:6px;}
-.footer-privacy{font-size:11px;color:#006615;margin-bottom:6px;}
-.footer-copy{font-size:9px;}
-.loading{text-align:center;padding:20px;font-size:11px;color:var(--green-dark);letter-spacing:2px;}
+.footer-disclaimer{font-size:13px;line-height:1.9;margin-bottom:6px;}
+.footer-privacy{font-size:12px;color:#006615;margin-bottom:6px;}
+.footer-copy{font-size:10px;}
+.loading{text-align:center;padding:20px;font-size:12px;color:var(--green-dark);letter-spacing:2px;}
 
 @media(max-width:480px){
   .meta-row{grid-template-columns:repeat(2,1fr);}
@@ -152,11 +152,11 @@ body{animation:flicker 8s infinite;}
   <div class="section-head">▶ ОБЩИЙ ЗАЧЁТ СЕЗОНА</div>
   <div id="standings-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
 
-  <div class="section-head">▶ СЕТКА СЕЗОНА</div>
-  <div class="rounds-grid" id="rounds-grid"><div class="loading">ЗАГРУЗКА...</div></div>
-
   <div class="section-head">▶ ИСТОРИЯ КРУГОВ</div>
   <div id="history-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+
+  <div class="section-head">▶ СЕТКА СЕЗОНА</div>
+  <div class="rounds-grid" id="rounds-grid"><div class="loading">ЗАГРУЗКА...</div></div>
 
   <div style="height:20px"></div>
 
@@ -275,17 +275,29 @@ function getCurrentRound() {
 }
 
 function getRoundDates(rn) {
-  if (rn === 1) return { label:'18–20 МАР', start: new Date('2026-03-18'), end: new Date('2026-03-20') };
-  const s = new Date('2026-03-23');
-  s.setDate(s.getDate() + (rn-2)*7);
-  const e = new Date(s); e.setDate(e.getDate()+4);
-  // Last round (42) ends Dec 31
+  const M = ['ЯНВАРЯ','ФЕВРАЛЯ','МАРТА','АПРЕЛЯ','МАЯ','ИЮНЯ','ИЮЛЯ','АВГУСТА','СЕНТЯБРЯ','ОКТЯБРЯ','НОЯБРЯ','ДЕКАБРЯ'];
+  const MS = ['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
+  if (rn === 1) return { label:'18–22 МАР', start: new Date('2026-03-18'), end: new Date('2026-03-22') };
+  // Display: Saturday before the Monday through Friday
+  const mon = new Date('2026-03-23');
+  mon.setDate(mon.getDate() + (rn-2)*7);
+  const sat = new Date(mon); sat.setDate(sat.getDate() - 2); // Saturday before
+  const fri = new Date(mon); fri.setDate(fri.getDate() + 4);
+  // First round 2: Sat = 21 Mar
+  // Last round: cap at Dec 31
   const finale = new Date('2026-12-31');
-  if (e > finale) { e.setTime(finale.getTime()); }
-  const M = ['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
-  const sm = M[s.getMonth()], em = M[e.getMonth()];
-  const label = sm===em ? `${s.getDate()}–${e.getDate()} ${sm}` : `${s.getDate()} ${sm}–${e.getDate()} ${em}`;
-  return { label, start:s, end:e };
+  if (fri > finale) { fri.setTime(finale.getTime()); }
+  const sm = MS[sat.getMonth()], fm = MS[fri.getMonth()];
+  const label = sm===fm ? `${sat.getDate()}–${fri.getDate()} ${sm}` : `${sat.getDate()} ${sm}–${fri.getDate()} ${fm}`;
+  return { label, start:sat, end:fri, M };
+}
+
+function fmtDateLong(dateStr) {
+  const ML = ['ЯНВАРЯ','ФЕВРАЛЯ','МАРТА','АПРЕЛЯ','МАЯ','ИЮНЯ','ИЮЛЯ','АВГУСТА','СЕНТЯБРЯ','ОКТЯБРЯ','НОЯБРЯ','ДЕКАБРЯ'];
+  const p = dateStr.split('-');
+  const day = parseInt(p[2], 10);
+  const mon = parseInt(p[1], 10) - 1;
+  return day + ' ' + ML[mon];
 }
 
 function daysToFinal() {
@@ -353,8 +365,7 @@ function renderCurrentRound(data) {
   const ops = Object.entries(curData).sort((a,b) => b[1].stations - a[1].stations);
 
   function fmtDate(ds) {
-    const p = ds.split('-');
-    return p[2].replace(/^0/,'')+'.'+p[1].replace(/^0/,'');
+    return fmtDateLong(ds);
   }
 
   let inner = '';
@@ -410,7 +421,7 @@ function renderStandings(data) {
       <th style="width:45px">ОЧК</th>
       <th style="width:55px">ПОБЕД</th>
       <th style="width:50px">ВСЕГО СТ.</th>
-      <th style="width:70px">Σ МОЩНОСТЬ</th>
+      <th style="width:70px">ОБЩ. МОЩНОСТЬ</th>
     </tr></thead><tbody>`;
 
   sorted.forEach((op,i) => {
@@ -429,32 +440,21 @@ function renderStandings(data) {
 
 function renderRoundsGrid(data) {
   const { roundResults, curRound } = data;
+  // Show rounds in rows of 5, only up to the row containing curRound
+  const lastVisible = Math.ceil(curRound / 5) * 5;
   let html = '';
-  for (let i=1; i<=TOTAL_ROUNDS; i++) {
+  for (let i=1; i<=Math.min(lastVisible, TOTAL_ROUNDS); i++) {
     const dates = getRoundDates(i);
     const isPast = i < curRound;
     const isActive = i === curRound;
-    const cls = isActive ? 'active' : (!isPast ? 'future' : '');
+    const isFuture = i > curRound;
+    const cls = isActive ? 'active' : (isFuture ? 'future' : '');
     const results = roundResults[i];
     const winner = isPast && results && results[0];
 
     let winHtml = '—';
     if (isActive) winHtml = `<span style="color:var(--green)">ИДЁТ</span>`;
     else if (winner) winHtml = `<span style="color:${opColor(winner.op)}">★ ${opName(winner.op).split(' ')[0]}</span>`;
-
-    if (i===11) {
-      html += `<div class="round-cell future" style="opacity:.15">
-        <div class="r-num">· · ·</div>
-        <div class="r-win" style="font-size:8px;color:#222">42 КРУГА</div>
-        <div class="r-date">ДО ДЕК</div>
-      </div>
-      <div class="round-cell future">
-        <div class="r-num">КР 42</div>
-        <div class="r-win">—</div>
-        <div class="r-date">28–31 ДЕК</div>
-      </div>`;
-      break;
-    }
 
     html += `<div class="round-cell ${cls}">
       <div class="r-num">КР ${String(i).padStart(2,'0')}</div>
