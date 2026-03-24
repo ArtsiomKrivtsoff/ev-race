@@ -43,11 +43,6 @@
   .header-intro strong { color:var(--green); }
   .header-intro .highlight { color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:11px; }
 
-  .power-block { text-align:center; padding:16px 0; margin-bottom:20px; border-top:1px solid var(--green-dark); border-bottom:1px solid var(--green-dark); }
-  .power-label { font-size:9px; color:#00aa2b; letter-spacing:3px; margin-bottom:8px; }
-  .power-value { font-family:'Press Start 2P',monospace; font-size:clamp(22px,5vw,36px); color:#00ffff; text-shadow:0 0 15px #00ffff; }
-  .power-unit { font-size:clamp(14px,3vw,22px); color:#00ffff; }
-
   .countdown-title { text-align:center; font-size:clamp(12px,2.5vw,18px); color:var(--text-dim); letter-spacing:3px; margin:24px 0 10px; }
   .countdown-section { display:flex; justify-content:center; gap:10px; margin-bottom:24px; }
   .countdown-block { text-align:center; border:1px solid var(--green-dim); padding:10px 8px; flex:1; max-width:90px; background:var(--card-bg); }
@@ -203,11 +198,10 @@
       <span class="progress-pct" id="total-pct-bar">0%</span>
     </div>
     <div class="updated" id="updated-date">ОБНОВЛЕНО: —</div>
-  </div>
-
-  <div class="power-block" id="power-block" style="display:none">
-    <div class="power-label">СУММАРНАЯ МОЩНОСТЬ УСТАНОВЛЕННЫХ СТАНЦИЙ</div>
-    <div class="power-value"><span id="power-value">0</span> <span class="power-unit">кВт</span></div>
+    <div style="text-align:center;margin-top:12px;padding-top:10px;border-top:1px solid #003d0f;">
+      <div style="font-size:9px;color:#00aa2b;letter-spacing:3px;margin-bottom:6px;">СУММАРНАЯ МОЩНОСТЬ УСТАНОВЛЕННЫХ СТАНЦИЙ</div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:clamp(14px,3vw,20px);color:#00ffff;text-shadow:0 0 10px rgba(0,255,255,0.5)" id="total-power">— кВт</div>
+    </div>
   </div>
 
   <div class="operators-title">▼ УЧАСТНИКИ ГОНКИ ▼</div>
@@ -272,18 +266,53 @@
 
 <script>
 // ============================================================
-// РЕДАКТИРУЙ ТОЛЬКО ЭТОТ БЛОК
+// МЕТА-ДАННЫЕ ОПЕРАТОРОВ (не менять вручную — данные из базы)
 // ============================================================
-const OPERATORS = [
-  { id: 'batteryfly', name: 'BatteryFly',      count: 0, added: 0, updated: '18.03.2026', goal: 500, color: '#005EEB', logo: 'logos/batteryfly.png', darkBg: true  },
-  { id: 'forevo',     name: 'forEVo',           count: 1, added: 1, updated: '19.03.2026', goal: 300, color: '#b44fff', logo: 'logos/forevo.png',     darkBg: true  },
-  { id: 'zaryadka',   name: 'Zaryadka',         count: 0, added: 0, updated: '18.03.2026', goal: 100, color: '#00cfff', logo: 'logos/zaryadka.svg',   darkBg: false },
-  { id: 'united',     name: 'United Company',   count: 0, added: 0, updated: '18.03.2026', goal: 10,  color: '#F5821F', logo: 'logos/united.png',     darkBg: true  },
-  { id: 'grodno',     name: 'Гродненский ЦСМС', count: 0, added: 0, updated: '18.03.2026', goal: 100, color: '#FF6B6B', logo: 'logos/csms.png',       darkBg: false },
+const OPERATORS_META = [
+  { id: 'batteryfly', name: 'BatteryFly',      goal: 500, color: '#005EEB', logo: 'logos/batteryfly.png', darkBg: true  },
+  { id: 'forevo',     name: 'forEVo',           goal: 300, color: '#b44fff', logo: 'logos/forevo.png',     darkBg: true  },
+  { id: 'zaryadka',   name: 'Zaryadka',         goal: 100, color: '#00cfff', logo: 'logos/zaryadka.svg',   darkBg: false },
+  { id: 'united',     name: 'United Company',   goal: 10,  color: '#F5821F', logo: 'logos/united.png',     darkBg: true  },
+  { id: 'csms',       name: 'Гродненский ЦСМС', goal: 100, color: '#FF6B6B', logo: 'logos/csms.png',       darkBg: false },
 ];
 const TOTAL_GOAL = 1010;
-const LAST_UPDATED = '18.03.2026';
+let OPERATORS = OPERATORS_META.map(o => ({ ...o, count: 0, added: 0, updated: '—', total_power: 0 }));
+let LAST_UPDATED = '—';
 // ============================================================
+
+async function loadStationsData() {
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_stations_summary', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      data.forEach(row => {
+        const op = OPERATORS.find(o => o.id === row.operator);
+        if (op) {
+          op.count = row.total || 0;
+          op.added = row.last_added || 0;
+          op.total_power = row.total_power || 0;
+          if (row.last_date) {
+            const d = new Date(row.last_date);
+            op.updated = String(d.getDate()).padStart(2,'0') + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + d.getFullYear();
+          }
+        }
+      });
+      const dates = data.filter(r => r.last_date).map(r => new Date(r.last_date));
+      if (dates.length > 0) {
+        const latest = new Date(Math.max(...dates));
+        LAST_UPDATED = String(latest.getDate()).padStart(2,'0') + '.' + String(latest.getMonth()+1).padStart(2,'0') + '.' + latest.getFullYear();
+      }
+      const totalPower = data.reduce((s, r) => s + (r.total_power || 0), 0);
+      const pwrEl = document.getElementById('total-power');
+      if (pwrEl) pwrEl.textContent = totalPower.toLocaleString('ru') + ' кВт';
+    }
+  } catch(e) { console.log('Stations load error', e); }
+  renderOperators();
+}
 
 const SUPABASE_URL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
@@ -342,17 +371,11 @@ function renderOperators() {
     ? [...OPERATORS].sort((a,b) => b.count - a.count)
     : [...OPERATORS];
   const total = sorted.reduce((s,o) => s+o.count, 0);
-  const totalPower = sorted.reduce((s,o) => s+(o.totalPower||0), 0);
   const pct = Math.round(total/TOTAL_GOAL*100);
   document.getElementById('total-count').textContent = total;
   document.getElementById('total-pct').textContent = pct + '%';
   document.getElementById('total-pct-bar').textContent = pct + '%';
-  document.getElementById('total-power').textContent = totalPower > 0 ? totalPower + ' кВт' : '— кВт';
-
-  // Find latest update date
-  const dates = sorted.filter(o => o.updated && o.updated !== '—').map(o => o.updated);
-  const lastDate = dates.length > 0 ? dates.sort().pop() : '—';
-  document.getElementById('updated-date').textContent = 'ОБНОВЛЕНО: ' + lastDate;
+  document.getElementById('updated-date').textContent = 'ОБНОВЛЕНО: ' + LAST_UPDATED;
 
   // Stacked progress bar
   const stackedBar = document.getElementById('total-bar-stacked');
@@ -621,42 +644,10 @@ function acceptCookies() {
 }
 if (localStorage.getItem('ev_race_cookies')) document.getElementById('cookieBanner').style.display='none';
 
-async function loadStationsData() {
-  try {
-    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_stations_summary', {
-      method: 'POST',
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    });
-    const data = await res.json();
-    if (!Array.isArray(data)) return;
-
-    // Map operator id from stations table (csms) to OPERATORS (grodno)
-    const idMap = { csms: 'grodno' };
-
-    data.forEach(row => {
-      const opId = idMap[row.operator] || row.operator;
-      const op = OPERATORS.find(o => o.id === opId);
-      if (!op) return;
-      op.count = row.total || 0;
-      op.added = row.last_added || 0;
-      op.totalPower = row.total_power || 0;
-      if (row.last_date) {
-        const d = new Date(row.last_date);
-        op.updated = `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}`;
-      }
-    });
-  } catch(e) {
-    console.log('Stations load error:', e);
-  }
-}
-
 renderVoteOptions();
 checkVoted();
 trackVisit();
-
-// Load stations data then render
-loadStationsData().then(() => renderOperators());
+loadStationsData();
 </script>
 </body>
 </html>
