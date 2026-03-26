@@ -3,18 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>EV RACE 2026 — Турнирная таблица | Рейтинг операторов зарядных станций</title>
-<meta name="description" content="Турнирная таблица EV RACE 2026: рейтинг частных операторов зарядных станций Беларуси по неделям. 42 круга, 5 операторов, финал 31 декабря 2026.">
-<meta name="keywords" content="рейтинг операторов зарядных станций Беларусь, BatteryFly forEVo Zaryadka рейтинг, зарядные станции статистика 2026, турнир операторов ЭЗС">
+<title>EV RACE 2026 — Реестр зарядных станций Беларуси</title>
+<meta name="description" content="Полный реестр быстрых зарядных станций Беларуси 2026: BatteryFly, forEVo, Zaryadka, United Company, Гродненский ЦСМС. Адреса, мощности, типы разъёмов.">
+<meta name="keywords" content="зарядные станции Беларусь, электромобиль зарядка, CCS2, CHAdeMO, DC быстрая зарядка, BatteryFly, forEVo, Zaryadka, EV зарядка Минск, электрозаправка Беларусь 2026">
 <meta name="robots" content="index, follow">
 <meta name="author" content="Artsiom Krivtsoff">
-<link rel="canonical" href="https://evrace.by/table.html">
-<meta property="og:title" content="EV RACE 2026 — Турнирная таблица операторов зарядных станций">
-<meta property="og:description" content="42 круга, 5 операторов, финал 31 декабря. Кто побеждает в гонке зарядной инфраструктуры Беларуси?">
-<meta property="og:image" content="https://evrace.by/og.png">
-<meta property="og:url" content="https://evrace.by/table.html">
+<link rel="canonical" href="https://evrace.imeyuskazat.by/registry.html">
+<meta property="og:title" content="EV RACE 2026 — Реестр зарядных станций Беларуси">
+<meta property="og:description" content="Где зарядиться в Беларуси? Реестр всех новых DC станций 2026 года — адреса, мощности, типы разъёмов.">
+<meta property="og:image" content="https://evrace.imeyuskazat.by/og.png">
+<meta property="og:url" content="https://evrace.imeyuskazat.by/registry.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_BY">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="EV RACE 2026 — Реестр зарядных станций Беларуси">
+<meta name="twitter:description" content="Полный реестр DC зарядных станций Беларуси 2026. Адреса, мощности, разъёмы.">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <!-- Yandex.Metrika counter -->
@@ -34,33 +37,117 @@
 :root {
   --green:#00ff41; --green-dim:#00aa2b; --green-dark:#003d0f;
   --yellow:#ffd700; --bg:#0a0a0a; --card-bg:#0d1f0d;
+  --bf:#005EEB; --fe:#b44fff; --za:#00cfff; --uc:#F5821F; --cs:#FF6B6B;
+  --dc:#ffd700; --ac:#00cfff;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--green);font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.1) 2px,rgba(0,0,0,.1) 4px);pointer-events:none;z-index:1000;}
 @keyframes flicker{0%,100%{opacity:1}93%{opacity:.87}96%{opacity:.93}}
 body{animation:flicker 8s infinite;}
-.container{max-width:860px;margin:0 auto;padding:16px 14px;}
+.container{max-width:960px;margin:0 auto;padding:16px 14px;}
+
+/* NAV */
 .nav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--green-dark);}
 .nav-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:8px 12px;border:1px solid var(--green-dark);background:transparent;color:var(--green-dim);text-decoration:none;transition:all .2s;-webkit-tap-highlight-color:transparent;}
 .nav-btn:hover,.nav-btn:active{border-color:var(--green-dim);color:var(--green);}
 .nav-btn.active{border-color:var(--green);color:var(--green);background:rgba(0,255,65,.05);}
+
+/* HEADER */
 .header{text-align:center;padding:24px 0 20px;border-bottom:2px solid var(--green);margin-bottom:20px;}
 .header-sub{font-size:10px;color:var(--green-dim);letter-spacing:3px;margin-bottom:14px;line-height:1.6;}
 .header-title{font-family:'Press Start 2P',monospace;font-size:clamp(22px,6vw,38px);color:var(--green);text-shadow:0 0 20px var(--green),0 0 40px var(--green-dim);line-height:1.3;margin-bottom:10px;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .cursor{animation:blink 1s infinite;}
 .header-year{font-family:'Press Start 2P',monospace;font-size:clamp(11px,3vw,15px);color:var(--yellow);text-shadow:0 0 10px var(--yellow);letter-spacing:5px;}
-.coming-soon{border:2px solid var(--yellow);padding:40px 20px;margin:40px 0;text-align:center;background:#1a1500;position:relative;}
-.coming-soon::before{content:' В РАЗРАБОТКЕ ';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 10px;font-family:'Press Start 2P',monospace;font-size:10px;color:var(--yellow);letter-spacing:2px;white-space:nowrap;}
-.coming-title{font-family:'Press Start 2P',monospace;font-size:clamp(14px,4vw,24px);color:var(--yellow);text-shadow:0 0 15px var(--yellow);line-height:1.6;margin-bottom:20px;}
-.coming-text{font-size:13px;color:var(--green-dim);line-height:2;margin-bottom:24px;}
-.coming-text strong{color:var(--green);}
-.progress-items{display:flex;flex-direction:column;gap:10px;max-width:400px;margin:0 auto;}
-.progress-item{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--green-dim);}
-.progress-item.done{color:var(--green);}
-.progress-icon{font-family:'Press Start 2P',monospace;font-size:8px;width:20px;text-align:center;flex-shrink:0;}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}
+.stat-card{background:var(--card-bg);border:1px solid var(--green-dark);padding:10px 8px;text-align:center;}
+.stat-label{font-size:8px;color:var(--green-dim);letter-spacing:1px;margin-bottom:5px;}
+.stat-val{font-family:'Press Start 2P',monospace;font-size:clamp(10px,2vw,14px);color:var(--yellow);text-shadow:0 0 8px var(--yellow);}
+
+/* FILTERS */
+.filters-wrap{margin-bottom:16px;}
+.filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.filter-label{font-size:9px;color:var(--green-dim);letter-spacing:2px;white-space:nowrap;min-width:80px;}
+.toggle{display:flex;border:1px solid var(--green-dark);overflow:hidden;}
+.toggle span{font-family:'Press Start 2P',monospace;font-size:7px;padding:6px 9px;cursor:pointer;color:var(--green-dim);white-space:nowrap;transition:all .15s;}
+.toggle span.on{background:rgba(0,255,65,.1);color:var(--green);}
+.toggle span:hover{color:var(--green);}
+/* operator filter badges */
+.op-filters{display:flex;gap:6px;flex-wrap:wrap;}
+.op-filter-btn{font-family:'Press Start 2P',monospace;font-size:6px;padding:5px 9px;cursor:pointer;transition:all .15s;border:1px solid transparent;opacity:.45;}
+.op-filter-btn.on{opacity:1;box-shadow:0 0 8px rgba(0,0,0,.4);}
+.op-filter-btn:hover{opacity:.8;}
+.op-filter-all{border:1px solid var(--green-dark)!important;color:var(--green-dim);background:transparent;}
+.op-filter-all.on{border-color:var(--green)!important;color:var(--green);background:rgba(0,255,65,.07);}
+/* city & new buttons */
+.city-filters{display:flex;gap:5px;flex-wrap:wrap;}
+.city-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 8px;border:1px solid var(--green-dark);color:var(--green-dim);background:transparent;cursor:pointer;transition:all .15s;}
+.city-btn.on{border-color:var(--green);color:var(--green);background:rgba(0,255,65,.05);}
+.city-btn:hover{color:var(--green);}
+.new-filter-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 8px;border:1px solid var(--green-dark);color:var(--green-dim);background:transparent;cursor:pointer;transition:all .15s;}
+.new-filter-btn.on{border-color:var(--green);color:var(--green);background:rgba(0,255,65,.08);}
+
+/* SECTION HEAD */
+.section-head{font-size:9px;color:var(--green-dim);letter-spacing:2px;border-bottom:1px solid var(--green-dark);padding-bottom:6px;margin-bottom:12px;}
+
+/* BADGES */
+.badge-dc{background:rgba(255,215,0,.1);color:var(--dc);border:1px solid rgba(255,215,0,.25);font-family:'Press Start 2P',monospace;font-size:6px;padding:2px 6px;white-space:nowrap;}
+.badge-ac{background:rgba(0,207,255,.1);color:var(--ac);border:1px solid rgba(0,207,255,.25);font-family:'Press Start 2P',monospace;font-size:6px;padding:2px 6px;white-space:nowrap;}
+.op-badge{font-family:'Press Start 2P',monospace;font-size:6px;padding:3px 6px;white-space:nowrap;}
+.op-bf{background:rgba(0,94,235,.15);color:#4d8fff;border:1px solid rgba(0,94,235,.25);}
+.op-fo{background:rgba(180,79,255,.15);color:#cc88ff;border:1px solid rgba(180,79,255,.25);}
+.op-za{background:rgba(0,207,255,.15);color:#66ddff;border:1px solid rgba(0,207,255,.25);}
+.op-uc{background:rgba(245,130,31,.15);color:#ffaa55;border:1px solid rgba(245,130,31,.25);}
+.op-cs{background:rgba(255,107,107,.15);color:#ff9999;border:1px solid rgba(255,107,107,.25);}
+.gun-pill{font-size:8px;padding:2px 6px;border:1px solid #1a3a1a;color:#00aa28;display:inline-flex;align-items:center;gap:3px;}
+.gun-dot{width:5px;height:5px;background:var(--green);border-radius:1px;flex-shrink:0;display:inline-block;}
+.new-badge{background:rgba(0,255,65,.12);color:var(--green);border:1px solid var(--green-dark);font-size:6px;font-family:'Press Start 2P',monospace;padding:2px 5px;}
+
+/* DESKTOP TABLE */
+.table-wrap{overflow-x:auto;margin-bottom:24px;}
+table.reg{width:100%;border-collapse:collapse;font-size:11px;min-width:720px;}
+table.reg thead tr{border-bottom:1px solid #1a3a1a;}
+table.reg th{font-size:7px;color:var(--green-dim);text-align:left;padding:7px 8px;font-weight:normal;white-space:nowrap;letter-spacing:1px;}
+table.reg th.center{text-align:center;}
+table.reg td{padding:7px 8px;border-bottom:1px solid #0d1a0d;color:var(--green-dim);vertical-align:middle;}
+table.reg tr:hover td{background:rgba(0,255,65,.03);}
+table.reg td.city{color:var(--green);}
+table.reg td.addr{font-size:10px;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+table.reg td.power{color:var(--dc);font-family:'Press Start 2P',monospace;font-size:9px;white-space:nowrap;}
+table.reg td.center{text-align:center;}
+table.reg td.date{font-size:9px;color:var(--green-dark);}
+.no-gun{color:#1a3a1a;}
+
+/* MOBILE CARDS */
+.cards-wrap{display:none;margin-bottom:24px;}
+.loc-card{background:#0d1a0d;border:1px solid #1a3a1a;padding:12px;margin-bottom:10px;}
+.loc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #1a2a1a;}
+.loc-head-left{display:flex;flex-direction:column;gap:5px;}
+.loc-city{font-size:12px;color:var(--green);}
+.loc-addr{font-size:9px;color:var(--green-dim);}
+.loc-head-right{text-align:right;flex-shrink:0;margin-left:10px;}
+.loc-total-power{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--dc);}
+.loc-total-label{font-size:8px;color:var(--green-dark);margin-top:2px;}
+.station-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #111;gap:6px;}
+.station-row:last-child{border-bottom:none;}
+.st-left{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1;}
+.st-num{font-family:'Press Start 2P',monospace;font-size:6px;color:var(--green-dark);white-space:nowrap;}
+.st-guns{display:flex;gap:4px;flex-wrap:wrap;}
+.st-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.st-power{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--dc);white-space:nowrap;}
+.loc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:7px;border-top:1px solid #1a2a1a;}
+.loc-date{font-size:9px;color:var(--green-dark);}
+
+/* LOADING / EMPTY */
+.loading{text-align:center;padding:30px;font-size:11px;color:var(--green-dark);letter-spacing:2px;}
+
+/* BIG PHRASE */
 .big-phrase{text-align:center;font-family:'Press Start 2P',monospace;font-size:clamp(14px,4vw,28px);color:var(--yellow);text-shadow:0 0 20px var(--yellow),0 0 40px rgba(255,215,0,.3);line-height:1.5;padding:24px 0;letter-spacing:2px;}
+
+/* AUTHOR */
 .author-section{border:1px solid var(--green-dim);padding:20px 16px;margin-bottom:24px;background:var(--card-bg);position:relative;}
 .author-section::before{content:' ARTSIOM KRIVTSOFF | АВТОР ПРОЕКТА ';position:absolute;top:-10px;left:14px;background:var(--bg);padding:0 6px;font-size:9px;color:var(--green-dim);letter-spacing:2px;}
 .author-about-btn{display:block;width:100%;border:1px solid var(--green);background:transparent;color:var(--green);font-family:'Share Tech Mono',monospace;font-size:13px;padding:14px;cursor:pointer;letter-spacing:2px;text-align:center;text-decoration:none;margin-bottom:18px;transition:all .2s;-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
@@ -72,16 +159,26 @@ body{animation:flicker 8s infinite;}
 .author-contacts{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;box-sizing:border-box;}
 .author-contact-btn{border:1px solid var(--green-dim);background:transparent;color:var(--green-dim);font-family:'Share Tech Mono',monospace;font-size:11px;padding:13px 6px;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;width:100%;min-height:44px;box-sizing:border-box;}
 .author-contact-btn:hover,.author-contact-btn:active{border-color:var(--green);color:var(--green);}
+
+/* VISIT COUNTER */
 .visit-counter{text-align:center;font-size:11px;color:var(--green-dim);margin-bottom:20px;letter-spacing:2px;line-height:1.8;}
 .visit-counter span{color:var(--green);font-family:'Press Start 2P',monospace;font-size:11px;}
+
+/* FOOTER */
 .footer{border-top:1px solid var(--green-dark);padding:18px 0 90px;text-align:center;color:var(--green-dim);line-height:2;}
 .footer-disclaimer{font-size:12px;line-height:1.9;margin-bottom:6px;}
 .footer-copy{font-size:9px;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.pulsing{animation:pulse 2s infinite;}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .table-wrap{display:none;}
+  .cards-wrap{display:block;}
+  .author-links{grid-template-columns:1fr 1fr 1fr;}
+  .author-contacts{grid-template-columns:1fr;}
+}
 @media(max-width:400px){
   .author-links{grid-template-columns:1fr;}
-  .author-contacts{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -90,8 +187,8 @@ body{animation:flicker 8s infinite;}
 
   <div class="nav">
     <a class="nav-btn" href="index.html">ГЛАВНАЯ</a>
-    <a class="nav-btn active" href="#">ТУРНИРНАЯ ТАБЛИЦА</a>
-    <a class="nav-btn" href="registry.html">РЕЕСТР СТАНЦИЙ</a>
+    <a class="nav-btn" href="table.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+    <a class="nav-btn active" href="#">СТАНЦИИ 2026</a>
   </div>
 
   <div class="header">
@@ -100,19 +197,69 @@ body{animation:flicker 8s infinite;}
     <div class="header-year">БЕЛАРУСЬ 2026</div>
   </div>
 
-  <div class="coming-soon">
-    <div class="coming-title pulsing">ТУРНИРНАЯ ТАБЛИЦА<br>ЗАГРУЖАЕТСЯ...</div>
-    <div class="coming-text">
-      Полная статистика гонки по кругам,<br>
-      история результатов и рейтинг сезона.<br><br>
-      <strong>Скоро здесь будет жарко.</strong>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">DC СТАНЦИЙ</div><div class="stat-val" id="stat-dc">...</div></div>
+    <div class="stat-card"><div class="stat-label">ПИСТОЛЕТОВ</div><div class="stat-val" id="stat-guns">...</div></div>
+    <div class="stat-card"><div class="stat-label">МОЩНОСТЬ</div><div class="stat-val" id="stat-power">...</div></div>
+    <div class="stat-card"><div class="stat-label">ГОРОДОВ</div><div class="stat-val" id="stat-cities">...</div></div>
+  </div>
+
+  <div class="filters-wrap">
+    <div class="filter-row">
+      <span class="filter-label">ПЕРИОД:</span>
+      <div class="toggle">
+        <span id="f-period-all" onclick="setPeriod('all')">С 01.01.2026</span>
+        <span id="f-period-race" class="on" onclick="setPeriod('race')">С 19.03.2026</span>
+      </div>
     </div>
-    <div class="progress-items">
-      <div class="progress-item done"><span class="progress-icon">✓</span>Главная страница запущена</div>
-      <div class="progress-item done"><span class="progress-icon">✓</span>Реестр станций готов</div>
-      <div class="progress-item"><span class="progress-icon pulsing">▶</span>Турнирная таблица — в работе</div>
-      <div class="progress-item"><span class="progress-icon" style="color:#333">○</span>Карта станций</div>
+    <div class="filter-row">
+      <span class="filter-label">ОПЕРАТОР:</span>
+      <div class="op-filters" id="op-filter">
+        <span class="op-filter-btn op-filter-all on" onclick="setOp('all')" data-op="all">ВСЕ</span>
+        <span class="op-filter-btn op-bf on" onclick="setOp('batteryfly')" data-op="batteryfly">BatteryFly</span>
+        <span class="op-filter-btn op-fo on" onclick="setOp('forevo')" data-op="forevo">forEVo</span>
+        <span class="op-filter-btn op-za on" onclick="setOp('zaryadka')" data-op="zaryadka">Zaryadka</span>
+        <span class="op-filter-btn op-uc on" onclick="setOp('united')" data-op="united">United Co.</span>
+        <span class="op-filter-btn op-cs on" onclick="setOp('csms')" data-op="csms">Гродн. ЦСМС</span>
+      </div>
     </div>
+    <div class="filter-row">
+      <span class="filter-label">ГОРОД:</span>
+      <div class="city-filters" id="city-filter"></div>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">НОВИНКИ:</span>
+      <span class="new-filter-btn" id="f-new" onclick="toggleNew()">★ ТОЛЬКО NEW</span>
+    </div>
+  </div>
+
+  <div class="section-head" id="table-head">▶ ЗАГРУЗКА...</div>
+
+  <!-- DESKTOP TABLE -->
+  <div class="table-wrap">
+    <table class="reg" id="reg-table">
+      <thead>
+        <tr>
+          <th>ОПЕРАТОР</th>
+          <th>ТИП</th>
+          <th>ГОРОД</th>
+          <th>АДРЕС / ЛОКАЦИЯ</th>
+          <th class="center">ПИСТОЛЕТ 1</th>
+          <th class="center">ПИСТОЛЕТ 2</th>
+          <th class="center">ПИСТОЛЕТ 3</th>
+          <th style="text-align:right">МОЩНОСТЬ</th>
+          <th style="text-align:right">ДАТА</th>
+        </tr>
+      </thead>
+      <tbody id="reg-tbody">
+        <tr><td colspan="9" class="loading">ЗАГРУЗКА ДАННЫХ...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MOBILE CARDS -->
+  <div class="cards-wrap" id="cards-wrap">
+    <div class="loading">ЗАГРУЗКА ДАННЫХ...</div>
   </div>
 
   <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
@@ -153,15 +300,243 @@ body{animation:flicker 8s infinite;}
 <script>
 const SURL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
 const SKEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
+const RACE_START = '2026-03-19';
+
+const OP_NAMES  = { batteryfly:'BatteryFly', forevo:'forEVo', zaryadka:'Zaryadka', united:'United Company', csms:'Гродненский ЦСМС' };
+const OP_CLASS  = { batteryfly:'op-bf', forevo:'op-fo', zaryadka:'op-za', united:'op-uc', csms:'op-cs' };
+
+let allStations = [];
+let filterPeriod = 'race';
+let filterOp = 'all';
+let filterCity = 'all';
+let filterNew = false;
+
+// Текущий круг — для определения бейджа NEW (конец текущей недели пн-пт)
+function getCurrentRoundEnd() {
+  const now = new Date();
+  const dow = now.getDay();
+  // Находим пятницу текущей недели
+  const fri = new Date(now);
+  const diff = dow <= 5 ? (5 - dow) : (5 + 7 - dow);
+  fri.setDate(fri.getDate() + diff);
+  fri.setHours(23, 59, 59, 0);
+  return fri;
+}
+
+function isNew(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const roundEnd = getCurrentRoundEnd();
+  // Начало недели (понедельник)
+  const mon = new Date(roundEnd);
+  mon.setDate(mon.getDate() - 4);
+  mon.setHours(0, 0, 0, 0);
+  return d >= mon && d <= roundEnd;
+}
+
+function opBadge(op) {
+  const cls = OP_CLASS[op] || '';
+  const name = OP_NAMES[op] || op;
+  return `<span class="op-badge ${cls}">${name}</span>`;
+}
+
+function typeBadge(t) {
+  if (!t) return '';
+  return t === 'DC'
+    ? '<span class="badge-dc">DC</span>'
+    : '<span class="badge-ac">AC</span>';
+}
+
+function gunCell(type) {
+  if (!type) return '<span class="no-gun">—</span>';
+  return `<span class="gun-pill"><span class="gun-dot"></span>${type}</span>`;
+}
+
+function fmtDate(dateStr) {
+  if (!dateStr) return '—';
+  const p = dateStr.split('-');
+  return p[2] + '.' + p[1] + '.' + p[0].slice(2);
+}
+
+function getFiltered() {
+  return allStations.filter(s => {
+    if (filterPeriod === 'race' && s.station_date < RACE_START) return false;
+    if (filterOp !== 'all' && s.operator !== filterOp) return false;
+    if (filterCity !== 'all' && (s.city || '').toLowerCase() !== filterCity) return false;
+    if (filterNew && !isNew(s.station_date)) return false;
+    return true;
+  });
+}
+
+function buildCityFilter(stations) {
+  const cities = [...new Set(stations.map(s => s.city).filter(Boolean))].sort();
+  const wrap = document.getElementById('city-filter');
+  let html = `<span class="city-btn on" onclick="setCity('all')" data-city="all">ВСЕ</span>`;
+  cities.forEach(c => {
+    html += `<span class="city-btn" onclick="setCity('${c.toLowerCase()}')" data-city="${c.toLowerCase()}">${c.toUpperCase()}</span>`;
+  });
+  wrap.innerHTML = html;
+}
+
+function renderStats(stations) {
+  const dc = stations.filter(s => s.station_type === 'DC' || !s.station_type);
+  const guns = stations.reduce((n, s) => {
+    if (s.gun1_type) n++;
+    if (s.gun2_type) n++;
+    if (s.gun3_type) n++;
+    return n;
+  }, 0);
+  const power = stations.reduce((n, s) => n + (s.total_power || 0), 0);
+  const cities = new Set(stations.map(s => s.city).filter(Boolean)).size;
+  document.getElementById('stat-dc').textContent = dc.length;
+  document.getElementById('stat-guns').textContent = guns || '—';
+  document.getElementById('stat-power').textContent = power ? power.toLocaleString('ru') + ' кВт' : '—';
+  document.getElementById('stat-cities').textContent = cities;
+}
+
+function renderTable(stations) {
+  const head = document.getElementById('table-head');
+  head.textContent = `▶ СТАНЦИЙ В РЕЕСТРЕ: ${stations.length}`;
+
+  // Desktop table
+  const tbody = document.getElementById('reg-tbody');
+  if (stations.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" class="loading" style="color:#1a3a1a">НЕТ ДАННЫХ ПО ВЫБРАННЫМ ФИЛЬТРАМ</td></tr>';
+  } else {
+    tbody.innerHTML = stations.map(s => {
+      const newBadge = isNew(s.station_date) ? ' <span class="new-badge">NEW</span>' : '';
+      return `<tr>
+        <td>${opBadge(s.operator)}</td>
+        <td>${typeBadge(s.station_type)}</td>
+        <td class="city">${s.city || '—'}</td>
+        <td class="addr" title="${s.address || ''}">${s.location_name || s.address || '—'}</td>
+        <td class="center">${gunCell(s.gun1_type)}</td>
+        <td class="center">${gunCell(s.gun2_type)}</td>
+        <td class="center">${gunCell(s.gun3_type)}</td>
+        <td class="power" style="text-align:right">${s.total_power ? s.total_power + ' кВт' : '—'}</td>
+        <td class="date" style="text-align:right">${fmtDate(s.station_date)}${newBadge}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Mobile cards — группировка по location_name
+  const cardsWrap = document.getElementById('cards-wrap');
+  if (stations.length === 0) {
+    cardsWrap.innerHTML = '<div class="loading" style="color:#1a3a1a">НЕТ ДАННЫХ ПО ВЫБРАННЫМ ФИЛЬТРАМ</div>';
+    return;
+  }
+
+  // Группируем по location_name (или address если нет)
+  const groups = {};
+  stations.forEach(s => {
+    const key = s.location_name || s.address || 'unknown';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(s);
+  });
+
+  let cardsHtml = '';
+  Object.entries(groups).forEach(([locKey, locs]) => {
+    const first = locs[0];
+    const totalPower = locs.reduce((n, s) => n + (s.total_power || 0), 0);
+    const totalGuns = locs.reduce((n, s) => {
+      if (s.gun1_type) n++;
+      if (s.gun2_type) n++;
+      if (s.gun3_type) n++;
+      return n;
+    }, 0);
+    // Самая свежая дата
+    const latestDate = locs.reduce((d, s) => s.station_date > d ? s.station_date : d, '');
+    const newBadge = isNew(latestDate) ? '<span class="new-badge">NEW</span>' : '';
+
+    const stationsHtml = locs.map((s, i) => {
+      const guns = [s.gun1_type, s.gun2_type, s.gun3_type].filter(Boolean);
+      const gunsHtml = guns.map(g => `<span class="gun-pill"><span class="gun-dot"></span>${g}</span>`).join('');
+      return `<div class="station-row">
+        <div class="st-left">
+          <span class="st-num">СТ ${i + 1}</span>
+          ${typeBadge(s.station_type)}
+          <div class="st-guns">${gunsHtml || '<span style="color:#1a3a1a;font-size:9px">—</span>'}</div>
+        </div>
+        <div class="st-right">
+          <span class="st-power">${s.total_power ? s.total_power + ' кВт' : '—'}</span>
+        </div>
+      </div>`;
+    }).join('');
+
+    cardsHtml += `<div class="loc-card">
+      <div class="loc-head">
+        <div class="loc-head-left">
+          ${opBadge(first.operator)}
+          <span class="loc-city">${first.city || '—'}</span>
+          <span class="loc-addr">${first.location_name || first.address || '—'}</span>
+        </div>
+        <div class="loc-head-right">
+          <div class="loc-total-power">${totalPower ? totalPower + ' кВт' : '—'}</div>
+          <div class="loc-total-label">ВСЕГО</div>
+          ${totalGuns ? `<div class="loc-total-label" style="margin-top:2px">${totalGuns} пист.</div>` : ''}
+        </div>
+      </div>
+      ${stationsHtml}
+      <div class="loc-footer">
+        <span class="loc-date">${fmtDate(latestDate)}</span>
+        ${newBadge}
+      </div>
+    </div>`;
+  });
+
+  cardsWrap.innerHTML = cardsHtml;
+}
+
+function setPeriod(val) {
+  filterPeriod = val;
+  document.getElementById('f-period-all').classList.toggle('on', val === 'all');
+  document.getElementById('f-period-race').classList.toggle('on', val === 'race');
+  applyFilters();
+}
+
+function setOp(val) {
+  filterOp = val;
+  document.querySelectorAll('#op-filter span').forEach(el => {
+    el.classList.toggle('on', val === 'all' ? true : el.dataset.op === val || el.dataset.op === 'all' && false);
+  });
+  // all = все бейджи светятся, конкретный = только он
+  document.querySelectorAll('#op-filter span').forEach(el => {
+    if (val === 'all') {
+      el.classList.add('on');
+    } else {
+      el.classList.toggle('on', el.dataset.op === val);
+    }
+  });
+  applyFilters();
+}
+
+function toggleNew() {
+  filterNew = !filterNew;
+  document.getElementById('f-new').classList.toggle('on', filterNew);
+  applyFilters();
+}
+
+function setCity(val) {
+  filterCity = val;
+  document.querySelectorAll('#city-filter span').forEach(el => {
+    el.classList.toggle('on', el.dataset.city === val);
+  });
+  applyFilters();
+}
+
+function applyFilters() {
+  const filtered = getFiltered();
+  renderStats(filtered);
+  renderTable(filtered);
+}
 
 async function trackVisit() {
   try {
     await fetch(SURL + '/rest/v1/visits', {
       method: 'POST',
       headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ visited_at: new Date().toISOString(), page: 'table' })
+      body: JSON.stringify({ visited_at: new Date().toISOString(), page: 'registry' })
     });
-    const res = await fetch(SURL + '/rest/v1/visits?select=id&page=eq.table', {
+    const res = await fetch(SURL + '/rest/v1/visits?select=id&page=eq.registry', {
       headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY, 'Prefer': 'count=exact', 'Range': '0-0' }
     });
     const count = res.headers.get('content-range')?.split('/')[1] || '...';
@@ -171,7 +546,24 @@ async function trackVisit() {
   }
 }
 
-trackVisit();
+async function init() {
+  try {
+    const res = await fetch(SURL + '/rest/v1/stations?select=*&order=station_date.desc', {
+      headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY }
+    });
+    allStations = await res.json();
+    if (!Array.isArray(allStations)) allStations = [];
+    buildCityFilter(allStations);
+    applyFilters();
+  } catch(e) {
+    console.log('Error:', e);
+    document.getElementById('reg-tbody').innerHTML = '<tr><td colspan="9" class="loading" style="color:#1a3a1a">ОШИБКА ЗАГРУЗКИ ДАННЫХ</td></tr>';
+    document.getElementById('cards-wrap').innerHTML = '<div class="loading" style="color:#1a3a1a">ОШИБКА ЗАГРУЗКИ ДАННЫХ</div>';
+  }
+  trackVisit();
+}
+
+init();
 </script>
 </body>
 </html>
