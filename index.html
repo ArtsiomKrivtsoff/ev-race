@@ -222,10 +222,7 @@
       <span class="progress-pct" id="total-pct-bar">0%</span>
     </div>
     <div class="updated" id="updated-date">ОБНОВЛЕНО: —</div>
-    <div style="text-align:center;margin-top:12px;padding-top:10px;border-top:1px solid #003d0f;">
-      <div style="font-size:9px;color:#00aa2b;letter-spacing:3px;margin-bottom:6px;">СУММАРНАЯ МОЩНОСТЬ УСТАНОВЛЕННЫХ СТАНЦИЙ</div>
-      <div style="font-family:'Press Start 2P',monospace;font-size:clamp(14px,3vw,20px);color:#00ffff;text-shadow:0 0 10px rgba(0,255,255,0.5)" id="total-power">— кВт</div>
-    </div>
+
   </div>
 
   <div class="operators-title">▼ УЧАСТНИКИ ГОНКИ ▼</div>
@@ -300,7 +297,7 @@ const OPERATORS_META = [
   { id: 'csms',       name: 'Гродненский ЦСМС', goal: 100, color: '#FF6B6B', logo: 'logos/csms.png',       darkBg: false },
 ];
 const TOTAL_GOAL = 1010;
-let OPERATORS = OPERATORS_META.map(o => ({ ...o, count: 0, added: 0, updated: '—', total_power: 0 }));
+let OPERATORS = OPERATORS_META.map(o => ({ ...o, count: 0, added: 0, updated: '—' }));
 let LAST_UPDATED = '—';
 // ============================================================
 
@@ -318,7 +315,6 @@ async function loadStationsData() {
         if (op) {
           op.count = row.total || 0;
           op.added = row.last_added || 0;
-          op.total_power = row.total_power || 0;
           if (row.last_date) {
             const d = new Date(row.last_date);
             op.updated = String(d.getDate()).padStart(2,'0') + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + d.getFullYear();
@@ -330,9 +326,7 @@ async function loadStationsData() {
         const latest = new Date(Math.max(...dates));
         LAST_UPDATED = String(latest.getDate()).padStart(2,'0') + '.' + String(latest.getMonth()+1).padStart(2,'0') + '.' + latest.getFullYear();
       }
-      const totalPower = data.reduce((s, r) => s + (r.total_power || 0), 0);
-      const pwrEl = document.getElementById('total-power');
-      if (pwrEl) pwrEl.textContent = totalPower.toLocaleString('ru') + ' кВт';
+
     }
   } catch(e) { console.log('Stations load error', e); }
   renderOperators();
