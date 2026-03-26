@@ -275,9 +275,11 @@ function opName(op){ return OP_NAMES[op]||op; }
 
 function getRoundForDate(dateStr) {
   const d = new Date(dateStr + 'T12:00:00');
+  // До старта гонки — круг 0 (не участвует в турнире)
   const r1start = new Date('2026-03-18T00:00:00');
-  const r1end   = new Date('2026-03-20T23:59:59');
-  if (d >= r1start && d <= r1end) return 1;
+  if (d < r1start) return 0;
+  const r1end = new Date('2026-03-20T23:59:59');
+  if (d <= r1end) return 1;
   let effective = new Date(d);
   const dow = effective.getDay();
   if (dow === 6) effective.setDate(effective.getDate() + 2);
@@ -347,7 +349,13 @@ function processData(stations) {
   const curRound = getCurrentRound();
   const roundResults = {};
 
-  Object.keys(byRound).map(Number).forEach(rn => {
+  // Считаем totalSt из всего массива (включая до-сезонные)
+  stations.forEach(s => {
+    totalSt[s.operator] = (totalSt[s.operator] || 0) + (s.count || 1);
+    totalPow[s.operator] = (totalPow[s.operator] || 0) + ((s.dc_power || 0) * (s.count || 1));
+  });
+
+  Object.keys(byRound).map(Number).filter(rn => rn > 0).forEach(rn => {
     const ops = Object.entries(byRound[rn]).sort((a,b) => b[1].stations - a[1].stations);
     const pts = [3,2,1];
     roundResults[rn] = ops.map(([op,d],i) => ({ op, stations:d.stations, power:d.power, lastDate:d.lastDate, place:i+1, points:pts[i]||0 }));
@@ -357,10 +365,6 @@ function processData(stations) {
         if (i===0) wins[op]++;
       });
     }
-    ops.forEach(([op,d]) => {
-      totalSt[op] += d.stations;
-      totalPow[op] += d.power;
-    });
   });
 
   return { byRound, roundResults, points, wins, totalSt, totalPow, curRound };
