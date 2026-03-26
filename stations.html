@@ -377,8 +377,9 @@ function getFiltered() {
 function buildMonthFilter(stations) {
   const counts = {};
   stations.forEach(s => {
+    if (s.station_type === 'AC') return; // AC не считаем
     const m = parseInt(s.station_date.split('-')[1], 10) - 1;
-    counts[m] = (counts[m] || 0) + 1;
+    counts[m] = (counts[m] || 0) + (s.count || 1);
   });
   const wrap = document.getElementById('month-filter');
   let html = '';
@@ -406,16 +407,17 @@ function updateResetBtn() {
 
 function renderStats(stations) {
   const dc = stations.filter(s => s.station_type === 'DC' || !s.station_type);
-  const guns = stations.reduce((n, s) => {
+  const dcCount = dc.reduce((n, s) => n + (s.count || 1), 0);
+  const guns = dc.reduce((n, s) => {
     const stCount = s.count || 1;
     if (s.gun1_type) n += stCount;
     if (s.gun2_type) n += stCount;
     if (s.gun3_type) n += stCount;
     return n;
   }, 0);
-  const power = stations.reduce((n, s) => n + (s.total_power || 0), 0);
+  const power = dc.reduce((n, s) => n + (s.total_power || 0), 0);
   const cities = new Set(stations.map(s => s.city).filter(Boolean)).size;
-  document.getElementById('stat-dc').textContent = dc.length;
+  document.getElementById('stat-dc').textContent = dcCount;
   document.getElementById('stat-guns').textContent = guns || '—';
   document.getElementById('stat-power').textContent = power ? power.toLocaleString('ru') + ' кВт' : '—';
   document.getElementById('stat-cities').textContent = cities;
@@ -465,8 +467,9 @@ function renderTable(stations) {
   let cardsHtml = '';
   Object.entries(groups).forEach(([locKey, locs]) => {
     const first = locs[0];
-    const totalPower = locs.reduce((n, s) => n + (s.total_power || 0), 0);
-    const totalGuns = locs.reduce((n, s) => {
+    const dcLocs = locs.filter(s => s.station_type === 'DC' || !s.station_type);
+    const totalPower = dcLocs.reduce((n, s) => n + (s.total_power || 0), 0);
+    const totalGuns = dcLocs.reduce((n, s) => {
       const stCount = s.count || 1;
       if (s.gun1_type) n += stCount;
       if (s.gun2_type) n += stCount;
@@ -476,17 +479,20 @@ function renderTable(stations) {
     const latestDate = locs.reduce((d, s) => s.station_date > d ? s.station_date : d, '');
     const newBadge = isNew(latestDate) ? '<span class="new-badge">NEW</span>' : '';
 
-    const stationsHtml = locs.map((s, i) => {
+    const stationsHtml = locs.map((s) => {
       const guns = [s.gun1_type, s.gun2_type, s.gun3_type].filter(Boolean);
       const gunsHtml = guns.map(g => `<span class="gun-pill"><span class="gun-dot"></span>${g}</span>`).join('');
+      const cnt = s.count || 1;
+      const powerHtml = s.total_power
+        ? (cnt > 1 ? `${s.total_power/cnt} кВт <span style="color:var(--yellow)">×${cnt}</span>` : `${s.total_power} кВт`)
+        : '—';
       return `<div class="station-row">
         <div class="st-left">
-          <span class="st-num">СТ ${i + 1}</span>
           ${typeBadge(s.station_type)}
           <div class="st-guns">${gunsHtml || '<span style="color:#1a3a1a;font-size:9px">—</span>'}</div>
         </div>
         <div class="st-right">
-          <span class="st-power">${s.total_power ? s.total_power + ' кВт' : '—'}</span>
+          <span class="st-power">${powerHtml}</span>
         </div>
       </div>`;
     }).join('');
