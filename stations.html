@@ -64,7 +64,7 @@ body{animation:flicker 8s infinite;}
 .header-year{font-family:'Press Start 2P',monospace;font-size:clamp(11px,3vw,15px);color:var(--yellow);text-shadow:0 0 10px var(--yellow);letter-spacing:5px;}
 
 /* STATS ROW */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}@media(min-width:600px){.stats-row{grid-template-columns:repeat(7,1fr);}}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}@media(min-width:600px){.stats-row{grid-template-columns:repeat(6,1fr);}}
 .stat-card{background:var(--card-bg);border:1px solid var(--green-dark);padding:10px 8px;text-align:center;}
 .stat-label{font-size:9px;color:var(--green-dim);letter-spacing:1px;margin-bottom:5px;}
 .stat-val{font-family:'Press Start 2P',monospace;font-size:clamp(11px,2vw,15px);color:var(--yellow);text-shadow:0 0 8px var(--yellow);}
@@ -221,7 +221,6 @@ table.reg td.date{font-size:10px;color:var(--green-dim);}
     <div class="stat-card"><div class="stat-label">AC СТАНЦИЙ</div><div class="stat-val" id="stat-ac">...</div></div>
     <div class="stat-card"><div class="stat-label">DC КОННЕКТ.</div><div class="stat-val" id="stat-guns">...</div></div>
     <div class="stat-card"><div class="stat-label">AC КОННЕКТ.</div><div class="stat-val" id="stat-ac-guns">...</div></div>
-    <div class="stat-card"><div class="stat-label">МОЩНОСТЬ</div><div class="stat-val" id="stat-power">...</div></div>
     <div class="stat-card"><div class="stat-label">ГОРОДОВ</div><div class="stat-val" id="stat-cities">...</div></div>
     <div class="stat-card"><div class="stat-label">АВТО СРАЗУ</div><div class="stat-val" id="stat-cars" style="color:#00ffff">...</div></div>
   </div>
@@ -439,17 +438,19 @@ function renderStats(stations) {
   }, 0);
   const cars = stations.reduce((n, s) => n + ((s.simultaneous_charge || 1) * (s.count || 1)), 0);
   const cities = new Set(stations.map(s => s.city).filter(Boolean)).size;
-  document.getElementById('stat-dc').textContent = dcCount;
-  document.getElementById('stat-ac').textContent = acCount || '—';
+  const dcPower = dc.reduce((n, s) => n + ((s.dc_power || 0) * (s.count || 1)), 0);
+  const acPowerTotal = stations.filter(s => s.station_type === 'AC' || s.station_type === 'ACDC').reduce((n, s) => n + ((s.ac_power || 0) * (s.count || 1)), 0);
+  document.getElementById('stat-dc').textContent = dcPower ? dcCount + ' · ' + dcPower.toLocaleString('ru') + ' кВт' : dcCount || '—';
+  document.getElementById('stat-ac').textContent = acPowerTotal ? acCount + ' · ' + acPowerTotal.toLocaleString('ru') + ' кВт' : acCount || '—';
   document.getElementById('stat-guns').textContent = guns || '—';
   document.getElementById('stat-ac-guns').textContent = acGuns || '—';
-  document.getElementById('stat-power').textContent = power ? power.toLocaleString('ru') + ' кВт' : '—';
   document.getElementById('stat-cities').textContent = cities;
   document.getElementById('stat-cars').textContent = cars || '—';
 }
 
 function renderTable(stations) {
-  document.getElementById('table-head').textContent = `▶ СТАНЦИЙ В РЕЕСТРЕ: ${stations.length}`;
+  const totalStCount = stations.reduce((n, s) => n + (s.count || 1), 0);
+  document.getElementById('table-head').textContent = `▶ СТАНЦИЙ УСТАНОВЛЕНО: ${totalStCount}`;
 
   // Desktop
   const tbody = document.getElementById('reg-tbody');
@@ -469,7 +470,14 @@ function renderTable(stations) {
         <td class="center">${gunCell(s.gun1_type)}</td>
         <td class="center">${gunCell(s.gun2_type)}</td>
         <td class="center">${gunCell(s.gun3_type)}</td>
-        <td class="power" style="text-align:right">${s.total_power ? (s.count > 1 ? s.total_power/s.count + ' кВт ×' + s.count : s.total_power + ' кВт') : '—'}</td>
+        <td class="power" style="text-align:right">${(() => {
+          const dc = s.dc_power || 0;
+          const ac = s.ac_power || 0;
+          const cnt = s.count || 1;
+          if (!dc && !ac) return '—';
+          const pwrStr = dc && ac ? dc + '+' + ac + ' кВт' : (dc || ac) + ' кВт';
+          return cnt > 1 ? pwrStr + ' <span style="color:var(--yellow)">×' + cnt + '</span>' : pwrStr;
+        })()}</td>
         <td class="date" style="text-align:right">${fmtDate(s.station_date)}${newBadge}</td>
       </tr>`;
     }).join('');
@@ -493,7 +501,7 @@ function renderTable(stations) {
   Object.entries(groups).forEach(([locKey, locs]) => {
     const first = locs[0];
     const dcLocs = locs.filter(s => s.station_type === 'DC' || s.station_type === 'ACDC' || !s.station_type);
-    const totalPower = dcLocs.reduce((n, s) => n + (s.total_power || 0), 0);
+    const totalPower = dcLocs.reduce((n, s) => n + ((s.dc_power || 0) * (s.count || 1)), 0);
     const totalGuns = dcLocs.reduce((n, s) => {
       const stCount = s.count || 1;
       if (s.gun1_type) n += stCount;
@@ -508,9 +516,10 @@ function renderTable(stations) {
       const guns = [s.gun1_type, s.gun2_type, s.gun3_type].filter(Boolean);
       const gunsHtml = guns.map(g => `<span class="gun-pill"><span class="gun-dot"></span>${g}</span>`).join('');
       const cnt = s.count || 1;
-      const powerHtml = s.total_power
-        ? (cnt > 1 ? `${s.total_power/cnt} кВт <span style="color:var(--yellow)">×${cnt}</span>` : `${s.total_power} кВт`)
-        : '—';
+      const dcP = s.dc_power || 0;
+      const acP = s.ac_power || 0;
+      const pwrStr = dcP && acP ? dcP + '+' + acP + ' кВт' : (dcP || acP) ? (dcP || acP) + ' кВт' : '—';
+      const powerHtml = pwrStr === '—' ? '—' : (cnt > 1 ? pwrStr + ' <span style="color:var(--yellow)">×' + cnt + '</span>' : pwrStr);
       return `<div class="station-row">
         <div class="st-left">
           ${typeBadge(s.station_type)}
