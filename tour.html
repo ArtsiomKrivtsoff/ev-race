@@ -162,6 +162,7 @@ body{animation:flicker 8s infinite;}
   <div class="nav">
     <a class="nav-btn" href="/">ГЛАВНАЯ</a>
     <a class="nav-btn active" href="#">ТУРНИРНАЯ ТАБЛИЦА</a>
+    <a class="nav-btn" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
   </div>
 
   <div class="header">
@@ -323,7 +324,7 @@ function daysToFinal() {
 }
 
 async function fetchStations() {
-  const r = await fetch(SURL+'/rest/v1/stations?select=*&order=station_date.asc', {
+  const r = await fetch(SURL+'/rest/v1/stations?select=*&station_type=in.(DC,ACDC)&order=station_date.asc', {
     headers:{ 'apikey':SKEY, 'Authorization':'Bearer '+SKEY }
   });
   return r.json();
@@ -336,7 +337,7 @@ function processData(stations) {
     if (!byRound[rn]) byRound[rn] = {};
     if (!byRound[rn][s.operator]) byRound[rn][s.operator] = { stations:0, power:0, lastDate:s.station_date };
     byRound[rn][s.operator].stations += s.count;
-    byRound[rn][s.operator].power += s.total_power||0;
+    byRound[rn][s.operator].power += (s.dc_power||0) * (s.count||1);
     if (s.station_date > byRound[rn][s.operator].lastDate) byRound[rn][s.operator].lastDate = s.station_date;
   });
 
