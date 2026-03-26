@@ -217,8 +217,8 @@ table.reg td.date{font-size:10px;color:var(--green-dim);}
   </div>
 
   <div class="stats-row">
-    <div class="stat-card"><div class="stat-label">DC СТАНЦИЙ</div><div class="stat-val" id="stat-dc">...</div></div>
-    <div class="stat-card"><div class="stat-label">AC СТАНЦИЙ</div><div class="stat-val" id="stat-ac">...</div></div>
+    <div class="stat-card"><div class="stat-label">DC СТАНЦИЙ | КВТ</div><div class="stat-val" id="stat-dc" style="font-size:clamp(8px,1.5vw,11px)">...</div></div>
+    <div class="stat-card"><div class="stat-label">AC СТАНЦИЙ | КВТ</div><div class="stat-val" id="stat-ac" style="font-size:clamp(8px,1.5vw,11px)">...</div></div>
     <div class="stat-card"><div class="stat-label">DC КОННЕКТ.</div><div class="stat-val" id="stat-guns">...</div></div>
     <div class="stat-card"><div class="stat-label">AC КОННЕКТ.</div><div class="stat-val" id="stat-ac-guns">...</div></div>
     <div class="stat-card"><div class="stat-label">ГОРОДОВ</div><div class="stat-val" id="stat-cities">...</div></div>
@@ -383,7 +383,6 @@ function getFiltered() {
 function buildMonthFilter(stations) {
   const counts = {};
   stations.forEach(s => {
-    if (s.station_type === 'AC') return; // AC не считаем
     const m = parseInt(s.station_date.split('-')[1], 10) - 1;
     counts[m] = (counts[m] || 0) + (s.count || 1);
   });
@@ -439,9 +438,9 @@ function renderStats(stations) {
   const cars = stations.reduce((n, s) => n + ((s.simultaneous_charge || 1) * (s.count || 1)), 0);
   const cities = new Set(stations.map(s => s.city).filter(Boolean)).size;
   const dcPower = dc.reduce((n, s) => n + ((s.dc_power || 0) * (s.count || 1)), 0);
-  const acPowerTotal = stations.filter(s => s.station_type === 'AC' || s.station_type === 'ACDC').reduce((n, s) => n + ((s.ac_power || 0) * (s.count || 1)), 0);
-  document.getElementById('stat-dc').textContent = dcPower ? dcCount + ' · ' + dcPower.toLocaleString('ru') + ' кВт' : dcCount || '—';
-  document.getElementById('stat-ac').textContent = acPowerTotal ? acCount + ' · ' + acPowerTotal.toLocaleString('ru') + ' кВт' : acCount || '—';
+  const acPowerTotal = stations.reduce((n, s) => n + ((s.ac_power || 0) * (s.count || 1)), 0);
+  document.getElementById('stat-dc').textContent = dcPower ? dcCount + ' | ' + dcPower.toLocaleString('ru') : dcCount || '—';
+  document.getElementById('stat-ac').textContent = acPowerTotal ? acCount + ' | ' + acPowerTotal.toLocaleString('ru') : acCount || '—';
   document.getElementById('stat-guns').textContent = guns || '—';
   document.getElementById('stat-ac-guns').textContent = acGuns || '—';
   document.getElementById('stat-cities').textContent = cities;
@@ -501,7 +500,7 @@ function renderTable(stations) {
   Object.entries(groups).forEach(([locKey, locs]) => {
     const first = locs[0];
     const dcLocs = locs.filter(s => s.station_type === 'DC' || s.station_type === 'ACDC' || !s.station_type);
-    const totalPower = dcLocs.reduce((n, s) => n + ((s.dc_power || 0) * (s.count || 1)), 0);
+    const totalPower = locs.reduce((n, s) => n + (((s.dc_power || 0) + (s.ac_power || 0)) * (s.count || 1)), 0);
     const totalGuns = dcLocs.reduce((n, s) => {
       const stCount = s.count || 1;
       if (s.gun1_type) n += stCount;
