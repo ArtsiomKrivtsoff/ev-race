@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://evrace.by/sitemap.xml
