@@ -407,9 +407,10 @@ function updateResetBtn() {
 function renderStats(stations) {
   const dc = stations.filter(s => s.station_type === 'DC' || !s.station_type);
   const guns = stations.reduce((n, s) => {
-    if (s.gun1_type) n++;
-    if (s.gun2_type) n++;
-    if (s.gun3_type) n++;
+    const stCount = s.count || 1;
+    if (s.gun1_type) n += stCount;
+    if (s.gun2_type) n += stCount;
+    if (s.gun3_type) n += stCount;
     return n;
   }, 0);
   const power = stations.reduce((n, s) => n + (s.total_power || 0), 0);
@@ -441,7 +442,7 @@ function renderTable(stations) {
         <td class="center">${gunCell(s.gun1_type)}</td>
         <td class="center">${gunCell(s.gun2_type)}</td>
         <td class="center">${gunCell(s.gun3_type)}</td>
-        <td class="power" style="text-align:right">${s.total_power ? s.total_power + ' кВт' : '—'}</td>
+        <td class="power" style="text-align:right">${s.total_power ? (s.count > 1 ? s.total_power/s.count + ' кВт ×' + s.count : s.total_power + ' кВт') : '—'}</td>
         <td class="date" style="text-align:right">${fmtDate(s.station_date)}${newBadge}</td>
       </tr>`;
     }).join('');
@@ -466,9 +467,10 @@ function renderTable(stations) {
     const first = locs[0];
     const totalPower = locs.reduce((n, s) => n + (s.total_power || 0), 0);
     const totalGuns = locs.reduce((n, s) => {
-      if (s.gun1_type) n++;
-      if (s.gun2_type) n++;
-      if (s.gun3_type) n++;
+      const stCount = s.count || 1;
+      if (s.gun1_type) n += stCount;
+      if (s.gun2_type) n += stCount;
+      if (s.gun3_type) n += stCount;
       return n;
     }, 0);
     const latestDate = locs.reduce((d, s) => s.station_date > d ? s.station_date : d, '');
