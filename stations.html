@@ -499,9 +499,8 @@ function renderTable(stations) {
   let cardsHtml = '';
   Object.entries(groups).forEach(([locKey, locs]) => {
     const first = locs[0];
-    const dcLocs = locs.filter(s => s.station_type === 'DC' || s.station_type === 'ACDC' || !s.station_type);
     const totalPower = locs.reduce((n, s) => n + (((s.dc_power || 0) + (s.ac_power || 0)) * (s.count || 1)), 0);
-    const totalGuns = dcLocs.reduce((n, s) => {
+    const totalGuns = locs.reduce((n, s) => {
       const stCount = s.count || 1;
       if (s.gun1_type) n += stCount;
       if (s.gun2_type) n += stCount;
