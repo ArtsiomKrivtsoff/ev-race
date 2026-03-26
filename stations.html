@@ -64,7 +64,7 @@ body{animation:flicker 8s infinite;}
 .header-year{font-family:'Press Start 2P',monospace;font-size:clamp(11px,3vw,15px);color:var(--yellow);text-shadow:0 0 10px var(--yellow);letter-spacing:5px;}
 
 /* STATS ROW */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}@media(min-width:600px){.stats-row{grid-template-columns:repeat(7,1fr);}}
 .stat-card{background:var(--card-bg);border:1px solid var(--green-dark);padding:10px 8px;text-align:center;}
 .stat-label{font-size:9px;color:var(--green-dim);letter-spacing:1px;margin-bottom:5px;}
 .stat-val{font-family:'Press Start 2P',monospace;font-size:clamp(11px,2vw,15px);color:var(--yellow);text-shadow:0 0 8px var(--yellow);}
@@ -111,6 +111,7 @@ body{animation:flicker 8s infinite;}
 /* BADGES */
 .badge-dc{background:rgba(255,215,0,.1);color:var(--dc);border:1px solid rgba(255,215,0,.25);font-family:'Press Start 2P',monospace;font-size:7px;padding:2px 6px;white-space:nowrap;}
 .badge-ac{background:rgba(0,207,255,.1);color:var(--ac);border:1px solid rgba(0,207,255,.25);font-family:'Press Start 2P',monospace;font-size:7px;padding:2px 6px;white-space:nowrap;}
+.badge-acdc{background:rgba(180,79,255,.1);color:#cc88ff;border:1px solid rgba(180,79,255,.25);font-family:'Press Start 2P',monospace;font-size:7px;padding:2px 6px;white-space:nowrap;}
 .op-badge{font-family:'Press Start 2P',monospace;font-size:7px;padding:3px 7px;white-space:nowrap;}
 .op-bf{background:rgba(0,94,235,.15);color:#4d8fff;border:1px solid rgba(0,94,235,.25);}
 .op-fo{background:rgba(180,79,255,.15);color:#cc88ff;border:1px solid rgba(180,79,255,.25);}
@@ -135,7 +136,7 @@ table.reg td.addr .loc-address{font-size:10px;color:var(--green-dim);display:blo
 table.reg td.addr{max-width:220px;}
 table.reg td.power{color:var(--dc);font-family:'Press Start 2P',monospace;font-size:10px;white-space:nowrap;}
 table.reg td.center{text-align:center;}
-table.reg td.date{font-size:10px;color:var(--green-dark);}
+table.reg td.date{font-size:10px;color:var(--green-dim);}
 .no-gun{color:#1a3a1a;}
 
 /* MOBILE CARDS */
@@ -157,7 +158,7 @@ table.reg td.date{font-size:10px;color:var(--green-dark);}
 .st-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
 .st-power{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--dc);white-space:nowrap;}
 .loc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:7px;border-top:1px solid #1a2a1a;}
-.loc-date{font-size:10px;color:var(--green-dark);}
+.loc-date{font-size:10px;color:var(--green-dim);}
 
 /* LOADING / EMPTY */
 .loading{text-align:center;padding:30px;font-size:12px;color:var(--green-dark);letter-spacing:2px;}
@@ -217,9 +218,12 @@ table.reg td.date{font-size:10px;color:var(--green-dark);}
 
   <div class="stats-row">
     <div class="stat-card"><div class="stat-label">DC СТАНЦИЙ</div><div class="stat-val" id="stat-dc">...</div></div>
-    <div class="stat-card"><div class="stat-label">ПИСТОЛЕТОВ</div><div class="stat-val" id="stat-guns">...</div></div>
+    <div class="stat-card"><div class="stat-label">AC СТАНЦИЙ</div><div class="stat-val" id="stat-ac">...</div></div>
+    <div class="stat-card"><div class="stat-label">DC КОННЕКТ.</div><div class="stat-val" id="stat-guns">...</div></div>
+    <div class="stat-card"><div class="stat-label">AC КОННЕКТ.</div><div class="stat-val" id="stat-ac-guns">...</div></div>
     <div class="stat-card"><div class="stat-label">МОЩНОСТЬ</div><div class="stat-val" id="stat-power">...</div></div>
     <div class="stat-card"><div class="stat-label">ГОРОДОВ</div><div class="stat-val" id="stat-cities">...</div></div>
+    <div class="stat-card"><div class="stat-label">АВТО СРАЗУ</div><div class="stat-val" id="stat-cars" style="color:#00ffff">...</div></div>
   </div>
 
   <div class="filters-wrap">
@@ -348,7 +352,10 @@ function opBadge(op) {
 
 function typeBadge(t) {
   if (!t) return '';
-  return t === 'DC' ? '<span class="badge-dc">DC</span>' : '<span class="badge-ac">AC</span>';
+  if (t === 'DC') return '<span class="badge-dc">DC</span>';
+  if (t === 'AC') return '<span class="badge-ac">AC</span>';
+  if (t === 'ACDC') return '<span class="badge-acdc">AC+DC</span>';
+  return '';
 }
 
 function gunCell(type) {
@@ -406,8 +413,10 @@ function updateResetBtn() {
 }
 
 function renderStats(stations) {
-  const dc = stations.filter(s => s.station_type === 'DC' || !s.station_type);
+  const dc = stations.filter(s => s.station_type === 'DC' || s.station_type === 'ACDC' || !s.station_type);
   const dcCount = dc.reduce((n, s) => n + (s.count || 1), 0);
+  const ac = stations.filter(s => s.station_type === 'AC');
+  const acCount = ac.reduce((n, s) => n + (s.count || 1), 0);
   const guns = dc.reduce((n, s) => {
     const stCount = s.count || 1;
     if (s.gun1_type) n += stCount;
@@ -415,12 +424,28 @@ function renderStats(stations) {
     if (s.gun3_type) n += stCount;
     return n;
   }, 0);
-  const power = dc.reduce((n, s) => n + (s.total_power || 0), 0);
+  const acGuns = ac.reduce((n, s) => {
+    const stCount = s.count || 1;
+    if (s.gun1_type) n += stCount;
+    if (s.gun2_type) n += stCount;
+    if (s.gun3_type) n += stCount;
+    return n;
+  }, 0);
+  const power = stations.reduce((n, s) => {
+    const cnt = s.count || 1;
+    const dcP = (s.dc_power || (s.station_type !== 'AC' ? s.total_power : 0) || 0) * cnt;
+    const acP = (s.ac_power || (s.station_type === 'AC' ? s.total_power : 0) || 0) * cnt;
+    return n + dcP + acP;
+  }, 0);
+  const cars = stations.reduce((n, s) => n + ((s.simultaneous_charge || 1) * (s.count || 1)), 0);
   const cities = new Set(stations.map(s => s.city).filter(Boolean)).size;
   document.getElementById('stat-dc').textContent = dcCount;
+  document.getElementById('stat-ac').textContent = acCount || '—';
   document.getElementById('stat-guns').textContent = guns || '—';
+  document.getElementById('stat-ac-guns').textContent = acGuns || '—';
   document.getElementById('stat-power').textContent = power ? power.toLocaleString('ru') + ' кВт' : '—';
   document.getElementById('stat-cities').textContent = cities;
+  document.getElementById('stat-cars').textContent = cars || '—';
 }
 
 function renderTable(stations) {
@@ -467,7 +492,7 @@ function renderTable(stations) {
   let cardsHtml = '';
   Object.entries(groups).forEach(([locKey, locs]) => {
     const first = locs[0];
-    const dcLocs = locs.filter(s => s.station_type === 'DC' || !s.station_type);
+    const dcLocs = locs.filter(s => s.station_type === 'DC' || s.station_type === 'ACDC' || !s.station_type);
     const totalPower = dcLocs.reduce((n, s) => n + (s.total_power || 0), 0);
     const totalGuns = dcLocs.reduce((n, s) => {
       const stCount = s.count || 1;
