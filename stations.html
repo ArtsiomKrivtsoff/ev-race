@@ -76,40 +76,34 @@ body{animation:flicker 8s infinite;}
 
 /* месячные кнопки */
 .month-filters{display:flex;gap:5px;flex-wrap:wrap;}
-.month-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 7px;border:1px solid;cursor:pointer;transition:all .15s;opacity:.5;white-space:nowrap;}
-.month-btn.on{opacity:1;box-shadow:0 0 6px currentColor;}
-.month-btn:hover{opacity:.85;}
-.month-btn.winter{color:var(--winter);border-color:rgba(0,229,255,.3);}
-.month-btn.winter.on{background:rgba(0,229,255,.1);}
-.month-btn.spring{color:var(--spring);border-color:rgba(170,255,0,.3);}
-.month-btn.spring.on{background:rgba(170,255,0,.1);}
-.month-btn.summer{color:var(--summer);border-color:rgba(255,68,170,.3);}
-.month-btn.summer.on{background:rgba(255,68,170,.1);}
-.month-btn.autumn{color:var(--autumn);border-color:rgba(255,170,0,.3);}
-.month-btn.autumn.on{background:rgba(255,170,0,.1);}
-.month-btn.all-months{color:var(--green-dim);border-color:var(--green-dark);}
-.month-btn.all-months.on{color:var(--green);border-color:var(--green);background:rgba(0,255,65,.07);}
+.month-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 7px;border:1px solid;cursor:pointer;transition:all .2s;opacity:.25;white-space:nowrap;}
+.month-btn:hover{opacity:.6;}
+.month-btn.on{opacity:1;box-shadow:0 0 8px currentColor;}
+.month-btn.winter{color:var(--winter);border-color:rgba(0,229,255,.25);}
+.month-btn.winter.on{background:rgba(0,229,255,.08);border-color:var(--winter);}
+.month-btn.spring{color:var(--spring);border-color:rgba(170,255,0,.25);}
+.month-btn.spring.on{background:rgba(170,255,0,.08);border-color:var(--spring);}
+.month-btn.summer{color:var(--summer);border-color:rgba(255,68,170,.25);}
+.month-btn.summer.on{background:rgba(255,68,170,.08);border-color:var(--summer);}
+.month-btn.autumn{color:var(--autumn);border-color:rgba(255,170,0,.25);}
+.month-btn.autumn.on{background:rgba(255,170,0,.08);border-color:var(--autumn);}
 
 /* operator filter badges */
 .op-filters{display:flex;gap:6px;flex-wrap:wrap;}
-.op-filter-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 9px;cursor:pointer;transition:all .15s;border:1px solid transparent;opacity:.4;}
-.op-filter-btn.on{opacity:1;box-shadow:0 0 8px rgba(0,0,0,.4);}
-.op-filter-btn:hover{opacity:.8;}
+.op-filter-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 9px;cursor:pointer;transition:all .2s;border:1px solid transparent;opacity:.25;}
+.op-filter-btn:hover{opacity:.6;}
+.op-filter-btn.on{opacity:1;box-shadow:0 0 8px rgba(0,0,0,.5);}
 
 /* city buttons */
 .city-filters{display:flex;gap:5px;flex-wrap:wrap;}
-.city-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 8px;border:1px solid var(--green-dark);color:var(--green-dim);background:transparent;cursor:pointer;transition:all .15s;}
-.city-btn.on{border-color:var(--green);color:var(--green);background:rgba(0,255,65,.05);}
-.city-btn:hover{color:var(--green);}
+.city-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 8px;border:1px solid var(--green-dark);color:var(--green-dim);background:transparent;cursor:pointer;transition:all .2s;opacity:.25;}
+.city-btn.on{opacity:1;border-color:var(--green);color:var(--green);background:rgba(0,255,65,.05);}
+.city-btn:hover{opacity:.6;}
 
-/* new filter */
-.new-filter-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 8px;border:1px solid var(--green-dark);color:var(--green-dim);background:transparent;cursor:pointer;transition:all .15s;}
-.new-filter-btn.on{border-color:var(--green);color:var(--green);background:rgba(0,255,65,.08);}
-
-/* reset button */
-.reset-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 10px;border:1px solid rgba(255,68,68,.4);color:#ff4444;background:rgba(255,68,68,.07);cursor:pointer;transition:all .15s;display:none;}
+/* reset button — всегда яркая */
+.reset-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 10px;border:1px solid #ff4444;color:#ff4444;background:rgba(255,68,68,.1);cursor:pointer;transition:all .2s;display:none;box-shadow:0 0 10px rgba(255,68,68,.4),0 0 20px rgba(255,68,68,.2);}
 .reset-btn.visible{display:inline-block;}
-.reset-btn:hover{border-color:#ff4444;background:rgba(255,68,68,.15);}
+.reset-btn:hover{background:rgba(255,68,68,.25);box-shadow:0 0 16px rgba(255,68,68,.7),0 0 30px rgba(255,68,68,.3);}
 
 /* SECTION HEAD */
 .section-head{font-size:10px;color:var(--green-dim);letter-spacing:2px;border-bottom:1px solid var(--green-dark);padding-bottom:6px;margin-bottom:12px;}
@@ -236,20 +230,16 @@ table.reg td.date{font-size:10px;color:var(--green-dark);}
     <div class="filter-row">
       <span class="filter-label">ОПЕРАТОР:</span>
       <div class="op-filters" id="op-filter">
-        <span class="op-filter-btn op-bf on" onclick="setOp('batteryfly')" data-op="batteryfly">BatteryFly</span>
-        <span class="op-filter-btn op-fo on" onclick="setOp('forevo')" data-op="forevo">forEVo</span>
-        <span class="op-filter-btn op-za on" onclick="setOp('zaryadka')" data-op="zaryadka">Zaryadka</span>
-        <span class="op-filter-btn op-uc on" onclick="setOp('united')" data-op="united">United Co.</span>
-        <span class="op-filter-btn op-cs on" onclick="setOp('csms')" data-op="csms">Гродн. ЦСМС</span>
+        <span class="op-filter-btn op-bf" onclick="setOp('batteryfly')" data-op="batteryfly">BatteryFly</span>
+        <span class="op-filter-btn op-fo" onclick="setOp('forevo')" data-op="forevo">forEVo</span>
+        <span class="op-filter-btn op-za" onclick="setOp('zaryadka')" data-op="zaryadka">Zaryadka</span>
+        <span class="op-filter-btn op-uc" onclick="setOp('united')" data-op="united">United Co.</span>
+        <span class="op-filter-btn op-cs" onclick="setOp('csms')" data-op="csms">Гродн. ЦСМС</span>
       </div>
     </div>
     <div class="filter-row">
       <span class="filter-label">ГОРОД:</span>
       <div class="city-filters" id="city-filter"></div>
-    </div>
-    <div class="filter-row">
-      <span class="filter-label">НОВИНКИ:</span>
-      <span class="new-filter-btn" id="f-new" onclick="toggleNew()">★ ТОЛЬКО NEW</span>
       <span class="reset-btn" id="reset-btn" onclick="resetFilters()">✕ СБРОСИТЬ</span>
     </div>
   </div>
@@ -332,7 +322,6 @@ let allStations = [];
 let filterMonth = 'all';
 let filterOp = 'all';
 let filterCity = 'all';
-let filterNew = false;
 
 function getCurrentRoundEnd() {
   const now = new Date();
@@ -381,24 +370,21 @@ function getFiltered() {
     }
     if (filterOp !== 'all' && s.operator !== filterOp) return false;
     if (filterCity !== 'all' && (s.city || '').toLowerCase() !== filterCity) return false;
-    if (filterNew && !isNew(s.station_date)) return false;
     return true;
   });
 }
 
 function buildMonthFilter(stations) {
-  // считаем станции по месяцам
   const counts = {};
   stations.forEach(s => {
     const m = parseInt(s.station_date.split('-')[1], 10) - 1;
     counts[m] = (counts[m] || 0) + 1;
   });
-
   const wrap = document.getElementById('month-filter');
-  let html = `<span class="month-btn all-months on" onclick="setMonth('all')" data-month="all">ВСЕ</span>`;
+  let html = '';
   MONTHS.forEach((name, i) => {
-    if (!counts[i]) return; // скрываем месяцы без станций
-    html += `<span class="month-btn ${MONTH_SEASON[i]} on" onclick="setMonth(${i})" data-month="${i}">${name} | ${counts[i]}</span>`;
+    if (!counts[i]) return;
+    html += `<span class="month-btn ${MONTH_SEASON[i]}" onclick="setMonth(${i})" data-month="${i}">${name} | ${counts[i]}</span>`;
   });
   wrap.innerHTML = html;
 }
@@ -406,7 +392,7 @@ function buildMonthFilter(stations) {
 function buildCityFilter(stations) {
   const cities = [...new Set(stations.map(s => s.city).filter(Boolean))].sort();
   const wrap = document.getElementById('city-filter');
-  let html = `<span class="city-btn on" onclick="setCity('all')" data-city="all">ВСЕ</span>`;
+  let html = '';
   cities.forEach(c => {
     html += `<span class="city-btn" onclick="setCity('${c.toLowerCase()}')" data-city="${c.toLowerCase()}">${c.toUpperCase()}</span>`;
   });
@@ -414,7 +400,7 @@ function buildCityFilter(stations) {
 }
 
 function updateResetBtn() {
-  const active = filterMonth !== 'all' || filterOp !== 'all' || filterCity !== 'all' || filterNew;
+  const active = filterMonth !== 'all' || filterOp !== 'all' || filterCity !== 'all';
   document.getElementById('reset-btn').classList.toggle('visible', active);
 }
 
@@ -531,32 +517,26 @@ function renderTable(stations) {
 }
 
 function setMonth(val) {
-  filterMonth = val;
+  filterMonth = filterMonth === val ? 'all' : val; // повторный клик — сброс
   document.querySelectorAll('#month-filter span').forEach(el => {
-    el.classList.toggle('on', String(el.dataset.month) === String(val));
+    el.classList.toggle('on', String(el.dataset.month) === String(filterMonth));
   });
   applyFilters();
 }
 
 function setOp(val) {
-  filterOp = val;
+  filterOp = filterOp === val ? 'all' : val;
   document.querySelectorAll('#op-filter span').forEach(el => {
-    el.classList.toggle('on', val === 'all' || el.dataset.op === val);
+    el.classList.toggle('on', el.dataset.op === filterOp);
   });
   applyFilters();
 }
 
 function setCity(val) {
-  filterCity = val;
+  filterCity = filterCity === val ? 'all' : val;
   document.querySelectorAll('#city-filter span').forEach(el => {
-    el.classList.toggle('on', el.dataset.city === val);
+    el.classList.toggle('on', el.dataset.city === filterCity);
   });
-  applyFilters();
-}
-
-function toggleNew() {
-  filterNew = !filterNew;
-  document.getElementById('f-new').classList.toggle('on', filterNew);
   applyFilters();
 }
 
@@ -564,11 +544,7 @@ function resetFilters() {
   filterMonth = 'all';
   filterOp = 'all';
   filterCity = 'all';
-  filterNew = false;
-  document.querySelectorAll('#month-filter span').forEach(el => el.classList.toggle('on', el.dataset.month === 'all'));
-  document.querySelectorAll('#op-filter span').forEach(el => el.classList.add('on'));
-  document.querySelectorAll('#city-filter span').forEach(el => el.classList.toggle('on', el.dataset.city === 'all'));
-  document.getElementById('f-new').classList.remove('on');
+  document.querySelectorAll('#month-filter span, #op-filter span, #city-filter span').forEach(el => el.classList.remove('on'));
   applyFilters();
 }
 
