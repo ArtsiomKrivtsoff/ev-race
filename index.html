@@ -239,6 +239,8 @@ function setTheme(theme) {
   // Turnstile тема
   const ts = document.getElementById('vote-turnstile');
   if (ts) ts.setAttribute('data-theme', theme === 'tesla-light' ? 'light' : 'dark');
+  // перерисовать операторов — медали зависят от темы
+  if (document.getElementById('operators-grid').children.length > 0) renderOperators();
 }
 
 // восстановить тему при загрузке
@@ -320,7 +322,52 @@ async function loadStationsData() {
 // ============================================================
 // МЕДАЛИ
 // ============================================================
+function getCurrentTheme() {
+  return localStorage.getItem('ev_race_theme') || 'arcade';
+}
+
 function medalSVG(rank, hasCount) {
+  const theme = getCurrentTheme();
+  const isTesla = theme === 'tesla-light' || theme === 'tesla-dark';
+  const isDark  = theme === 'tesla-dark';
+
+  if (isTesla) return medalSVG_tesla(rank, hasCount, isDark);
+  return medalSVG_arcade(rank, hasCount);
+}
+
+function medalSVG_tesla(rank, hasCount, isDark) {
+  if (!hasCount) {
+    const clr = isDark ? '#444' : '#ccc';
+    const brd = isDark ? '#333' : '#ddd';
+    return `<svg width="36" height="36" viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" fill="none" stroke="${brd}" stroke-width="1.5"/><text x="18" y="23" text-anchor="middle" font-family="Roboto,sans-serif" font-size="13" font-weight="400" fill="${clr}">${rank}</text></svg>`;
+  }
+  if (rank === 1) {
+    const ribbon = isDark ? '#C89A00' : '#E6A800';
+    const bg     = isDark ? '#1e1a00' : '#FFF8E0';
+    const stroke = isDark ? '#D4A900' : '#F5C518';
+    const text   = isDark ? '#F5C518' : '#B8860B';
+    return `<svg width="44" height="52" viewBox="0 0 44 52"><rect x="17" y="0" width="10" height="6" rx="2" fill="${ribbon}"/><circle cx="22" cy="34" r="16" fill="${bg}" stroke="${stroke}" stroke-width="1.5"/><circle cx="22" cy="34" r="11" fill="none" stroke="${stroke}" stroke-width="1"/><text x="22" y="39" text-anchor="middle" font-family="Roboto,sans-serif" font-size="13" font-weight="500" fill="${text}">1</text></svg>`;
+  }
+  if (rank === 2) {
+    const ribbon = isDark ? '#777'   : '#999';
+    const bg     = isDark ? '#1a1a1a': '#F5F5F5';
+    const stroke = isDark ? '#888'   : '#B0B0B0';
+    const text   = isDark ? '#ccc'   : '#666';
+    return `<svg width="44" height="52" viewBox="0 0 44 52"><rect x="17" y="0" width="10" height="6" rx="2" fill="${ribbon}"/><circle cx="22" cy="34" r="16" fill="${bg}" stroke="${stroke}" stroke-width="1.5"/><circle cx="22" cy="34" r="11" fill="none" stroke="${stroke}" stroke-width="1"/><text x="22" y="39" text-anchor="middle" font-family="Roboto,sans-serif" font-size="13" font-weight="500" fill="${text}">2</text></svg>`;
+  }
+  if (rank === 3) {
+    const ribbon = isDark ? '#8B4513': '#A0522D';
+    const bg     = isDark ? '#1a1000': '#FDF0E8';
+    const stroke = isDark ? '#A0522D': '#CD7F32';
+    const text   = isDark ? '#CD7F32': '#8B4513';
+    return `<svg width="44" height="52" viewBox="0 0 44 52"><rect x="17" y="0" width="10" height="6" rx="2" fill="${ribbon}"/><circle cx="22" cy="34" r="16" fill="${bg}" stroke="${stroke}" stroke-width="1.5"/><circle cx="22" cy="34" r="11" fill="none" stroke="${stroke}" stroke-width="1"/><text x="22" y="39" text-anchor="middle" font-family="Roboto,sans-serif" font-size="13" font-weight="500" fill="${text}">3</text></svg>`;
+  }
+  const clr = isDark ? '#444' : '#ccc';
+  const brd = isDark ? '#333' : '#ddd';
+  return `<svg width="36" height="36" viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" fill="none" stroke="${brd}" stroke-width="1.5"/><text x="18" y="23" text-anchor="middle" font-family="Roboto,sans-serif" font-size="13" font-weight="400" fill="${clr}">${rank}</text></svg>`;
+}
+
+function medalSVG_arcade(rank, hasCount) {
   if (!hasCount) return `<span style="font-family:monospace;font-size:8px;color:#333">#${rank}</span>`;
   const colors = {
     1:{outer:'#ffd700',inner:'#ffec6e',text:'#7a5c00',ribbon:'#e6a800'},
