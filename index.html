@@ -290,11 +290,11 @@
 // МЕТА-ДАННЫЕ ОПЕРАТОРОВ (не менять вручную — данные из базы)
 // ============================================================
 const OPERATORS_META = [
-  { id: 'batteryfly', name: 'BatteryFly',      goal: 500, color: '#005EEB', logo: 'logos/batteryfly.png', darkBg: true  },
-  { id: 'forevo',     name: 'forEVo',           goal: 300, color: '#b44fff', logo: 'logos/forevo.png',     darkBg: true  },
-  { id: 'zaryadka',   name: 'Zaryadka',         goal: 100, color: '#00cfff', logo: 'logos/zaryadka.svg',   darkBg: false },
-  { id: 'united',     name: 'United Company',   goal: 10,  color: '#F5821F', logo: 'logos/united.png',     darkBg: true  },
-  { id: 'csms',       name: 'Гродненский ЦСМС', goal: 100, color: '#FF6B6B', logo: 'logos/csms.png',       darkBg: false },
+  { id: 'batteryfly', name: 'BatteryFly',      color: '#005EEB', logo: 'logos/batteryfly.png', darkBg: true  },
+  { id: 'forevo',     name: 'forEVo',           color: '#b44fff', logo: 'logos/forevo.png',     darkBg: true  },
+  { id: 'zaryadka',   name: 'Zaryadka',         color: '#00cfff', logo: 'logos/zaryadka.svg',   darkBg: false },
+  { id: 'united',     name: 'United Company',   color: '#F5821F', logo: 'logos/united.png',     darkBg: true  },
+  { id: 'csms',       name: 'Гродненский ЦСМС', color: '#FF6B6B', logo: 'logos/csms.png',       darkBg: false },
 ];
 const TOTAL_GOAL = 1010;
 let OPERATORS = OPERATORS_META.map(o => ({ ...o, count: 0, added: 0, updated: '—' }));
@@ -315,6 +315,7 @@ async function loadStationsData() {
         if (op) {
           op.count = row.total || 0;
           op.added = row.last_added || 0;
+          op.goal = row.goal || 1;
           if (row.last_date) {
             const d = new Date(row.last_date);
             op.updated = String(d.getDate()).padStart(2,'0') + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + d.getFullYear();
