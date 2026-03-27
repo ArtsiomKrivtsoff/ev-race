@@ -13,156 +13,23 @@
 <meta property="og:type" content="website">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://evrace.by/">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<!-- Yandex.Metrika -->
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
+ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830', 'ym');
-    ym(108141830, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --green: #00ff41; --green-dim: #00aa2b; --green-dark: #003d0f;
-    --yellow: #ffd700; --bg: #0a0a0a; --card-bg: #0d1f0d; --text: #00ff41; --text-dim: #00aa2b;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: 'Share Tech Mono', monospace; min-height: 100vh; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; top:0;left:0;right:0;bottom:0; background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.1) 2px,rgba(0,0,0,.1) 4px); pointer-events:none; z-index:1000; }
-  @keyframes flicker { 0%,100%{opacity:1} 93%{opacity:.87} 96%{opacity:.93} }
-  body { animation: flicker 8s infinite; }
 
-  .container { max-width: 860px; margin: 0 auto; padding: 16px 14px; }
-  .nav { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--green-dark); }
-  .nav-btn { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:2px; padding:8px 12px; border:1px solid var(--green-dark); background:transparent; color:var(--green-dim); text-decoration:none; transition:all .2s; -webkit-tap-highlight-color:transparent; }
-  .nav-btn:hover,.nav-btn:active { border-color:var(--green-dim); color:var(--green); }
-  .nav-btn.active { border-color:var(--green); color:var(--green); background:rgba(0,255,65,.05); }
-
-  .header { text-align:center; padding:32px 0 24px; border-bottom:2px solid var(--green); margin-bottom:20px; }
-  .header-subtitle { font-size:10px; color:var(--text-dim); letter-spacing:3px; margin-bottom:14px; line-height:1.6; }
-  .header-title { font-family:'Press Start 2P',monospace; font-size:clamp(22px,6vw,38px); color:var(--green); text-shadow:0 0 20px var(--green),0 0 40px var(--green-dim); line-height:1.3; margin-bottom:10px; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-  .cursor { animation:blink 1s infinite; }
-  .header-year { font-family:'Press Start 2P',monospace; font-size:clamp(11px,3vw,15px); color:var(--yellow); text-shadow:0 0 10px var(--yellow); letter-spacing:5px; margin-bottom:22px; }
-  .header-intro { font-size:clamp(13px,2vw,16px); color:var(--text-dim); line-height:2; text-align:left; }
-  .header-intro strong { color:var(--green); }
-  .header-intro .highlight { color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:11px; }
-
-  .countdown-title { text-align:center; font-size:clamp(12px,2.5vw,18px); color:var(--text-dim); letter-spacing:3px; margin:24px 0 10px; }
-  .countdown-section { display:flex; justify-content:center; gap:10px; margin-bottom:24px; }
-  .countdown-block { text-align:center; border:1px solid var(--green-dim); padding:10px 8px; flex:1; max-width:90px; background:var(--card-bg); }
-  .countdown-num { font-family:'Press Start 2P',monospace; font-size:clamp(14px,4vw,22px); color:var(--yellow); text-shadow:0 0 10px var(--yellow); display:block; }
-  .countdown-label { font-size:8px; color:var(--text-dim); letter-spacing:1px; margin-top:5px; display:block; }
-
-  .total-section { border:2px solid var(--green); padding:18px 16px; margin-bottom:24px; background:var(--card-bg); position:relative; }
-  .total-section::before { content:' ОБЩИЙ ПРОГРЕСС '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-size:clamp(10px,2vw,14px); color:var(--green); letter-spacing:2px; }
-  .total-numbers { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px; flex-wrap:wrap; gap:6px; }
-  .total-count { font-family:'Press Start 2P',monospace; font-size:clamp(22px,6vw,38px); color:var(--green); text-shadow:0 0 20px var(--green); margin-bottom:8px; }
-  .total-goal { font-size:12px; color:var(--text-dim); }
-  .total-goal span { color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:10px; }
-  .progress-bar-wrap { background:#001a00; border:1px solid var(--green-dim); height:22px; position:relative; overflow:hidden; }
-  @keyframes shine { 0%{left:-100%} 100%{left:200%} }
-  .progress-bar-fill { height:100%; background:linear-gradient(90deg,var(--green-dim),var(--green)); transition:width 1.5s ease; position:relative; overflow:hidden; }
-  .progress-bar-fill::after { content:''; position:absolute; top:0;bottom:0; width:40px; background:rgba(255,255,255,.12); animation:shine 2.5s infinite; }
-  .progress-bar-stacked { display:flex; height:100%; width:100%; }
-  .stack-seg { height:100%; flex-shrink:0; }
-  .progress-pct { display:none; }
-  .op-meta { font-size:9px; color:var(--text-dim); margin-top:6px; letter-spacing:1px; }
-  .updated { text-align:right; font-size:9px; color:var(--text-dim); margin-top:7px; }
-
-  .operators-title { font-family:'Press Start 2P',monospace; font-size:clamp(12px,2.5vw,18px); color:var(--text-dim); letter-spacing:3px; margin-bottom:14px; text-align:center; }
-  .operators-grid { display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }
-  .op-card { border:1px solid var(--green-dim); background:var(--card-bg); padding:14px 16px; transition:border-color .3s,box-shadow .3s; position:relative; }
-  .op-card:hover { border-color:var(--green); box-shadow:0 0 12px rgba(0,255,65,.1); }
-  .op-rank { position:absolute; top:10px; right:14px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-family:'Press Start 2P',monospace; font-size:8px; image-rendering:pixelated; }
-  .medal { width:28px; height:28px; position:relative; display:inline-block; image-rendering:pixelated; }
-  .medal svg { width:28px; height:28px; image-rendering:pixelated; shape-rendering:crispEdges; }
-  .op-top { display:flex; align-items:center; gap:14px; margin-bottom:10px; }
-  .op-logo { width:80px; height:38px; object-fit:contain; flex-shrink:0; }
-  .op-logo.dark-bg { background:#111; padding:4px; }
-  .op-name { font-size:12px; color:var(--text); letter-spacing:1px; flex:1; min-width:0; }
-  .op-score { font-family:'Press Start 2P',monospace; font-size:clamp(13px,3vw,17px); color:var(--green); text-shadow:0 0 10px var(--green); white-space:nowrap; margin-right:36px; }
-  .op-score .score-x { color:var(--text-dim); font-size:.6em; }
-  .op-bar-wrap { background:#001a00; border:1px solid #003d0f; height:5px; overflow:hidden; }
-  .op-bar-fill { height:100%; background:var(--green); transition:width 1.5s ease; box-shadow:0 0 4px var(--green); }
-
-  .vote-section { border:2px solid var(--yellow); padding:20px 16px; margin-bottom:24px; background:#1a1500; position:relative; }
-  .start-point { text-align:center; font-family:'Press Start 2P',monospace; font-size:clamp(12px,3vw,22px); color:#00ffff; text-shadow:0 0 15px #00ffff, 0 0 30px rgba(0,255,255,.3); line-height:1.5; padding:16px 0 20px; letter-spacing:2px; }
-  .vote-section::before { content:' СДЕЛАЙ СТАВКУ '; position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--bg); padding:0 10px; font-family:'Press Start 2P',monospace; font-size:clamp(10px,2.5vw,14px); color:var(--yellow); letter-spacing:2px; white-space:nowrap; }
-  .vote-question { font-size:clamp(12px,2.5vw,15px); color:var(--yellow); letter-spacing:1px; margin-bottom:18px; line-height:1.9; }
-  .vote-options { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin-bottom:14px; }
-  .vote-btn { border:1px solid var(--yellow); background:transparent; color:var(--yellow); font-family:'Share Tech Mono',monospace; font-size:10px; padding:10px 6px; cursor:pointer; transition:all .2s; text-align:center; display:flex; flex-direction:column; align-items:center; gap:6px; -webkit-tap-highlight-color:transparent; }
-  .vote-btn:hover,.vote-btn:active { background:rgba(255,215,0,.08); }
-  .vote-btn.selected { background:rgba(255,215,0,.15); border-width:2px; box-shadow:0 0 12px rgba(255,215,0,.25); }
-  .vote-btn img { width:65px; height:30px; object-fit:contain; background:#111; padding:3px; }
-  .vote-submit { display:block; width:100%; border:2px solid var(--yellow); background:transparent; color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:10px; padding:14px; cursor:pointer; letter-spacing:2px; transition:all .2s; -webkit-tap-highlight-color:transparent; }
-  .vote-submit:hover:not(:disabled),.vote-submit:active:not(:disabled) { background:var(--yellow); color:#000; }
-  .vote-submit:disabled { opacity:.35; cursor:not-allowed; }
-  .vote-results { display:none; }
-  .vote-result-item { margin-bottom:12px; }
-  .vote-result-top { display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px; }
-  .vote-result-top .rname { color:var(--text); }
-  .vote-result-top .rpct { color:var(--yellow); font-family:'Press Start 2P',monospace; font-size:9px; }
-  .vote-result-bar-wrap { background:#1a1000; height:10px; border:1px solid #3d3000; }
-  .vote-result-bar { height:100%; background:var(--yellow); transition:width 1s ease; box-shadow:0 0 5px var(--yellow); }
-  .vote-result-bar.mine { background:var(--green); box-shadow:0 0 6px var(--green); }
-  .vote-message { font-family:'Press Start 2P',monospace; font-size:9px; color:var(--green); text-align:center; margin-bottom:18px; line-height:1.9; text-shadow:0 0 10px var(--green); }
-  .vote-total-players { text-align:center; font-size:10px; color:var(--text-dim); margin-top:12px; letter-spacing:2px; }
-
-  .author-section { border:1px solid var(--green-dim); padding:20px 16px; margin-bottom:24px; background:var(--card-bg); position:relative; }
-  .author-section::before { content:' ARTSIOM KRIVTSOFF | АВТОР ПРОЕКТА '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-size:9px; color:var(--green-dim); letter-spacing:2px; }
-  .author-about-btn { display:block; width:100%; border:1px solid var(--green); background:transparent; color:var(--green); font-family:'Share Tech Mono',monospace; font-size:13px; padding:14px; cursor:pointer; letter-spacing:2px; text-align:center; text-decoration:none; margin-bottom:18px; transition:all .2s; -webkit-tap-highlight-color:transparent; box-sizing:border-box; }
-  .author-about-btn:hover,.author-about-btn:active { background:rgba(0,255,65,.08); box-shadow:0 0 10px rgba(0,255,65,.12); }
-  .section-label { font-size:9px; color:var(--text-dim); letter-spacing:3px; margin-bottom:10px; }
-  .author-links { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:18px; width:100%; box-sizing:border-box; }
-  .author-link-btn { border:1px solid var(--green-dim); background:transparent; color:var(--text-dim); font-family:'Share Tech Mono',monospace; font-size:11px; padding:12px 4px; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; transition:all .2s; -webkit-tap-highlight-color:transparent; width:100%; min-height:44px; box-sizing:border-box; white-space:normal; word-break:break-word; line-height:1.4; }
-  .author-link-btn:hover,.author-link-btn:active { border-color:var(--green); color:var(--green); background:rgba(0,255,65,.05); }
-  .author-contacts { display:grid; grid-template-columns:1fr 1fr; gap:8px; width:100%; box-sizing:border-box; }
-  .author-contact-btn { border:1px solid var(--green-dim); background:transparent; color:var(--text-dim); font-family:'Share Tech Mono',monospace; font-size:11px; padding:13px 6px; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; transition:all .2s; -webkit-tap-highlight-color:transparent; width:100%; min-height:44px; box-sizing:border-box; white-space:normal; word-break:break-word; line-height:1.4; }
-  .author-contact-btn:hover,.author-contact-btn:active { border-color:var(--green); color:var(--green); }
-  .big-phrase { text-align:center; font-family:'Press Start 2P',monospace; font-size:clamp(14px,4vw,28px); color:var(--yellow); text-shadow:0 0 20px var(--yellow),0 0 40px rgba(255,215,0,.3); line-height:1.5; padding:24px 0; letter-spacing:2px; }
-  .race-section { margin-bottom:24px; }
-  .race-title-label { font-family:'Press Start 2P',monospace; font-size:clamp(10px,2.5vw,14px); color:var(--text-dim); letter-spacing:3px; text-align:center; margin-bottom:12px; }
-  .race-block { border:1px solid var(--green-dim); background:var(--card-bg); overflow:hidden; position:relative; }
-  .race-canvas { display:block; width:100%; }
-  .race-foot { text-align:center; font-size:9px; color:var(--green-dark); letter-spacing:2px; padding:5px; }
-  .visit-counter { text-align:center; font-size:11px; color:var(--text-dim); margin-bottom:20px; letter-spacing:2px; line-height:1.8; }
-  .visit-counter span { color:var(--green); font-family:'Press Start 2P',monospace; font-size:11px; }
-  @media (max-width:400px) {
-    .author-links { grid-template-columns:1fr; }
-    .author-contacts { grid-template-columns:1fr; }
-  }
-
-  .cookie-banner { position:fixed; bottom:0; left:0; right:0; background:#0d1f0d; border-top:2px solid var(--green); padding:12px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; z-index:9999; flex-wrap:wrap; }
-  .cookie-text { font-size:10px; color:var(--text-dim); line-height:1.6; flex:1; min-width:180px; }
-  .cookie-btn { border:1px solid var(--green); background:transparent; color:var(--green); font-family:'Share Tech Mono',monospace; font-size:11px; padding:8px 18px; cursor:pointer; white-space:nowrap; -webkit-tap-highlight-color:transparent; }
-  .cookie-btn:hover,.cookie-btn:active { background:var(--green); color:#000; }
-
-  .footer { border-top:1px solid var(--green-dark); padding:18px 0 90px; text-align:center; color:var(--text-dim); line-height:2; }
-  .footer-links { font-size:12px; margin-bottom:10px; }
-  .footer-links a { color:var(--green-dim); text-decoration:none; margin:0 8px; }
-  .footer-links a:hover { color:var(--green); }
-  .footer-disclaimer { font-size:12px; line-height:1.9; margin-bottom:6px; }
-  .footer-privacy { font-size:11px; color:#006615; margin-bottom:6px; }
-  .footer-copy { font-size:9px; }
-
-  @media (max-width:480px) {
-    .vote-options { grid-template-columns:1fr 1fr; }
-    .author-links { grid-template-columns:1fr 1fr 1fr; }
-  }
-  @media (min-width:640px) {
-    .vote-options { grid-template-columns:repeat(5,1fr); }
-    .author-links { grid-template-columns:repeat(5,1fr); }
-  }
-</style>
+<!-- ТЕМА: меняется JS-ом -->
+<link id="theme-css" rel="stylesheet" href="css/arcade.css">
+<!-- prefetch остальных тем чтобы переключение было мгновенным -->
+<link rel="prefetch" href="css/tesla-light.css">
+<link rel="prefetch" href="css/tesla-dark.css">
 </head>
 <body>
 
@@ -173,29 +40,49 @@
 
 <div class="container">
 
-  <div class="nav">
-    <a class="nav-btn active" href="#">ГЛАВНАЯ</a>
-    <a class="nav-btn" href="tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
-    <a class="nav-btn" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+  <!-- СТАТУС-БАР: бургер + навигация + переключатель тем -->
+  <div class="statusbar" id="statusbar">
+    <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-desktop">
+      <a class="nav-link active" href="#">ГЛАВНАЯ</a>
+      <a class="nav-link" href="tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <a class="nav-link" href="registry.html">РЕЕСТР СТАНЦИЙ</a>
+    </div>
+    <div class="theme-seg">
+      <button class="theme-seg-btn active" id="btn-arcade"       onclick="setTheme('arcade')">⬡ ARCADE</button>
+      <button class="theme-seg-btn"        id="btn-tesla-light"  onclick="setTheme('tesla-light')">☀ TESLA</button>
+      <button class="theme-seg-btn"        id="btn-tesla-dark"   onclick="setTheme('tesla-dark')">◑ TESLA</button>
+    </div>
   </div>
 
-  <div class="header">
+  <!-- МОБИЛЬНОЕ МЕНЮ (выпадает вниз) -->
+  <div class="nav-mobile-drop" id="mobileMenu">
+    <a class="nav-mobile-link active" href="#" onclick="closeBurger()">ГЛАВНАЯ</a>
+    <a class="nav-mobile-link" href="tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+    <a class="nav-mobile-link" href="registry.html">РЕЕСТР СТАНЦИЙ</a>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
     <div class="header-subtitle">▶ #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ ◀</div>
-    <div class="header-title">EV RACE<span class="cursor">_</span></div>
+    <div class="hero-title">EV RACE<span class="cursor">_</span></div>
     <div class="header-year">БЕЛАРУСЬ 2026</div>
     <div class="header-intro">
-      <strong>18 марта 2026 года</strong> в Министерстве энергетики Республики Беларусь прошёл круглый стол по развитию зарядной инфраструктуры. Пять частных операторов озвучили министру свои планы по запуску быстрых зарядных станций до конца 2026 года.<br>
-      Планы каждого озвучивать не стану, НО...<br>
-      Суммарно все обещали ввести в работу до конца 2026 года <span class="highlight">1010 DC зарядных станций</span>.<br>
+      <strong>18 марта 2026 года</strong> в Министерстве энергетики Республики Беларусь прошёл круглый стол по развитию зарядной инфраструктуры. Пять частных операторов озвучили министру свои планы по запуску быстрых зарядных станций до конца 2026 года.<br><br>
+      Планы каждого озвучивать не стану, НО...<br><br>
+      Суммарно все обещали ввести в работу до конца 2026 года <span class="highlight">1010 DC зарядных станций</span>.<br><br>
       Эта страница считает. Сравним заявленное с реальным 31 декабря!
     </div>
-    <div style="margin-top:20px;padding:14px 16px;border-left:3px solid #00ffff;background:rgba(0,255,255,0.04);">
-      <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#00ffff;letter-spacing:2px;margin-bottom:8px;text-align:left;">► UPD 26.03.2026</div>
-      <div style="font-size:clamp(13px,2vw,15px);color:#00ffff;line-height:1.9;text-align:left;">Великодушие - одно из моих имён! Засчитываю все DC станции с 1 января 2026 года.<br>Это фора, господа операторы. Теперь отмазок нет. Пользуйтесь.</div>
-      <div style="margin-top:12px;font-size:11px;color:#00aa2b;letter-spacing:1px;border-top:1px solid #003d0f;padding-top:10px;text-align:left;">Блюститель честного заряда · <span style="color:#00ff41;font-family:'Press Start 2P',monospace;font-size:9px;">Artsiom Krivtsoff</span></div>
+    <div class="upd-block">
+      <div class="upd-label">► UPD 26.03.2026</div>
+      <div class="upd-text">Великодушие — одно из моих имён! Засчитываю все DC станции с 1 января 2026 года.<br>Это фора, господа операторы. Теперь отмазок нет. Пользуйтесь.</div>
+      <div class="upd-sign">Блюститель честного заряда · <span>Artsiom Krivtsoff</span></div>
     </div>
   </div>
 
+  <!-- ОБРАТНЫЙ ОТСЧЁТ -->
   <div class="countdown-title">◈ ДО КОНЦА ГОНКИ ОСТАЛОСЬ ◈</div>
   <div class="countdown-section">
     <div class="countdown-block"><span class="countdown-num" id="cd-days">000</span><span class="countdown-label">ДНЕЙ</span></div>
@@ -204,30 +91,33 @@
     <div class="countdown-block"><span class="countdown-num" id="cd-sec">00</span><span class="countdown-label">СЕКУНД</span></div>
   </div>
 
+  <!-- ТОЧКА ОТСЧЁТА -->
   <div class="start-point">ТОЧКА ОТСЧЁТА — 1 января 2026</div>
 
+  <!-- ОБЩИЙ ПРОГРЕСС -->
   <div class="total-section">
+    <div class="total-section-label">Общий прогресс</div>
     <div class="total-numbers">
       <div>
         <div class="total-count" id="total-count">0</div>
         <div class="total-goal">из <span>1010</span> DC станций</div>
       </div>
-      <div style="text-align:right">
-        <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--text-dim);margin-bottom:6px">ВЫПОЛНЕНО</div>
-        <div style="font-family:'Press Start 2P',monospace;font-size:20px;color:var(--yellow);text-shadow:0 0 10px var(--yellow)" id="total-pct">0%</div>
+      <div class="total-pct-block">
+        <div class="total-pct-label">ВЫПОЛНЕНО</div>
+        <div class="total-pct-value" id="total-pct">0%</div>
       </div>
     </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar-stacked" id="total-bar-stacked"></div>
-      <span class="progress-pct" id="total-pct-bar">0%</span>
     </div>
     <div class="updated" id="updated-date">ОБНОВЛЕНО: —</div>
-
   </div>
 
+  <!-- ОПЕРАТОРЫ -->
   <div class="operators-title">▼ УЧАСТНИКИ ГОНКИ ▼</div>
   <div class="operators-grid" id="operators-grid"></div>
 
+  <!-- ГОНКА (canvas) -->
   <div class="race-section">
     <div class="race-title-label">▼ ГОНКА ИДЁТ ▼</div>
     <div class="race-block">
@@ -236,7 +126,9 @@
     </div>
   </div>
 
+  <!-- ГОЛОСОВАНИЕ -->
   <div class="vote-section">
+    <div class="vote-section-label">СДЕЛАЙ СТАВКУ</div>
     <div class="vote-question">КТО УСТАНОВИТ БОЛЬШЕ ВСЕХ СТАНЦИЙ К 31.12.2026?<br>СДЕЛАЙ СВОЮ СТАВКУ — ОДИН ИГРОК, ОДИН ГОЛОС:</div>
     <div class="vote-options" id="vote-options"></div>
     <div class="cf-turnstile" id="vote-turnstile" data-sitekey="0x4AAAAAACtvG988gnpS7YBa" data-theme="dark" data-size="flexible" style="margin-bottom:10px"></div>
@@ -248,8 +140,10 @@
     </div>
   </div>
 
+  <!-- BIG PHRASE -->
   <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
 
+  <!-- АВТОР -->
   <div class="author-section">
     <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank">▶ ОБО МНЕ ◀</a>
     <div class="section-label">▼ TG-КАНАЛЫ #ИМЕЮСКАЗАТЬ ▼</div>
@@ -271,8 +165,18 @@
     </div>
   </div>
 
+  <!-- ПОСЕЩЕНИЯ -->
   <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">...</span> РАЗ</div>
 
+  <!-- ПЕРЕКЛЮЧАТЕЛЬ ВНИЗУ -->
+  <div class="theme-footer-switch">
+    <span class="theme-foot-lbl">СТИЛЬ</span>
+    <button class="theme-foot-btn active" id="foot-arcade"      title="Arcade"      onclick="setTheme('arcade')">⬡</button>
+    <button class="theme-foot-btn"        id="foot-tesla-light" title="Tesla Light" onclick="setTheme('tesla-light')">☀</button>
+    <button class="theme-foot-btn"        id="foot-tesla-dark"  title="Tesla Dark"  onclick="setTheme('tesla-dark')">◑</button>
+  </div>
+
+  <!-- ФУТЕР -->
   <div class="footer">
     <div class="footer-disclaimer">
       Эта страница создана исключительно в развлекательных целях.<br>
@@ -283,68 +187,91 @@
     <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
   </div>
 
-</div>
+</div><!-- /container -->
 
 <script>
 // ============================================================
-// МЕТА-ДАННЫЕ ОПЕРАТОРОВ (не менять вручную — данные из базы)
+// ДАННЫЕ ОПЕРАТОРОВ
 // ============================================================
 const OPERATORS_META = [
-  { id: 'batteryfly', name: 'BatteryFly',      color: '#005EEB', logo: 'logos/batteryfly.png', darkBg: true  },
-  { id: 'forevo',     name: 'forEVo',           color: '#b44fff', logo: 'logos/forevo.png',     darkBg: true  },
-  { id: 'zaryadka',   name: 'Zaryadka',         color: '#00cfff', logo: 'logos/zaryadka.svg',   darkBg: false },
-  { id: 'united',     name: 'United Company',   color: '#F5821F', logo: 'logos/united.png',     darkBg: true  },
-  { id: 'csms',       name: 'Гродненский ЦСМС', color: '#FF6B6B', logo: 'logos/csms.png',       darkBg: false },
+  { id:'batteryfly', name:'BatteryFly',      color:'#005EEB', logo:'logos/batteryfly.png', darkBg:true  },
+  { id:'forevo',     name:'forEVo',           color:'#b44fff', logo:'logos/forevo.png',     darkBg:true  },
+  { id:'zaryadka',   name:'Zaryadka',         color:'#00cfff', logo:'logos/zaryadka.svg',   darkBg:false },
+  { id:'united',     name:'United Company',   color:'#F5821F', logo:'logos/united.png',     darkBg:true  },
+  { id:'csms',       name:'Гродненский ЦСМС', color:'#FF6B6B', logo:'logos/csms.png',       darkBg:false },
 ];
 const TOTAL_GOAL = 1010;
-let OPERATORS = OPERATORS_META.map(o => ({ ...o, count: 0, added: 0, updated: '—' }));
+let OPERATORS    = OPERATORS_META.map(o=>({...o,count:0,added:0,updated:'—'}));
 let LAST_UPDATED = '—';
-// ============================================================
-
-async function loadStationsData() {
-  try {
-    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_stations_summary', {
-      method: 'POST',
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    });
-    const data = await res.json();
-    if (Array.isArray(data)) {
-      data.forEach(row => {
-        const op = OPERATORS.find(o => o.id === row.operator);
-        if (op) {
-          op.count = row.total || 0;
-          op.added = row.last_added || 0;
-          op.goal = row.goal || 1;
-          if (row.last_date) {
-            const d = new Date(row.last_date);
-            op.updated = String(d.getDate()).padStart(2,'0') + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + d.getFullYear();
-          }
-        }
-      });
-      const dates = data.filter(r => r.last_date).map(r => new Date(r.last_date));
-      if (dates.length > 0) {
-        const latest = new Date(Math.max(...dates));
-        LAST_UPDATED = String(latest.getDate()).padStart(2,'0') + '.' + String(latest.getMonth()+1).padStart(2,'0') + '.' + latest.getFullYear();
-      }
-
-    }
-  } catch(e) { console.log('Stations load error', e); }
-  renderOperators();
-}
+let selectedOperator = null;
 
 const SUPABASE_URL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
 
 const VOTE_MESSAGES = {
-  batteryfly: ['МОЩНЫЙ ВЫБОР!', 'СТАВКА НА ЛИДЕРА!', 'ВЕРИШЬ В ЛИДЕРА!'],
-  forevo:     ['СМЕЛАЯ СТАВКА!', 'ВЕРИШЬ В forEVo!', 'ИНТЕРЕСНЫЙ ВЫБОР!'],
-  zaryadka:   ['ОРИГИНАЛЬНЫЙ ВЫБОР!', 'ВЕРИШЬ В ZARYADKA!', 'НЕОЖИДАННО!'],
-  united:     ['РИСКОВАННАЯ СТАВКА!', 'ТЁМНАЯ ЛОШАДКА!', 'ПРОТИВ ТЕЧЕНИЯ!'],
-  grodno:     ['ОЧЕНЬ СМЕЛАЯ СТАВКА!', 'ВЕРИШЬ В РЕГИОНЫ!', 'НЕОЖИДАННЫЙ ВЫБОР!'],
+  batteryfly:['МОЩНЫЙ ВЫБОР!','СТАВКА НА ЛИДЕРА!','ВЕРИШЬ В ЛИДЕРА!'],
+  forevo:    ['СМЕЛАЯ СТАВКА!','ВЕРИШЬ В forEVo!','ИНТЕРЕСНЫЙ ВЫБОР!'],
+  zaryadka:  ['ОРИГИНАЛЬНЫЙ ВЫБОР!','ВЕРИШЬ В ZARYADKA!','НЕОЖИДАННО!'],
+  united:    ['РИСКОВАННАЯ СТАВКА!','ТЁМНАЯ ЛОШАДКА!','ПРОТИВ ТЕЧЕНИЯ!'],
+  csms:      ['ОЧЕНЬ СМЕЛАЯ СТАВКА!','ВЕРИШЬ В РЕГИОНЫ!','НЕОЖИДАННЫЙ ВЫБОР!'],
 };
-let selectedOperator = null;
 
+// ============================================================
+// ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
+// ============================================================
+const THEMES = ['arcade','tesla-light','tesla-dark'];
+
+function setTheme(theme) {
+  // меняем CSS
+  document.getElementById('theme-css').href = 'css/' + theme + '.css';
+  localStorage.setItem('ev_race_theme', theme);
+
+  // кнопки в статус-баре
+  THEMES.forEach(t => {
+    const btn = document.getElementById('btn-' + t);
+    if (btn) btn.classList.toggle('active', t === theme);
+  });
+  // кнопки внизу
+  THEMES.forEach(t => {
+    const btn = document.getElementById('foot-' + t);
+    if (btn) btn.classList.toggle('active', t === theme);
+  });
+  // Turnstile тема
+  const ts = document.getElementById('vote-turnstile');
+  if (ts) ts.setAttribute('data-theme', theme === 'tesla-light' ? 'light' : 'dark');
+}
+
+// восстановить тему при загрузке
+(function() {
+  const saved = localStorage.getItem('ev_race_theme');
+  if (saved && THEMES.includes(saved)) setTheme(saved);
+})();
+
+// ============================================================
+// БУРГЕР
+// ============================================================
+function toggleBurger() {
+  const btn  = document.getElementById('burgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  const open = menu.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+function closeBurger() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('burgerBtn').classList.remove('open');
+}
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobileMenu');
+  const btn  = document.getElementById('burgerBtn');
+  if (menu && menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove('open');
+    btn.classList.remove('open');
+  }
+});
+
+// ============================================================
+// ОБРАТНЫЙ ОТСЧЁТ
+// ============================================================
 function updateCountdown() {
   const diff = new Date('2026-12-31T23:59:59') - new Date();
   if (diff <= 0) return;
@@ -356,313 +283,323 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-function medalSVG(rank, hasCount) {
-  if (!hasCount) {
-    return `<span style="font-family:'Press Start 2P',monospace;font-size:8px;color:#333">#${rank}</span>`;
-  }
-  const colors = {
-    1: { outer:'#ffd700', inner:'#ffec6e', text:'#7a5c00', ribbon:'#e6a800' },
-    2: { outer:'#c0c0c0', inner:'#e8e8e8', text:'#555', ribbon:'#999' },
-    3: { outer:'#cd7f32', inner:'#e8a96e', text:'#5a2d00', ribbon:'#a0522d' },
-  };
-  const c = colors[rank] || { outer:'#333', inner:'#555', text:'#aaa', ribbon:'#222' };
-  if (rank <= 3) {
-    return `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-      <rect x="6" y="0" width="4" height="2" fill="${c.ribbon}"/>
-      <rect x="5" y="2" width="6" height="1" fill="${c.ribbon}"/>
-      <rect x="2" y="3" width="12" height="2" fill="${c.outer}"/>
-      <rect x="1" y="5" width="14" height="1" fill="${c.outer}"/>
-      <rect x="0" y="6" width="16" height="6" fill="${c.outer}"/>
-      <rect x="1" y="12" width="14" height="1" fill="${c.outer}"/>
-      <rect x="2" y="13" width="12" height="1" fill="${c.outer}"/>
-      <rect x="2" y="5" width="12" height="8" fill="${c.inner}"/>
-      <rect x="3" y="4" width="10" height="1" fill="${c.inner}"/>
-      <rect x="3" y="13" width="10" height="1" fill="${c.inner}"/>
-      <text x="8" y="11" font-family="monospace" font-size="6" font-weight="bold" fill="${c.text}" text-anchor="middle">${rank}</text>
-    </svg>`;
-  }
-  return `<span style="font-family:'Press Start 2P',monospace;font-size:8px;color:#555">#${rank}</span>`;
+// ============================================================
+// ЗАГРУЗКА ДАННЫХ
+// ============================================================
+async function loadStationsData() {
+  try {
+    const res  = await fetch(SUPABASE_URL+'/rest/v1/rpc/get_stations_summary', {
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'},
+      body:'{}'
+    });
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      data.forEach(row => {
+        const op = OPERATORS.find(o=>o.id===row.operator);
+        if (op) {
+          op.count   = row.total || 0;
+          op.added   = row.last_added || 0;
+          op.goal    = row.goal || 1;
+          if (row.last_date) {
+            const d = new Date(row.last_date);
+            op.updated = String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear();
+          }
+        }
+      });
+      const dates = data.filter(r=>r.last_date).map(r=>new Date(r.last_date));
+      if (dates.length>0) {
+        const latest = new Date(Math.max(...dates));
+        LAST_UPDATED = String(latest.getDate()).padStart(2,'0')+'.'+String(latest.getMonth()+1).padStart(2,'0')+'.'+latest.getFullYear();
+      }
+    }
+  } catch(e) { console.log('Stations load error',e); }
+  renderOperators();
 }
 
-function renderOperators() {
-  const anyCount = OPERATORS.some(o => o.count > 0);
-  const sorted = anyCount
-    ? [...OPERATORS].sort((a,b) => b.count - a.count)
-    : [...OPERATORS];
-  const total = sorted.reduce((s,o) => s+o.count, 0);
-  const pct = Math.round(total/TOTAL_GOAL*100);
-  document.getElementById('total-count').textContent = total;
-  document.getElementById('total-pct').textContent = pct + '%';
-  document.getElementById('total-pct-bar').textContent = pct + '%';
-  document.getElementById('updated-date').textContent = 'ОБНОВЛЕНО: ' + LAST_UPDATED;
+// ============================================================
+// МЕДАЛИ
+// ============================================================
+function medalSVG(rank, hasCount) {
+  if (!hasCount) return `<span style="font-family:monospace;font-size:8px;color:#333">#${rank}</span>`;
+  const colors = {
+    1:{outer:'#ffd700',inner:'#ffec6e',text:'#7a5c00',ribbon:'#e6a800'},
+    2:{outer:'#c0c0c0',inner:'#e8e8e8',text:'#555',ribbon:'#999'},
+    3:{outer:'#cd7f32',inner:'#e8a96e',text:'#5a2d00',ribbon:'#a0522d'},
+  };
+  const c = colors[rank]||{outer:'#333',inner:'#555',text:'#aaa',ribbon:'#222'};
+  if (rank<=3) return `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="0" width="4" height="2" fill="${c.ribbon}"/>
+    <rect x="5" y="2" width="6" height="1" fill="${c.ribbon}"/>
+    <rect x="2" y="3" width="12" height="2" fill="${c.outer}"/>
+    <rect x="1" y="5" width="14" height="1" fill="${c.outer}"/>
+    <rect x="0" y="6" width="16" height="6" fill="${c.outer}"/>
+    <rect x="1" y="12" width="14" height="1" fill="${c.outer}"/>
+    <rect x="2" y="13" width="12" height="1" fill="${c.outer}"/>
+    <rect x="2" y="5" width="12" height="8" fill="${c.inner}"/>
+    <rect x="3" y="4" width="10" height="1" fill="${c.inner}"/>
+    <rect x="3" y="13" width="10" height="1" fill="${c.inner}"/>
+    <text x="8" y="11" font-family="monospace" font-size="6" font-weight="bold" fill="${c.text}" text-anchor="middle">${rank}</text>
+  </svg>`;
+  return `<span style="font-family:monospace;font-size:8px;color:#555">#${rank}</span>`;
+}
 
-  // Stacked progress bar
+// ============================================================
+// РЕНДЕР ОПЕРАТОРОВ
+// ============================================================
+function renderOperators() {
+  const anyCount = OPERATORS.some(o=>o.count>0);
+  const sorted   = anyCount ? [...OPERATORS].sort((a,b)=>b.count-a.count) : [...OPERATORS];
+  const total    = sorted.reduce((s,o)=>s+o.count,0);
+  const pct      = Math.round(total/TOTAL_GOAL*100);
+
+  document.getElementById('total-count').textContent  = total;
+  document.getElementById('total-pct').textContent    = pct+'%';
+  document.getElementById('updated-date').textContent = 'ОБНОВЛЕНО: '+LAST_UPDATED;
+
   const stackedBar = document.getElementById('total-bar-stacked');
   stackedBar.innerHTML = '';
-  if (total > 0) {
-    sorted.forEach(op => {
-      if (op.count <= 0) return;
+  if (total>0) {
+    sorted.forEach(op=>{
+      if (op.count<=0) return;
       const seg = document.createElement('div');
       seg.className = 'stack-seg';
-      seg.style.cssText = `width:0%;background:${op.color};transition:width 1.5s ease;`;
+      seg.style.cssText = `width:0%;background:${op.color};`;
       seg.title = `${op.name}: ${op.count}`;
       stackedBar.appendChild(seg);
-      setTimeout(() => { seg.style.width = (op.count/TOTAL_GOAL*100) + '%'; }, 150);
+      setTimeout(()=>{ seg.style.width=(op.count/TOTAL_GOAL*100)+'%'; },150);
     });
   }
 
   const grid = document.getElementById('operators-grid');
   grid.innerHTML = '';
-  sorted.forEach((op, i) => {
-    const barPct = Math.min(op.count / op.goal * 100, 100);
-    const card = document.createElement('div');
+  sorted.forEach((op,i)=>{
+    const barPct = op.goal ? Math.min(op.count/op.goal*100,100) : 0;
+    const card   = document.createElement('div');
     card.className = 'op-card';
     card.innerHTML = `
-      <div class="op-rank"><div class="medal">${medalSVG(i+1, op.count > 0)}</div></div>
+      <div class="op-rank"><div class="medal">${medalSVG(i+1,op.count>0)}</div></div>
       <div class="op-top">
-        <img class="op-logo ${op.darkBg ? 'dark-bg' : ''}" src="${op.logo}" alt="${op.name}">
+        <img class="op-logo${op.darkBg?' dark-bg':''}" src="${op.logo}" alt="${op.name}">
         <div class="op-name">${op.name}</div>
         <div class="op-score">${op.count}<span class="score-x"> / X</span></div>
       </div>
-      <div class="op-bar-wrap"><div class="op-bar-fill" style="width:0%;background:${op.color};box-shadow:0 0 6px ${op.color}80"></div></div>
+      <div class="op-bar-wrap"><div class="op-bar-fill" style="width:0%;background:${op.color}"></div></div>
       <div class="op-meta">Обновлено: ${op.updated} · Добавлено: +${op.added} ст.</div>`;
     grid.appendChild(card);
-    setTimeout(() => { card.querySelector('.op-bar-fill').style.width = barPct + '%'; }, 150 + i*100);
+    setTimeout(()=>{ card.querySelector('.op-bar-fill').style.width=barPct+'%'; },150+i*100);
   });
 }
 
+// ============================================================
+// ГОЛОСОВАНИЕ
+// ============================================================
 function renderVoteOptions() {
   const c = document.getElementById('vote-options');
   c.innerHTML = '';
-  OPERATORS.forEach(op => {
+  OPERATORS.forEach(op=>{
     const btn = document.createElement('button');
-    btn.className = 'vote-btn';
+    btn.className  = 'vote-btn';
     btn.dataset.id = op.id;
-    btn.innerHTML = `<img src="${op.logo}" alt="${op.name}"><span>${op.name}</span>`;
-    btn.onclick = () => selectVote(op.id);
+    btn.innerHTML  = `<img src="${op.logo}" alt="${op.name}"><span>${op.name}</span>`;
+    btn.onclick    = ()=>selectVote(op.id);
     c.appendChild(btn);
   });
 }
 
 function selectVote(id) {
   selectedOperator = id;
-  document.querySelectorAll('.vote-btn').forEach(b => b.classList.toggle('selected', b.dataset.id === id));
+  document.querySelectorAll('.vote-btn').forEach(b=>b.classList.toggle('selected',b.dataset.id===id));
   document.getElementById('vote-submit').disabled = false;
 }
 
 async function submitVote() {
   if (!selectedOperator) return;
-
   const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
-  if (!token) {
-    alert('Пожалуйста, подождите проверки безопасности...');
-    return;
-  }
-
+  if (!token) { alert('Пожалуйста, подождите проверки безопасности...'); return; }
   const btn = document.getElementById('vote-submit');
   btn.disabled = true; btn.textContent = '... ОБРАБОТКА ...';
-  localStorage.setItem('ev_race_vote', selectedOperator);
+  localStorage.setItem('ev_race_vote',  selectedOperator);
   localStorage.setItem('ev_race_voted', '1');
   try {
     await fetch('https://uvrboxrddqlasgrnnnne.supabase.co/functions/v1/submit-vote', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_KEY
-      },
-      body: JSON.stringify({ operator: selectedOperator, cf_token: token })
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+      body:JSON.stringify({operator:selectedOperator,cf_token:token})
     });
-  } catch(e) { console.log('Vote error', e); }
+  } catch(e) { console.log('Vote error',e); }
   await showResults(selectedOperator);
 }
 
 async function showResults(myVote) {
-  let votes = {};
-  let total = 0;
+  let votes={}, total=0;
   try {
-    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_vote_counts', {
-      method: 'POST',
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
+    const res  = await fetch(SUPABASE_URL+'/rest/v1/rpc/get_vote_counts',{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'},
+      body:'{}'
     });
     const data = await res.json();
     if (Array.isArray(data)) {
-      data.forEach(row => { votes[row.operator] = parseInt(row.count); });
-      total = data.reduce((s,r) => s + parseInt(r.count), 0);
+      data.forEach(r=>{votes[r.operator]=parseInt(r.count);});
+      total = data.reduce((s,r)=>s+parseInt(r.count),0);
     }
-  } catch(e) { console.log('Fetch error', e); }
-  if (total === 0) total = 1;
-  document.getElementById('vote-options').style.display = 'none';
-  document.getElementById('vote-submit').style.display = 'none';
+  } catch(e) { console.log('Fetch error',e); }
+  if (total===0) total=1;
+
+  document.getElementById('vote-options').style.display   = 'none';
+  document.getElementById('vote-submit').style.display    = 'none';
   document.getElementById('vote-turnstile').style.display = 'none';
-  document.getElementById('vote-results').style.display = 'block';
-  const myCount = votes[myVote] || 1;
-  const myPct = Math.round(myCount/total*100);
-  const msgs = VOTE_MESSAGES[myVote] || ['СТАВКА СДЕЛАНА!'];
-  const msg = msgs[Math.floor(Math.random()*msgs.length)];
-  const opName = OPERATORS.find(o=>o.id===myVote)?.name || myVote;
+  document.getElementById('vote-results').style.display   = 'block';
+
+  const myCount = votes[myVote]||1;
+  const myPct   = Math.round(myCount/total*100);
+  const msgs    = VOTE_MESSAGES[myVote]||['СТАВКА СДЕЛАНА!'];
+  const msg     = msgs[Math.floor(Math.random()*msgs.length)];
+  const opName  = OPERATORS.find(o=>o.id===myVote)?.name||myVote;
   const subtext = myPct>=40 ? `${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
                   myPct>=20 ? `ТОЛЬКО ${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
                               `ЛИШЬ ${myPct}% ИГРОКОВ ВЕРЯТ В ${opName.toUpperCase()}`;
   document.getElementById('vote-message').innerHTML = `${msg}<br><span style="font-size:8px;color:var(--text-dim)">${subtext}</span>`;
+
   const barsDiv = document.getElementById('vote-bars');
   barsDiv.innerHTML = '';
-  [...OPERATORS].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0)).forEach(op => {
-    const cnt = votes[op.id]||0;
-    const pct = Math.round(cnt/total*100);
-    const isMe = op.id === myVote;
-    const div = document.createElement('div');
+  [...OPERATORS].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0)).forEach(op=>{
+    const cnt  = votes[op.id]||0;
+    const pct  = Math.round(cnt/total*100);
+    const isMe = op.id===myVote;
+    const div  = document.createElement('div');
     div.className = 'vote-result-item';
     div.innerHTML = `
       <div class="vote-result-top">
-        <span class="rname" style="${isMe?'color:var(--yellow)':''}">${isMe?'▶ ':''}${op.name}</span>
+        <span class="rname" style="${isMe?'color:var(--text)':''}">${isMe?'▶ ':''}${op.name}</span>
         <span class="rpct">${pct}%</span>
       </div>
-      <div class="vote-result-bar-wrap"><div class="vote-result-bar ${isMe?'mine':''}" style="width:0%"></div></div>`;
+      <div class="vote-result-bar-wrap"><div class="vote-result-bar${isMe?' mine':''}" style="width:0%"></div></div>`;
     barsDiv.appendChild(div);
-    setTimeout(() => { div.querySelector('.vote-result-bar').style.width = pct+'%'; }, 200);
+    setTimeout(()=>{ div.querySelector('.vote-result-bar').style.width=pct+'%'; },200);
   });
   document.getElementById('vote-total').textContent = `▶ ВСЕГО СТАВОК: ${total} ◀`;
 }
 
 async function checkVoted() {
-  const voted = localStorage.getItem('ev_race_voted');
+  const voted  = localStorage.getItem('ev_race_voted');
   const myVote = localStorage.getItem('ev_race_vote');
-  if (voted && myVote) {
+  if (voted&&myVote) {
     document.getElementById('vote-submit').style.display = 'none';
-    document.querySelectorAll('.vote-btn').forEach(b => { b.disabled=true; if(b.dataset.id===myVote) b.classList.add('selected'); });
+    document.querySelectorAll('.vote-btn').forEach(b=>{b.disabled=true;if(b.dataset.id===myVote)b.classList.add('selected');});
     await showResults(myVote);
   }
 }
 
 async function trackVisit() {
   try {
-    await fetch(SUPABASE_URL + '/rest/v1/visits', {
-      method: 'POST',
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ visited_at: new Date().toISOString(), page: 'main' })
+    await fetch(SUPABASE_URL+'/rest/v1/visits',{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({visited_at:new Date().toISOString(),page:'main'})
     });
-    const res = await fetch(SUPABASE_URL + '/rest/v1/visits?select=id&page=eq.main', {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'count=exact', 'Range': '0-0' }
+    const res   = await fetch(SUPABASE_URL+'/rest/v1/visits?select=id&page=eq.main',{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'count=exact','Range':'0-0'}
     });
-    const count = res.headers.get('content-range')?.split('/')[1] || '...';
+    const count = res.headers.get('content-range')?.split('/')[1]||'...';
     document.getElementById('visit-count').textContent = Number(count).toLocaleString('ru');
-  } catch(e) {
-    document.getElementById('visit-count').textContent = '...';
-  }
+  } catch(e) { document.getElementById('visit-count').textContent='...'; }
 }
 
-// RACE TRACK
-(function() {
-  const rc = document.getElementById('race-canvas');
-  const rctx = rc.getContext('2d');
-  const LANE_H = 48;
-  const TRACK_TOP = 10;
+function acceptCookies() {
+  localStorage.setItem('ev_race_cookies','1');
+  document.getElementById('cookieBanner').style.display='none';
+}
+if (localStorage.getItem('ev_race_cookies')) document.getElementById('cookieBanner').style.display='none';
 
-  const raceCars = OPERATORS.map(op => ({
-    name: op.name,
-    color: op.color,
-    x: 40 + Math.random() * 200,
-    baseSpeed: 0.3 + Math.random() * 0.65,
-    speed: 0.3 + Math.random() * 0.65,
-    speedTimer: Math.floor(Math.random() * 200),
+// ============================================================
+// RACE TRACK (canvas)
+// ============================================================
+(function() {
+  const rc   = document.getElementById('race-canvas');
+  const rctx = rc.getContext('2d');
+  const LANE_H = 48, TRACK_TOP = 10;
+
+  const raceCars = OPERATORS_META.map(op=>({
+    name:op.name, color:op.color,
+    x: 40+Math.random()*200,
+    baseSpeed: 0.3+Math.random()*0.65,
+    speed: 0.3+Math.random()*0.65,
+    speedTimer: Math.floor(Math.random()*200),
   }));
 
   function resizeRace() {
-    rc.width = rc.offsetWidth || 800;
-    rc.height = TRACK_TOP + OPERATORS.length * LANE_H + 10;
+    rc.width  = rc.offsetWidth||800;
+    rc.height = TRACK_TOP+OPERATORS_META.length*LANE_H+10;
   }
   resizeRace();
-  window.addEventListener('resize', resizeRace);
+  window.addEventListener('resize',resizeRace);
 
-  function getP() { return rc.width < 400 ? 1 : 2; }
+  function getP() { return rc.width<400?1:2; }
 
-  function drawPixelCar(x, y, color, p) {
-    rctx.save();
-    rctx.translate(Math.round(x), Math.round(y));
-    rctx.fillStyle = color;
+  function drawPixelCar(x,y,color,p) {
+    rctx.save(); rctx.translate(Math.round(x),Math.round(y));
+    rctx.fillStyle=color;
     [[0,4],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[10,4],[11,4],[12,4],[13,4],[14,4],[15,4],
      [0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],[12,5],[13,5],[14,5],[15,5],
      [0,6],[1,6],[2,6],[3,6],[4,6],[5,6],[6,6],[7,6],[8,6],[9,6],[10,6],[11,6],[12,6],[13,6],[14,6],[15,6],
      [1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[9,3],[10,3],[11,3],[12,3],[13,3],[14,3],
      [3,2],[4,2],[5,2],[6,2],[7,2],[8,2],[9,2],[10,2],[11,2],
      [4,1],[5,1],[6,1],[7,1],[8,1],[9,1],[10,1],
-    ].forEach(([px,py]) => rctx.fillRect(px*p, py*p, p, p));
-    rctx.fillStyle = 'rgba(0,0,0,0.65)';
-    [[4,1],[5,1],[6,1],[4,2],[5,2],[6,2],[7,2],[8,1],[9,1],[10,1],[8,2],[9,2],[10,2]].forEach(([px,py]) => rctx.fillRect(px*p+1, py*p+1, p-1, p-1));
-    rctx.fillStyle = '#1a1a1a';
-    [[2,7],[3,7],[4,7],[11,7],[12,7],[13,7]].forEach(([px,py]) => rctx.fillRect(px*p, py*p, p, p));
-    rctx.fillStyle = '#ffd700';
-    rctx.fillRect(7*p, 4*p+1, p*0.5, p*0.7);
-    rctx.fillRect(6.5*p, 4*p+p*0.7+1, p*0.5, p*0.7);
-    rctx.fillStyle = '#fffaaa';
-    rctx.fillRect(15*p, 4*p, p, p*2);
+    ].forEach(([px,py])=>rctx.fillRect(px*p,py*p,p,p));
+    rctx.fillStyle='rgba(0,0,0,0.65)';
+    [[4,1],[5,1],[6,1],[4,2],[5,2],[6,2],[7,2],[8,1],[9,1],[10,1],[8,2],[9,2],[10,2]].forEach(([px,py])=>rctx.fillRect(px*p+1,py*p+1,p-1,p-1));
+    rctx.fillStyle='#1a1a1a';
+    [[2,7],[3,7],[4,7],[11,7],[12,7],[13,7]].forEach(([px,py])=>rctx.fillRect(px*p,py*p,p,p));
+    rctx.fillStyle='#ffd700'; rctx.fillRect(7*p,4*p+1,p*0.5,p*0.7); rctx.fillRect(6.5*p,4*p+p*0.7+1,p*0.5,p*0.7);
+    rctx.fillStyle='#fffaaa'; rctx.fillRect(15*p,4*p,p,p*2);
     rctx.restore();
   }
 
-  let dashOffset = 0;
-  let raceRunning = true;
-
-  const observer = new IntersectionObserver(entries => {
-    raceRunning = entries[0].isIntersecting;
-    if (raceRunning) raceLoop();
-  }, { threshold: 0.1 });
+  let dashOffset=0, raceRunning=true;
+  const observer=new IntersectionObserver(entries=>{
+    raceRunning=entries[0].isIntersecting;
+    if(raceRunning) raceLoop();
+  },{threshold:0.1});
   observer.observe(rc);
 
   function raceLoop() {
     if (!raceRunning) return;
-    rctx.clearRect(0, 0, rc.width, rc.height);
-    const p = getP();
-    const carH = 8 * p;
-
-    raceCars.forEach((car, i) => {
-      const y = TRACK_TOP + i * LANE_H;
-      rctx.fillStyle = i % 2 === 0 ? 'rgba(0,20,0,0.5)' : 'rgba(0,15,0,0.3)';
-      rctx.fillRect(0, y, rc.width, LANE_H);
-      rctx.fillStyle = car.color + '40';
-      rctx.font = `bold ${rc.width < 400 ? 7 : 9}px 'Courier New'`;
-      rctx.fillText(car.name.toUpperCase(), 6, y + 12);
-      rctx.strokeStyle = car.color + '25';
-      rctx.lineWidth = 1;
-      rctx.setLineDash([14, 10]);
-      rctx.lineDashOffset = -dashOffset * car.speed * 0.8;
-      rctx.beginPath();
-      rctx.moveTo(0, y + LANE_H - 1);
-      rctx.lineTo(rc.width, y + LANE_H - 1);
-      rctx.stroke();
+    rctx.clearRect(0,0,rc.width,rc.height);
+    const p=getP(), carH=8*p;
+    raceCars.forEach((car,i)=>{
+      const y=TRACK_TOP+i*LANE_H;
+      rctx.fillStyle=i%2===0?'rgba(0,20,0,0.5)':'rgba(0,15,0,0.3)';
+      rctx.fillRect(0,y,rc.width,LANE_H);
+      rctx.fillStyle=car.color+'40';
+      rctx.font=`bold ${rc.width<400?7:9}px 'Courier New'`;
+      rctx.fillText(car.name.toUpperCase(),6,y+12);
+      rctx.strokeStyle=car.color+'25'; rctx.lineWidth=1;
+      rctx.setLineDash([14,10]); rctx.lineDashOffset=-dashOffset*car.speed*0.8;
+      rctx.beginPath(); rctx.moveTo(0,y+LANE_H-1); rctx.lineTo(rc.width,y+LANE_H-1); rctx.stroke();
       rctx.setLineDash([]);
-      rctx.strokeStyle = 'rgba(0,255,65,0.06)';
-      rctx.lineWidth = 1;
-      rctx.beginPath(); rctx.moveTo(0, y); rctx.lineTo(rc.width, y); rctx.stroke();
-      const laneY = y + (LANE_H - carH) / 2 - p;
-      drawPixelCar(car.x, laneY, car.color, p);
-      car.x += car.speed;
+      rctx.strokeStyle='rgba(0,255,65,0.06)'; rctx.lineWidth=1;
+      rctx.beginPath(); rctx.moveTo(0,y); rctx.lineTo(rc.width,y); rctx.stroke();
+      const laneY=y+(LANE_H-carH)/2-p;
+      drawPixelCar(car.x,laneY,car.color,p);
+      car.x+=car.speed;
       car.speedTimer--;
-      if (car.speedTimer <= 0) {
-        car.speed = car.baseSpeed * (0.4 + Math.random() * 1.4);
-        car.speedTimer = 150 + Math.floor(Math.random() * 150);
-      }
-      if (car.x > rc.width + 40) car.x = -40;
+      if (car.speedTimer<=0) { car.speed=car.baseSpeed*(0.4+Math.random()*1.4); car.speedTimer=150+Math.floor(Math.random()*150); }
+      if (car.x>rc.width+40) car.x=-40;
     });
-
-    const fx = rc.width - 20;
-    const sz = 5;
-    for (let r = 0; r < Math.ceil(rc.height/sz); r++) {
-      for (let c = 0; c < 4; c++) {
-        if ((r+c) % 2 === 0) { rctx.fillStyle = 'rgba(255,255,255,0.12)'; rctx.fillRect(fx+c*sz, r*sz, sz, sz); }
-      }
-    }
-    dashOffset += 0.5;
+    const fx=rc.width-20, sz=5;
+    for(let r=0;r<Math.ceil(rc.height/sz);r++)
+      for(let c=0;c<4;c++)
+        if((r+c)%2===0){rctx.fillStyle='rgba(255,255,255,0.12)';rctx.fillRect(fx+c*sz,r*sz,sz,sz);}
+    dashOffset+=0.5;
     requestAnimationFrame(raceLoop);
   }
 })();
 
-function acceptCookies() {
-  localStorage.setItem('ev_race_cookies','1');
-  document.getElementById('cookieBanner').style.display = 'none';
-}
-if (localStorage.getItem('ev_race_cookies')) document.getElementById('cookieBanner').style.display='none';
-
+// ============================================================
+// INIT
+// ============================================================
 renderVoteOptions();
 checkVoted();
 trackVisit();
