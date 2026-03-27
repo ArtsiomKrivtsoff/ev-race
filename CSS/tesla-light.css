@@ -271,12 +271,12 @@
   }
   .op-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.11); }
   .op-rank {
-    position: absolute; top: 12px; right: 14px;
-    width: 28px; height: 28px;
+    position: absolute; top: 8px; right: 12px;
+    width: 44px; height: 52px;
     display: flex; align-items: center; justify-content: center;
   }
-  .medal { width: 28px; height: 28px; display: inline-block; image-rendering: pixelated; }
-  .medal svg { width: 28px; height: 28px; image-rendering: pixelated; shape-rendering: crispEdges; }
+  .medal { display: inline-flex; align-items: center; justify-content: center; }
+  .medal svg { display: block; }
   .op-top { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
   .op-logo { width: 80px; height: 34px; object-fit: contain; flex-shrink: 0; }
   .op-logo.dark-bg { background: #111; padding: 4px; border-radius: 4px; }
