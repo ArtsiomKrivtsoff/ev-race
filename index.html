@@ -26,10 +26,10 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <!-- ТЕМА: меняется JS-ом -->
-<link id="theme-css" rel="stylesheet" href="css/arcade.css">
+<link id="theme-css" rel="stylesheet" href="CSS/arcade.css">
 <!-- prefetch остальных тем чтобы переключение было мгновенным -->
-<link rel="prefetch" href="css/tesla-light.css">
-<link rel="prefetch" href="css/tesla-dark.css">
+<link rel="prefetch" href="CSS/tesla-light.css">
+<link rel="prefetch" href="CSS/tesla-dark.css">
 </head>
 <body>
 
@@ -223,7 +223,7 @@ const THEMES = ['arcade','tesla-light','tesla-dark'];
 
 function setTheme(theme) {
   // меняем CSS
-  document.getElementById('theme-css').href = 'css/' + theme + '.css';
+  document.getElementById('theme-css').href = 'CSS/' + theme + '.css';
   localStorage.setItem('ev_race_theme', theme);
 
   // кнопки в статус-баре
