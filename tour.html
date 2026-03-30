@@ -323,25 +323,24 @@ function renderStandings(data){
       const pos=i+1;
       let dH='<span class="change-same">—</span>';
       if(prevR&&lastR&&lastR[op]){const pP=prevR[op]||5;const lP=lastR[op];const diff=pP-lP;if(diff>0)dH=`<span class="change-up">▲${diff}</span>`;else if(diff<0)dH=`<span class="change-down">▼${Math.abs(diff)}</span>`;}
-      const tv=showKwt?(totals[op]?totals[op]+' кВт':'—'):(totals[op]||0);
+      const tv=showKwt?(totals[op]?totals[op]:'—'):(totals[op]||0);
       html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></td><td><span class="pts">${pts[op]}</span></td><td>${dH}</td><td style="color:var(--green-dim)">${wins[op]}</td><td style="color:var(--green);font-family:'Press Start 2P',monospace;font-size:9px">${tv}</td></tr>`;
     });
     html+='</tbody></table>';
     document.getElementById(wrapId).innerHTML=html;
   }
-  render(stPts,stW,stRH,'standings-stations-wrap',totalSt,'ВСЕГО СТ.',false);
+  render(stPts,stW,stRH,'standings-stations-wrap',totalSt,'ВСЕГО СТАНЦ.',false);
   render(pwPts,pwW,pwRH,'standings-power-wrap',totalPow,'ОБЩ. кВт',true);
 }
 function renderRoundsGrid(data){
   const{roundResults,curRound}=data;
-  const lastV=Math.min(curRound+1,TOTAL_ROUNDS);
   let html='';
-  for(let i=1;i<=lastV;i++){
+  for(let i=curRound;i>=1;i--){
     const d=getRoundDates(i);const isPast=i<curRound;const isAct=i===curRound;
-    const cls=isAct?'active':(i>curRound?'future':'');
+    const cls=isAct?'active':'';
     const res=roundResults[i];const w=isPast&&res&&res.byStations&&res.byStations[0];
     let wH='—';if(isAct)wH='<span style="color:var(--green)">ИДЁТ</span>';
-    else if(w)wH=`<span style="color:${opColor(w.op)}">★ ${opName(w.op).split(' ')[0]}</span>`;
+    else if(w)wH=`<span style="color:${opColor(w.op)}">${opName(w.op).split(' ')[0]}</span>`;
     html+=`<div class="round-cell ${cls}"><div class="r-num">КР ${String(i).padStart(2,'0')}</div><div class="r-win">${wH}</div><div class="r-date">${d.label}</div></div>`;
   }
   document.getElementById('rounds-grid').innerHTML=html;
@@ -350,15 +349,12 @@ function renderHistory(data){
   const{roundResults,curRound}=data;
   const comp=Object.keys(roundResults).map(Number).filter(r=>r<curRound).sort((a,b)=>b-a);
   if(!comp.length){document.getElementById('history-wrap').innerHTML='<div class="loading" style="color:#333">ЗАВЕРШЁННЫХ КРУГОВ ЕЩЁ НЕТ</div>';return;}
-  const pc=['var(--yellow)','#c0c0c0','#cd7f32','var(--green-dim)','var(--green-dim)'];
-  const ic=['★','▲','▲','▲','▲'];
   let html='';
   comp.forEach(rn=>{
     const d=getRoundDates(rn);const res=roundResults[rn].byStations;
-    const oH=res.map((r,i)=>{
-      const c=pc[i]||opColor(r.op);const pts=r.points>0?` <span style="color:${c}">+${r.points}</span>`:'';
-      return `<div class="hist-op"><span style="color:${c};min-width:12px">${ic[i]||''}</span><span class="dot" style="background:${opColor(r.op)}"></span><span style="color:${opColor(r.op)}">${opName(r.op)}</span><span style="color:${i<3?c:'var(--green-dim)'}"> ${r.stations} ст.${pts}</span></div>`;
-    }).join('<span class="sep">·</span>');
+    const oH=res.map((r)=>{
+      return `<span class="hist-op"><span class="dot" style="background:${opColor(r.op)}"></span><span style="color:${opColor(r.op)}">${opName(r.op)}</span><span style="color:#aaa"> ${r.stations} ст.</span></span>`;
+    }).join('<span class="sep"> · </span>');
     html+=`<div class="hist-row"><div class="hist-meta"><div class="hist-round">КРУГ #${rn}</div><div class="hist-dates">${d.label} · завершён</div></div><div class="hist-ops">${oH}</div></div>`;
   });
   document.getElementById('history-wrap').innerHTML=html;
