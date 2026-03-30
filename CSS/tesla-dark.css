@@ -578,8 +578,8 @@
     .meta-row{grid-template-columns:repeat(2,1fr);}
     .rounds-grid{grid-template-columns:repeat(3,1fr);}
     .standings{font-size:12px;}
-    .standings th{font-size:8px;padding:7px 4px;}
-    .standings td{padding:9px 4px;}
+    .standings th{font-size:8px;padding:7px 10px;}
+    .standings td{padding:9px 10px;}
     .cur-round-table{font-size:12px;}
     .cur-round-table th{font-size:8px;padding:6px 4px;}
     .cur-round-table td{padding:8px 4px;}
@@ -608,8 +608,6 @@
 
   /* ── TOUR: STANDINGS ── */
   .standings { width:100%; border-collapse:collapse; font-size:14px; margin-bottom:20px; font-family:'Roboto',sans-serif; }
-  .standings th { font-size:10px; color:#555; letter-spacing:1px; padding:9px 6px; border-bottom:1px solid #2a2a2a; text-align:left; font-weight:500; }
-  .standings td { padding:11px 6px; border-bottom:1px solid #222; vertical-align:middle; }
   .standings tr:last-child td { border-bottom:none; }
   .rank { font-family:'Roboto',sans-serif; font-size:12px; color:#444; font-weight:400; }
   .r1 { color:#F5C518; font-weight:500; } .r2 { color:#555; font-weight:500; } .r3 { color:#CD7F32; font-weight:500; }
@@ -653,9 +651,7 @@
     .meta-row { grid-template-columns:repeat(2,1fr); }
     .rounds-grid { grid-template-columns:repeat(3,1fr); }
     .standings { font-size:12px; }
-    .standings th { font-size:8px; padding:7px 4px; }
-    .standings td { padding:9px 4px; }
-    .cur-round-table { font-size:12px; }
+        .cur-round-table { font-size:12px; }
     .cur-round-table th { font-size:8px; padding:6px 4px; }
     .cur-round-table td { padding:8px 4px; }
   }
