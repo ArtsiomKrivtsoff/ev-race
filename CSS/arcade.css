@@ -196,3 +196,65 @@
     .vote-options { grid-template-columns:repeat(5,1fr); }
     .author-links { grid-template-columns:repeat(5,1fr); }
   }
+
+  /* ============================================================
+     ТУРНИРНАЯ ТАБЛИЦА — новые классы
+     ============================================================ */
+  .meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:32px;}
+  .meta-card{background:var(--card-bg);border:1px solid var(--green-dark);padding:12px 8px;text-align:center;}
+  .meta-label{font-size:9px;color:var(--green-dim);letter-spacing:1px;margin-bottom:5px;}
+  .meta-val{font-family:'Press Start 2P',monospace;font-size:clamp(9px,1.8vw,12px);color:var(--yellow);text-shadow:0 0 8px var(--yellow);line-height:1.6;}
+  .section-head{font-size:11px;color:var(--green-dim);letter-spacing:2px;border-bottom:1px solid var(--green-dark);padding-bottom:8px;margin-bottom:14px;}
+  .cur-round{border:2px solid var(--yellow);background:#1a1500;padding:22px 18px;margin-bottom:24px;position:relative;}
+  .cur-round::before{content:' ТЕКУЩИЙ КРУГ ';position:absolute;top:-10px;left:14px;background:var(--bg);padding:0 6px;font-family:'Press Start 2P',monospace;font-size:9px;color:var(--yellow);letter-spacing:2px;}
+  .cur-round-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+  .cur-round-num{font-family:'Press Start 2P',monospace;font-size:clamp(18px,4vw,26px);color:var(--yellow);}
+  .cur-round-dates{font-size:12px;color:var(--green-dim);text-align:right;}
+  .cur-round-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .cur-round-table th{font-size:9px;color:var(--green-dim);letter-spacing:1px;padding:8px 6px;border-bottom:1px solid #3d3000;text-align:left;}
+  .cur-round-table td{padding:10px 6px;border-bottom:1px solid #1a1000;vertical-align:middle;}
+  .cur-round-table tr:last-child td{border-bottom:none;}
+  .cur-no-data{font-size:12px;color:#3d3000;letter-spacing:2px;padding:14px 0;}
+  .standings{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px;}
+  .standings th{font-size:10px;color:var(--green-dim);letter-spacing:1px;padding:9px 6px;border-bottom:1px solid var(--green-dark);text-align:left;}
+  .standings td{padding:11px 6px;border-bottom:1px solid #001a00;vertical-align:middle;}
+  .standings tr:last-child td{border-bottom:none;}
+  .rank{font-family:'Press Start 2P',monospace;font-size:10px;color:var(--green-dim);}
+  .r1{color:var(--yellow);}.r2{color:#c0c0c0;}.r3{color:#cd7f32;}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;flex-shrink:0;}
+  .pts{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--green);}
+  .change-up{color:#00ff41;font-size:11px;}.change-down{color:#ff4444;font-size:11px;}.change-same{color:var(--green-dark);font-size:11px;}
+  .rounds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:24px;}
+  .round-cell{background:var(--card-bg);border:1px solid #001a00;padding:9px 5px;text-align:center;}
+  .round-cell.active{border-color:var(--green);background:rgba(0,255,65,.06);}
+  .round-cell.future{opacity:.3;}
+  .r-num{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--green-dim);margin-bottom:5px;}
+  .r-win{font-size:11px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .r-date{font-size:10px;color:var(--green-dim);}
+  .hist-row{padding:11px 0;border-bottom:1px solid #001a00;}
+  .hist-row:last-child{border-bottom:none;}
+  .hist-meta{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+  .hist-round{font-size:12px;color:var(--yellow);min-width:75px;}
+  .hist-dates{font-size:11px;color:var(--green-dark);}
+  .hist-ops{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .hist-op{display:flex;align-items:center;gap:4px;font-size:13px;white-space:nowrap;}
+  .sep{color:var(--green-dark);font-size:11px;}
+  .rules-title{font-size:clamp(13px,2.5vw,17px);color:var(--green-dim);letter-spacing:3px;text-align:center;margin-bottom:16px;}
+  .rules-section{border:1px solid var(--green-dark);background:var(--bg);padding:18px 16px;margin-bottom:20px;}
+  .rule-block{margin-bottom:16px;}.rule-block:last-child{margin-bottom:0;}
+  .rule-h{font-size:13px;color:var(--green);letter-spacing:3px;margin-bottom:8px;border-bottom:1px solid var(--green-dark);padding-bottom:5px;}
+  .rule-t{font-size:13px;color:var(--green-dim);line-height:2;}.rule-t span{color:var(--yellow);}
+  .rule-note{font-size:12px;color:#00ffff;line-height:1.8;margin-top:8px;}
+  .pts-row{display:flex;align-items:center;gap:10px;padding:3px 0;font-size:13px;color:var(--green-dim);}
+  .pts-v{margin-left:auto;font-size:12px;}
+  .loading{text-align:center;padding:20px;font-size:12px;color:var(--green-dark);letter-spacing:2px;}
+  @media(max-width:480px){
+    .meta-row{grid-template-columns:repeat(2,1fr);}
+    .rounds-grid{grid-template-columns:repeat(3,1fr);}
+    .standings{font-size:12px;}
+    .standings th{font-size:8px;padding:7px 4px;}
+    .standings td{padding:9px 4px;}
+    .cur-round-table{font-size:12px;}
+    .cur-round-table th{font-size:8px;padding:6px 4px;}
+    .cur-round-table td{padding:8px 4px;}
+  }

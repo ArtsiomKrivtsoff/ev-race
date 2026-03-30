@@ -509,3 +509,142 @@
   .footer-disclaimer { font-size: 12px; line-height: 1.9; margin-bottom: 6px; color: #aaa; }
   .footer-privacy { font-size: 11px; color: #ccc; margin-bottom: 6px; }
   .footer-copy { font-size: 10px; color: #ccc; }
+
+  /* ============================================================
+     ТУРНИРНАЯ ТАБЛИЦА — Tesla Light
+     ============================================================ */
+  .meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 clamp(16px,4vw,24px) 24px;}
+  .meta-card{background:#fff;border-radius:10px;padding:14px 8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .meta-label{font-size:10px;color:#aaa;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;font-weight:400;}
+  .meta-val{font-family:'Roboto',sans-serif;font-size:clamp(11px,2vw,14px);color:#111;font-weight:500;line-height:1.6;}
+  .section-head{font-size:11px;color:#888;letter-spacing:2px;border-bottom:1px solid #e4e6e8;padding-bottom:8px;margin:0 clamp(16px,4vw,24px) 14px;text-transform:uppercase;font-weight:600;}
+  .cur-round{border:1px solid #e4e6e8;background:#fff;padding:20px 18px;margin:0 clamp(16px,4vw,24px) 20px;position:relative;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .cur-round::before{content:' ТЕКУЩИЙ КРУГ ';position:absolute;top:-10px;left:14px;background:#fff;padding:0 6px;font-size:9px;color:#aaa;letter-spacing:2px;font-family:'Roboto',sans-serif;font-weight:600;}
+  .cur-round-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+  .cur-round-num{font-family:'Roboto',sans-serif;font-size:clamp(18px,4vw,24px);color:#111;font-weight:300;letter-spacing:-1px;}
+  .cur-round-dates{font-size:12px;color:#888;text-align:right;font-weight:300;}
+  .cur-round-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .cur-round-table th{font-size:10px;color:#aaa;letter-spacing:1px;padding:8px 6px;border-bottom:1px solid #eee;text-align:left;text-transform:uppercase;font-weight:500;}
+  .cur-round-table td{padding:10px 6px;border-bottom:1px solid #f5f5f5;vertical-align:middle;color:#333;}
+  .cur-round-table tr:last-child td{border-bottom:none;}
+  .cur-no-data{font-size:12px;color:#ccc;letter-spacing:2px;padding:14px 0;text-align:center;}
+  .standings{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:0;}
+  .standings th{font-size:10px;color:#aaa;letter-spacing:1px;padding:9px 6px;border-bottom:1px solid #eee;text-align:left;text-transform:uppercase;font-weight:500;}
+  .standings td{padding:11px 6px;border-bottom:1px solid #f5f5f5;vertical-align:middle;color:#333;}
+  .standings tr:last-child td{border-bottom:none;}
+  .standings-wrap{background:#fff;border-radius:12px;padding:4px 14px;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .rank{font-family:'Roboto',sans-serif;font-size:13px;color:#ccc;font-weight:400;}
+  .r1{color:#B8860B;font-weight:500;}.r2{color:#888;font-weight:500;}.r3{color:#8B4513;font-weight:500;}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;flex-shrink:0;}
+  .pts{font-family:'Roboto',sans-serif;font-size:13px;color:#111;font-weight:500;}
+  .change-up{color:#22aa44;font-size:11px;}.change-down{color:#cc3333;font-size:11px;}.change-same{color:#ddd;font-size:11px;}
+  .rounds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 clamp(16px,4vw,24px) 20px;}
+  .round-cell{background:#fff;border:1px solid #eee;padding:9px 5px;text-align:center;border-radius:8px;}
+  .round-cell.active{border-color:#111;background:#f5f5f5;}
+  .round-cell.future{opacity:.4;}
+  .r-num{font-family:'Roboto',sans-serif;font-size:9px;color:#aaa;margin-bottom:5px;font-weight:500;letter-spacing:1px;}
+  .r-win{font-size:11px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#333;}
+  .r-date{font-size:10px;color:#bbb;}
+  .hist-row{padding:11px 0;border-bottom:1px solid #f0f0f0;}
+  .hist-row:last-child{border-bottom:none;}
+  .hist-wrap{background:#fff;border-radius:12px;padding:4px 14px;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .hist-meta{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+  .hist-round{font-size:12px;color:#555;min-width:75px;font-weight:500;}
+  .hist-dates{font-size:11px;color:#bbb;}
+  .hist-ops{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .hist-op{display:flex;align-items:center;gap:4px;font-size:13px;white-space:nowrap;color:#333;}
+  .sep{color:#ddd;font-size:11px;}
+  .rules-title{font-size:clamp(13px,2.5vw,17px);color:#888;letter-spacing:2px;text-align:center;margin:0 clamp(16px,4vw,24px) 16px;text-transform:uppercase;font-weight:400;}
+  .rules-section{border:1px solid #e4e6e8;background:#fff;padding:18px 16px;margin:0 clamp(16px,4vw,24px) 20px;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .rule-block{margin-bottom:16px;}.rule-block:last-child{margin-bottom:0;}
+  .rule-h{font-size:13px;color:#111;letter-spacing:2px;margin-bottom:8px;border-bottom:1px solid #eee;padding-bottom:5px;font-weight:500;text-transform:uppercase;}
+  .rule-t{font-size:13px;color:#555;line-height:2;font-weight:300;}.rule-t span{color:#111;font-weight:500;}
+  .rule-note{font-size:12px;color:#00aacc;line-height:1.8;margin-top:8px;}
+  .pts-row{display:flex;align-items:center;gap:10px;padding:4px 0;font-size:13px;color:#555;}
+  .pts-v{margin-left:auto;font-size:12px;font-weight:500;}
+  .loading{text-align:center;padding:20px;font-size:12px;color:#ccc;letter-spacing:2px;}
+  @media(max-width:480px){
+    .meta-row{grid-template-columns:repeat(2,1fr);}
+    .rounds-grid{grid-template-columns:repeat(3,1fr);}
+    .standings{font-size:12px;}
+    .standings th{font-size:8px;padding:7px 4px;}
+    .standings td{padding:9px 4px;}
+    .cur-round-table{font-size:12px;}
+    .cur-round-table th{font-size:8px;padding:6px 4px;}
+    .cur-round-table td{padding:8px 4px;}
+  }
+
+  /* ── TOUR: МЕТА-КАРТОЧКИ ── */
+  .meta-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:28px; }
+  .meta-card { background:#ffffff; border:1px solid #e4e6e8; border-radius:10px; padding:14px 8px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+  .meta-label { font-size:10px; color:#888; letter-spacing:1px; margin-bottom:6px; text-transform:uppercase; font-family:'Roboto',sans-serif; }
+  .meta-val { font-family:'Roboto',sans-serif; font-size:clamp(11px,1.8vw,14px); color:#111; font-weight:500; line-height:1.6; }
+
+  /* ── TOUR: СЕКЦИИ ── */
+  .section-head { font-size:11px; color:#888; letter-spacing:2px; border-bottom:1px solid #e4e6e8; padding-bottom:8px; margin-bottom:14px; text-transform:uppercase; font-family:'Roboto',sans-serif; }
+
+  /* ── TOUR: ТЕКУЩИЙ КРУГ ── */
+  .cur-round { border:1.5px solid #d0d2d4; background:#fff; padding:20px 18px; margin-bottom:20px; position:relative; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,.07); }
+  .cur-round::before { content:' ТЕКУЩИЙ КРУГ '; position:absolute; top:-10px; left:14px; background:#eef0f2; padding:0 6px; font-family:'Roboto',sans-serif; font-size:9px; color:#888; letter-spacing:2px; }
+  .cur-round-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; flex-wrap:wrap; gap:8px; }
+  .cur-round-num { font-family:'Roboto',sans-serif; font-size:clamp(16px,4vw,22px); color:#111; font-weight:300; letter-spacing:-1px; }
+  .cur-round-dates { font-size:12px; color:#888; text-align:right; font-family:'Roboto',sans-serif; }
+  .cur-round-table { width:100%; border-collapse:collapse; font-size:13px; font-family:'Roboto',sans-serif; }
+  .cur-round-table th { font-size:10px; color:#888; letter-spacing:1px; padding:8px 6px; border-bottom:1px solid #e4e6e8; text-align:left; font-weight:500; }
+  .cur-round-table td { padding:10px 6px; border-bottom:1px solid #f0f0f0; vertical-align:middle; color:#333; }
+  .cur-round-table tr:last-child td { border-bottom:none; }
+  .cur-no-data { font-size:12px; color:#ccc; letter-spacing:2px; padding:14px 0; font-family:'Roboto',sans-serif; }
+
+  /* ── TOUR: STANDINGS ── */
+  .standings { width:100%; border-collapse:collapse; font-size:14px; margin-bottom:20px; font-family:'Roboto',sans-serif; }
+  .standings th { font-size:10px; color:#888; letter-spacing:1px; padding:9px 6px; border-bottom:1px solid #e4e6e8; text-align:left; font-weight:500; }
+  .standings td { padding:11px 6px; border-bottom:1px solid #f5f5f5; vertical-align:middle; }
+  .standings tr:last-child td { border-bottom:none; }
+  .rank { font-family:'Roboto',sans-serif; font-size:12px; color:#aaa; font-weight:400; }
+  .r1 { color:#B8860B; font-weight:500; } .r2 { color:#888; font-weight:500; } .r3 { color:#8B4513; font-weight:500; }
+  .dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; flex-shrink:0; }
+  .pts { font-family:'Roboto',sans-serif; font-size:13px; color:#111; font-weight:500; }
+  .change-up { color:#22a722; font-size:11px; } .change-down { color:#cc3333; font-size:11px; } .change-same { color:#ccc; font-size:11px; }
+
+  /* ── TOUR: СЕТКА КРУГОВ ── */
+  .rounds-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:20px; }
+  .round-cell { background:#fff; border:1px solid #e4e6e8; border-radius:8px; padding:9px 5px; text-align:center; }
+  .round-cell.active { border-color:#111; background:#f5f5f5; }
+  .round-cell.future { opacity:.35; }
+  .r-num { font-family:'Roboto',sans-serif; font-size:9px; color:#aaa; margin-bottom:5px; font-weight:500; letter-spacing:1px; }
+  .r-win { font-size:11px; margin-bottom:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:'Roboto',sans-serif; }
+  .r-date { font-size:10px; color:#aaa; font-family:'Roboto',sans-serif; }
+
+  /* ── TOUR: ИСТОРИЯ ── */
+  .hist-row { padding:11px 0; border-bottom:1px solid #f0f0f0; }
+  .hist-row:last-child { border-bottom:none; }
+  .hist-meta { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; flex-wrap:wrap; }
+  .hist-round { font-size:12px; color:#111; font-weight:500; min-width:75px; font-family:'Roboto',sans-serif; }
+  .hist-dates { font-size:11px; color:#aaa; font-family:'Roboto',sans-serif; }
+  .hist-ops { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .hist-op { display:flex; align-items:center; gap:4px; font-size:13px; white-space:nowrap; font-family:'Roboto',sans-serif; }
+  .sep { color:#ddd; font-size:11px; }
+
+  /* ── TOUR: ПРАВИЛА ── */
+  .rules-title { font-size:clamp(13px,2.5vw,16px); color:#555; letter-spacing:2px; text-align:center; margin-bottom:16px; font-family:'Roboto',sans-serif; text-transform:uppercase; }
+  .rules-section { border:1px solid #e4e6e8; background:#fff; border-radius:12px; padding:18px 16px; margin-bottom:20px; }
+  .rule-block { margin-bottom:16px; } .rule-block:last-child { margin-bottom:0; }
+  .rule-h { font-size:13px; color:#111; letter-spacing:1px; margin-bottom:8px; border-bottom:1px solid #f0f0f0; padding-bottom:5px; font-weight:500; font-family:'Roboto',sans-serif; }
+  .rule-t { font-size:13px; color:#555; line-height:2; font-family:'Roboto',sans-serif; } .rule-t span { color:#111; font-weight:500; }
+  .rule-note { font-size:12px; color:#00aacc; line-height:1.8; margin-top:8px; font-family:'Roboto',sans-serif; }
+  .pts-row { display:flex; align-items:center; gap:10px; padding:4px 0; font-size:13px; color:#555; font-family:'Roboto',sans-serif; }
+  .pts-v { margin-left:auto; font-size:12px; color:#111; font-weight:500; }
+
+  /* ── TOUR: ЗАГРУЗКА ── */
+  .loading { text-align:center; padding:20px; font-size:12px; color:#ccc; letter-spacing:2px; font-family:'Roboto',sans-serif; }
+
+  @media(max-width:480px) {
+    .meta-row { grid-template-columns:repeat(2,1fr); }
+    .rounds-grid { grid-template-columns:repeat(3,1fr); }
+    .standings { font-size:12px; }
+    .standings th { font-size:8px; padding:7px 4px; }
+    .standings td { padding:9px 4px; }
+    .cur-round-table { font-size:12px; }
+    .cur-round-table th { font-size:8px; padding:6px 4px; }
+    .cur-round-table td { padding:8px 4px; }
+  }
