@@ -318,13 +318,13 @@ function renderStandings(data){
     const prevRn=cR.length>1?cR[cR.length-2]:null;
     const lastR=lastRn?rH[lastRn]:null;
     const prevR=prevRn?rH[prevRn]:null;
-    let html=`<table class="standings"><thead><tr><th style="width:28px">#</th><th>ОПЕРАТОР</th><th style="width:44px">ОЧК</th><th style="width:44px">Δ</th><th style="width:50px">ПОБЕД</th><th style="width:65px">${totLabel}</th></tr></thead><tbody>`;
+    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num">ОЧК</th><th class="th-num">Δ</th><th class="th-num">ПОБЕД</th><th class="th-last">${totLabel}</th></tr></thead><tbody>`;
     sorted.forEach((op,i)=>{
       const pos=i+1;
       let dH='<span class="change-same">—</span>';
       if(prevR&&lastR&&lastR[op]){const pP=prevR[op]||5;const lP=lastR[op];const diff=pP-lP;if(diff>0)dH=`<span class="change-up">▲${diff}</span>`;else if(diff<0)dH=`<span class="change-down">▼${Math.abs(diff)}</span>`;}
       const tv=showKwt?(totals[op]?totals[op]:'—'):(totals[op]||0);
-      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></td><td><span class="pts">${pts[op]}</span></td><td>${dH}</td><td style="color:var(--green-dim)">${wins[op]}</td><td style="color:var(--green);font-family:'Press Start 2P',monospace;font-size:9px">${tv}</td></tr>`;
+      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></td><td><span class="pts">${pts[op]}</span></td><td>${dH}</td><td class="td-wins">${wins[op]}</td><td class="td-last">${tv}</td></tr>`;
     });
     html+='</tbody></table>';
     document.getElementById(wrapId).innerHTML=html;
