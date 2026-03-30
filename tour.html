@@ -328,7 +328,11 @@ function renderStandings(data){
   function render(pts,wins,rH,wrapId,totals,totLabel,showKwt){
     const sorted=[...ALL_OPS].sort((a,b)=>pts[b]!==pts[a]?pts[b]-pts[a]:wins[b]-wins[a]);
     const rc=['r1','r2','r3','',''];
-    const lastR=last?rH[last]:null;const prevR=prev?rH[prev]:null;
+    const cR=Object.keys(rH).map(Number).sort((a,b)=>a-b);
+    const lastRn=cR.length?cR[cR.length-1]:null;
+    const prevRn=cR.length>1?cR[cR.length-2]:null;
+    const lastR=lastRn?rH[lastRn]:null;
+    const prevR=prevRn?rH[prevRn]:null;
     let html=`<table class="standings"><thead><tr><th style="width:28px">#</th><th>ОПЕРАТОР</th><th style="width:44px">ОЧК</th><th style="width:44px">Δ</th><th style="width:50px">ПОБЕД</th><th style="width:65px">${totLabel}</th></tr></thead><tbody>`;
     sorted.forEach((op,i)=>{
       const pos=i+1;
