@@ -272,8 +272,8 @@
   }
   .op-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.5); border-color: #3a3a3a; }
   .op-rank {
-    position: absolute; top: 8px; right: 12px;
-    width: 44px; height: 52px;
+    position: absolute; top: 10px; right: 12px;
+    width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
   }
   .medal { display: inline-flex; align-items: center; justify-content: center; }
@@ -289,7 +289,7 @@
     letter-spacing: -1px; text-shadow: none;
     font-family: 'Roboto', sans-serif;
   }
-  .op-score .score-x { color: #444; font-size: .65em; }
+  .op-score .score-x { color: #444; font-size: .85em; }
   .op-bar-wrap { background: #2a2a2a; border-radius: 4px; height: 8px; overflow: hidden; border: none; }
   .op-bar-fill { height: 100%; border-radius: 4px; transition: width 1.5s ease; box-shadow: none; }
   .op-meta { font-size: 11px; color: #444; margin-top: 6px; letter-spacing: .3px; }
