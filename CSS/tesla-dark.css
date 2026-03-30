@@ -106,9 +106,8 @@
     background: #1e1e1e;
     padding: clamp(20px,4vw,32px) clamp(16px,4vw,24px) clamp(18px,3vw,26px);
     border-bottom: 1px solid #2a2a2a;
-    margin: 0 clamp(16px,4vw,24px);
-    border-radius: 12px 12px 0 0;
-    margin-bottom: 0;
+    margin: 20px clamp(16px,4vw,24px) 0;
+    border-radius: 12px;
   }
   .header-subtitle {
     font-size: clamp(11px,2.5vw,13px);
@@ -625,12 +624,8 @@
   .r-date { font-size:10px; color:#444; font-family:'Roboto',sans-serif; }
 
   /* ── TOUR: ИСТОРИЯ ── */
-  .hist-row { padding:11px 0; border-bottom:1px solid #222; }
-  .hist-row:last-child { border-bottom:none; }
-  .hist-meta { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; flex-wrap:wrap; }
   .hist-round { font-size:12px; color:#f0f0f0; font-weight:500; min-width:75px; font-family:'Roboto',sans-serif; }
   .hist-dates { font-size:11px; color:#444; font-family:'Roboto',sans-serif; }
-  .hist-ops { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
   .hist-op { display:flex; align-items:center; gap:4px; font-size:13px; white-space:nowrap; font-family:'Roboto',sans-serif; }
   .sep { color:#333; font-size:11px; }
 
