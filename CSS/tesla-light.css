@@ -396,7 +396,7 @@
     box-shadow: 0 1px 4px rgba(0,0,0,.07);
     border: none; position: relative;
   }
-  .author-section::before { display: none; }
+  .author-section::before { content:' ARTSIOM KRIVTSOFF | АВТОР ПРОЕКТА '; position:absolute; top:-10px; left:14px; background:#ffffff; padding:0 6px; font-size:9px; color:#aaa; letter-spacing:2px; font-family:'Roboto',sans-serif; }
   .author-about-btn {
     display: block; width: 100%;
     border: 1.5px solid #d0d2d4; background: transparent; color: #333;
@@ -408,6 +408,10 @@
     -webkit-tap-highlight-color: transparent; box-sizing: border-box;
   }
   .author-about-btn:hover,.author-about-btn:active { border-color: #999; background: #eef0f2; box-shadow: none; }
+
+  .author-chat-btn { display:block; width:100%; border:1.5px solid #d0d2d4; background:#ffffff; color:#333; font-family:'Roboto',sans-serif; font-size:clamp(13px,2.5vw,15px); font-weight:500; padding:14px 16px; cursor:pointer; letter-spacing:.5px; text-align:center; text-decoration:none; margin-bottom:12px; transition:border-color .15s,background .15s; -webkit-tap-highlight-color:transparent; box-sizing:border-box; line-height:1.6; border-radius:9px; }
+  .author-chat-btn:hover,.author-chat-btn:active { border-color:#999; background:#eef0f2; }
+  .author-chat-btn .chat-sub { display:block; font-size:12px; color:#888; letter-spacing:.5px; margin-top:4px; font-weight:400; }
   .section-label {
     font-size: 10px; color: #888;
     letter-spacing: 2px; margin-bottom: 8px;

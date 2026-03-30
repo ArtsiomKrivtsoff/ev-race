@@ -17,12 +17,26 @@
   @keyframes flicker { 0%,100%{opacity:1} 93%{opacity:.87} 96%{opacity:.93} }
   body { animation: flicker 8s infinite; }
 
-  .container { max-width: 860px; margin: 0 auto; padding: 16px 14px; }
+  .container { max-width: 860px; margin: 0 auto; padding: 0; }
+  .page-wrap { padding: 0 14px 16px; }
 
-  /* ── СТАТУС-БАР (новый элемент) ── */
-  .statusbar { display:flex; align-items:center; gap:6px; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--green-dark); }
-  .burger-btn { display:none; }
-  .nav-desktop { display:flex; gap:6px; flex-wrap:wrap; flex:1; }
+  /* ── СТАТУС-БАР ── */
+  .statusbar { display:flex; align-items:center; gap:6px; padding:10px 14px 12px; margin-bottom:20px; border-bottom:1px solid var(--green-dark); position:sticky; top:0; z-index:200; background:var(--bg); }
+  /* мобиле — бургер виден, десктоп-навигация скрыта */
+  .burger-btn { display:flex; flex-direction:column; justify-content:center; gap:5px; width:36px; height:36px; padding:6px; background:transparent; border:1px solid var(--green-dark); cursor:pointer; -webkit-tap-highlight-color:transparent; flex-shrink:0; }
+  .burger-btn span { display:block; height:2px; background:var(--green-dim); border-radius:0; transition:all .2s; }
+  .burger-btn.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); background:var(--green); }
+  .burger-btn.open span:nth-child(2) { opacity:0; }
+  .burger-btn.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); background:var(--green); }
+  .nav-desktop { display:none; gap:6px; flex-wrap:wrap; flex:1; }
+
+  /* десктоп — бургер скрыт, навигация видна */
+  @media (min-width:600px) {
+    .burger-btn  { display:none; }
+    .nav-desktop { display:flex; }
+    .nav-mobile-drop { display:none !important; }
+  }
+
   .nav-link { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:2px; padding:8px 12px; border:1px solid var(--green-dark); background:transparent; color:var(--green-dim); text-decoration:none; transition:all .2s; -webkit-tap-highlight-color:transparent; }
   .nav-link:hover,.nav-link:active { border-color:var(--green-dim); color:var(--green); }
   .nav-link.active { border-color:var(--green); color:var(--green); background:rgba(0,255,65,.05); }
@@ -33,8 +47,13 @@
   .theme-seg-btn.active { background:rgba(0,255,65,.1); color:var(--green); }
   .theme-seg-btn:not(.active):hover { color:var(--green-dim); }
 
-  /* мобильное меню */
-  .nav-mobile-drop { display:none !important; }
+  /* мобильное выпадающее меню */
+  .nav-mobile-drop { display:none; position:relative; flex-direction:column; background:#0d1f0d; border:1px solid var(--green-dark); border-top:none; }
+  .nav-mobile-drop.open { display:flex; }
+  .nav-mobile-link { font-family:'Share Tech Mono',monospace; font-size:13px; padding:14px 16px; color:var(--green-dim); text-decoration:none; border-bottom:1px solid var(--green-dark); letter-spacing:1px; transition:color .15s; -webkit-tap-highlight-color:transparent; }
+  .nav-mobile-link:last-child { border-bottom:none; }
+  .nav-mobile-link.active { color:var(--green); }
+  .nav-mobile-link:hover { color:var(--green); background:rgba(0,255,65,.04); }
 
   /* ── HERO (оригинал: .header) ── */
   .hero { text-align:center; padding:32px 0 24px; border-bottom:2px solid var(--green); margin-bottom:20px; }
@@ -123,7 +142,11 @@
 
   .author-section { border:1px solid var(--green-dim); padding:20px 16px; margin-bottom:24px; background:var(--card-bg); position:relative; }
   .author-section::before { content:' ARTSIOM KRIVTSOFF | АВТОР ПРОЕКТА '; position:absolute; top:-10px; left:14px; background:var(--bg); padding:0 6px; font-size:9px; color:var(--green-dim); letter-spacing:2px; }
-  .author-about-btn { display:block; width:100%; border:1px solid var(--green); background:transparent; color:var(--green); font-family:'Share Tech Mono',monospace; font-size:13px; padding:14px; cursor:pointer; letter-spacing:2px; text-align:center; text-decoration:none; margin-bottom:18px; transition:all .2s; -webkit-tap-highlight-color:transparent; box-sizing:border-box; }
+  .page-wrap { padding: 0 14px 16px; }
+  .author-about-btn { display:block; width:100%; border:1px solid var(--green); background:transparent; color:var(--green); font-family:'Share Tech Mono',monospace; font-size:14px; padding:16px; cursor:pointer; letter-spacing:2px; text-align:center; text-decoration:none; margin-bottom:12px; transition:all .2s; -webkit-tap-highlight-color:transparent; box-sizing:border-box; }
+  .author-chat-btn { display:block; width:100%; border:1px solid var(--green); background:rgba(0,255,65,.05); color:var(--green); font-family:'Share Tech Mono',monospace; font-size:14px; padding:14px 16px; cursor:pointer; letter-spacing:1px; text-align:center; text-decoration:none; margin-bottom:18px; transition:all .2s; -webkit-tap-highlight-color:transparent; box-sizing:border-box; line-height:1.6; }
+  .author-chat-btn:hover,.author-chat-btn:active { background:rgba(0,255,65,.12); }
+  .author-chat-btn .chat-sub { display:block; font-size:11px; color:var(--green-dim); letter-spacing:1px; margin-top:4px; }
   .author-about-btn:hover,.author-about-btn:active { background:rgba(0,255,65,.08); box-shadow:0 0 10px rgba(0,255,65,.12); }
   .section-label { font-size:9px; color:var(--text-dim); letter-spacing:3px; margin-bottom:10px; }
   .author-links { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:18px; width:100%; box-sizing:border-box; }
