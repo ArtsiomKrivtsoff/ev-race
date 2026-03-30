@@ -105,6 +105,7 @@
     background: #ffffff;
     padding: clamp(20px,4vw,32px) clamp(16px,4vw,24px) clamp(18px,3vw,26px);
     border-bottom: 1px solid #e4e6e8;
+    margin-bottom: 0;
   }
   .header-subtitle {
     font-size: clamp(11px,2.5vw,13px);
@@ -513,26 +514,31 @@
   /* ============================================================
      ТУРНИРНАЯ ТАБЛИЦА — Tesla Light
      ============================================================ */
-  .meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 clamp(16px,4vw,24px) 24px;}
+  .meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:24px clamp(16px,4vw,24px) 24px;}
   .meta-card{background:#fff;border-radius:10px;padding:14px 8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07);}
   .meta-label{font-size:10px;color:#aaa;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;font-weight:400;}
   .meta-val{font-family:'Roboto',sans-serif;font-size:clamp(11px,2vw,14px);color:#111;font-weight:500;line-height:1.6;}
-  .section-head{font-size:11px;color:#888;letter-spacing:2px;border-bottom:1px solid #e4e6e8;padding-bottom:8px;margin:0 clamp(16px,4vw,24px) 14px;text-transform:uppercase;font-weight:600;}
+  .section-head{font-size:11px;color:#555;letter-spacing:2px;border-bottom:1.5px solid #d0d2d4;padding:0 0 10px;margin:32px clamp(16px,4vw,24px) 16px;text-transform:uppercase;font-weight:600;display:flex;align-items:center;gap:8px;}
+  .section-head::before{content:'';display:block;width:3px;height:14px;background:#111;border-radius:2px;flex-shrink:0;}
   .cur-round{border:1px solid #e4e6e8;background:#fff;padding:20px 18px;margin:0 clamp(16px,4vw,24px) 20px;position:relative;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
   .cur-round::before{content:' ТЕКУЩИЙ КРУГ ';position:absolute;top:-10px;left:14px;background:#fff;padding:0 6px;font-size:9px;color:#aaa;letter-spacing:2px;font-family:'Roboto',sans-serif;font-weight:600;}
   .cur-round-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
   .cur-round-num{font-family:'Roboto',sans-serif;font-size:clamp(18px,4vw,24px);color:#111;font-weight:300;letter-spacing:-1px;}
   .cur-round-dates{font-size:12px;color:#888;text-align:right;font-weight:300;}
   .cur-round-table{width:100%;border-collapse:collapse;font-size:13px;}
-  .cur-round-table th{font-size:10px;color:#aaa;letter-spacing:1px;padding:8px 6px;border-bottom:1px solid #eee;text-align:left;text-transform:uppercase;font-weight:500;}
-  .cur-round-table td{padding:10px 6px;border-bottom:1px solid #f5f5f5;vertical-align:middle;color:#333;}
+  .cur-round-table th{font-size:10px;color:#aaa;letter-spacing:1px;padding:10px 12px;border-bottom:1px solid #f0f0f0;text-align:left;text-transform:uppercase;font-weight:500;}
+  .cur-round-table td{padding:11px 12px;border-bottom:none;vertical-align:middle;color:#333;}
+  .cur-round-table tbody tr:nth-child(even){background:#f9f9f9;}
+  .cur-round-table tbody tr:nth-child(odd){background:#fff;}
   .cur-round-table tr:last-child td{border-bottom:none;}
   .cur-no-data{font-size:12px;color:#ccc;letter-spacing:2px;padding:14px 0;text-align:center;}
   .standings{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:0;}
-  .standings th{font-size:10px;color:#aaa;letter-spacing:1px;padding:9px 6px;border-bottom:1px solid #eee;text-align:left;text-transform:uppercase;font-weight:500;}
-  .standings td{padding:11px 6px;border-bottom:1px solid #f5f5f5;vertical-align:middle;color:#333;}
+  .standings th{font-size:10px;color:#aaa;letter-spacing:1px;padding:11px 12px;border-bottom:1px solid #f0f0f0;text-align:left;text-transform:uppercase;font-weight:500;}
+  .standings td{padding:12px 12px;border-bottom:none;vertical-align:middle;color:#333;}
+  .standings tbody tr:nth-child(even){background:#f9f9f9;}
+  .standings tbody tr:nth-child(odd){background:#fff;}
   .standings tr:last-child td{border-bottom:none;}
-  .standings-wrap{background:#fff;border-radius:12px;padding:4px 14px;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .standings-wrap{background:#fff;border-radius:12px;padding:0;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden;}
   .rank{font-family:'Roboto',sans-serif;font-size:13px;color:#ccc;font-weight:400;}
   .r1{color:#B8860B;font-weight:500;}.r2{color:#888;font-weight:500;}.r3{color:#8B4513;font-weight:500;}
   .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;flex-shrink:0;}
@@ -545,9 +551,11 @@
   .r-num{font-family:'Roboto',sans-serif;font-size:9px;color:#aaa;margin-bottom:5px;font-weight:500;letter-spacing:1px;}
   .r-win{font-size:11px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#333;}
   .r-date{font-size:10px;color:#bbb;}
-  .hist-row{padding:11px 0;border-bottom:1px solid #f0f0f0;}
+  .hist-row{padding:13px 16px;border-bottom:none;}
+  .hist-row:nth-child(even){background:#f9f9f9;}
+  .hist-row:nth-child(odd){background:#fff;}
   .hist-row:last-child{border-bottom:none;}
-  .hist-wrap{background:#fff;border-radius:12px;padding:4px 14px;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .hist-wrap{background:#fff;border-radius:12px;padding:0;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden;}
   .hist-meta{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
   .hist-round{font-size:12px;color:#555;min-width:75px;font-weight:500;}
   .hist-dates{font-size:11px;color:#bbb;}
