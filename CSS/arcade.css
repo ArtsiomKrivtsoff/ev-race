@@ -42,7 +42,7 @@
   .nav-link.active { border-color:var(--green); color:var(--green); background:rgba(0,255,65,.05); }
 
   /* переключатель стилей */
-  .theme-seg { display:flex; background:#0d1f0d; border:1px solid var(--green-dark); padding:3px; gap:2px; flex-shrink:0; }
+  .theme-seg { display:flex; background:#0d1f0d; border:1px solid var(--green-dark); padding:3px; gap:2px; flex-shrink:0; margin-left:auto; }
   .theme-seg-btn { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:1px; padding:4px 8px; border:none; background:transparent; color:var(--green-dark); cursor:pointer; white-space:nowrap; transition:all .15s; -webkit-tap-highlight-color:transparent; }
   .theme-seg-btn.active { background:rgba(0,255,65,.1); color:var(--green); }
   .theme-seg-btn:not(.active):hover { color:var(--green-dim); }
