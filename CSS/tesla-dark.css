@@ -663,3 +663,12 @@
   .standings td:last-child{font-size:13px;font-family:'Roboto',sans-serif;color:#666;}
 
   .hist-op span:last-child{color:#555;}
+
+  .standings{table-layout:auto;}
+  .th-rank{width:36px;}
+  .th-num{width:52px;text-align:right;}
+  .th-last{width:80px;text-align:right;}
+  .standings td.td-wins{text-align:right;color:#aaa;font-size:13px;}
+  .standings td.td-last{text-align:right;color:#666;font-size:13px;font-family:'Roboto',sans-serif;}
+  .standings th.th-num{text-align:right;}
+  .standings th.th-last{text-align:right;}
