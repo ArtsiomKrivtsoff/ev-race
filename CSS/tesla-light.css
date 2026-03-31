@@ -668,8 +668,6 @@
   /* ============================================================
      СТРАНИЦА СТАНЦИЙ — Tesla Light
      ============================================================ */
-  --winter:#0077aa; --spring:#558800; --summer:#cc2277; --autumn:#aa6600;
-
   .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px clamp(16px,4vw,24px) 20px;}
   .stat-card{background:#fff;border-radius:10px;padding:14px 8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07);}
   .stat-label{font-size:10px;color:#aaa;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;font-weight:400;}
