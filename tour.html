@@ -244,7 +244,7 @@ function fmtDateLong(ds){
 function daysToFinal(){return Math.max(0,Math.ceil((FINAL-new Date())/86400000));}
 
 async function fetchStations(){
-  const r=await fetch(SURL+'/rest/v1/stations?select=*&station_type=in.(DC,ACDC)&order=station_date.asc',{
+  const r=await fetch(SURL+'/rest/v1/stations?select=*&station_type=in.(DC,ACDC)&operator=in.(batteryfly,forevo,zaryadka,united,csms)&order=station_date.asc',{
     headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
   return r.json();
 }
