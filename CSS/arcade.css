@@ -258,3 +258,5 @@
     .cur-round-table th{font-size:8px;padding:6px 4px;}
     .cur-round-table td{padding:8px 4px;}
   }
+
+  .new-badge { background:rgba(0,255,65,.12); color:var(--green); border:1px solid var(--green-dark); font-size:7px; font-family:'Press Start 2P',monospace; padding:2px 5px; margin-left:6px; }

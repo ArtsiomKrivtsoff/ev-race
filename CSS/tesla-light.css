@@ -662,3 +662,5 @@
   .standings td.td-last{text-align:right;color:#555;font-size:13px;font-family:'Roboto',sans-serif;}
   .standings th.th-num{text-align:right;}
   .standings th.th-last{text-align:right;}
+
+  .new-badge { margin-left: 6px; }

@@ -19,6 +19,7 @@
   body::before { display: none; }
 
   .container { max-width: 860px; margin: 0 auto; padding: 0; }
+  .page-wrap { padding: 0 14px 16px; }
 
   /* ── СТАТУС-БАР ── */
   .statusbar {
@@ -663,3 +664,5 @@
   .standings td.td-last{text-align:right;color:#666;font-size:13px;font-family:'Roboto',sans-serif;}
   .standings th.th-num{text-align:right;}
   .standings th.th-last{text-align:right;}
+
+  .new-badge { margin-left: 6px; }
