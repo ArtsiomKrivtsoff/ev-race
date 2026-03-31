@@ -379,3 +379,7 @@
     .table-wrap{display:none;}
     .cards-wrap{display:block;}
   }
+
+  .section-label{display:block;width:100%;}
+  .op-badge{display:inline-block;width:auto !important;flex-shrink:0;align-self:flex-start;}
+  .loc-head-left{display:flex;flex-direction:column;gap:5px;align-items:flex-start;}

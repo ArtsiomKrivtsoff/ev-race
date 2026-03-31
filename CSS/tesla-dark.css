@@ -19,7 +19,7 @@
   body::before { display: none; }
 
   .container { max-width: 860px; margin: 0 auto; padding: 0; }
-  .page-wrap { padding: 0 14px 16px; }
+  .page-wrap { padding: 0 0 16px; }
 
   /* ── СТАТУС-БАР ── */
   .statusbar {
@@ -670,7 +670,7 @@
   /* ============================================================
      СТРАНИЦА СТАНЦИЙ — Tesla Dark
      ============================================================ */
-  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 clamp(16px,4vw,24px) 20px;}
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px clamp(16px,4vw,24px) 20px;}
   .stat-card{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:10px;padding:14px 8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.3);}
   .stat-label{font-size:10px;color:#444;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;font-weight:400;}
   .stat-val{font-family:'Roboto',sans-serif;font-size:clamp(11px,2vw,15px);color:#f0f0f0;font-weight:600;}
@@ -739,19 +739,19 @@
   .gun-dot{width:5px;height:5px;background:#555;border-radius:1px;flex-shrink:0;display:inline-block;}
   .no-gun{color:#333;}
 
-  .table-wrap{overflow-x:auto;margin:0 clamp(16px,4vw,24px) 20px;}
-  table.reg{width:100%;border-collapse:collapse;font-size:13px;min-width:740px;background:#1e1e1e;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.3);border:1px solid #2a2a2a;}
+  .table-wrap{overflow-x:hidden;margin:0 clamp(16px,4vw,24px) 20px;}
+  table.reg{width:100%;border-collapse:collapse;font-size:12px;background:#1e1e1e;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.3);border:1px solid #2a2a2a;table-layout:fixed;}
   table.reg thead tr{border-bottom:1px solid #2a2a2a;background:#1e1e1e;}
-  table.reg th{font-size:10px;color:#444;text-align:left;padding:11px 14px;font-weight:500;white-space:nowrap;letter-spacing:1px;text-transform:uppercase;}
+  table.reg th{font-size:9px;color:#444;text-align:left;padding:10px 8px;font-weight:500;white-space:nowrap;letter-spacing:0;text-transform:uppercase;}
   table.reg th.center{text-align:center;}
-  table.reg td{padding:11px 14px;border-bottom:none;color:#aaa;vertical-align:middle;}
+  table.reg td{padding:10px 8px;border-bottom:none;color:#aaa;vertical-align:middle;}
   table.reg tbody tr:nth-child(even){background:#1a1a1a;}
   table.reg tbody tr:nth-child(odd){background:#1e1e1e;}
   table.reg tr:hover td{background:#222;}
   table.reg td.city{color:#f0f0f0;font-size:13px;font-weight:500;}
   table.reg td.addr .loc-name{font-size:12px;color:#f0f0f0;display:block;font-weight:500;}
   table.reg td.addr .loc-address{font-size:11px;color:#555;display:block;margin-top:2px;}
-  table.reg td.addr{max-width:220px;}
+  table.reg td.addr{width:22%;overflow:hidden;text-overflow:ellipsis;}
   table.reg td.power{color:#ccaa00;font-family:'Roboto',sans-serif;font-size:13px;font-weight:600;white-space:nowrap;}
   table.reg td.center{text-align:center;}
   table.reg td.date{font-size:12px;color:#555;}
@@ -783,3 +783,7 @@
     .table-wrap{display:none;}
     .cards-wrap{display:block;}
   }
+
+  .section-label{display:block;width:100%;}
+
+  .op-badge{display:inline-block;width:auto;align-self:flex-start;}
