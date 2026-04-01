@@ -17,7 +17,7 @@
   }
   body::before { display: none; }
 
-  .container { max-width: 860px; margin: 0 auto; padding: 0; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0; }
 
   /* ── СТАТУС-БАР ── */
   .statusbar {
