@@ -624,10 +624,21 @@ function closeBurger() {
 async function loadStations() {
   try {
     const res = await fetch(
-      SURL + '/rest/v1/stations?select=operator,station_type,city,address,location_name,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng&not.lat.is=null&order=station_date.desc',
+      SURL + '/rest/v1/stations?select=operator,station_type,city,address,location_name,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng&lat=not.is.null',
       { headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY } }
     );
+    if (!res.ok) {
+      const err = await res.text();
+      console.error('Supabase error:', res.status, err);
+      document.getElementById('mf-count').textContent = 'ERR';
+      return;
+    }
     allStations = await res.json();
+    if (!Array.isArray(allStations)) {
+      console.error('Не массив:', allStations);
+      document.getElementById('mf-count').textContent = 'ERR';
+      return;
+    }
     buildCityFilter(allStations);
     renderMarkers();
   } catch(e) {
