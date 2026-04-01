@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>EV RACE 2026 — Карта зарядных станций Беларуси</title>
+<meta name="description" content="Интерактивная карта DC зарядных станций Беларуси 2026. BatteryFly, forEVo, Zaryadka, United Company, Гродненский ЦСМС и другие операторы.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://evrace.by/map.html">
+<meta property="og:title" content="Карта зарядных станций Беларуси 2026 — EV RACE">
+<meta property="og:description" content="Интерактивная карта DC зарядных станций Беларуси 2026.">
+<meta property="og:image" content="https://evrace.by/og.png">
+<meta property="og:url" content="https://evrace.by/map.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_BY">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
+ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+
+<link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=2">
+<link rel="prefetch" href="CSS/tesla-light.css?v=2">
+<link rel="prefetch" href="CSS/tesla-dark.css?v=2">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+
+<style>
+/* ── КАРТА: страница без скролла ── */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+.page-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 0 !important;
+}
+
+/* ── ПАНЕЛЬ ФИЛЬТРОВ ── */
+.map-filters {
+  background: var(--card-bg, #0d1f0d);
+  border-bottom: 1px solid var(--green-dim, #00aa2b);
+  padding: 8px 12px;
+  flex-shrink: 0;
+  z-index: 1000;
+}
+.filter-row-map {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+.filter-row-map:last-child { margin-bottom: 0; }
+.filter-lbl {
+  font-size: 10px;
+  color: var(--green-dim, #00aa2b);
+  font-family: 'Press Start 2P', monospace;
+  white-space: nowrap;
+  margin-right: 3px;
+}
+.mf-btn {
+  font-size: 9px;
+  font-family: 'Press Start 2P', monospace;
+  padding: 3px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+.mf-btn.inactive { opacity: 0.35; }
+
+/* Операторы */
+.mf-bf { background:#005EEB; color:#fff; }
+.mf-fo { background:#b44fff; color:#fff; }
+.mf-za { background:#00cfff; color:#003; }
+.mf-uc { background:#F5821F; color:#fff; }
+.mf-cs { background:#FF6B6B; color:#fff; }
+.mf-ma { background:#76d275; color:#003; }
+.mf-ev { background:#832af5; color:#fff; }
+.mf-or { background:#FF6B00; color:#fff; }
+.mf-pr { background:#24c3d3; color:#003; }
+
+/* Тип */
+.mf-type {
+  background: transparent;
+  color: var(--green, #00ff41);
+  border-color: var(--green-dim, #00aa2b);
+}
+.mf-type.active-type {
+  background: var(--green-dim, #00aa2b);
+  color: #000;
+}
+
+/* Кнопки справа */
+.mf-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.mf-geo-btn {
+  font-size: 9px;
+  font-family: 'Press Start 2P', monospace;
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--winter, #00e5ff);
+  border: 1px solid var(--winter, #00e5ff);
+  white-space: nowrap;
+}
+.mf-geo-btn:hover { background: var(--winter, #00e5ff); color: #000; }
+.mf-reset-btn {
+  font-size: 9px;
+  font-family: 'Press Start 2P', monospace;
+  padding: 3px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+  background: transparent;
+  color: #555;
+  border: 1px solid #333;
+}
+.mf-reset-btn:hover { color: var(--green, #00ff41); border-color: var(--green-dim, #00aa2b); }
+.mf-count {
+  font-size: 9px;
+  font-family: 'Press Start 2P', monospace;
+  color: var(--green, #00ff41);
+  white-space: nowrap;
+}
+
+/* Город-фильтры — горизонтальный скролл на мобиле */
+.city-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 5px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex: 1;
+}
+.city-scroll::-webkit-scrollbar { display: none; }
+.mf-city {
+  background: transparent;
+  color: var(--green-dim, #00aa2b);
+  border: 1px solid #003d0f;
+  white-space: nowrap;
+}
+.mf-city.active-city {
+  background: #003d0f;
+  color: var(--green, #00ff41);
+  border-color: var(--green-dim, #00aa2b);
+}
+
+/* ── КАРТА ── */
+#map {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+/* ── LEAFLET КАСТОМИЗАЦИЯ ── */
+.leaflet-popup-content-wrapper {
+  background: #0d1f0d !important;
+  border: 1px solid #00aa2b !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.leaflet-popup-content {
+  margin: 0 !important;
+  font-family: 'Press Start 2P', monospace !important;
+}
+.leaflet-popup-tip-container { display: none !important; }
+.leaflet-popup-close-button {
+  color: #00aa2b !important;
+  font-size: 16px !important;
+  top: 6px !important;
+  right: 8px !important;
+}
+.leaflet-popup-close-button:hover { color: #00ff41 !important; }
+
+/* Попап контент */
+.popup-wrap {
+  padding: 10px 12px;
+  min-width: 180px;
+  max-width: 240px;
+}
+.popup-op {
+  font-size: 10px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #003d0f;
+}
+.popup-row {
+  font-size: 8px;
+  color: #aaa;
+  margin-bottom: 4px;
+  line-height: 1.6;
+}
+.popup-row span { color: #00ff41; }
+.popup-route-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 5px 0;
+  font-size: 8px;
+  font-family: 'Press Start 2P', monospace;
+  text-align: center;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+.popup-route-btn:hover { opacity: 0.85; }
+
+/* Кластеры */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: rgba(0,255,65,0.15) !important;
+}
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background-color: rgba(0,255,65,0.3) !important;
+  color: #00ff41 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 10px !important;
+}
+
+/* Геолокация маркер */
+.geo-pulse {
+  width: 14px; height: 14px;
+  background: #00e5ff;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 4px rgba(0,229,255,0.3);
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0,229,255,0.4); }
+  70%  { box-shadow: 0 0 0 8px rgba(0,229,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,229,255,0); }
+}
+
+/* ── TESLA LIGHT переопределения ── */
+body.theme-tesla-light .map-filters {
+  background: #fff;
+  border-bottom-color: #ddd;
+}
+body.theme-tesla-light .filter-lbl { color: #888; }
+body.theme-tesla-light .mf-type { color: #333; border-color: #ccc; }
+body.theme-tesla-light .mf-type.active-type { background: #333; color: #fff; }
+body.theme-tesla-light .mf-city { color: #555; border-color: #ddd; }
+body.theme-tesla-light .mf-city.active-city { background: #eee; color: #111; border-color: #999; }
+body.theme-tesla-light .mf-count { color: #111; }
+body.theme-tesla-light .mf-geo-btn { color: #0078d4; border-color: #0078d4; }
+body.theme-tesla-light .mf-reset-btn { color: #aaa; border-color: #ddd; }
+body.theme-tesla-light .leaflet-popup-content-wrapper { background: #fff !important; border-color: #ddd !important; }
+body.theme-tesla-light .popup-row { color: #555; }
+body.theme-tesla-light .popup-row span { color: #111; }
+body.theme-tesla-light .popup-op { border-bottom-color: #eee; }
+
+/* ── TESLA DARK переопределения ── */
+body.theme-tesla-dark .map-filters {
+  background: #1c1c1c;
+  border-bottom-color: #333;
+}
+body.theme-tesla-dark .filter-lbl { color: #666; }
+body.theme-tesla-dark .mf-type { color: #ccc; border-color: #444; }
+body.theme-tesla-dark .mf-type.active-type { background: #444; color: #fff; }
+body.theme-tesla-dark .mf-city { color: #666; border-color: #2a2a2a; }
+body.theme-tesla-dark .mf-city.active-city { background: #2a2a2a; color: #fff; border-color: #555; }
+body.theme-tesla-dark .mf-count { color: #ccc; }
+body.theme-tesla-dark .mf-geo-btn { color: #00bcd4; border-color: #00bcd4; }
+body.theme-tesla-dark .mf-reset-btn { color: #444; border-color: #2a2a2a; }
+body.theme-tesla-dark .leaflet-popup-content-wrapper { background: #1c1c1c !important; border-color: #333 !important; }
+body.theme-tesla-dark .popup-row { color: #888; }
+body.theme-tesla-dark .popup-row span { color: #ccc; }
+body.theme-tesla-dark .popup-op { border-bottom-color: #2a2a2a; }
+
+/* Мобиле */
+@media (max-width: 600px) {
+  .filter-lbl { display: none; }
+  .mf-btn { font-size: 8px; padding: 3px 5px; }
+  .mf-geo-btn { font-size: 8px; padding: 3px 6px; }
+  .mf-count { font-size: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- СТАТУС-БАР -->
+  <div class="statusbar" id="statusbar">
+    <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-desktop">
+      <a class="nav-link" href="/">ГЛАВНАЯ</a>
+      <a class="nav-link" href="https://evrace.by/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <a class="nav-link active" href="#">КАРТА</a>
+      <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+    </div>
+    <div class="theme-seg">
+      <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
+      <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">&#x2600; TESLA</button>
+      <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">&#x25D1; TESLA</button>
+    </div>
+  </div>
+
+  <!-- МОБИЛЬНОЕ МЕНЮ -->
+  <div class="nav-mobile-drop" id="mobileMenu">
+    <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
+    <a class="nav-mobile-link" href="https://evrace.by/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
+    <a class="nav-mobile-link active" href="#" onclick="closeBurger()">КАРТА</a>
+    <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- ФИЛЬТРЫ -->
+    <div class="map-filters" id="map-filters">
+      <!-- Строка 1: операторы -->
+      <div class="filter-row-map">
+        <span class="filter-lbl">ОПЕ:</span>
+        <button class="mf-btn mf-bf" data-op="batteryfly"  onclick="toggleOp(this)">BatteryFly</button>
+        <button class="mf-btn mf-fo" data-op="forevo"      onclick="toggleOp(this)">forEVo</button>
+        <button class="mf-btn mf-za" data-op="zaryadka"    onclick="toggleOp(this)">Zaryadka</button>
+        <button class="mf-btn mf-uc" data-op="united"      onclick="toggleOp(this)">United</button>
+        <button class="mf-btn mf-cs" data-op="csms"        onclick="toggleOp(this)">ЦСМС</button>
+        <button class="mf-btn mf-ma" data-op="malanka"     onclick="toggleOp(this)">Malanka</button>
+        <button class="mf-btn mf-ev" data-op="evika"       onclick="toggleOp(this)">Evika!</button>
+        <button class="mf-btn mf-or" data-op="orange"      onclick="toggleOp(this)">Orange</button>
+        <button class="mf-btn mf-pr" data-op="prizma"      onclick="toggleOp(this)">Prizma</button>
+        <div class="mf-right">
+          <button class="mf-geo-btn" onclick="locateMe()">📍</button>
+          <button class="mf-reset-btn" onclick="resetFilters()">✕</button>
+          <span class="mf-count" id="mf-count">...</span>
+        </div>
+      </div>
+      <!-- Строка 2: тип + города -->
+      <div class="filter-row-map">
+        <span class="filter-lbl">ТИП:</span>
+        <button class="mf-btn mf-type" data-type="DC"   onclick="toggleType(this)">DC</button>
+        <button class="mf-btn mf-type" data-type="AC"   onclick="toggleType(this)">AC</button>
+        <button class="mf-btn mf-type" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
+        <span class="filter-lbl" style="margin-left:8px">ГОРОД:</span>
+        <div class="city-scroll" id="city-scroll"></div>
+      </div>
+    </div>
+
+    <!-- КАРТА -->
+    <div id="map"></div>
+
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+const SURL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
+const SKEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
+
+const OP_NAMES = {
+  batteryfly:'BatteryFly', forevo:'forEVo', zaryadka:'Zaryadka',
+  united:'United Company', csms:'Гродн. ЦСМС',
+  malanka:'Malanka', evika:'Evika!', orange:'Orange', prizma:'Prizma'
+};
+const OP_COLORS = {
+  batteryfly:'#005EEB', forevo:'#b44fff', zaryadka:'#00cfff',
+  united:'#F5821F', csms:'#FF6B6B',
+  malanka:'#76d275', evika:'#832af5', orange:'#FF6B00', prizma:'#24c3d3'
+};
+
+// ── ТАЙЛЫ ПО ТЕМЕ ──
+const TILE_URLS = {
+  'arcade':      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  'tesla-light': 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+  'tesla-dark':  'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png'
+};
+const TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
+
+// ── СОСТОЯНИЕ ФИЛЬТРОВ ──
+const activeOps   = new Set(Object.keys(OP_NAMES));
+const activeTypes = new Set(['DC','AC','ACDC']);
+let   activeCity  = null;
+let   allStations = [];
+let   geoMarker   = null;
+
+// ── КАРТА ──
+const map = L.map('map', {
+  center: [53.7, 28.0],
+  zoom: 7,
+  zoomControl: true,
+  scrollWheelZoom: true
+});
+
+let tileLayer = L.tileLayer(TILE_URLS['arcade'], {
+  attribution: TILE_ATTR,
+  maxZoom: 19
+}).addTo(map);
+
+const clusterGroup = L.markerClusterGroup({
+  maxClusterRadius: 50,
+  spiderfyOnMaxZoom: true,
+  showCoverageOnHover: false,
+  zoomToBoundsOnClick: true
+});
+map.addLayer(clusterGroup);
+
+// ── МАРКЕР SVG ──
+function makeIcon(color) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+    <path d="M9 0C4 0 0 4 0 9c0 7 9 15 9 15s9-8 9-15C18 4 14 0 9 0z" fill="${color}" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="9" cy="9" r="3.5" fill="#fff" fill-opacity="0.85"/>
+  </svg>`;
+  return L.divIcon({
+    html: svg,
+    className: '',
+    iconSize: [18, 24],
+    iconAnchor: [9, 24],
+    popupAnchor: [0, -26]
+  });
+}
+
+// ── МОБИЛЕ ОПРЕДЕЛЕНИЕ ──
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+// ── МАРШРУТ ──
+function buildRoute(lat, lng, name) {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const label = encodeURIComponent(name);
+  if (isIOS) {
+    window.open(`maps://maps.apple.com/?daddr=${lat},${lng}&daddr=${label}`);
+  } else {
+    window.open(`geo:${lat},${lng}?q=${lat},${lng}(${label})`);
+  }
+}
+
+// ── ПОПАП ──
+function makePopup(s) {
+  const color  = OP_COLORS[s.operator] || '#00ff41';
+  const opName = OP_NAMES[s.operator]  || s.operator;
+  const dc  = s.dc_power  ? `DC ${s.dc_power} кВт`  : '';
+  const ac  = s.ac_power  ? `AC ${s.ac_power} кВт`  : '';
+  const pwr = [dc, ac].filter(Boolean).join(' · ') || '—';
+  const guns = [s.gun1_type, s.gun2_type, s.gun3_type].filter(Boolean).join(' · ') || '—';
+  const date = s.station_date ? s.station_date.slice(0,10).split('-').reverse().join('.') : '—';
+  const addr = [s.city, s.address].filter(Boolean).join(', ');
+
+  const routeBtn = isMobile
+    ? `<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${s.lat},${s.lng},'${opName.replace(/'/g,"\\'")}')">▶ МАРШРУТ</button>`
+    : '';
+
+  return `<div class="popup-wrap">
+    <div class="popup-op" style="color:${color}">${opName}</div>
+    <div class="popup-row">📍 <span>${addr}</span></div>
+    <div class="popup-row">⚡ <span>${pwr}</span></div>
+    <div class="popup-row">🔌 <span>${guns}</span></div>
+    <div class="popup-row">📅 <span>${date}</span></div>
+    ${routeBtn}
+  </div>`;
+}
+
+// ── РЕНДЕР МАРКЕРОВ ──
+function renderMarkers() {
+  clusterGroup.clearLayers();
+  const filtered = allStations.filter(s => {
+    if (!s.lat || !s.lng) return false;
+    if (!activeOps.has(s.operator)) return false;
+    if (!activeTypes.has(s.station_type)) return false;
+    if (activeCity && s.city !== activeCity) return false;
+    return true;
+  });
+
+  filtered.forEach(s => {
+    const color  = OP_COLORS[s.operator] || '#00ff41';
+    const marker = L.marker([s.lat, s.lng], { icon: makeIcon(color) });
+    marker.bindPopup(makePopup(s), { maxWidth: 260, minWidth: 180 });
+    clusterGroup.addLayer(marker);
+  });
+
+  document.getElementById('mf-count').textContent = filtered.length;
+}
+
+// ── ФИЛЬТРЫ: ОПЕРАТОРЫ ──
+function toggleOp(btn) {
+  const op = btn.dataset.op;
+  if (activeOps.has(op)) {
+    if (activeOps.size === 1) return; // хотя бы один всегда активен
+    activeOps.delete(op);
+    btn.classList.add('inactive');
+  } else {
+    activeOps.add(op);
+    btn.classList.remove('inactive');
+  }
+  renderMarkers();
+}
+
+// ── ФИЛЬТРЫ: ТИП ──
+function toggleType(btn) {
+  const t = btn.dataset.type;
+  if (activeTypes.has(t)) {
+    if (activeTypes.size === 1) return;
+    activeTypes.delete(t);
+    btn.classList.remove('active-type');
+  } else {
+    activeTypes.add(t);
+    btn.classList.add('active-type');
+  }
+  renderMarkers();
+}
+
+// ── ФИЛЬТРЫ: ГОРОД ──
+function setCity(city, btn) {
+  document.querySelectorAll('.mf-city').forEach(b => b.classList.remove('active-city'));
+  if (activeCity === city) {
+    activeCity = null;
+  } else {
+    activeCity = city;
+    btn.classList.add('active-city');
+  }
+  renderMarkers();
+}
+
+function buildCityFilter(stations) {
+  const cities = [...new Set(stations.map(s => s.city).filter(Boolean))].sort();
+  const wrap = document.getElementById('city-scroll');
+  wrap.innerHTML = cities.map(c =>
+    `<button class="mf-btn mf-city" onclick="setCity('${c}',this)">${c}</button>`
+  ).join('');
+}
+
+// ── СБРОС ──
+function resetFilters() {
+  activeOps.clear();
+  Object.keys(OP_NAMES).forEach(op => activeOps.add(op));
+  document.querySelectorAll('.mf-btn[data-op]').forEach(b => b.classList.remove('inactive'));
+
+  activeTypes.clear();
+  ['DC','AC','ACDC'].forEach(t => activeTypes.add(t));
+  document.querySelectorAll('.mf-type').forEach(b => b.classList.remove('active-type'));
+
+  activeCity = null;
+  document.querySelectorAll('.mf-city').forEach(b => b.classList.remove('active-city'));
+
+  renderMarkers();
+}
+
+// ── ГЕОЛОКАЦИЯ ──
+function locateMe() {
+  if (!navigator.geolocation) { alert('Геолокация недоступна в вашем браузере'); return; }
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude: lat, longitude: lng } = pos.coords;
+
+    if (geoMarker) map.removeLayer(geoMarker);
+    geoMarker = L.marker([lat, lng], {
+      icon: L.divIcon({
+        html: '<div class="geo-pulse"></div>',
+        className: '',
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
+      })
+    }).addTo(map).bindPopup('Вы здесь').openPopup();
+
+    map.setView([lat, lng], 13);
+  }, () => {
+    alert('Не удалось определить местоположение');
+  });
+}
+
+// ── ТЕМА ──
+function setTheme(theme) {
+  document.getElementById('theme-css').href = `CSS/${theme}.css?v=2`;
+  localStorage.setItem('ev_race_theme', theme);
+
+  // Кнопки статус-бара
+  ['arcade','tesla-light','tesla-dark'].forEach(t => {
+    document.getElementById('btn-' + t)?.classList.toggle('active', t === theme);
+  });
+
+  // Тело — класс для CSS переопределений фильтров и попапов
+  document.body.className = document.body.className
+    .replace(/theme-\S+/g, '').trim();
+  document.body.classList.add('theme-' + theme);
+
+  // Тайлы карты
+  tileLayer.setUrl(TILE_URLS[theme] || TILE_URLS['arcade']);
+}
+
+// ── БУРГЕР ──
+function toggleBurger() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('burgerBtn').classList.toggle('active');
+}
+function closeBurger() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('burgerBtn').classList.remove('active');
+}
+
+// ── ЗАГРУЗКА ДАННЫХ ──
+async function loadStations() {
+  try {
+    const res = await fetch(
+      SURL + '/rest/v1/stations?select=operator,station_type,city,address,location_name,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng&not.lat.is=null&order=station_date.desc',
+      { headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY } }
+    );
+    allStations = await res.json();
+    buildCityFilter(allStations);
+    renderMarkers();
+  } catch(e) {
+    console.error('Ошибка загрузки:', e);
+    document.getElementById('mf-count').textContent = 'ERR';
+  }
+}
+
+// ── ТРЕКИНГ ВИЗИТА ──
+async function trackVisit() {
+  try {
+    await fetch(SURL + '/rest/v1/visits', {
+      method: 'POST',
+      headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ visited_at: new Date().toISOString(), page: 'map' })
+    });
+  } catch(e) {}
+}
+
+// ── ИНИТ ──
+(function init() {
+  const saved = localStorage.getItem('ev_race_theme') || 'arcade';
+  setTheme(saved);
+  loadStations();
+  trackVisit();
+})();
+</script>
+</body>
+</html>
