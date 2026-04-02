@@ -48,8 +48,8 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 /* ── САЙДБАР (скрыт по умолчанию) ── */
 .map-sidebar{display:none;}
 
-/* ── ДЕСКТОП ≥768px ── */
-@media(min-width:768px){
+/* ── ДЕСКТОП ≥600px ── */
+@media(min-width:600px){
   #map{left:260px;}
   .map-top{display:none;}
   .map-bottom{display:none;}
@@ -145,7 +145,7 @@ body.theme-tesla-dark .map-type-radio.on{color:#4a9eff;border-color:rgba(74,158,
 .map-badge-desktop{display:none;position:absolute;top:10px;right:40px;z-index:400;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--green,#00ff41);background:rgba(10,10,10,0.85);padding:3px 8px;border:1px solid var(--green-dark,#003d0f);}
 body.theme-tesla-light .map-badge-desktop{background:rgba(255,255,255,.96);border-color:#ddd;color:#111;font-family:'Roboto',sans-serif;font-size:11px;border-radius:8px;}
 body.theme-tesla-dark .map-badge-desktop{background:rgba(20,20,20,.92);border-color:#2a2a2a;color:#f0f0f0;font-family:'Roboto',sans-serif;font-size:11px;border-radius:8px;}
-@media(min-width:768px){.map-badge-desktop{display:block;}}
+@media(min-width:600px){.map-badge-desktop{display:block;}}
 
 /* ── TESLA LIGHT ── */
 body.theme-tesla-light .map-top-bar{background:rgba(255,255,255,.96);border:0.5px solid #ddd;border-radius:10px;}
@@ -225,7 +225,7 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
   <div class="page-wrap">
     <div id="map"></div>
 
-    <!-- САЙДБАР (≥768px) -->
+    <!-- САЙДБАР (≥600px) -->
     <div class="map-sidebar">
       <div class="sidebar-section">
         <div class="sidebar-label">ОПЕРАТОР</div>
