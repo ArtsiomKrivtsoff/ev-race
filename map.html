@@ -64,9 +64,17 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 .map-hscroll::-webkit-scrollbar{display:none;}
 .map-hscroll .op-filter-btn,
 .map-hscroll .month-btn { white-space:nowrap; flex-shrink:0; }
-.map-scroll-fade{position:absolute;top:0;right:0;bottom:2px;width:40px;background:linear-gradient(to right,transparent,rgba(10,10,10,0.92));pointer-events:none;}
+.map-scroll-fade{position:absolute;top:0;right:0;bottom:2px;width:40px;background:linear-gradient(to right,transparent,rgba(10,10,10,0.92));pointer-events:none;display:flex;align-items:center;justify-content:flex-end;padding-right:4px;}
+.map-scroll-arrow{color:var(--green-dark,#003d0f);font-size:14px;opacity:0.7;line-height:1;}
 body.theme-tesla-light .map-scroll-fade{background:linear-gradient(to right,transparent,rgba(255,255,255,0.96));}
+body.theme-tesla-light .map-scroll-arrow{color:#ccc;}
 body.theme-tesla-dark  .map-scroll-fade{background:linear-gradient(to right,transparent,rgba(20,20,20,0.94));}
+body.theme-tesla-dark  .map-scroll-arrow{color:#333;}
+
+/* Подпись — отдельная строка */
+.map-caption-row{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.5px;color:var(--green-dark,#003d0f);padding-top:5px;border-top:1px solid var(--green-dark,#003d0f);margin-top:4px;line-height:1.6;}
+body.theme-tesla-light .map-caption-row{font-family:'Roboto',sans-serif;font-size:10px;color:#bbb;border-top-color:#eee;letter-spacing:0;}
+body.theme-tesla-dark  .map-caption-row{font-family:'Roboto',sans-serif;font-size:10px;color:#333;border-top-color:#1a1a1a;letter-spacing:0;}
 
 /* Утилиты */
 .map-utils-row{display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding-top:5px;border-top:1px solid var(--green-dark,#003d0f);margin-top:2px;}
@@ -210,7 +218,7 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
         <!-- Кнопки месяцев — горизонтальный скролл -->
         <div class="map-scroll-wrap" style="margin-bottom:5px;">
           <div class="month-filters map-hscroll" id="month-row"></div>
-          <div class="map-scroll-fade"></div>
+          <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
         </div>
 
         <!-- Операторы — горизонтальный скролл -->
@@ -226,16 +234,18 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
             <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
             <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
           </div>
-          <div class="map-scroll-fade"></div>
+          <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
         </div>
 
         <!-- Утилиты -->
         <div class="map-utils-row">
           <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
           <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
-          <button class="map-util-btn map-reset-fade" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
-          <span class="map-caption">На карте станции Беларуси 2026</span>
+          <button class="map-util-btn" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
         </div>
+
+        <!-- Подпись — всегда отдельная строка -->
+        <div class="map-caption-row">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
 
       </div>
     </div>
