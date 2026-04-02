@@ -413,12 +413,7 @@ function resetFilters(){
 
 function onSlider(val){
   sliderWeek=parseInt(val);
-  const m=Math.floor(sliderWeek/4);
   document.getElementById('slider-label').textContent=weekLabel(sliderWeek);
-  if(activeMonth!==null&&Math.floor(monthToWeek(activeMonth)/4)!==m){
-    activeMonth=null;
-    document.querySelectorAll('.month-btn').forEach(b=>b.classList.remove('on'));
-  }
   renderMarkers();
 }
 
