@@ -335,13 +335,13 @@ function getFiltered(){
 function updateBadge(filtered){
   const bounds=map.getBounds();
   const vis=filtered.filter(s=>bounds.contains([s.lat,s.lng]));
-  const dc=vis.filter(s=>s.station_type==='DC').length;
-  const ac=vis.filter(s=>s.station_type==='AC').length;
-  const acdc=vis.filter(s=>s.station_type==='ACDC').length;
+  const dc  =vis.filter(s=>s.station_type==='DC')  .reduce((sum,s)=>sum+(s.count||1),0);
+  const ac  =vis.filter(s=>s.station_type==='AC')  .reduce((sum,s)=>sum+(s.count||1),0);
+  const acdc=vis.filter(s=>s.station_type==='ACDC').reduce((sum,s)=>sum+(s.count||1),0);
   const parts=[];
-  if(dc)parts.push(`DC:${dc}`);
-  if(ac)parts.push(`AC:${ac}`);
-  if(acdc)parts.push(`ACDC:${acdc}`);
+  if(dc)   parts.push(`DC:${dc}`);
+  if(ac)   parts.push(`AC:${ac}`);
+  if(acdc) parts.push(`ACDC:${acdc}`);
   document.getElementById('map-badge').textContent=parts.join(' · ')||'0';
 }
 
