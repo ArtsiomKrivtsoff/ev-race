@@ -31,11 +31,14 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <style>
 html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 .container{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:100%!important;padding:0!important;}
-.page-wrap{display:flex;flex-direction:column;flex:1;min-height:0;padding:0!important;position:relative;}
-#map{flex:1;min-height:0;width:100%;z-index:1;}
+.page-wrap{display:flex;flex-direction:row;flex:1;min-height:0;padding:0!important;}
 
-.map-top,.map-bottom{position:absolute;left:0;right:0;z-index:400;pointer-events:none;}
-.map-top{top:0;}.map-bottom{bottom:0;}
+/* ── КАРТА ── */
+#map{flex:1;min-width:0;min-height:0;z-index:1;}
+
+/* ── FLOATING ПАНЕЛИ (мобиль portrait) ── */
+.map-top,.map-bottom{position:absolute;z-index:400;pointer-events:none;}
+.map-top{top:0;left:0;right:0;}.map-bottom{bottom:0;left:0;right:0;}
 .map-top>*,.map-bottom>*{pointer-events:auto;}
 
 /* Верхняя панель */
@@ -47,7 +50,47 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 .map-zoom-btn{width:24px;height:24px;border:1px solid var(--green-dim,#00aa2b);background:rgba(10,10,10,0.88);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
 .map-zoom-btn:hover{background:var(--green-dark,#003d0f);}
 
-/* Нижняя панель */
+/* ── САЙДБАР — по умолчанию скрыт ── */
+.map-sidebar{display:none;}
+
+/* ── ДЕСКТОП и LANDSCAPE: сайдбар слева ── */
+@media(min-width:768px),(orientation:landscape) and (max-height:500px){
+  .map-top{left:260px;}
+  .map-bottom{display:none;}
+  .map-sidebar{
+    display:flex;flex-direction:column;
+    width:260px;flex-shrink:0;order:-1;
+    overflow-y:auto;z-index:2;gap:10px;
+    padding:10px 8px;
+    background:rgba(10,10,10,0.95);
+    border-right:1px solid var(--green-dark,#003d0f);
+  }
+  .sidebar-section{display:flex;flex-direction:column;gap:5px;}
+  .sidebar-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--green-dim,#00aa2b);padding-bottom:4px;border-bottom:1px solid var(--green-dark,#003d0f);}
+  .sidebar-ops{display:flex;flex-wrap:wrap;gap:4px;}
+  .sidebar-utils{display:flex;flex-direction:column;gap:4px;}
+  .sidebar-caption{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.5px;color:var(--green-dark,#003d0f);line-height:1.6;margin-top:auto;padding-top:8px;border-top:1px solid var(--green-dark,#003d0f);}
+
+  body.theme-tesla-light .map-sidebar{background:rgba(255,255,255,.98);border-right-color:#ddd;}
+  body.theme-tesla-light .sidebar-label{font-family:'Roboto',sans-serif;font-size:10px;color:#888;border-bottom-color:#eee;letter-spacing:1px;}
+  body.theme-tesla-light .sidebar-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#bbb;border-top-color:#eee;letter-spacing:0;}
+  body.theme-tesla-dark .map-sidebar{background:rgba(20,20,20,.98);border-right-color:#2a2a2a;}
+  body.theme-tesla-dark .sidebar-label{font-family:'Roboto',sans-serif;font-size:10px;color:#555;border-bottom-color:#1a1a1a;letter-spacing:1px;}
+  body.theme-tesla-dark .sidebar-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#333;border-top-color:#1a1a1a;letter-spacing:0;}
+}
+
+/* Landscape мобиль — сайдбар компактнее */
+@media(orientation:landscape) and (max-height:500px){
+  .map-sidebar{width:200px;padding:6px;}
+  .map-top{left:200px;}
+  .sidebar-caption{display:none;}
+}
+
+/* Portrait мобиль — панели снизу/сверху */
+@media(orientation:portrait) and (max-width:767px){
+  .map-sidebar{display:none!important;}
+  .map-bottom{display:block;}
+}
 .map-bottom-bar{margin:0 8px calc(8px + env(safe-area-inset-bottom,0px)) 8px;padding:7px 8px 6px;background:rgba(10,10,10,0.92);border:1px solid var(--green-dark,#003d0f);}
 
 /* Слайдер */
@@ -151,46 +194,7 @@ body.theme-tesla-dark .popup-route-btn{font-family:'Roboto',sans-serif;border-ra
 body.theme-tesla-dark .marker-cluster-small,body.theme-tesla-dark .marker-cluster-medium,body.theme-tesla-dark .marker-cluster-large{background-color:rgba(0,188,212,.12)!important;}
 body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cluster-medium div,body.theme-tesla-dark .marker-cluster-large div{background-color:rgba(0,188,212,.25)!important;color:#00bcd4!important;font-family:'Roboto',sans-serif!important;border-radius:50%!important;}
 
-/* ── ДЕСКТОП САЙДБАР ── */
-.map-sidebar { display:none; }
-
-@media(min-width:1024px) {
-  .page-wrap { flex-direction:row; }
-  #map { flex:1; min-width:0; min-height:0; }
-  .map-top { left:280px; }
-  .map-bottom { display:none; }
-  .map-sidebar {
-    display:flex; flex-direction:column;
-    width:280px; flex-shrink:0;
-    background:rgba(10,10,10,0.95);
-    border-right:1px solid var(--green-dark,#003d0f);
-    padding:12px 10px; overflow-y:auto; z-index:2; gap:12px;
-  }
-  .sidebar-section { display:flex; flex-direction:column; gap:6px; }
-  .sidebar-label {
-    font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px;
-    color:var(--green-dim,#00aa2b); padding-bottom:4px;
-    border-bottom:1px solid var(--green-dark,#003d0f);
-  }
-  .sidebar-ops { display:flex; flex-wrap:wrap; gap:4px; }
-  .sidebar-utils { display:flex; flex-direction:column; gap:4px; }
-  .sidebar-caption {
-    font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:0.5px;
-    color:var(--green-dark,#003d0f); line-height:1.6; margin-top:auto;
-    padding-top:8px; border-top:1px solid var(--green-dark,#003d0f);
-  }
-  body.theme-tesla-light .map-sidebar { background:rgba(255,255,255,.98); border-right-color:#ddd; }
-  body.theme-tesla-light .sidebar-label { font-family:'Roboto',sans-serif; color:#888; border-bottom-color:#eee; font-size:10px; letter-spacing:1px; }
-  body.theme-tesla-light .sidebar-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#bbb; border-top-color:#eee; letter-spacing:0; }
-  body.theme-tesla-dark .map-sidebar { background:rgba(20,20,20,.98); border-right-color:#2a2a2a; }
-  body.theme-tesla-dark .sidebar-label { font-family:'Roboto',sans-serif; color:#555; border-bottom-color:#1a1a1a; font-size:10px; letter-spacing:1px; }
-  body.theme-tesla-dark .sidebar-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#333; border-top-color:#1a1a1a; letter-spacing:0; }
-}
-
-@media(max-width:1023px) {
-  .map-top-bar{gap:4px;padding:4px 6px;margin:6px 6px 0;}
-  .map-bottom-bar{margin:0 6px calc(6px + env(safe-area-inset-bottom,0px)) 6px;padding:6px;}
-}
+/* Нижняя панель */
 </style>
 </head>
 <body>
