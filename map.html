@@ -14,56 +14,50 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_BY">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
-
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
 ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
-
 <link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=2">
 <link rel="prefetch" href="CSS/tesla-light.css?v=2">
 <link rel="prefetch" href="CSS/tesla-dark.css?v=2">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
-
 <style>
 html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 .container{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:100%!important;padding:0!important;}
-.page-wrap{display:flex;flex-direction:row;flex:1;min-height:0;padding:0!important;}
+.page-wrap{flex:1;min-height:0;position:relative;}
+#map{position:absolute;inset:0;z-index:1;}
 
-/* ── MAP AREA ── */
-.map-area{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;}
-.map-container{flex:1;min-height:0;position:relative;}
-#map{width:100%;height:100%;}
-
-/* Верхняя панель — в потоке */
-.map-top-bar-wrap{flex-shrink:0;display:none;}
-.map-top-bar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:5px 8px;background:rgba(10,10,10,0.88);border-bottom:1px solid var(--green-dark,#003d0f);}
+/* ── FLOATING ПАНЕЛИ (мобиль) ── */
+.map-top{position:absolute;top:0;left:0;right:0;z-index:400;pointer-events:none;}
+.map-top>*{pointer-events:auto;}
+.map-bottom{position:absolute;bottom:0;left:0;right:0;z-index:400;pointer-events:none;}
+.map-bottom>*{pointer-events:auto;}
+.map-top-bar{margin:8px 8px 0;display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:5px 8px;background:rgba(10,10,10,0.88);border:1px solid var(--green-dark,#003d0f);}
 .map-badge{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--green,#00ff41);white-space:nowrap;flex-shrink:0;}
+.map-bottom-bar{margin:0 8px calc(8px + env(safe-area-inset-bottom,0px)) 8px;padding:7px 8px 6px;background:rgba(10,10,10,0.92);border:1px solid var(--green-dark,#003d0f);}
 
-/* Нижняя панель — в потоке */
-.map-bottom-bar-wrap{flex-shrink:0;display:none;}
-
-/* Зум */
-.map-zoom{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:3px;z-index:400;}
+/* ── ЗУМ ── */
+.map-zoom{position:absolute;right:8px;top:50px;display:flex;flex-direction:column;gap:3px;z-index:400;}
 .map-zoom-btn{width:24px;height:24px;border:1px solid var(--green-dim,#00aa2b);background:rgba(10,10,10,0.88);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
 .map-zoom-btn:hover{background:var(--green-dark,#003d0f);}
 
-/* ── САЙДБАР — скрыт по умолчанию ── */
+/* ── САЙДБАР (скрыт по умолчанию) ── */
 .map-sidebar{display:none;}
 
-/* ── ДЕСКТОП/ПЛАНШЕТ: сайдбар слева (≥768px) ── */
+/* ── ДЕСКТОП ≥768px ── */
 @media(min-width:768px){
-  .map-top-bar-wrap{display:none;}
-  .map-bottom-bar-wrap{display:none;}
+  #map{left:260px;}
+  .map-top{left:260px;}
+  .map-bottom{display:none;}
   .map-sidebar{
     display:flex;flex-direction:column;
-    width:260px;flex-shrink:0;order:-1;
-    overflow-y:auto;z-index:2;gap:10px;
-    padding:10px 8px;
-    background:rgba(10,10,10,0.95);
+    position:absolute;left:0;top:0;bottom:0;width:260px;
+    z-index:2;overflow-y:auto;gap:10px;padding:10px 8px;
+    background:rgba(10,10,10,0.97);
     border-right:1px solid var(--green-dark,#003d0f);
   }
   .sidebar-section{display:flex;flex-direction:column;gap:5px;}
@@ -79,16 +73,7 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
   body.theme-tesla-dark .sidebar-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#333;border-top-color:#1a1a1a;letter-spacing:0;}
 }
 
-/* ── МОБИЛЬ: панели сверху и снизу (<768px) ── */
-@media(max-width:767px){
-  .map-sidebar{display:none!important;}
-  .map-top-bar-wrap{display:block;}
-  .map-bottom-bar-wrap{display:block;}
-  .map-bottom-bar{padding:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));}
-}
-.map-bottom-bar{margin:0 8px calc(8px + env(safe-area-inset-bottom,0px)) 8px;padding:7px 8px 6px;background:rgba(10,10,10,0.92);border:1px solid var(--green-dark,#003d0f);}
-
-/* Слайдер */
+/* ── СЛАЙДЕР ── */
 .map-slider-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
 .map-slider-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--green-dim,#00aa2b);white-space:nowrap;flex-shrink:0;min-width:28px;}
 .map-slider{flex:1;height:3px;cursor:pointer;accent-color:var(--green,#00ff41);}
@@ -96,32 +81,26 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 .map-play-btn:hover{background:var(--green-dark,#003d0f);color:var(--green,#00ff41);}
 .map-play-btn.playing{border-color:#ff4444;color:#ff4444;}
 
-/* ── ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ ── */
+/* ── СКРОЛЛ ── */
 .map-scroll-wrap{position:relative;overflow:hidden;margin-bottom:5px;}
 .map-hscroll{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:5px;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;}
 .map-hscroll::-webkit-scrollbar{display:none;}
-.map-hscroll .op-filter-btn,
-.map-hscroll .month-btn { white-space:nowrap; flex-shrink:0; }
+.map-hscroll .op-filter-btn{white-space:nowrap;flex-shrink:0;}
 .map-scroll-fade{position:absolute;top:0;right:0;bottom:2px;width:40px;background:linear-gradient(to right,transparent,rgba(10,10,10,0.92));pointer-events:none;display:flex;align-items:center;justify-content:flex-end;padding-right:4px;}
-.map-scroll-arrow{color:var(--green-dark,#003d0f);font-size:14px;opacity:0.7;line-height:1;}
+.map-scroll-arrow{color:var(--green-dark,#003d0f);font-size:14px;opacity:0.7;}
 body.theme-tesla-light .map-scroll-fade{background:linear-gradient(to right,transparent,rgba(255,255,255,0.96));}
 body.theme-tesla-light .map-scroll-arrow{color:#ccc;}
-body.theme-tesla-dark  .map-scroll-fade{background:linear-gradient(to right,transparent,rgba(20,20,20,0.94));}
-body.theme-tesla-dark  .map-scroll-arrow{color:#333;}
+body.theme-tesla-dark .map-scroll-fade{background:linear-gradient(to right,transparent,rgba(20,20,20,0.94));}
+body.theme-tesla-dark .map-scroll-arrow{color:#333;}
 
-/* Подпись — отдельная строка */
-.map-caption-row{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.5px;color:var(--green-dark,#003d0f);padding-top:5px;border-top:1px solid var(--green-dark,#003d0f);margin-top:4px;line-height:1.6;}
-body.theme-tesla-light .map-caption-row{font-family:'Roboto',sans-serif;font-size:10px;color:#bbb;border-top-color:#eee;letter-spacing:0;}
-body.theme-tesla-dark  .map-caption-row{font-family:'Roboto',sans-serif;font-size:10px;color:#333;border-top-color:#1a1a1a;letter-spacing:0;}
-
-/* Утилиты */
+/* ── УТИЛИТЫ ── */
 .map-utils-row{display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding-top:5px;border-top:1px solid var(--green-dark,#003d0f);margin-top:2px;}
 .map-util-btn{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;padding:3px 8px;border:1px solid var(--green-dark,#003d0f);background:transparent;color:var(--green-dim,#00aa2b);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;white-space:nowrap;line-height:1.4;}
 .map-util-btn:hover{background:var(--green-dark,#003d0f);color:var(--green,#00ff41);}
 .map-util-btn.on{border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);}
-.map-caption{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--green-dark,#003d0f);margin-left:auto;}
+.map-caption-row{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.5px;color:var(--green-dark,#003d0f);padding-top:4px;border-top:1px solid var(--green-dark,#003d0f);margin-top:4px;line-height:1.6;}
 
-/* Popup */
+/* ── POPUP ── */
 .leaflet-popup-content-wrapper{background:var(--card-bg,#0d1f0d)!important;border:1px solid var(--green-dim,#00aa2b)!important;border-radius:0!important;box-shadow:none!important;padding:0!important;}
 .leaflet-popup-content{margin:0!important;}
 .leaflet-popup-tip-container{display:none!important;}
@@ -135,15 +114,13 @@ body.theme-tesla-dark  .map-caption-row{font-family:'Roboto',sans-serif;font-siz
 .popup-total{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--green-dim,#00aa2b);padding-top:6px;border-top:1px solid var(--green-dark,#003d0f);margin-top:4px;}
 .popup-route-btn{display:block;width:100%;margin-top:8px;padding:6px 0;font-size:9px;font-family:'Share Tech Mono',monospace;text-align:center;border:none;cursor:pointer;color:#fff;letter-spacing:1px;}
 
-/* Кластеры */
+/* ── КЛАСТЕРЫ ── */
 .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background-color:rgba(0,255,65,.1)!important;}
 .marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background-color:rgba(0,255,65,.25)!important;color:var(--green,#00ff41)!important;font-family:'Share Tech Mono',monospace!important;font-size:10px!important;}
-
-/* Гео */
 .geo-pulse{width:12px;height:12px;background:#00e5ff;border-radius:50%;border:2px solid #fff;animation:gpulse 1.5s infinite;}
 @keyframes gpulse{0%{box-shadow:0 0 0 0 rgba(0,229,255,.4);}70%{box-shadow:0 0 0 8px rgba(0,229,255,0);}100%{box-shadow:0 0 0 0 rgba(0,229,255,0);}}
 
-/* Tesla Light */
+/* ── TESLA LIGHT ── */
 body.theme-tesla-light .map-top-bar{background:rgba(255,255,255,.96);border:0.5px solid #ddd;border-radius:10px;}
 body.theme-tesla-light .map-bottom-bar{background:rgba(255,255,255,.96);border:0.5px solid #ddd;border-radius:10px;}
 body.theme-tesla-light .map-badge{font-family:'Roboto',sans-serif;font-size:11px;color:#111;font-weight:500;}
@@ -154,7 +131,7 @@ body.theme-tesla-light .map-play-btn.playing{border-color:#cc3333;color:#cc3333;
 body.theme-tesla-light .map-utils-row{border-top-color:#eee;}
 body.theme-tesla-light .map-util-btn{font-family:'Roboto',sans-serif;font-size:11px;border:1.5px solid #d0d2d4;border-radius:20px;background:#f7f7f7;color:#555;padding:3px 10px;line-height:1.4;}
 body.theme-tesla-light .map-util-btn.on{border-color:#cc3333;color:#cc3333;background:rgba(204,51,51,.06);}
-body.theme-tesla-light .map-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#bbb;letter-spacing:0;}
+body.theme-tesla-light .map-caption-row{font-family:'Roboto',sans-serif;font-size:10px;color:#bbb;border-top-color:#eee;letter-spacing:0;}
 body.theme-tesla-light .map-zoom-btn{background:rgba(255,255,255,.96);border:0.5px solid #ddd;color:#333;border-radius:4px;}
 body.theme-tesla-light .leaflet-popup-content-wrapper{background:#fff!important;border:0.5px solid #ddd!important;border-radius:10px!important;}
 body.theme-tesla-light .popup-op{font-family:'Roboto',sans-serif;border-bottom-color:#eee;}
@@ -163,10 +140,9 @@ body.theme-tesla-light .popup-row{font-family:'Roboto',sans-serif;color:#888;}
 body.theme-tesla-light .popup-row span{color:#111;}
 body.theme-tesla-light .popup-total{font-family:'Roboto',sans-serif;color:#888;border-top-color:#eee;}
 body.theme-tesla-light .popup-route-btn{font-family:'Roboto',sans-serif;border-radius:20px;}
-body.theme-tesla-light .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background-color:rgba(0,120,212,.12)!important;}
 body.theme-tesla-light .marker-cluster-small div,body.theme-tesla-light .marker-cluster-medium div,body.theme-tesla-light .marker-cluster-large div{background-color:rgba(0,120,212,.25)!important;color:#0078d4!important;font-family:'Roboto',sans-serif!important;border-radius:50%!important;}
 
-/* Tesla Dark */
+/* ── TESLA DARK ── */
 body.theme-tesla-dark .map-top-bar{background:rgba(20,20,20,.94);border:0.5px solid #2a2a2a;border-radius:10px;}
 body.theme-tesla-dark .map-bottom-bar{background:rgba(20,20,20,.94);border:0.5px solid #2a2a2a;border-radius:10px;}
 body.theme-tesla-dark .map-badge{font-family:'Roboto',sans-serif;font-size:11px;color:#f0f0f0;font-weight:500;}
@@ -177,7 +153,7 @@ body.theme-tesla-dark .map-play-btn.playing{border-color:#ff6666;color:#ff6666;}
 body.theme-tesla-dark .map-utils-row{border-top-color:#1a1a1a;}
 body.theme-tesla-dark .map-util-btn{font-family:'Roboto',sans-serif;font-size:11px;border:1.5px solid #2a2a2a;border-radius:20px;background:#1e1e1e;color:#555;padding:3px 10px;line-height:1.4;}
 body.theme-tesla-dark .map-util-btn.on{border-color:#ff6666;color:#ff6666;background:rgba(204,51,51,.1);}
-body.theme-tesla-dark .map-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#333;letter-spacing:0;}
+body.theme-tesla-dark .map-caption-row{font-family:'Roboto',sans-serif;font-size:10px;color:#333;border-top-color:#1a1a1a;letter-spacing:0;}
 body.theme-tesla-dark .map-zoom-btn{background:rgba(20,20,20,.94);border:0.5px solid #333;color:#aaa;border-radius:4px;}
 body.theme-tesla-dark .leaflet-popup-content-wrapper{background:#1e1e1e!important;border:0.5px solid #2a2a2a!important;border-radius:10px!important;}
 body.theme-tesla-dark .popup-op{font-family:'Roboto',sans-serif;border-bottom-color:#2a2a2a;}
@@ -186,15 +162,16 @@ body.theme-tesla-dark .popup-row{font-family:'Roboto',sans-serif;color:#555;}
 body.theme-tesla-dark .popup-row span{color:#f0f0f0;}
 body.theme-tesla-dark .popup-total{font-family:'Roboto',sans-serif;color:#555;border-top-color:#2a2a2a;}
 body.theme-tesla-dark .popup-route-btn{font-family:'Roboto',sans-serif;border-radius:20px;}
-body.theme-tesla-dark .marker-cluster-small,body.theme-tesla-dark .marker-cluster-medium,body.theme-tesla-dark .marker-cluster-large{background-color:rgba(0,188,212,.12)!important;}
 body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cluster-medium div,body.theme-tesla-dark .marker-cluster-large div{background-color:rgba(0,188,212,.25)!important;color:#00bcd4!important;font-family:'Roboto',sans-serif!important;border-radius:50%!important;}
 
-/* Нижняя панель */
+@media(max-width:600px){
+  .map-top-bar{margin:6px 6px 0;gap:4px;padding:4px 6px;}
+  .map-bottom-bar{margin:0 6px calc(6px + env(safe-area-inset-bottom,0px)) 6px;padding:6px;}
+}
 </style>
 </head>
 <body>
 <div class="container">
-
   <div class="statusbar" id="statusbar">
     <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
       <span></span><span></span><span></span>
@@ -211,7 +188,6 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
       <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">&#x25D1;</button>
     </div>
   </div>
-
   <div class="nav-mobile-drop" id="mobileMenu">
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
     <a class="nav-mobile-link" href="https://evrace.by/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
@@ -222,8 +198,8 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
   <div class="page-wrap">
     <div id="map"></div>
 
-    <!-- ДЕСКТОП/LANDSCAPE САЙДБАР — слева -->
-    <div class="map-sidebar" id="map-sidebar">
+    <!-- САЙДБАР (≥768px) -->
+    <div class="map-sidebar">
       <div class="sidebar-section">
         <div class="sidebar-label">ОПЕРАТОР</div>
         <div class="op-filters sidebar-ops">
@@ -259,62 +235,56 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
         <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
         <button class="map-util-btn" id="heatBtn-d" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
         <button class="map-util-btn" id="resetBtn-d" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
+        <span id="map-badge-d" style="font-size:10px;color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;margin-top:4px;">...</span>
       </div>
       <div class="sidebar-caption">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
     </div>
 
-    <!-- MAP AREA: верхняя панель + карта + зум + нижняя панель -->
-    <div class="map-area">
-      <!-- Верхняя панель DC/AC/ACDC (только мобиль portrait) -->
-      <div class="map-top-bar-wrap">
-        <div class="map-top-bar">
-          <button class="op-filter-btn map-type-radio" data-type="DC"   onclick="toggleType(this)">DC</button>
-          <button class="op-filter-btn map-type-radio" data-type="AC"   onclick="toggleType(this)">AC</button>
-          <button class="op-filter-btn map-type-radio" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
-          <span class="map-badge" id="map-badge">...</span>
-        </div>
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ (мобиль) -->
+    <div class="map-top">
+      <div class="map-top-bar">
+        <button class="op-filter-btn map-type-radio" data-type="DC"   onclick="toggleType(this)">DC</button>
+        <button class="op-filter-btn map-type-radio" data-type="AC"   onclick="toggleType(this)">AC</button>
+        <button class="op-filter-btn map-type-radio" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
+        <span class="map-badge" id="map-badge">...</span>
       </div>
+    </div>
 
-      <!-- Карта -->
-      <div class="map-container">
-        <div id="map"></div>
-        <!-- Зум -->
-        <div class="map-zoom">
-          <button class="map-zoom-btn" onclick="map.zoomIn()">+</button>
-          <button class="map-zoom-btn" onclick="map.zoomOut()">&#x2212;</button>
-        </div>
-      </div>
+    <!-- ЗУМ -->
+    <div class="map-zoom">
+      <button class="map-zoom-btn" onclick="map.zoomIn()">+</button>
+      <button class="map-zoom-btn" onclick="map.zoomOut()">&#x2212;</button>
+    </div>
 
-      <!-- Нижняя панель (мобиль portrait) -->
-      <div class="map-bottom-bar-wrap">
-        <div class="map-bottom-bar">
-          <div class="map-slider-row">
-            <span class="map-slider-label" id="slider-label">ЯНВ</span>
-            <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value)">
-            <span class="map-slider-label" id="slider-label-end">АПР</span>
-            <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
-          </div>
-          <div class="map-scroll-wrap" style="margin-bottom:5px;">
-            <div class="op-filters map-hscroll">
-              <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
-              <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
-              <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
-              <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
-              <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
-              <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
-              <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
-              <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
-              <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
-            </div>
-            <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
-          </div>
-          <div class="map-utils-row">
-            <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
-            <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
-            <button class="map-util-btn" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
-          </div>
-          <div class="map-caption-row">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
+    <!-- НИЖНЯЯ ПАНЕЛЬ (мобиль) -->
+    <div class="map-bottom">
+      <div class="map-bottom-bar">
+        <div class="map-slider-row">
+          <span class="map-slider-label" id="slider-label">ЯНВ</span>
+          <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value)">
+          <span class="map-slider-label" id="slider-label-end">АПР</span>
+          <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
         </div>
+        <div class="map-scroll-wrap">
+          <div class="op-filters map-hscroll">
+            <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
+            <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
+            <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
+            <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
+            <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
+            <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
+            <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
+            <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
+            <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
+          </div>
+          <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
+        </div>
+        <div class="map-utils-row">
+          <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
+          <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
+          <button class="map-util-btn" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
+        </div>
+        <div class="map-caption-row">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
       </div>
     </div>
   </div>
@@ -330,23 +300,14 @@ const OP_COLORS={batteryfly:'#005EEB',forevo:'#b44fff',zaryadka:'#00cfff',united
 const OP_NAMES={batteryfly:'BatteryFly',forevo:'forEVo',zaryadka:'Zaryadka',united:'United Company',csms:'Гродн. ЦСМС',malanka:'Malanka',evika:'Evika!',orange:'Orange',prizma:'Prizma'};
 const TILES={'arcade':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png','tesla-light':'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png','tesla-dark':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'};
 const MONTH_NAMES=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
-
-const NOW=new Date();
-const CUR_MONTH=NOW.getMonth();
-const TOTAL_WEEKS=(CUR_MONTH+1)*4;
-
-function weekToDate(w){const m=Math.floor(w/4);const d=(w%4)*7+1;return new Date(2026,m,Math.min(d,28));}
+const NOW=new Date(),CUR_MONTH=NOW.getMonth(),TOTAL_WEEKS=(CUR_MONTH+1)*4;
+function weekToDate(w){const m=Math.floor(w/4);return new Date(2026,m,Math.min((w%4)*7+1,28));}
 function weekLabel(w){return MONTH_NAMES[Math.min(Math.floor(w/4),11)];}
 
-let allStations=[],sliderWeek=TOTAL_WEEKS-1,heatMode=false,playInterval=null,geoMarker=null,heatLayer=null;
-let activeOp=null,activeType=null;
+let allStations=[],sliderWeek=TOTAL_WEEKS-1,heatMode=false,playInterval=null,geoMarker=null,heatLayer=null,activeOp=null,activeType=null;
 
-document.getElementById('time-slider').max=TOTAL_WEEKS-1;
-document.getElementById('time-slider').value=TOTAL_WEEKS-1;
-document.getElementById('slider-label-end').textContent=MONTH_NAMES[CUR_MONTH];
-document.getElementById('time-slider-d').max=TOTAL_WEEKS-1;
-document.getElementById('time-slider-d').value=TOTAL_WEEKS-1;
-document.getElementById('slider-label-end-d').textContent=MONTH_NAMES[CUR_MONTH];
+['time-slider','time-slider-d'].forEach(id=>{const el=document.getElementById(id);if(el){el.max=TOTAL_WEEKS-1;el.value=TOTAL_WEEKS-1;}});
+['slider-label-end','slider-label-end-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=MONTH_NAMES[CUR_MONTH];});
 
 const map=L.map('map',{center:[53.7,28.0],zoom:7,zoomControl:false,scrollWheelZoom:true});
 let tileLayer=L.tileLayer(TILES['arcade'],{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',maxZoom:19}).addTo(map);
@@ -354,8 +315,7 @@ const clusterGroup=L.markerClusterGroup({maxClusterRadius:50,spiderfyOnMaxZoom:t
 map.addLayer(clusterGroup);
 
 function makeIcon(color){
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="22" viewBox="0 0 16 22"><path d="M8 0C3.6 0 0 3.6 0 8c0 6.3 8 14 8 14s8-7.7 8-14C16 3.6 12.4 0 8 0z" fill="${color}" stroke="#fff" stroke-width="1.2"/><circle cx="8" cy="8" r="3" fill="#fff" fill-opacity=".85"/></svg>`;
-  return L.divIcon({html:svg,className:'',iconSize:[16,22],iconAnchor:[8,22],popupAnchor:[0,-24]});
+  return L.divIcon({html:`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="22" viewBox="0 0 16 22"><path d="M8 0C3.6 0 0 3.6 0 8c0 6.3 8 14 8 14s8-7.7 8-14C16 3.6 12.4 0 8 0z" fill="${color}" stroke="#fff" stroke-width="1.2"/><circle cx="8" cy="8" r="3" fill="#fff" fill-opacity=".85"/></svg>`,className:'',iconSize:[16,22],iconAnchor:[8,22],popupAnchor:[0,-24]});
 }
 
 const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -378,20 +338,16 @@ function makePopup(stations){
   const addr=[first.city,first.address].filter(Boolean).join(', ');
   let html='',totalDC=0,totalAC=0,totalCount=0;
   stations.forEach(s=>{
-    const cnt=s.count||1;
-    totalCount+=cnt;
+    const cnt=s.count||1;totalCount+=cnt;
     const dc=s.dc_power?`DC ${s.dc_power} кВт${cnt>1?` ×${cnt}`:''}`:'' ;
     const ac=s.ac_power?`AC ${s.ac_power} кВт${cnt>1?` ×${cnt}`:''}`:'' ;
     const pwr=[dc,ac].filter(Boolean).join(' · ')||'—';
     const guns=[s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' · ')||'—';
     const date=s.station_date?s.station_date.slice(0,10).split('-').reverse().join('.'):'';
-    if(s.dc_power)totalDC+=s.dc_power*cnt;
-    if(s.ac_power)totalAC+=s.ac_power*cnt;
+    if(s.dc_power)totalDC+=s.dc_power*cnt;if(s.ac_power)totalAC+=s.ac_power*cnt;
     html+=`<div class="popup-station"><div class="popup-row">&#x26A1; <span>${pwr}</span></div><div class="popup-row">&#x1F50C; <span>${guns}</span></div>${date?`<div class="popup-row">&#x1F4C5; <span>${date}</span></div>`:''}</div>`;
   });
-  const totalPwr=[];
-  if(totalDC)totalPwr.push(`DC ${totalDC} кВт`);
-  if(totalAC)totalPwr.push(`AC ${totalAC} кВт`);
+  const totalPwr=[];if(totalDC)totalPwr.push(`DC ${totalDC} кВт`);if(totalAC)totalPwr.push(`AC ${totalAC} кВт`);
   const totalStr=totalCount>1?`<div class="popup-total">&#x2211; ${totalCount} станции · ${totalPwr.join(' · ')}</div>`:'';
   const btn=isMobile?`<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${first.lat},${first.lng},'${opName.replace(/'/g,"\\'")}')">&#x25BA; МАРШРУТ</button>`:'';
   return `<div class="popup-wrap"><div class="popup-op" style="color:${color}">${opName}</div><div class="popup-row">&#x1F4CD; <span>${addr}</span></div>${html}${totalStr}${btn}</div>`;
@@ -401,10 +357,10 @@ function getFiltered(){
   const isMax=sliderWeek>=TOTAL_WEEKS-1;
   const cutoff=weekToDate(sliderWeek);
   return allStations.filter(s=>{
-    if(!s.lat||!s.lng) return false;
-    if(activeOp&&s.operator!==activeOp) return false;
-    if(activeType&&s.station_type!==activeType) return false;
-    if(!isMax&&s.station_date&&new Date(s.station_date)>cutoff) return false;
+    if(!s.lat||!s.lng)return false;
+    if(activeOp&&s.operator!==activeOp)return false;
+    if(activeType&&s.station_type!==activeType)return false;
+    if(!isMax&&s.station_date&&new Date(s.station_date)>cutoff)return false;
     return true;
   });
 }
@@ -412,14 +368,12 @@ function getFiltered(){
 function updateBadge(filtered){
   const bounds=map.getBounds();
   const vis=filtered.filter(s=>bounds.contains([s.lat,s.lng]));
-  const dc  =vis.filter(s=>s.station_type==='DC')  .reduce((sum,s)=>sum+(s.count||1),0);
-  const ac  =vis.filter(s=>s.station_type==='AC')  .reduce((sum,s)=>sum+(s.count||1),0);
+  const dc=vis.filter(s=>s.station_type==='DC').reduce((sum,s)=>sum+(s.count||1),0);
+  const ac=vis.filter(s=>s.station_type==='AC').reduce((sum,s)=>sum+(s.count||1),0);
   const acdc=vis.filter(s=>s.station_type==='ACDC').reduce((sum,s)=>sum+(s.count||1),0);
-  const parts=[];
-  if(dc)   parts.push(`DC:${dc}`);
-  if(ac)   parts.push(`AC:${ac}`);
-  if(acdc) parts.push(`ACDC:${acdc}`);
-  document.getElementById('map-badge').textContent=parts.join(' · ')||'0';
+  const parts=[];if(dc)parts.push(`DC:${dc}`);if(ac)parts.push(`AC:${ac}`);if(acdc)parts.push(`ACDC:${acdc}`);
+  const txt=parts.join(' · ')||'0';
+  ['map-badge','map-badge-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=txt;});
 }
 
 function updateResetBtn(){
@@ -444,29 +398,20 @@ function renderMarkers(){
       clusterGroup.addLayer(m);
     });
   }
-  updateBadge(filtered);
-  updateResetBtn();
+  updateBadge(filtered);updateResetBtn();
 }
 
-// Тип — радиокнопка
 function toggleType(btn){
   const t=btn.dataset.type;
   if(activeType===t){activeType=null;document.querySelectorAll(`[data-type="${t}"]`).forEach(b=>b.classList.remove('on'));}
-  else{
-    if(activeType)document.querySelectorAll(`[data-type="${activeType}"]`).forEach(b=>b.classList.remove('on'));
-    activeType=t;document.querySelectorAll(`[data-type="${t}"]`).forEach(b=>b.classList.add('on'));
-  }
+  else{if(activeType)document.querySelectorAll(`[data-type="${activeType}"]`).forEach(b=>b.classList.remove('on'));activeType=t;document.querySelectorAll(`[data-type="${t}"]`).forEach(b=>b.classList.add('on'));}
   renderMarkers();
 }
 
-// Оператор — радиокнопка
 function toggleOp(btn){
   const op=btn.dataset.op;
   if(activeOp===op){activeOp=null;document.querySelectorAll(`[data-op="${op}"]`).forEach(b=>b.classList.remove('on'));}
-  else{
-    if(activeOp)document.querySelectorAll(`[data-op="${activeOp}"]`).forEach(b=>b.classList.remove('on'));
-    activeOp=op;document.querySelectorAll(`[data-op="${op}"]`).forEach(b=>b.classList.add('on'));
-  }
+  else{if(activeOp)document.querySelectorAll(`[data-op="${activeOp}"]`).forEach(b=>b.classList.remove('on'));activeOp=op;document.querySelectorAll(`[data-op="${op}"]`).forEach(b=>b.classList.add('on'));}
   renderMarkers();
 }
 
@@ -498,22 +443,13 @@ function onSlider(val){
 
 function togglePlay(){
   const btns=['playBtn','playBtn-d'].map(id=>document.getElementById(id)).filter(Boolean);
-  if(playInterval){
-    clearInterval(playInterval);playInterval=null;
-    btns.forEach(b=>{b.innerHTML='&#x25BA;';b.classList.remove('playing');});
-    return;
-  }
+  if(playInterval){clearInterval(playInterval);playInterval=null;btns.forEach(b=>{b.innerHTML='&#x25BA;';b.classList.remove('playing');});return;}
   sliderWeek=0;
   ['time-slider','time-slider-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=0;});
   ['slider-label','slider-label-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=weekLabel(0);});
-  renderMarkers();
-  btns.forEach(b=>{b.innerHTML='&#x25A0;';b.classList.add('playing');});
+  renderMarkers();btns.forEach(b=>{b.innerHTML='&#x25A0;';b.classList.add('playing');});
   playInterval=setInterval(()=>{
-    if(sliderWeek>=TOTAL_WEEKS-1){
-      clearInterval(playInterval);playInterval=null;
-      btns.forEach(b=>{b.innerHTML='&#x25BA;';b.classList.remove('playing');});
-      return;
-    }
+    if(sliderWeek>=TOTAL_WEEKS-1){clearInterval(playInterval);playInterval=null;btns.forEach(b=>{b.innerHTML='&#x25BA;';b.classList.remove('playing');});return;}
     sliderWeek++;
     ['time-slider','time-slider-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=sliderWeek;});
     ['slider-label','slider-label-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=weekLabel(sliderWeek);});
@@ -548,7 +484,7 @@ async function loadStations(){
     const res=await fetch(SURL+'/rest/v1/stations?select=operator,station_type,city,address,count,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng&lat=not.is.null',{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
     if(!res.ok){console.error('Supabase:',res.status);return;}
     const data=await res.json();
-    if(!Array.isArray(data)){console.error('Not array:',data);return;}
+    if(!Array.isArray(data)){console.error('Not array');return;}
     allStations=data;renderMarkers();
   }catch(e){console.error('Load:',e);}
 }
@@ -557,10 +493,7 @@ async function trackVisit(){
   try{await fetch(SURL+'/rest/v1/visits',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({visited_at:new Date().toISOString(),page:'map'})});}catch(e){}
 }
 
-(function init(){
-  const saved=localStorage.getItem('ev_race_theme')||'arcade';
-  setTheme(saved);loadStations();trackVisit();
-})();
+(function init(){const saved=localStorage.getItem('ev_race_theme')||'arcade';setTheme(saved);loadStations();trackVisit();})();
 </script>
 </body>
 </html>
