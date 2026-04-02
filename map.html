@@ -215,12 +215,6 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
           <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
         </div>
 
-        <!-- Кнопки месяцев — горизонтальный скролл -->
-        <div class="map-scroll-wrap" style="margin-bottom:5px;">
-          <div class="month-filters map-hscroll" id="month-row"></div>
-          <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
-        </div>
-
         <!-- Операторы — горизонтальный скролл -->
         <div class="map-scroll-wrap" style="margin-bottom:5px;">
           <div class="op-filters map-hscroll">
@@ -269,10 +263,9 @@ const TOTAL_WEEKS=(CUR_MONTH+1)*4;
 
 function weekToDate(w){const m=Math.floor(w/4);const d=(w%4)*7+1;return new Date(2026,m,Math.min(d,28));}
 function weekLabel(w){return MONTH_NAMES[Math.min(Math.floor(w/4),11)];}
-function monthToWeek(m){return m*4+3;}
 
 let allStations=[],sliderWeek=TOTAL_WEEKS-1,heatMode=false,playInterval=null,geoMarker=null,heatLayer=null;
-let activeOp=null,activeType=null,activeMonth=null;
+let activeOp=null,activeType=null;
 
 document.getElementById('time-slider').max=TOTAL_WEEKS-1;
 document.getElementById('time-slider').value=TOTAL_WEEKS-1;
@@ -352,7 +345,7 @@ function updateBadge(filtered){
 }
 
 function updateResetBtn(){
-  const has=activeOp!==null||activeType!==null||activeMonth!==null;
+  const has=activeOp!==null||activeType!==null;
   document.getElementById('resetBtn').style.display=has?'inline-block':'none';
 }
 
@@ -405,47 +398,10 @@ function toggleHeat(){
   renderMarkers();
 }
 
-function buildMonthButtons(){
-  const row=document.getElementById('month-row');
-  const counts={};
-  for(let m=0;m<=CUR_MONTH;m++)counts[m]=0;
-  allStations.forEach(s=>{
-    if(!s.station_date)return;
-    const m=new Date(s.station_date).getMonth();
-    if(m<=CUR_MONTH)counts[m]=(counts[m]||0)+(s.count||1);
-  });
-  row.innerHTML='';
-  for(let m=0;m<=CUR_MONTH;m++){
-    const btn=document.createElement('button');
-    btn.className='month-btn';
-    btn.dataset.month=m;
-    btn.textContent=`${MONTH_NAMES[m]} | ${counts[m]||0}`;
-    btn.onclick=()=>selectMonth(btn,m);
-    row.appendChild(btn);
-  }
-}
-
-function selectMonth(btn,m){
-  if(activeMonth===m){
-    activeMonth=null;btn.classList.remove('on');
-    sliderWeek=TOTAL_WEEKS-1;
-    document.getElementById('time-slider').value=TOTAL_WEEKS-1;
-    document.getElementById('slider-label').textContent='ЯНВ';
-  } else {
-    activeMonth=m;
-    document.querySelectorAll('.month-btn').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on');
-    sliderWeek=monthToWeek(m);
-    document.getElementById('time-slider').value=sliderWeek;
-    document.getElementById('slider-label').textContent=MONTH_NAMES[m];
-  }
-  renderMarkers();
-}
-
 function resetFilters(){
   activeOp=null;activeType=null;activeMonth=null;
   document.querySelectorAll('.op-filter-btn').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll('.month-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.map-type-radio').forEach(b=>b.classList.remove('on'));
   sliderWeek=TOTAL_WEEKS-1;
   document.getElementById('time-slider').value=TOTAL_WEEKS-1;
   document.getElementById('slider-label').textContent='ЯНВ';
@@ -507,7 +463,7 @@ async function loadStations(){
     if(!res.ok){console.error('Supabase:',res.status);return;}
     const data=await res.json();
     if(!Array.isArray(data)){console.error('Not array:',data);return;}
-    allStations=data;buildMonthButtons();renderMarkers();
+    allStations=data;renderMarkers();
   }catch(e){console.error('Load:',e);}
 }
 
