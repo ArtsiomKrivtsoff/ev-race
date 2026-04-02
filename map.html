@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>EV RACE 2026 — Карта зарядных станций Беларуси</title>
-<meta name="description" content="Интерактивная карта DC зарядных станций Беларуси 2026. BatteryFly, forEVo, Zaryadka, United Company, Гродненский ЦСМС и другие операторы.">
+<meta name="description" content="Интерактивная карта зарядных станций Беларуси 2026. DC, AC, ACDC станции всех операторов: BatteryFly, forEVo, Zaryadka, United Company, ЦСМС, Malanka, Evika!, Orange, Prizma.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://evrace.by/map.html">
 <meta property="og:title" content="Карта зарядных станций Беларуси 2026 — EV RACE">
-<meta property="og:description" content="Интерактивная карта DC зарядных станций Беларуси 2026.">
+<meta property="og:description" content="Интерактивная карта зарядных станций Беларуси 2026. DC, AC, ACDC станции всех операторов.">
 <meta property="og:image" content="https://evrace.by/og.png">
 <meta property="og:url" content="https://evrace.by/map.html">
 <meta property="og:type" content="website">
@@ -24,273 +24,253 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=2">
 <link rel="prefetch" href="CSS/tesla-light.css?v=2">
 <link rel="prefetch" href="CSS/tesla-dark.css?v=2">
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
 
 <style>
-/* ── КАРТА: страница без скролла ── */
-html, body {
-  height: 100%;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-}
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  max-width: 100% !important;
-  padding: 0 !important;
-}
-.page-wrap {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  padding: 0 !important;
+html, body { height:100%; overflow:hidden; margin:0; padding:0; }
+.container { display:flex; flex-direction:column; height:100vh; max-width:100% !important; padding:0 !important; }
+.page-wrap { display:flex; flex-direction:column; flex:1; min-height:0; padding:0 !important; position:relative; }
+#map { flex:1; min-height:0; width:100%; z-index:1; }
+
+/* ── FLOATING ОБЁРТКИ ── */
+.map-top, .map-bottom { position:absolute; left:0; right:0; z-index:400; pointer-events:none; }
+.map-top { top:0; }
+.map-bottom { bottom:0; }
+.map-top > *, .map-bottom > * { pointer-events:auto; }
+
+/* ── ВЕРХНЯЯ ПАНЕЛЬ ── */
+.map-top-bar {
+  margin:8px 8px 0;
+  display:flex; align-items:center; gap:5px;
+  padding:5px 8px;
+  background:rgba(10,10,10,0.88);
+  border:1px solid var(--green-dark,#003d0f);
 }
 
-/* ── ПАНЕЛЬ ФИЛЬТРОВ ── */
-.map-filters {
-  background: var(--card-bg, #0d1f0d);
-  border-bottom: 1px solid var(--green-dim, #00aa2b);
-  padding: 8px 12px;
-  flex-shrink: 0;
-  z-index: 1000;
+/* Arcade: кнопки типа */
+.map-type-btn {
+  font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:1px;
+  padding:4px 8px; border:1px solid var(--green-dark,#003d0f);
+  background:transparent; color:var(--green-dark,#003d0f);
+  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent;
 }
-.filter-row-map {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 5px;
-}
-.filter-row-map:last-child { margin-bottom: 0; }
-.filter-lbl {
-  font-size: 10px;
-  color: var(--green-dim, #00aa2b);
-  font-family: 'Press Start 2P', monospace;
-  white-space: nowrap;
-  margin-right: 3px;
-}
-.mf-btn {
-  font-size: 9px;
-  font-family: 'Press Start 2P', monospace;
-  padding: 3px 7px;
-  border-radius: 3px;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: opacity 0.15s;
-  white-space: nowrap;
-}
-.mf-btn.inactive { opacity: 0.35; }
+.map-type-btn.on { background:var(--green-dark,#003d0f); border-color:var(--green-dim,#00aa2b); color:var(--green,#00ff41); }
 
-/* Операторы */
-.mf-bf { background:#005EEB; color:#fff; }
-.mf-fo { background:#b44fff; color:#fff; }
-.mf-za { background:#00cfff; color:#003; }
-.mf-uc { background:#F5821F; color:#fff; }
-.mf-cs { background:#FF6B6B; color:#fff; }
-.mf-ma { background:#76d275; color:#003; }
-.mf-ev { background:#832af5; color:#fff; }
-.mf-or { background:#FF6B00; color:#fff; }
-.mf-pr { background:#24c3d3; color:#003; }
-
-/* Тип */
-.mf-type {
-  background: transparent;
-  color: var(--green, #00ff41);
-  border-color: var(--green-dim, #00aa2b);
+/* Тепло */
+.map-heat-btn {
+  font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:1px;
+  padding:4px 7px; border:1px solid var(--green-dark,#003d0f);
+  background:transparent; color:var(--green-dark,#003d0f);
+  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
 }
-.mf-type.active-type {
-  background: var(--green-dim, #00aa2b);
-  color: #000;
+.map-heat-btn.on { border-color:#ff4444; color:#ff4444; background:rgba(255,68,68,.08); }
+
+/* Геолокация */
+.map-geo-btn {
+  width:26px; height:26px; border-radius:50%;
+  border:1px solid var(--green-dim,#00aa2b); background:transparent;
+  color:var(--green-dim,#00aa2b); font-size:13px;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; -webkit-tap-highlight-color:transparent;
+}
+.map-geo-btn:hover { background:var(--green-dark,#003d0f); }
+
+/* Сброс */
+.map-reset-btn {
+  font-family:'Share Tech Mono',monospace; font-size:9px;
+  padding:4px 7px; border:1px solid #1a1a1a;
+  background:transparent; color:#333;
+  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent;
+}
+.map-reset-btn:hover { border-color:var(--green-dim,#00aa2b); color:var(--green,#00ff41); }
+
+/* Бейдж */
+.map-badge {
+  margin-left:auto; font-family:'Share Tech Mono',monospace;
+  font-size:8px; letter-spacing:1px; color:var(--green,#00ff41);
+  white-space:nowrap; flex-shrink:0;
 }
 
-/* Кнопки справа */
-.mf-right {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+/* ── ЗУМ ── */
+.map-zoom { position:absolute; right:8px; top:50px; display:flex; flex-direction:column; gap:3px; z-index:400; }
+.map-zoom-btn {
+  width:24px; height:24px; border:1px solid var(--green-dim,#00aa2b);
+  background:rgba(10,10,10,0.88); color:var(--green,#00ff41);
+  font-family:'Share Tech Mono',monospace; font-size:14px;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  -webkit-tap-highlight-color:transparent;
 }
-.mf-geo-btn {
-  font-size: 9px;
-  font-family: 'Press Start 2P', monospace;
-  padding: 3px 8px;
-  border-radius: 3px;
-  cursor: pointer;
-  background: transparent;
-  color: var(--winter, #00e5ff);
-  border: 1px solid var(--winter, #00e5ff);
-  white-space: nowrap;
-}
-.mf-geo-btn:hover { background: var(--winter, #00e5ff); color: #000; }
-.mf-reset-btn {
-  font-size: 9px;
-  font-family: 'Press Start 2P', monospace;
-  padding: 3px 7px;
-  border-radius: 3px;
-  cursor: pointer;
-  background: transparent;
-  color: #555;
-  border: 1px solid #333;
-}
-.mf-reset-btn:hover { color: var(--green, #00ff41); border-color: var(--green-dim, #00aa2b); }
-.mf-count {
-  font-size: 9px;
-  font-family: 'Press Start 2P', monospace;
-  color: var(--green, #00ff41);
-  white-space: nowrap;
+.map-zoom-btn:hover { background:var(--green-dark,#003d0f); }
+
+/* ── НИЖНЯЯ ПАНЕЛЬ ── */
+.map-bottom-bar {
+  margin:0 8px 8px; padding:7px 8px 5px;
+  background:rgba(10,10,10,0.92);
+  border:1px solid var(--green-dark,#003d0f);
 }
 
+/* Слайдер */
+.map-slider-row { display:flex; align-items:center; gap:6px; margin-bottom:7px; }
+.map-slider-label {
+  font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1px;
+  color:var(--green-dim,#00aa2b); white-space:nowrap; flex-shrink:0; min-width:28px;
+}
+.map-slider { flex:1; height:3px; cursor:pointer; accent-color:var(--green,#00ff41); }
+.map-play-btn {
+  font-family:'Share Tech Mono',monospace; font-size:9px;
+  width:24px; height:24px; border:1px solid var(--green-dim,#00aa2b);
+  background:transparent; color:var(--green-dim,#00aa2b);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; -webkit-tap-highlight-color:transparent;
+}
+.map-play-btn:hover { background:var(--green-dark,#003d0f); color:var(--green,#00ff41); }
+.map-play-btn.playing { border-color:#ff4444; color:#ff4444; }
 
+/* Операторы Arcade */
+.map-ops-row { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:5px; }
+.map-op-btn {
+  font-family:'Share Tech Mono',monospace; font-size:8px;
+  padding:3px 7px; border:1px solid transparent;
+  cursor:pointer; transition:opacity .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
+}
+.map-op-btn.inactive { opacity:0.25; }
 
-/* ── КАРТА ── */
-#map {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  z-index: 1;
+/* Подпись */
+.map-caption {
+  font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:1px;
+  color:var(--green-dark,#003d0f); padding-top:4px; border-top:1px solid var(--green-dark,#003d0f);
 }
 
-/* ── LEAFLET КАСТОМИЗАЦИЯ ── */
+/* ── POPUP ── */
 .leaflet-popup-content-wrapper {
-  background: #0d1f0d !important;
-  border: 1px solid #00aa2b !important;
-  border-radius: 6px !important;
-  box-shadow: none !important;
-  padding: 0 !important;
+  background:var(--card-bg,#0d1f0d) !important; border:1px solid var(--green-dim,#00aa2b) !important;
+  border-radius:0 !important; box-shadow:none !important; padding:0 !important;
 }
-.leaflet-popup-content {
-  margin: 0 !important;
-  font-family: 'Press Start 2P', monospace !important;
-}
-.leaflet-popup-tip-container { display: none !important; }
-.leaflet-popup-close-button {
-  color: #00aa2b !important;
-  font-size: 16px !important;
-  top: 6px !important;
-  right: 8px !important;
-}
-.leaflet-popup-close-button:hover { color: #00ff41 !important; }
+.leaflet-popup-content { margin:0 !important; }
+.leaflet-popup-tip-container { display:none !important; }
+.leaflet-popup-close-button { color:var(--green-dim,#00aa2b) !important; font-size:16px !important; top:5px !important; right:7px !important; }
+.popup-wrap { padding:10px 12px; min-width:180px; max-width:240px; }
+.popup-op { font-family:'Share Tech Mono',monospace; font-size:9px; font-weight:bold; margin-bottom:6px; padding-bottom:6px; border-bottom:1px solid var(--green-dark,#003d0f); }
+.popup-row { font-family:'Share Tech Mono',monospace; font-size:8px; color:#555; margin-bottom:3px; line-height:1.6; }
+.popup-row span { color:var(--green,#00ff41); }
+.popup-route-btn { display:block; width:100%; margin-top:8px; padding:5px 0; font-size:8px; font-family:'Share Tech Mono',monospace; text-align:center; border:none; cursor:pointer; color:#fff; letter-spacing:1px; }
 
-/* Попап контент */
-.popup-wrap {
-  padding: 10px 12px;
-  min-width: 180px;
-  max-width: 240px;
-}
-.popup-op {
-  font-size: 10px;
-  font-weight: bold;
-  margin-bottom: 6px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--green-dark, #003d0f);
-}
-.popup-row {
-  font-size: 8px;
-  color: var(--text-muted, #aaa);
-  margin-bottom: 4px;
-  line-height: 1.6;
-}
-.popup-row span { color: var(--green, #00ff41); }
-.popup-route-btn {
-  display: block;
-  width: 100%;
-  margin-top: 8px;
-  padding: 5px 0;
-  font-size: 8px;
-  font-family: 'Press Start 2P', monospace;
-  text-align: center;
-  border-radius: 3px;
-  border: none;
-  cursor: pointer;
-  color: #fff;
-}
-.popup-route-btn:hover { opacity: 0.85; }
-
-/* Кластеры */
-.marker-cluster-small,
-.marker-cluster-medium,
-.marker-cluster-large { background-color: rgba(0,255,65,0.15) !important; }
-.marker-cluster-small div,
-.marker-cluster-medium div,
-.marker-cluster-large div {
-  background-color: rgba(0,255,65,0.3) !important;
-  color: var(--green, #00ff41) !important;
-  font-family: 'Press Start 2P', monospace !important;
-  font-size: 10px !important;
+/* Кластеры Arcade */
+.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background-color:rgba(0,255,65,.1) !important; }
+.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+  background-color:rgba(0,255,65,.25) !important; color:var(--green,#00ff41) !important;
+  font-family:'Share Tech Mono',monospace !important; font-size:10px !important;
 }
 
-/* Геолокация маркер */
-.geo-pulse {
-  width: 14px; height: 14px;
-  background: var(--winter, #00e5ff);
-  border-radius: 50%;
-  border: 2px solid #fff;
-  animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(0,229,255,0.4); }
-  70%  { box-shadow: 0 0 0 8px rgba(0,229,255,0); }
-  100% { box-shadow: 0 0 0 0 rgba(0,229,255,0); }
-}
+/* Гео маркер */
+.geo-pulse { width:12px; height:12px; background:#00e5ff; border-radius:50%; border:2px solid #fff; animation:gpulse 1.5s infinite; }
+@keyframes gpulse { 0%{box-shadow:0 0 0 0 rgba(0,229,255,.4);} 70%{box-shadow:0 0 0 8px rgba(0,229,255,0);} 100%{box-shadow:0 0 0 0 rgba(0,229,255,0);} }
 
 /* ── TESLA LIGHT ── */
-body.theme-tesla-light .map-filters { background: #fff; border-bottom-color: #ddd; }
-body.theme-tesla-light .filter-lbl { color: #888; }
-body.theme-tesla-light .mf-type { color: #333; border-color: #ccc; }
-body.theme-tesla-light .mf-type.active-type { background: #333; color: #fff; border-color: #333; }
-body.theme-tesla-light .mf-count { color: #111; }
-body.theme-tesla-light .mf-geo-btn { color: #0078d4; border-color: #0078d4; }
-body.theme-tesla-light .mf-reset-btn { color: #aaa; border-color: #ddd; }
-body.theme-tesla-light .leaflet-popup-content-wrapper { background: #fff !important; border-color: #ddd !important; }
-body.theme-tesla-light .popup-row { color: #555; }
-body.theme-tesla-light .popup-row span { color: #111; }
-body.theme-tesla-light .popup-op { border-bottom-color: #eee; }
-body.theme-tesla-light .marker-cluster-small,
-body.theme-tesla-light .marker-cluster-medium,
-body.theme-tesla-light .marker-cluster-large { background-color: rgba(0,120,212,0.15) !important; }
-body.theme-tesla-light .marker-cluster-small div,
-body.theme-tesla-light .marker-cluster-medium div,
-body.theme-tesla-light .marker-cluster-large div { background-color: rgba(0,120,212,0.3) !important; color: #0078d4 !important; }
+body.theme-tesla-light .map-top-bar { background:rgba(255,255,255,.96); border:0.5px solid #ddd; border-radius:10px; }
+body.theme-tesla-light .map-bottom-bar { background:rgba(255,255,255,.96); border:0.5px solid #ddd; border-radius:10px; }
+body.theme-tesla-light .map-type-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:4px 10px; }
+body.theme-tesla-light .map-type-btn.on { background:#111; color:#fff; border-color:#111; }
+body.theme-tesla-light .map-heat-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:4px 10px; }
+body.theme-tesla-light .map-heat-btn.on { border-color:#cc3333; color:#cc3333; background:rgba(204,51,51,.06); }
+body.theme-tesla-light .map-geo-btn { border-color:#0078d4; color:#0078d4; }
+body.theme-tesla-light .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#aaa; padding:4px 10px; }
+body.theme-tesla-light .map-badge { font-family:'Roboto',sans-serif; font-size:11px; color:#111; font-weight:500; }
+body.theme-tesla-light .map-slider-label { font-family:'Roboto',sans-serif; font-size:11px; color:#888; }
+body.theme-tesla-light .map-slider { accent-color:#111; }
+body.theme-tesla-light .map-play-btn { font-family:'Roboto',sans-serif; border:1.5px solid #d0d2d4; border-radius:50%; color:#555; width:28px; height:28px; }
+body.theme-tesla-light .map-play-btn.playing { border-color:#cc3333; color:#cc3333; }
+body.theme-tesla-light .map-op-btn { font-family:'Roboto',sans-serif; font-size:11px; border-radius:20px; border:1.5px solid #d0d2d4; background:#f7f7f7; color:#555; padding:4px 10px; display:inline-flex; align-items:center; gap:5px; }
+body.theme-tesla-light .map-op-btn::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#bbb; transition:background .15s; flex-shrink:0; }
+body.theme-tesla-light .map-op-btn.inactive { opacity:0.4; }
+body.theme-tesla-light .map-op-btn.op-bf.on { color:#005EEB; border-color:rgba(0,94,235,.4); background:rgba(0,94,235,.05); }
+body.theme-tesla-light .map-op-btn.op-bf.on::before { background:#005EEB; }
+body.theme-tesla-light .map-op-btn.op-fo.on { color:#b44fff; border-color:rgba(180,79,255,.4); background:rgba(180,79,255,.05); }
+body.theme-tesla-light .map-op-btn.op-fo.on::before { background:#b44fff; }
+body.theme-tesla-light .map-op-btn.op-za.on { color:#00aacc; border-color:rgba(0,207,255,.4); background:rgba(0,207,255,.05); }
+body.theme-tesla-light .map-op-btn.op-za.on::before { background:#00aacc; }
+body.theme-tesla-light .map-op-btn.op-uc.on { color:#F5821F; border-color:rgba(245,130,31,.4); background:rgba(245,130,31,.05); }
+body.theme-tesla-light .map-op-btn.op-uc.on::before { background:#F5821F; }
+body.theme-tesla-light .map-op-btn.op-cs.on { color:#FF6B6B; border-color:rgba(255,107,107,.4); background:rgba(255,107,107,.05); }
+body.theme-tesla-light .map-op-btn.op-cs.on::before { background:#FF6B6B; }
+body.theme-tesla-light .map-op-btn.op-ma.on { color:#5aaa59; border-color:rgba(118,210,117,.4); background:rgba(118,210,117,.05); }
+body.theme-tesla-light .map-op-btn.op-ma.on::before { background:#76d275; }
+body.theme-tesla-light .map-op-btn.op-ev.on { color:#832af5; border-color:rgba(131,42,245,.4); background:rgba(131,42,245,.05); }
+body.theme-tesla-light .map-op-btn.op-ev.on::before { background:#832af5; }
+body.theme-tesla-light .map-op-btn.op-or.on { color:#FF6B00; border-color:rgba(255,107,0,.4); background:rgba(255,107,0,.05); }
+body.theme-tesla-light .map-op-btn.op-or.on::before { background:#FF6B00; }
+body.theme-tesla-light .map-op-btn.op-pr.on { color:#24c3d3; border-color:rgba(36,195,211,.4); background:rgba(36,195,211,.05); }
+body.theme-tesla-light .map-op-btn.op-pr.on::before { background:#24c3d3; }
+body.theme-tesla-light .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#aaa; border-top-color:#eee; letter-spacing:0; }
+body.theme-tesla-light .map-zoom-btn { background:rgba(255,255,255,.96); border:0.5px solid #ddd; color:#333; border-radius:4px; }
+body.theme-tesla-light .leaflet-popup-content-wrapper { background:#fff !important; border:0.5px solid #ddd !important; border-radius:10px !important; }
+body.theme-tesla-light .popup-op { font-family:'Roboto',sans-serif; border-bottom-color:#eee; }
+body.theme-tesla-light .popup-row { font-family:'Roboto',sans-serif; color:#888; }
+body.theme-tesla-light .popup-row span { color:#111; }
+body.theme-tesla-light .popup-route-btn { font-family:'Roboto',sans-serif; border-radius:20px; }
+body.theme-tesla-light .marker-cluster-small, body.theme-tesla-light .marker-cluster-medium, body.theme-tesla-light .marker-cluster-large { background-color:rgba(0,120,212,.12) !important; }
+body.theme-tesla-light .marker-cluster-small div, body.theme-tesla-light .marker-cluster-medium div, body.theme-tesla-light .marker-cluster-large div { background-color:rgba(0,120,212,.25) !important; color:#0078d4 !important; font-family:'Roboto',sans-serif !important; border-radius:50% !important; }
 
 /* ── TESLA DARK ── */
-body.theme-tesla-dark .map-filters { background: #1c1c1c; border-bottom-color: #333; }
-body.theme-tesla-dark .filter-lbl { color: #666; }
-body.theme-tesla-dark .mf-type { color: #ccc; border-color: #444; }
-body.theme-tesla-dark .mf-type.active-type { background: #444; color: #fff; border-color: #555; }
-body.theme-tesla-dark .mf-count { color: #ccc; }
-body.theme-tesla-dark .mf-geo-btn { color: #00bcd4; border-color: #00bcd4; }
-body.theme-tesla-dark .mf-reset-btn { color: #444; border-color: #2a2a2a; }
-body.theme-tesla-dark .leaflet-popup-content-wrapper { background: #1c1c1c !important; border-color: #333 !important; }
-body.theme-tesla-dark .popup-row { color: #888; }
-body.theme-tesla-dark .popup-row span { color: #ccc; }
-body.theme-tesla-dark .popup-op { border-bottom-color: #2a2a2a; }
-body.theme-tesla-dark .marker-cluster-small,
-body.theme-tesla-dark .marker-cluster-medium,
-body.theme-tesla-dark .marker-cluster-large { background-color: rgba(0,188,212,0.15) !important; }
-body.theme-tesla-dark .marker-cluster-small div,
-body.theme-tesla-dark .marker-cluster-medium div,
-body.theme-tesla-dark .marker-cluster-large div { background-color: rgba(0,188,212,0.3) !important; color: #00bcd4 !important; }
+body.theme-tesla-dark .map-top-bar { background:rgba(20,20,20,.94); border:0.5px solid #2a2a2a; border-radius:10px; }
+body.theme-tesla-dark .map-bottom-bar { background:rgba(20,20,20,.94); border:0.5px solid #2a2a2a; border-radius:10px; }
+body.theme-tesla-dark .map-type-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:4px 10px; }
+body.theme-tesla-dark .map-type-btn.on { background:#2a2a2a; color:#f0f0f0; border-color:#444; }
+body.theme-tesla-dark .map-heat-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:4px 10px; }
+body.theme-tesla-dark .map-heat-btn.on { border-color:#ff6666; color:#ff6666; background:rgba(204,51,51,.1); }
+body.theme-tesla-dark .map-geo-btn { border-color:#00bcd4; color:#00bcd4; }
+body.theme-tesla-dark .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#444; padding:4px 10px; }
+body.theme-tesla-dark .map-badge { font-family:'Roboto',sans-serif; font-size:11px; color:#f0f0f0; font-weight:500; }
+body.theme-tesla-dark .map-slider-label { font-family:'Roboto',sans-serif; font-size:11px; color:#555; }
+body.theme-tesla-dark .map-slider { accent-color:#f0f0f0; }
+body.theme-tesla-dark .map-play-btn { font-family:'Roboto',sans-serif; border:1.5px solid #2a2a2a; border-radius:50%; color:#555; background:#1e1e1e; width:28px; height:28px; }
+body.theme-tesla-dark .map-play-btn.playing { border-color:#ff6666; color:#ff6666; }
+body.theme-tesla-dark .map-op-btn { font-family:'Roboto',sans-serif; font-size:11px; border-radius:20px; border:1.5px solid #2a2a2a; background:#1e1e1e; color:#555; padding:4px 10px; display:inline-flex; align-items:center; gap:5px; }
+body.theme-tesla-dark .map-op-btn::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#444; transition:background .15s; flex-shrink:0; }
+body.theme-tesla-dark .map-op-btn.inactive { opacity:0.4; }
+body.theme-tesla-dark .map-op-btn.op-bf.on { color:#4d8fff; border-color:rgba(0,94,235,.5); background:rgba(0,94,235,.1); }
+body.theme-tesla-dark .map-op-btn.op-bf.on::before { background:#4d8fff; }
+body.theme-tesla-dark .map-op-btn.op-fo.on { color:#cc88ff; border-color:rgba(180,79,255,.5); background:rgba(180,79,255,.1); }
+body.theme-tesla-dark .map-op-btn.op-fo.on::before { background:#cc88ff; }
+body.theme-tesla-dark .map-op-btn.op-za.on { color:#66ddff; border-color:rgba(0,207,255,.5); background:rgba(0,207,255,.1); }
+body.theme-tesla-dark .map-op-btn.op-za.on::before { background:#66ddff; }
+body.theme-tesla-dark .map-op-btn.op-uc.on { color:#ffaa55; border-color:rgba(245,130,31,.5); background:rgba(245,130,31,.1); }
+body.theme-tesla-dark .map-op-btn.op-uc.on::before { background:#ffaa55; }
+body.theme-tesla-dark .map-op-btn.op-cs.on { color:#ff9999; border-color:rgba(255,107,107,.5); background:rgba(255,107,107,.1); }
+body.theme-tesla-dark .map-op-btn.op-cs.on::before { background:#ff9999; }
+body.theme-tesla-dark .map-op-btn.op-ma.on { color:#76d275; border-color:rgba(118,210,117,.5); background:rgba(118,210,117,.1); }
+body.theme-tesla-dark .map-op-btn.op-ma.on::before { background:#76d275; }
+body.theme-tesla-dark .map-op-btn.op-ev.on { color:#b066ff; border-color:rgba(131,42,245,.5); background:rgba(131,42,245,.1); }
+body.theme-tesla-dark .map-op-btn.op-ev.on::before { background:#b066ff; }
+body.theme-tesla-dark .map-op-btn.op-or.on { color:#ff8833; border-color:rgba(255,107,0,.5); background:rgba(255,107,0,.1); }
+body.theme-tesla-dark .map-op-btn.op-or.on::before { background:#ff8833; }
+body.theme-tesla-dark .map-op-btn.op-pr.on { color:#24c3d3; border-color:rgba(36,195,211,.5); background:rgba(36,195,211,.1); }
+body.theme-tesla-dark .map-op-btn.op-pr.on::before { background:#24c3d3; }
+body.theme-tesla-dark .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#333; border-top-color:#1a1a1a; letter-spacing:0; }
+body.theme-tesla-dark .map-zoom-btn { background:rgba(20,20,20,.94); border:0.5px solid #333; color:#aaa; border-radius:4px; }
+body.theme-tesla-dark .leaflet-popup-content-wrapper { background:#1e1e1e !important; border:0.5px solid #2a2a2a !important; border-radius:10px !important; }
+body.theme-tesla-dark .popup-op { font-family:'Roboto',sans-serif; border-bottom-color:#2a2a2a; }
+body.theme-tesla-dark .popup-row { font-family:'Roboto',sans-serif; color:#555; }
+body.theme-tesla-dark .popup-row span { color:#f0f0f0; }
+body.theme-tesla-dark .popup-route-btn { font-family:'Roboto',sans-serif; border-radius:20px; }
+body.theme-tesla-dark .marker-cluster-small, body.theme-tesla-dark .marker-cluster-medium, body.theme-tesla-dark .marker-cluster-large { background-color:rgba(0,188,212,.12) !important; }
+body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-cluster-medium div, body.theme-tesla-dark .marker-cluster-large div { background-color:rgba(0,188,212,.25) !important; color:#00bcd4 !important; font-family:'Roboto',sans-serif !important; border-radius:50% !important; }
 
-/* Мобиле */
-@media (max-width: 600px) {
-  .filter-lbl { display: none; }
-  .mf-btn { font-size: 8px; padding: 3px 5px; }
-  .mf-geo-btn { font-size: 8px; padding: 3px 6px; }
-  .mf-count { font-size: 8px; }
+@media(max-width:600px) {
+  .map-heat-btn { display:none; }
+  .map-top-bar { gap:4px; padding:4px 6px; margin:6px 6px 0; }
+  .map-bottom-bar { margin:0 6px 6px; padding:6px; }
+  .map-type-btn, .map-reset-btn { font-size:8px; padding:3px 6px; }
+  body.theme-tesla-light .map-type-btn, body.theme-tesla-dark .map-type-btn { font-size:10px; padding:3px 8px; }
+  body.theme-tesla-light .map-op-btn, body.theme-tesla-dark .map-op-btn { font-size:10px; padding:3px 8px; }
 }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- СТАТУС-БАР -->
   <div class="statusbar" id="statusbar">
     <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
       <span></span><span></span><span></span>
@@ -308,7 +288,6 @@ body.theme-tesla-dark .marker-cluster-large div { background-color: rgba(0,188,2
     </div>
   </div>
 
-  <!-- МОБИЛЬНОЕ МЕНЮ -->
   <div class="nav-mobile-drop" id="mobileMenu">
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
     <a class="nav-mobile-link" href="https://evrace.by/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
@@ -318,302 +297,257 @@ body.theme-tesla-dark .marker-cluster-large div { background-color: rgba(0,188,2
 
   <div class="page-wrap">
 
-    <!-- ФИЛЬТРЫ -->
-    <div class="map-filters" id="map-filters">
-      <!-- Строка 1: операторы -->
-      <div class="filter-row-map">
-        <span class="filter-lbl">ОПЕ:</span>
-        <button class="mf-btn mf-bf" data-op="batteryfly"  onclick="toggleOp(this)">BatteryFly</button>
-        <button class="mf-btn mf-fo" data-op="forevo"      onclick="toggleOp(this)">forEVo</button>
-        <button class="mf-btn mf-za" data-op="zaryadka"    onclick="toggleOp(this)">Zaryadka</button>
-        <button class="mf-btn mf-uc" data-op="united"      onclick="toggleOp(this)">United</button>
-        <button class="mf-btn mf-cs" data-op="csms"        onclick="toggleOp(this)">ЦСМС</button>
-        <button class="mf-btn mf-ma" data-op="malanka"     onclick="toggleOp(this)">Malanka</button>
-        <button class="mf-btn mf-ev" data-op="evika"       onclick="toggleOp(this)">Evika!</button>
-        <button class="mf-btn mf-or" data-op="orange"      onclick="toggleOp(this)">Orange</button>
-        <button class="mf-btn mf-pr" data-op="prizma"      onclick="toggleOp(this)">Prizma</button>
-        <div class="mf-right">
-          <button class="mf-geo-btn" onclick="locateMe()">📍</button>
-          <button class="mf-reset-btn" onclick="resetFilters()">✕</button>
-          <span class="mf-count" id="mf-count">...</span>
-        </div>
-      </div>
-      <!-- Строка 2: тип -->
-      <div class="filter-row-map">
-        <span class="filter-lbl">ТИП:</span>
-        <button class="mf-btn mf-type active-type" data-type="DC"   onclick="toggleType(this)">DC</button>
-        <button class="mf-btn mf-type active-type" data-type="AC"   onclick="toggleType(this)">AC</button>
-        <button class="mf-btn mf-type active-type" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
+    <div id="map"></div>
+
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+    <div class="map-top">
+      <div class="map-top-bar">
+        <button class="map-type-btn on" data-type="DC"   onclick="toggleType(this)">DC</button>
+        <button class="map-type-btn on" data-type="AC"   onclick="toggleType(this)">AC</button>
+        <button class="map-type-btn on" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
+        <button class="map-heat-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛО</button>
+        <button class="map-geo-btn"  onclick="locateMe()">&#x25CE;</button>
+        <button class="map-reset-btn" onclick="resetFilters()">&#x2715;</button>
+        <span class="map-badge" id="map-badge">...</span>
       </div>
     </div>
 
-    <!-- КАРТА -->
-    <div id="map"></div>
+    <!-- ЗУМ -->
+    <div class="map-zoom">
+      <button class="map-zoom-btn" onclick="map.zoomIn()">+</button>
+      <button class="map-zoom-btn" onclick="map.zoomOut()">&#x2212;</button>
+    </div>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ -->
+    <div class="map-bottom">
+      <div class="map-bottom-bar">
+        <div class="map-slider-row">
+          <span class="map-slider-label" id="slider-label">ЯНВ</span>
+          <input class="map-slider" type="range" id="time-slider" min="0" max="11" value="11" oninput="onSlider(this.value)">
+          <span class="map-slider-label">ДЕК</span>
+          <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
+        </div>
+        <div class="map-ops-row">
+          <button class="map-op-btn op-bf on" data-op="batteryfly" onclick="toggleOp(this)" style="background:#005EEB;color:#fff;border-color:#005EEB;">BatteryFly</button>
+          <button class="map-op-btn op-fo on" data-op="forevo"     onclick="toggleOp(this)" style="background:#b44fff;color:#fff;border-color:#b44fff;">forEVo</button>
+          <button class="map-op-btn op-za on" data-op="zaryadka"   onclick="toggleOp(this)" style="background:#00cfff;color:#003;border-color:#00cfff;">Zaryadka</button>
+          <button class="map-op-btn op-uc on" data-op="united"     onclick="toggleOp(this)" style="background:#F5821F;color:#fff;border-color:#F5821F;">United</button>
+          <button class="map-op-btn op-cs on" data-op="csms"       onclick="toggleOp(this)" style="background:#FF6B6B;color:#fff;border-color:#FF6B6B;">ЦСМС</button>
+          <button class="map-op-btn op-ma on" data-op="malanka"    onclick="toggleOp(this)" style="background:#76d275;color:#003;border-color:#76d275;">Malanka</button>
+          <button class="map-op-btn op-ev on" data-op="evika"      onclick="toggleOp(this)" style="background:#832af5;color:#fff;border-color:#832af5;">Evika!</button>
+          <button class="map-op-btn op-or on" data-op="orange"     onclick="toggleOp(this)" style="background:#FF6B00;color:#fff;border-color:#FF6B00;">Orange</button>
+          <button class="map-op-btn op-pr on" data-op="prizma"     onclick="toggleOp(this)" style="background:#24c3d3;color:#003;border-color:#24c3d3;">Prizma</button>
+        </div>
+        <div class="map-caption">На карте зарядные станции, запущенные в Беларуси в 2026 году</div>
+      </div>
+    </div>
 
   </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 <script>
-const SURL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
-const SKEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
+const SURL='https://uvrboxrddqlasgrnnnne.supabase.co';
+const SKEY='sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
 
-const OP_NAMES = {
-  batteryfly:'BatteryFly', forevo:'forEVo', zaryadka:'Zaryadka',
-  united:'United Company', csms:'Гродн. ЦСМС',
-  malanka:'Malanka', evika:'Evika!', orange:'Orange', prizma:'Prizma'
-};
-const OP_COLORS = {
-  batteryfly:'#005EEB', forevo:'#b44fff', zaryadka:'#00cfff',
-  united:'#F5821F', csms:'#FF6B6B',
-  malanka:'#76d275', evika:'#832af5', orange:'#FF6B00', prizma:'#24c3d3'
-};
+const OP_COLORS={batteryfly:'#005EEB',forevo:'#b44fff',zaryadka:'#00cfff',united:'#F5821F',csms:'#FF6B6B',malanka:'#76d275',evika:'#832af5',orange:'#FF6B00',prizma:'#24c3d3'};
+const OP_NAMES={batteryfly:'BatteryFly',forevo:'forEVo',zaryadka:'Zaryadka',united:'United Company',csms:'Гродн. ЦСМС',malanka:'Malanka',evika:'Evika!',orange:'Orange',prizma:'Prizma'};
+const OP_DARK=['zaryadka','malanka','prizma'];
+const TILES={'arcade':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png','tesla-light':'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png','tesla-dark':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'};
+const MONTHS=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
 
-// ── ТАЙЛЫ ПО ТЕМЕ ──
-const TILE_URLS = {
-  'arcade':      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-  'tesla-light': 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-  'tesla-dark':  'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
-};
-const TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
+const activeOps=new Set(Object.keys(OP_COLORS));
+const activeTypes=new Set(['DC','AC','ACDC']);
+let allStations=[],sliderMonth=11,heatMode=false,playInterval=null,geoMarker=null,heatLayer=null;
 
-// ── СОСТОЯНИЕ ФИЛЬТРОВ ──
-const activeOps   = new Set(Object.keys(OP_NAMES));
-const activeTypes = new Set(['DC','AC','ACDC']);
-let   allStations = [];
-let   geoMarker   = null;
-
-// ── КАРТА ──
-const map = L.map('map', {
-  center: [53.7, 28.0],
-  zoom: 7,
-  zoomControl: true,
-  scrollWheelZoom: true
-});
-
-let tileLayer = L.tileLayer(TILE_URLS['arcade'], {
-  attribution: TILE_ATTR,
-  maxZoom: 19
-}).addTo(map);
-
-const clusterGroup = L.markerClusterGroup({
-  maxClusterRadius: 50,
-  spiderfyOnMaxZoom: true,
-  showCoverageOnHover: false,
-  zoomToBoundsOnClick: true
-});
+const map=L.map('map',{center:[53.7,28.0],zoom:7,zoomControl:false,scrollWheelZoom:true});
+let tileLayer=L.tileLayer(TILES['arcade'],{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',maxZoom:19}).addTo(map);
+const clusterGroup=L.markerClusterGroup({maxClusterRadius:50,spiderfyOnMaxZoom:true,showCoverageOnHover:false,zoomToBoundsOnClick:true});
 map.addLayer(clusterGroup);
 
-// ── МАРКЕР SVG ──
-function makeIcon(color) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
-    <path d="M9 0C4 0 0 4 0 9c0 7 9 15 9 15s9-8 9-15C18 4 14 0 9 0z" fill="${color}" stroke="#fff" stroke-width="1.5"/>
-    <circle cx="9" cy="9" r="3.5" fill="#fff" fill-opacity="0.85"/>
-  </svg>`;
-  return L.divIcon({
-    html: svg,
-    className: '',
-    iconSize: [18, 24],
-    iconAnchor: [9, 24],
-    popupAnchor: [0, -26]
-  });
+function makeIcon(color){
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="22" viewBox="0 0 16 22"><path d="M8 0C3.6 0 0 3.6 0 8c0 6.3 8 14 8 14s8-7.7 8-14C16 3.6 12.4 0 8 0z" fill="${color}" stroke="#fff" stroke-width="1.2"/><circle cx="8" cy="8" r="3" fill="#fff" fill-opacity=".85"/></svg>`;
+  return L.divIcon({html:svg,className:'',iconSize:[16,22],iconAnchor:[8,22],popupAnchor:[0,-24]});
 }
 
-// ── МОБИЛЕ ОПРЕДЕЛЕНИЕ ──
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-// ── МАРШРУТ ──
-function buildRoute(lat, lng, name) {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const label = encodeURIComponent(name);
-  if (isIOS) {
-    window.open(`maps://maps.apple.com/?daddr=${lat},${lng}&daddr=${label}`);
-  } else {
-    window.open(`geo:${lat},${lng}?q=${lat},${lng}(${label})`);
-  }
+function buildRoute(lat,lng,name){
+  if(/iPad|iPhone|iPod/.test(navigator.userAgent)) window.open(`maps://maps.apple.com/?daddr=${lat},${lng}`);
+  else window.open(`geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(name)})`);
 }
 
-// ── ПОПАП ──
-function makePopup(s) {
-  const color  = OP_COLORS[s.operator] || '#00ff41';
-  const opName = OP_NAMES[s.operator]  || s.operator;
-  const dc  = s.dc_power  ? `DC ${s.dc_power} кВт`  : '';
-  const ac  = s.ac_power  ? `AC ${s.ac_power} кВт`  : '';
-  const pwr = [dc, ac].filter(Boolean).join(' · ') || '—';
-  const guns = [s.gun1_type, s.gun2_type, s.gun3_type].filter(Boolean).join(' · ') || '—';
-  const date = s.station_date ? s.station_date.slice(0,10).split('-').reverse().join('.') : '—';
-  const addr = [s.city, s.address].filter(Boolean).join(', ');
-
-  const routeBtn = isMobile
-    ? `<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${s.lat},${s.lng},'${opName.replace(/'/g,"\\'")}')">▶ МАРШРУТ</button>`
-    : '';
-
-  return `<div class="popup-wrap">
-    <div class="popup-op" style="color:${color}">${opName}</div>
-    <div class="popup-row">📍 <span>${addr}</span></div>
-    <div class="popup-row">⚡ <span>${pwr}</span></div>
-    <div class="popup-row">🔌 <span>${guns}</span></div>
-    <div class="popup-row">📅 <span>${date}</span></div>
-    ${routeBtn}
-  </div>`;
+function makePopup(s){
+  const color=OP_COLORS[s.operator]||'#00ff41';
+  const opName=OP_NAMES[s.operator]||s.operator;
+  const dc=s.dc_power?`DC ${s.dc_power} кВт`:'';
+  const ac=s.ac_power?`AC ${s.ac_power} кВт`:'';
+  const pwr=[dc,ac].filter(Boolean).join(' · ')||'—';
+  const guns=[s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' · ')||'—';
+  const date=s.station_date?s.station_date.slice(0,10).split('-').reverse().join('.'):'—';
+  const addr=[s.city,s.address].filter(Boolean).join(', ');
+  const btn=isMobile?`<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${s.lat},${s.lng},'${opName.replace(/'/g,"\\'")}')">&#x25BA; МАРШРУТ</button>`:'';
+  return `<div class="popup-wrap"><div class="popup-op" style="color:${color}">${opName}</div><div class="popup-row">&#x1F4CD; <span>${addr}</span></div><div class="popup-row">&#x26A1; <span>${pwr}</span></div><div class="popup-row">&#x1F50C; <span>${guns}</span></div><div class="popup-row">&#x1F4C5; <span>${date}</span></div>${btn}</div>`;
 }
 
-// ── РЕНДЕР МАРКЕРОВ ──
-function renderMarkers() {
-  clusterGroup.clearLayers();
-  const filtered = allStations.filter(s => {
-    if (!s.lat || !s.lng) return false;
-    if (!activeOps.has(s.operator)) return false;
-    if (!activeTypes.has(s.station_type)) return false;
+function getFiltered(){
+  const cutoff=new Date(2026,sliderMonth+1,0);
+  return allStations.filter(s=>{
+    if(!s.lat||!s.lng) return false;
+    if(!activeOps.has(s.operator)) return false;
+    if(!activeTypes.has(s.station_type)) return false;
+    if(s.station_date&&new Date(s.station_date)>cutoff) return false;
     return true;
   });
-
-  filtered.forEach(s => {
-    const color  = OP_COLORS[s.operator] || '#00ff41';
-    const marker = L.marker([s.lat, s.lng], { icon: makeIcon(color) });
-    marker.bindPopup(makePopup(s), { maxWidth: 260, minWidth: 180 });
-    clusterGroup.addLayer(marker);
-  });
-
-  document.getElementById('mf-count').textContent = filtered.length;
 }
 
-// ── ФИЛЬТРЫ: ОПЕРАТОРЫ ──
-function toggleOp(btn) {
-  const op = btn.dataset.op;
-  if (activeOps.has(op)) {
-    if (activeOps.size === 1) return; // хотя бы один всегда активен
+function updateBadge(filtered){
+  const bounds=map.getBounds();
+  const vis=filtered.filter(s=>bounds.contains([s.lat,s.lng]));
+  const dc=vis.filter(s=>s.station_type==='DC').length;
+  const ac=vis.filter(s=>s.station_type==='AC').length;
+  const acdc=vis.filter(s=>s.station_type==='ACDC').length;
+  const parts=[];
+  if(dc) parts.push(`DC:${dc}`);
+  if(ac) parts.push(`AC:${ac}`);
+  if(acdc) parts.push(`ACDC:${acdc}`);
+  document.getElementById('map-badge').textContent=parts.join(' · ')||'0';
+}
+
+map.on('moveend zoomend',()=>updateBadge(getFiltered()));
+
+function renderMarkers(){
+  clusterGroup.clearLayers();
+  if(heatLayer){map.removeLayer(heatLayer);heatLayer=null;}
+  const filtered=getFiltered();
+  if(heatMode){
+    const pts=filtered.map(s=>[s.lat,s.lng,1]);
+    heatLayer=L.heatLayer(pts,{radius:25,blur:15,maxZoom:12}).addTo(map);
+  } else {
+    filtered.forEach(s=>{
+      const color=OP_COLORS[s.operator]||'#00ff41';
+      const m=L.marker([s.lat,s.lng],{icon:makeIcon(color)});
+      m.bindPopup(makePopup(s),{maxWidth:260,minWidth:180});
+      clusterGroup.addLayer(m);
+    });
+  }
+  updateBadge(filtered);
+}
+
+function toggleOp(btn){
+  const op=btn.dataset.op;
+  const theme=localStorage.getItem('ev_race_theme')||'arcade';
+  if(activeOps.has(op)){
+    if(activeOps.size===1) return;
     activeOps.delete(op);
-    btn.classList.add('inactive');
+    btn.classList.remove('on'); btn.classList.add('inactive');
+    if(theme==='arcade'){btn.style.background='transparent';btn.style.color='#1a1a1a';btn.style.borderColor='#1a1a1a';}
   } else {
     activeOps.add(op);
-    btn.classList.remove('inactive');
+    btn.classList.add('on'); btn.classList.remove('inactive');
+    if(theme==='arcade'){btn.style.background=OP_COLORS[op];btn.style.color=OP_DARK.includes(op)?'#003':'#fff';btn.style.borderColor=OP_COLORS[op];}
   }
   renderMarkers();
 }
 
-// ── ФИЛЬТРЫ: ТИП ──
-function toggleType(btn) {
-  const t = btn.dataset.type;
-  if (activeTypes.has(t)) {
-    if (activeTypes.size === 1) return;
-    activeTypes.delete(t);
-    btn.classList.remove('active-type');
-  } else {
-    activeTypes.add(t);
-    btn.classList.add('active-type');
-  }
+function toggleType(btn){
+  const t=btn.dataset.type;
+  if(activeTypes.has(t)){if(activeTypes.size===1) return; activeTypes.delete(t); btn.classList.remove('on');}
+  else {activeTypes.add(t); btn.classList.add('on');}
   renderMarkers();
 }
 
-// ── СБРОС ──
-function resetFilters() {
-  activeOps.clear();
-  Object.keys(OP_NAMES).forEach(op => activeOps.add(op));
-  document.querySelectorAll('.mf-btn[data-op]').forEach(b => b.classList.remove('inactive'));
-
-  activeTypes.clear();
-  ['DC','AC','ACDC'].forEach(t => activeTypes.add(t));
-  document.querySelectorAll('.mf-type').forEach(b => b.classList.add('active-type'));
-
+function toggleHeat(){
+  heatMode=!heatMode;
+  document.getElementById('heatBtn').classList.toggle('on',heatMode);
   renderMarkers();
 }
 
-// ── ГЕОЛОКАЦИЯ ──
-function locateMe() {
-  if (!navigator.geolocation) { alert('Геолокация недоступна в вашем браузере'); return; }
-  navigator.geolocation.getCurrentPosition(pos => {
-    const { latitude: lat, longitude: lng } = pos.coords;
-
-    if (geoMarker) map.removeLayer(geoMarker);
-    geoMarker = L.marker([lat, lng], {
-      icon: L.divIcon({
-        html: '<div class="geo-pulse"></div>',
-        className: '',
-        iconSize: [14, 14],
-        iconAnchor: [7, 7]
-      })
-    }).addTo(map).bindPopup('Вы здесь').openPopup();
-
-    map.setView([lat, lng], 13);
-  }, () => {
-    alert('Не удалось определить местоположение');
+function resetFilters(){
+  const theme=localStorage.getItem('ev_race_theme')||'arcade';
+  activeOps.clear(); Object.keys(OP_COLORS).forEach(op=>activeOps.add(op));
+  document.querySelectorAll('.map-op-btn').forEach(b=>{
+    b.classList.add('on'); b.classList.remove('inactive');
+    if(theme==='arcade'){const op=b.dataset.op;b.style.background=OP_COLORS[op];b.style.color=OP_DARK.includes(op)?'#003':'#fff';b.style.borderColor=OP_COLORS[op];}
+    else{b.style.background='';b.style.color='';b.style.borderColor='';}
   });
+  activeTypes.clear(); ['DC','AC','ACDC'].forEach(t=>activeTypes.add(t));
+  document.querySelectorAll('.map-type-btn').forEach(b=>b.classList.add('on'));
+  sliderMonth=11; document.getElementById('time-slider').value=11;
+  document.getElementById('slider-label').textContent='ЯНВ';
+  if(playInterval){clearInterval(playInterval);playInterval=null;const pb=document.getElementById('playBtn');pb.innerHTML='&#x25BA;';pb.classList.remove('playing');}
+  heatMode=false; document.getElementById('heatBtn').classList.remove('on');
+  renderMarkers();
 }
 
-// ── ТЕМА ──
-function setTheme(theme) {
-  document.getElementById('theme-css').href = `CSS/${theme}.css?v=2`;
-  localStorage.setItem('ev_race_theme', theme);
-
-  // Кнопки статус-бара
-  ['arcade','tesla-light','tesla-dark'].forEach(t => {
-    document.getElementById('btn-' + t)?.classList.toggle('active', t === theme);
-  });
-
-  // Тело — класс для CSS переопределений фильтров и попапов
-  document.body.className = document.body.className
-    .replace(/theme-\S+/g, '').trim();
-  document.body.classList.add('theme-' + theme);
-
-  // Тайлы карты
-  tileLayer.setUrl(TILE_URLS[theme] || TILE_URLS['arcade']);
+function onSlider(val){
+  sliderMonth=parseInt(val);
+  document.getElementById('slider-label').textContent=MONTHS[sliderMonth];
+  renderMarkers();
 }
 
-// ── БУРГЕР ──
-function toggleBurger() {
-  document.getElementById('mobileMenu').classList.toggle('open');
-  document.getElementById('burgerBtn').classList.toggle('active');
-}
-function closeBurger() {
-  document.getElementById('mobileMenu').classList.remove('open');
-  document.getElementById('burgerBtn').classList.remove('active');
-}
-
-// ── ЗАГРУЗКА ДАННЫХ ──
-async function loadStations() {
-  try {
-    const res = await fetch(
-      SURL + '/rest/v1/stations?select=operator,station_type,city,address,location_name,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng&lat=not.is.null',
-      { headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY } }
-    );
-    if (!res.ok) {
-      const err = await res.text();
-      console.error('Supabase error:', res.status, err);
-      document.getElementById('mf-count').textContent = 'ERR';
-      return;
-    }
-    allStations = await res.json();
-    if (!Array.isArray(allStations)) {
-      console.error('Не массив:', allStations);
-      document.getElementById('mf-count').textContent = 'ERR';
-      return;
-    }
+function togglePlay(){
+  const btn=document.getElementById('playBtn');
+  if(playInterval){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
+  sliderMonth=0; document.getElementById('time-slider').value=0;
+  document.getElementById('slider-label').textContent=MONTHS[0];
+  renderMarkers(); btn.innerHTML='&#x25A0;'; btn.classList.add('playing');
+  playInterval=setInterval(()=>{
+    if(sliderMonth>=11){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
+    sliderMonth++; document.getElementById('time-slider').value=sliderMonth;
+    document.getElementById('slider-label').textContent=MONTHS[sliderMonth];
     renderMarkers();
-  } catch(e) {
-    console.error('Ошибка загрузки:', e);
-    document.getElementById('mf-count').textContent = 'ERR';
-  }
+  },800);
 }
 
-// ── ТРЕКИНГ ВИЗИТА ──
-async function trackVisit() {
-  try {
-    await fetch(SURL + '/rest/v1/visits', {
-      method: 'POST',
-      headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ visited_at: new Date().toISOString(), page: 'map' })
-    });
-  } catch(e) {}
+function locateMe(){
+  if(!navigator.geolocation){alert('Геолокация недоступна');return;}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const{latitude:lat,longitude:lng}=pos.coords;
+    if(geoMarker) map.removeLayer(geoMarker);
+    geoMarker=L.marker([lat,lng],{icon:L.divIcon({html:'<div class="geo-pulse"></div>',className:'',iconSize:[12,12],iconAnchor:[6,6]})}).addTo(map).bindPopup('Вы здесь').openPopup();
+    map.setView([lat,lng],13);
+  },()=>alert('Не удалось определить местоположение'));
 }
 
-// ── ИНИТ ──
-(function init() {
-  const saved = localStorage.getItem('ev_race_theme') || 'arcade';
-  setTheme(saved);
-  loadStations();
-  trackVisit();
+function setTheme(theme){
+  document.getElementById('theme-css').href=`CSS/${theme}.css?v=2`;
+  localStorage.setItem('ev_race_theme',theme);
+  ['arcade','tesla-light','tesla-dark'].forEach(t=>document.getElementById('btn-'+t)?.classList.toggle('active',t===theme));
+  document.body.className=document.body.className.replace(/theme-\S+/g,'').trim();
+  document.body.classList.add('theme-'+theme);
+  tileLayer.setUrl(TILES[theme]||TILES['arcade']);
+  document.querySelectorAll('.map-op-btn').forEach(btn=>{
+    const op=btn.dataset.op; const isOn=btn.classList.contains('on');
+    if(theme==='arcade'){
+      if(isOn){btn.style.background=OP_COLORS[op];btn.style.color=OP_DARK.includes(op)?'#003':'#fff';btn.style.borderColor=OP_COLORS[op];}
+      else{btn.style.background='transparent';btn.style.color='#1a1a1a';btn.style.borderColor='#1a1a1a';}
+    } else {btn.style.background='';btn.style.color='';btn.style.borderColor='';}
+  });
+}
+
+function toggleBurger(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('burgerBtn').classList.toggle('open');}
+function closeBurger(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('burgerBtn').classList.remove('open');}
+
+async function loadStations(){
+  try{
+    const res=await fetch(SURL+'/rest/v1/stations?select=operator,station_type,city,address,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng&lat=not.is.null',{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
+    if(!res.ok){console.error('Supabase:',res.status);return;}
+    const data=await res.json();
+    if(!Array.isArray(data)){console.error('Not array:',data);return;}
+    allStations=data; renderMarkers();
+  }catch(e){console.error('Load:',e);}
+}
+
+async function trackVisit(){
+  try{await fetch(SURL+'/rest/v1/visits',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({visited_at:new Date().toISOString(),page:'map'})});}catch(e){}
+}
+
+(function init(){
+  const saved=localStorage.getItem('ev_race_theme')||'arcade';
+  setTheme(saved); loadStations(); trackVisit();
 })();
 </script>
 </body>
