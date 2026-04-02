@@ -30,11 +30,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 
 <style>
 html, body { height:100%; overflow:hidden; margin:0; padding:0; }
-.container {
-  display:flex; flex-direction:column;
-  height:100vh; height:100dvh;
-  max-width:100% !important; padding:0 !important;
-}
+.container { display:flex; flex-direction:column; height:100vh; height:100dvh; max-width:100% !important; padding:0 !important; }
 .page-wrap { display:flex; flex-direction:column; flex:1; min-height:0; padding:0 !important; position:relative; }
 #map { flex:1; min-height:0; width:100%; z-index:1; }
 
@@ -46,7 +42,7 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
 
 /* ── ВЕРХНЯЯ ПАНЕЛЬ ── */
 .map-top-bar {
-  margin:8px 8px 0; display:flex; align-items:center; gap:5px;
+  margin:8px 8px 0; display:flex; align-items:center; gap:5px; flex-wrap:wrap;
   padding:5px 8px; background:rgba(10,10,10,0.88);
   border:1px solid var(--green-dark,#003d0f);
 }
@@ -60,21 +56,24 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
 }
 .map-type-btn.on { background:var(--green-dark,#003d0f); border-color:var(--green-dim,#00aa2b); color:var(--green,#00ff41); }
 
-/* Сброс */
-.map-reset-btn {
-  font-family:'Share Tech Mono',monospace; font-size:9px;
-  padding:4px 7px; border:1px solid #1a1a1a;
-  background:transparent; color:#333;
-  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent;
-}
-.map-reset-btn:hover { border-color:var(--green-dim,#00aa2b); color:var(--green,#00ff41); }
-
 /* Бейдж */
 .map-badge {
   margin-left:auto; font-family:'Share Tech Mono',monospace;
   font-size:8px; letter-spacing:1px; color:var(--green,#00ff41);
   white-space:nowrap; flex-shrink:0;
 }
+
+/* ── МЕСЯЧНЫЕ КНОПКИ ── */
+.map-month-row {
+  display:flex; gap:4px; flex-wrap:wrap; margin-bottom:5px;
+}
+.map-month-btn {
+  font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:1px;
+  padding:3px 7px; border:1px solid var(--green-dark,#003d0f);
+  background:transparent; color:var(--green-dim,#00aa2b);
+  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
+}
+.map-month-btn.on { background:var(--green-dark,#003d0f); border-color:var(--green-dim,#00aa2b); color:var(--green,#00ff41); }
 
 /* ── ЗУМ ── */
 .map-zoom { position:absolute; right:8px; top:50px; display:flex; flex-direction:column; gap:3px; z-index:400; }
@@ -112,18 +111,19 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
 .map-play-btn:hover { background:var(--green-dark,#003d0f); color:var(--green,#00ff41); }
 .map-play-btn.playing { border-color:#ff4444; color:#ff4444; }
 
-/* Операторы */
+/* Операторы — радиокнопка */
 .map-ops-row { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:5px; }
 .map-op-btn {
   font-family:'Share Tech Mono',monospace; font-size:8px;
-  padding:3px 7px; border:1px solid transparent;
-  cursor:pointer; transition:opacity .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
+  padding:3px 7px; border:1px solid #1a1a1a;
+  background:transparent; color:#333;
+  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
 }
-.map-op-btn.inactive { opacity:0.25; }
+.map-op-btn.on { border-color:transparent; }
 
 /* Нижняя строка утилит */
 .map-utils-row {
-  display:flex; gap:4px; align-items:center;
+  display:flex; gap:4px; align-items:center; flex-wrap:wrap;
   padding-top:5px; border-top:1px solid var(--green-dark,#003d0f);
   margin-top:2px;
 }
@@ -135,6 +135,16 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
 }
 .map-util-btn:hover { background:var(--green-dark,#003d0f); color:var(--green,#00ff41); }
 .map-util-btn.on { border-color:#ff4444; color:#ff4444; background:rgba(255,68,68,.08); }
+
+/* Сброс */
+.map-reset-btn {
+  font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1px;
+  padding:3px 10px; border:1px solid #ff4444; color:#ff4444;
+  background:rgba(255,68,68,.1); cursor:pointer; transition:all .15s;
+  -webkit-tap-highlight-color:transparent; white-space:nowrap; display:none;
+}
+.map-reset-btn.visible { display:inline-block; }
+.map-reset-btn:hover { background:rgba(255,68,68,.25); }
 
 /* Подпись */
 .map-caption {
@@ -175,15 +185,15 @@ body.theme-tesla-light .map-top-bar { background:rgba(255,255,255,.96); border:0
 body.theme-tesla-light .map-bottom-bar { background:rgba(255,255,255,.96); border:0.5px solid #ddd; border-radius:10px; }
 body.theme-tesla-light .map-type-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:4px 10px; }
 body.theme-tesla-light .map-type-btn.on { background:#111; color:#fff; border-color:#111; }
-body.theme-tesla-light .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#aaa; padding:4px 10px; }
 body.theme-tesla-light .map-badge { font-family:'Roboto',sans-serif; font-size:11px; color:#111; font-weight:500; }
+body.theme-tesla-light .map-month-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:4px 10px; }
+body.theme-tesla-light .map-month-btn.on { background:#111; color:#fff; border-color:#111; }
 body.theme-tesla-light .map-slider-label { font-family:'Roboto',sans-serif; font-size:11px; color:#888; }
 body.theme-tesla-light .map-slider { accent-color:#111; }
 body.theme-tesla-light .map-play-btn { font-family:'Roboto',sans-serif; border:1.5px solid #d0d2d4; border-radius:50%; color:#555; width:28px; height:28px; }
 body.theme-tesla-light .map-play-btn.playing { border-color:#cc3333; color:#cc3333; }
 body.theme-tesla-light .map-op-btn { font-family:'Roboto',sans-serif; font-size:11px; border-radius:20px; border:1.5px solid #d0d2d4; background:#f7f7f7; color:#555; padding:4px 10px; display:inline-flex; align-items:center; gap:5px; }
 body.theme-tesla-light .map-op-btn::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#bbb; transition:background .15s; flex-shrink:0; }
-body.theme-tesla-light .map-op-btn.inactive { opacity:0.4; }
 body.theme-tesla-light .map-op-btn.op-bf.on{color:#005EEB;border-color:rgba(0,94,235,.4);background:rgba(0,94,235,.05);}body.theme-tesla-light .map-op-btn.op-bf.on::before{background:#005EEB;}
 body.theme-tesla-light .map-op-btn.op-fo.on{color:#b44fff;border-color:rgba(180,79,255,.4);background:rgba(180,79,255,.05);}body.theme-tesla-light .map-op-btn.op-fo.on::before{background:#b44fff;}
 body.theme-tesla-light .map-op-btn.op-za.on{color:#00aacc;border-color:rgba(0,207,255,.4);background:rgba(0,207,255,.05);}body.theme-tesla-light .map-op-btn.op-za.on::before{background:#00aacc;}
@@ -196,6 +206,7 @@ body.theme-tesla-light .map-op-btn.op-pr.on{color:#24c3d3;border-color:rgba(36,1
 body.theme-tesla-light .map-utils-row { border-top-color:#eee; }
 body.theme-tesla-light .map-util-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:3px 10px; }
 body.theme-tesla-light .map-util-btn.on { border-color:#cc3333; color:#cc3333; background:rgba(204,51,51,.06); }
+body.theme-tesla-light .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #cc3333; color:#cc3333; background:rgba(204,51,51,.06); border-radius:20px; padding:3px 12px; }
 body.theme-tesla-light .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#bbb; letter-spacing:0; }
 body.theme-tesla-light .map-zoom-btn { background:rgba(255,255,255,.96); border:0.5px solid #ddd; color:#333; border-radius:4px; }
 body.theme-tesla-light .leaflet-popup-content-wrapper { background:#fff !important; border:0.5px solid #ddd !important; border-radius:10px !important; }
@@ -213,15 +224,15 @@ body.theme-tesla-dark .map-top-bar { background:rgba(20,20,20,.94); border:0.5px
 body.theme-tesla-dark .map-bottom-bar { background:rgba(20,20,20,.94); border:0.5px solid #2a2a2a; border-radius:10px; }
 body.theme-tesla-dark .map-type-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:4px 10px; }
 body.theme-tesla-dark .map-type-btn.on { background:#2a2a2a; color:#f0f0f0; border-color:#444; }
-body.theme-tesla-dark .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#444; padding:4px 10px; }
 body.theme-tesla-dark .map-badge { font-family:'Roboto',sans-serif; font-size:11px; color:#f0f0f0; font-weight:500; }
+body.theme-tesla-dark .map-month-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:4px 10px; }
+body.theme-tesla-dark .map-month-btn.on { background:#2a2a2a; color:#f0f0f0; border-color:#444; }
 body.theme-tesla-dark .map-slider-label { font-family:'Roboto',sans-serif; font-size:11px; color:#555; }
 body.theme-tesla-dark .map-slider { accent-color:#f0f0f0; }
 body.theme-tesla-dark .map-play-btn { font-family:'Roboto',sans-serif; border:1.5px solid #2a2a2a; border-radius:50%; color:#555; background:#1e1e1e; width:28px; height:28px; }
 body.theme-tesla-dark .map-play-btn.playing { border-color:#ff6666; color:#ff6666; }
 body.theme-tesla-dark .map-op-btn { font-family:'Roboto',sans-serif; font-size:11px; border-radius:20px; border:1.5px solid #2a2a2a; background:#1e1e1e; color:#555; padding:4px 10px; display:inline-flex; align-items:center; gap:5px; }
 body.theme-tesla-dark .map-op-btn::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#444; transition:background .15s; flex-shrink:0; }
-body.theme-tesla-dark .map-op-btn.inactive { opacity:0.4; }
 body.theme-tesla-dark .map-op-btn.op-bf.on{color:#4d8fff;border-color:rgba(0,94,235,.5);background:rgba(0,94,235,.1);}body.theme-tesla-dark .map-op-btn.op-bf.on::before{background:#4d8fff;}
 body.theme-tesla-dark .map-op-btn.op-fo.on{color:#cc88ff;border-color:rgba(180,79,255,.5);background:rgba(180,79,255,.1);}body.theme-tesla-dark .map-op-btn.op-fo.on::before{background:#cc88ff;}
 body.theme-tesla-dark .map-op-btn.op-za.on{color:#66ddff;border-color:rgba(0,207,255,.5);background:rgba(0,207,255,.1);}body.theme-tesla-dark .map-op-btn.op-za.on::before{background:#66ddff;}
@@ -234,6 +245,7 @@ body.theme-tesla-dark .map-op-btn.op-pr.on{color:#24c3d3;border-color:rgba(36,19
 body.theme-tesla-dark .map-utils-row { border-top-color:#1a1a1a; }
 body.theme-tesla-dark .map-util-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:3px 10px; }
 body.theme-tesla-dark .map-util-btn.on { border-color:#ff6666; color:#ff6666; background:rgba(204,51,51,.1); }
+body.theme-tesla-dark .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #cc3333; color:#ff6666; background:rgba(204,51,51,.1); border-radius:20px; padding:3px 12px; }
 body.theme-tesla-dark .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#333; letter-spacing:0; }
 body.theme-tesla-dark .map-zoom-btn { background:rgba(20,20,20,.94); border:0.5px solid #333; color:#aaa; border-radius:4px; }
 body.theme-tesla-dark .leaflet-popup-content-wrapper { background:#1e1e1e !important; border:0.5px solid #2a2a2a !important; border-radius:10px !important; }
@@ -250,10 +262,10 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
   .map-top-bar { gap:4px; padding:4px 6px; margin:6px 6px 0; }
   .map-bottom-bar { margin:0 6px calc(6px + env(safe-area-inset-bottom,0px)) 6px; padding:6px; }
   .map-type-btn { font-size:8px; padding:3px 6px; }
-  .map-reset-btn { font-size:8px; padding:3px 6px; }
   body.theme-tesla-light .map-type-btn, body.theme-tesla-dark .map-type-btn { font-size:10px; padding:3px 8px; }
   body.theme-tesla-light .map-op-btn, body.theme-tesla-dark .map-op-btn { font-size:10px; padding:3px 8px; }
   body.theme-tesla-light .map-util-btn, body.theme-tesla-dark .map-util-btn { font-size:10px; padding:3px 8px; }
+  body.theme-tesla-light .map-month-btn, body.theme-tesla-dark .map-month-btn { font-size:10px; padding:3px 8px; }
 }
 </style>
 </head>
@@ -271,9 +283,9 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
       <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
     </div>
     <div class="theme-seg">
-      <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
-      <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">&#x2600; TESLA</button>
-      <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">&#x25D1; TESLA</button>
+      <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡</button>
+      <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">&#x2600;</button>
+      <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">&#x25D1;</button>
     </div>
   </div>
 
@@ -293,7 +305,6 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
         <button class="map-type-btn on" data-type="DC"   onclick="toggleType(this)">DC</button>
         <button class="map-type-btn on" data-type="AC"   onclick="toggleType(this)">AC</button>
         <button class="map-type-btn on" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
-        <button class="map-reset-btn" onclick="resetFilters()">&#x2715;</button>
         <span class="map-badge" id="map-badge">...</span>
       </div>
     </div>
@@ -316,23 +327,27 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
           <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
         </div>
 
+        <!-- Месяцы -->
+        <div class="map-month-row" id="month-row"></div>
+
         <!-- Операторы -->
         <div class="map-ops-row">
-          <button class="map-op-btn op-bf on" data-op="batteryfly" onclick="toggleOp(this)" style="background:#005EEB;color:#fff;border-color:#005EEB;">BatteryFly</button>
-          <button class="map-op-btn op-fo on" data-op="forevo"     onclick="toggleOp(this)" style="background:#b44fff;color:#fff;border-color:#b44fff;">forEVo</button>
-          <button class="map-op-btn op-za on" data-op="zaryadka"   onclick="toggleOp(this)" style="background:#00cfff;color:#003;border-color:#00cfff;">Zaryadka</button>
-          <button class="map-op-btn op-uc on" data-op="united"     onclick="toggleOp(this)" style="background:#F5821F;color:#fff;border-color:#F5821F;">United</button>
-          <button class="map-op-btn op-cs on" data-op="csms"       onclick="toggleOp(this)" style="background:#FF6B6B;color:#fff;border-color:#FF6B6B;">ЦСМС</button>
-          <button class="map-op-btn op-ma on" data-op="malanka"    onclick="toggleOp(this)" style="background:#76d275;color:#003;border-color:#76d275;">Malanka</button>
-          <button class="map-op-btn op-ev on" data-op="evika"      onclick="toggleOp(this)" style="background:#832af5;color:#fff;border-color:#832af5;">Evika!</button>
-          <button class="map-op-btn op-or on" data-op="orange"     onclick="toggleOp(this)" style="background:#FF6B00;color:#fff;border-color:#FF6B00;">Orange</button>
-          <button class="map-op-btn op-pr on" data-op="prizma"     onclick="toggleOp(this)" style="background:#24c3d3;color:#003;border-color:#24c3d3;">Prizma</button>
+          <button class="map-op-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
+          <button class="map-op-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
+          <button class="map-op-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
+          <button class="map-op-btn op-uc" data-op="united"     onclick="toggleOp(this)">United</button>
+          <button class="map-op-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
+          <button class="map-op-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
+          <button class="map-op-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
+          <button class="map-op-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
+          <button class="map-op-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
         </div>
 
-        <!-- Утилиты: ГДЕ Я + ТЕПЛО + подпись -->
+        <!-- Утилиты -->
         <div class="map-utils-row">
           <button class="map-util-btn" onclick="locateMe()">ГДЕ Я</button>
-          <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛ. КАРТА</button>
+          <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
+          <button class="map-reset-btn" id="resetBtn" onclick="resetFilters()">&#x2715; СБРОСИТЬ</button>
           <span class="map-caption">На карте станции Беларуси 2026</span>
         </div>
 
@@ -354,33 +369,32 @@ const OP_DARK=['zaryadka','malanka','prizma'];
 const TILES={'arcade':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png','tesla-light':'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png','tesla-dark':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'};
 const MONTH_NAMES=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
 
-// Слайдер — недели: 4 шага на месяц, до текущего месяца включительно
-const NOW = new Date();
-const CUR_MONTH = NOW.getMonth(); // 0-11, сейчас апрель = 3
-const TOTAL_WEEKS = (CUR_MONTH + 1) * 4; // всего шагов: апрель = 16
+// Слайдер по неделям до текущего месяца
+const NOW=new Date();
+const CUR_MONTH=NOW.getMonth(); // апрель = 3
+const TOTAL_WEEKS=(CUR_MONTH+1)*4;
 
-function weekToDate(week) {
-  // week 0 = 1 января, каждые 4 недели = 1 месяц
-  const month = Math.floor(week / 4);
-  const weekInMonth = week % 4;
-  const day = weekInMonth * 7 + 1;
-  return new Date(2026, month, Math.min(day, 28));
+function weekToDate(week){
+  const month=Math.floor(week/4);
+  const weekInMonth=week%4;
+  const day=weekInMonth*7+1;
+  return new Date(2026,month,Math.min(day,28));
 }
+function weekLabel(week){ return MONTH_NAMES[Math.min(Math.floor(week/4),11)]; }
+function monthToWeek(m){ return m*4+3; } // конец месяца = последняя неделя
 
-function weekLabel(week) {
-  const month = Math.floor(week / 4);
-  return MONTH_NAMES[Math.min(month, 11)];
-}
-
-const activeOps=new Set(Object.keys(OP_COLORS));
-const activeTypes=new Set(['DC','AC','ACDC']);
+// Состояние
 let allStations=[],sliderWeek=TOTAL_WEEKS-1,heatMode=false,playInterval=null,geoMarker=null,heatLayer=null;
+let activeOp=null; // радиокнопка — один оператор или null
+let activeMonth=null; // выбранный месяц или null
+const activeTypes=new Set(['DC','AC','ACDC']);
 
-// Инициализируем слайдер
-document.getElementById('time-slider').max = TOTAL_WEEKS - 1;
-document.getElementById('time-slider').value = TOTAL_WEEKS - 1;
-document.getElementById('slider-label-end').textContent = MONTH_NAMES[CUR_MONTH];
+// Инит слайдера
+document.getElementById('time-slider').max=TOTAL_WEEKS-1;
+document.getElementById('time-slider').value=TOTAL_WEEKS-1;
+document.getElementById('slider-label-end').textContent=MONTH_NAMES[CUR_MONTH];
 
+// Карта
 const map=L.map('map',{center:[53.7,28.0],zoom:7,zoomControl:false,scrollWheelZoom:true});
 let tileLayer=L.tileLayer(TILES['arcade'],{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',maxZoom:19}).addTo(map);
 const clusterGroup=L.markerClusterGroup({maxClusterRadius:50,spiderfyOnMaxZoom:true,showCoverageOnHover:false,zoomToBoundsOnClick:true});
@@ -399,69 +413,47 @@ function buildRoute(lat,lng,name){
 }
 
 // Группировка по координатам
-function groupByCoords(stations) {
-  const groups = {};
-  stations.forEach(s => {
-    const key = `${s.lat.toFixed(5)},${s.lng.toFixed(5)}`;
-    if (!groups[key]) groups[key] = [];
+function groupByCoords(stations){
+  const groups={};
+  stations.forEach(s=>{
+    const key=`${s.lat.toFixed(5)},${s.lng.toFixed(5)}`;
+    if(!groups[key]) groups[key]=[];
     groups[key].push(s);
   });
   return groups;
 }
 
-function makePopup(stations) {
-  const first = stations[0];
-  const color  = OP_COLORS[first.operator] || '#00ff41';
-  const opName = OP_NAMES[first.operator]  || first.operator;
-  const addr   = [first.city, first.address].filter(Boolean).join(', ');
-
-  let stationsHtml = '';
-  let totalDC = 0, totalAC = 0;
-  const dates = [];
-
-  stations.forEach(s => {
-    const dc  = s.dc_power  ? `DC ${s.dc_power} кВт`  : '';
-    const ac  = s.ac_power  ? `AC ${s.ac_power} кВт`  : '';
-    const pwr = [dc,ac].filter(Boolean).join(' · ') || '—';
-    const guns = [s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' · ') || '—';
-    const date = s.station_date ? s.station_date.slice(0,10).split('-').reverse().join('.') : '';
-    if (date) dates.push(date);
-    if (s.dc_power) totalDC += s.dc_power;
-    if (s.ac_power) totalAC += s.ac_power;
-    stationsHtml += `<div class="popup-station">
-      <div class="popup-row">&#x26A1; <span>${pwr}</span></div>
-      <div class="popup-row">&#x1F50C; <span>${guns}</span></div>
-      ${date ? `<div class="popup-row">&#x1F4C5; <span>${date}</span></div>` : ''}
-    </div>`;
+function makePopup(stations){
+  const first=stations[0];
+  const color=OP_COLORS[first.operator]||'#00ff41';
+  const opName=OP_NAMES[first.operator]||first.operator;
+  const addr=[first.city,first.address].filter(Boolean).join(', ');
+  let stationsHtml='',totalDC=0,totalAC=0;
+  stations.forEach(s=>{
+    const dc=s.dc_power?`DC ${s.dc_power} кВт`:'';
+    const ac=s.ac_power?`AC ${s.ac_power} кВт`:'';
+    const pwr=[dc,ac].filter(Boolean).join(' · ')||'—';
+    const guns=[s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' · ')||'—';
+    const date=s.station_date?s.station_date.slice(0,10).split('-').reverse().join('.'):'';
+    if(s.dc_power) totalDC+=s.dc_power;
+    if(s.ac_power) totalAC+=s.ac_power;
+    stationsHtml+=`<div class="popup-station"><div class="popup-row">&#x26A1; <span>${pwr}</span></div><div class="popup-row">&#x1F50C; <span>${guns}</span></div>${date?`<div class="popup-row">&#x1F4C5; <span>${date}</span></div>`:''}</div>`;
   });
-
-  const totalPwr = [];
-  if (totalDC) totalPwr.push(`DC ${totalDC} кВт`);
-  if (totalAC) totalPwr.push(`AC ${totalAC} кВт`);
-  const totalStr = stations.length > 1
-    ? `<div class="popup-total">&#x2211; ${stations.length} станции · ${totalPwr.join(' · ')}</div>`
-    : '';
-
-  const btn = isMobile
-    ? `<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${first.lat},${first.lng},'${opName.replace(/'/g,"\\'")}')">&#x25BA; МАРШРУТ</button>`
-    : '';
-
-  return `<div class="popup-wrap">
-    <div class="popup-op" style="color:${color}">${opName}</div>
-    <div class="popup-row">&#x1F4CD; <span>${addr}</span></div>
-    ${stationsHtml}
-    ${totalStr}
-    ${btn}
-  </div>`;
+  const totalPwr=[];
+  if(totalDC) totalPwr.push(`DC ${totalDC} кВт`);
+  if(totalAC) totalPwr.push(`AC ${totalAC} кВт`);
+  const totalStr=stations.length>1?`<div class="popup-total">&#x2211; ${stations.length} станции · ${totalPwr.join(' · ')}</div>`:'';
+  const btn=isMobile?`<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${first.lat},${first.lng},'${opName.replace(/'/g,"\\'")}')">&#x25BA; МАРШРУТ</button>`:'';
+  return `<div class="popup-wrap"><div class="popup-op" style="color:${color}">${opName}</div><div class="popup-row">&#x1F4CD; <span>${addr}</span></div>${stationsHtml}${totalStr}${btn}</div>`;
 }
 
 function getFiltered(){
-  const cutoff = weekToDate(sliderWeek);
+  const cutoff=weekToDate(sliderWeek);
   return allStations.filter(s=>{
     if(!s.lat||!s.lng) return false;
-    if(!activeOps.has(s.operator)) return false;
+    if(activeOp && s.operator!==activeOp) return false;
     if(!activeTypes.has(s.station_type)) return false;
-    if(s.station_date && new Date(s.station_date) > cutoff) return false;
+    if(s.station_date&&new Date(s.station_date)>cutoff) return false;
     return true;
   });
 }
@@ -479,6 +471,11 @@ function updateBadge(filtered){
   document.getElementById('map-badge').textContent=parts.join(' · ')||'0';
 }
 
+function updateResetBtn(){
+  const hasFilter=activeOp!==null||activeMonth!==null||!activeTypes.has('DC')||!activeTypes.has('AC')||!activeTypes.has('ACDC');
+  document.getElementById('resetBtn').classList.toggle('visible',hasFilter);
+}
+
 map.on('moveend zoomend',()=>updateBadge(getFiltered()));
 
 function renderMarkers(){
@@ -489,32 +486,42 @@ function renderMarkers(){
     const pts=filtered.map(s=>[s.lat,s.lng,1]);
     heatLayer=L.heatLayer(pts,{radius:25,blur:15,maxZoom:12}).addTo(map);
   } else {
-    const groups = groupByCoords(filtered);
-    Object.values(groups).forEach(group => {
-      const first = group[0];
-      const color = OP_COLORS[first.operator]||'#00ff41';
-      const m = L.marker([first.lat,first.lng],{icon:makeIcon(color)});
+    const groups=groupByCoords(filtered);
+    Object.values(groups).forEach(group=>{
+      const first=group[0];
+      const color=OP_COLORS[first.operator]||'#00ff41';
+      const m=L.marker([first.lat,first.lng],{icon:makeIcon(color)});
       m.bindPopup(makePopup(group),{maxWidth:300,minWidth:200});
       clusterGroup.addLayer(m);
     });
   }
   updateBadge(filtered);
+  updateResetBtn();
 }
 
+// ── ФИЛЬТР ОПЕРАТОРОВ — радиокнопка ──
 function toggleOp(btn){
   const op=btn.dataset.op;
   const theme=localStorage.getItem('ev_race_theme')||'arcade';
-  if(activeOps.has(op)){
-    if(activeOps.size===1) return;
-    activeOps.delete(op); btn.classList.remove('on'); btn.classList.add('inactive');
-    if(theme==='arcade'){btn.style.background='transparent';btn.style.color='#1a1a1a';btn.style.borderColor='#1a1a1a';}
+  if(activeOp===op){
+    // повторный клик — сброс
+    activeOp=null;
+    btn.classList.remove('on');
+    if(theme==='arcade'){btn.style.background='transparent';btn.style.color='#333';btn.style.borderColor='#1a1a1a';}
   } else {
-    activeOps.add(op); btn.classList.add('on'); btn.classList.remove('inactive');
+    // снимаем предыдущий
+    if(activeOp){
+      const prev=document.querySelector(`.map-op-btn[data-op="${activeOp}"]`);
+      if(prev){prev.classList.remove('on');if(theme==='arcade'){prev.style.background='transparent';prev.style.color='#333';prev.style.borderColor='#1a1a1a';}}
+    }
+    activeOp=op;
+    btn.classList.add('on');
     if(theme==='arcade'){btn.style.background=OP_COLORS[op];btn.style.color=OP_DARK.includes(op)?'#003':'#fff';btn.style.borderColor=OP_COLORS[op];}
   }
   renderMarkers();
 }
 
+// ── ФИЛЬТР ТИПА ──
 function toggleType(btn){
   const t=btn.dataset.type;
   if(activeTypes.has(t)){if(activeTypes.size===1) return; activeTypes.delete(t); btn.classList.remove('on');}
@@ -522,22 +529,69 @@ function toggleType(btn){
   renderMarkers();
 }
 
+// ── ТЕПЛО ──
 function toggleHeat(){
   heatMode=!heatMode;
   document.getElementById('heatBtn').classList.toggle('on',heatMode);
   renderMarkers();
 }
 
+// ── МЕСЯЦ ──
+function buildMonthButtons(){
+  const row=document.getElementById('month-row');
+  // считаем станции по месяцам
+  const counts={};
+  for(let m=0;m<=CUR_MONTH;m++) counts[m]=0;
+  allStations.forEach(s=>{
+    if(!s.station_date) return;
+    const d=new Date(s.station_date);
+    const m=d.getMonth();
+    if(m<=CUR_MONTH) counts[m]=(counts[m]||0)+1;
+  });
+  row.innerHTML='';
+  for(let m=0;m<=CUR_MONTH;m++){
+    const btn=document.createElement('button');
+    btn.className='map-month-btn';
+    btn.dataset.month=m;
+    btn.textContent=`${MONTH_NAMES[m]} | ${counts[m]||0}`;
+    btn.onclick=()=>selectMonth(btn,m);
+    row.appendChild(btn);
+  }
+}
+
+function selectMonth(btn,m){
+  if(activeMonth===m){
+    // сброс месяца
+    activeMonth=null;
+    btn.classList.remove('on');
+    sliderWeek=TOTAL_WEEKS-1;
+    document.getElementById('time-slider').value=TOTAL_WEEKS-1;
+    document.getElementById('slider-label').textContent='ЯНВ';
+  } else {
+    activeMonth=m;
+    document.querySelectorAll('.map-month-btn').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    // двигаем ползунок на конец этого месяца
+    sliderWeek=monthToWeek(m);
+    document.getElementById('time-slider').value=sliderWeek;
+    document.getElementById('slider-label').textContent=MONTH_NAMES[m];
+  }
+  renderMarkers();
+}
+
+// ── СБРОС ──
 function resetFilters(){
   const theme=localStorage.getItem('ev_race_theme')||'arcade';
-  activeOps.clear(); Object.keys(OP_COLORS).forEach(op=>activeOps.add(op));
+  activeOp=null;
   document.querySelectorAll('.map-op-btn').forEach(b=>{
-    b.classList.add('on'); b.classList.remove('inactive');
-    if(theme==='arcade'){const op=b.dataset.op;b.style.background=OP_COLORS[op];b.style.color=OP_DARK.includes(op)?'#003':'#fff';b.style.borderColor=OP_COLORS[op];}
+    b.classList.remove('on');
+    if(theme==='arcade'){b.style.background='transparent';b.style.color='#333';b.style.borderColor='#1a1a1a';}
     else{b.style.background='';b.style.color='';b.style.borderColor='';}
   });
   activeTypes.clear(); ['DC','AC','ACDC'].forEach(t=>activeTypes.add(t));
   document.querySelectorAll('.map-type-btn').forEach(b=>b.classList.add('on'));
+  activeMonth=null;
+  document.querySelectorAll('.map-month-btn').forEach(b=>b.classList.remove('on'));
   sliderWeek=TOTAL_WEEKS-1;
   document.getElementById('time-slider').value=TOTAL_WEEKS-1;
   document.getElementById('slider-label').textContent='ЯНВ';
@@ -546,12 +600,21 @@ function resetFilters(){
   renderMarkers();
 }
 
+// ── СЛАЙДЕР ──
 function onSlider(val){
   sliderWeek=parseInt(val);
+  const m=Math.floor(sliderWeek/4);
   document.getElementById('slider-label').textContent=weekLabel(sliderWeek);
+  // синхронизируем кнопки месяцев
+  document.querySelectorAll('.map-month-btn').forEach(b=>{
+    const bm=parseInt(b.dataset.month);
+    b.classList.toggle('on',bm===m&&activeMonth===m);
+  });
+  if(activeMonth!==null&&Math.floor(monthToWeek(activeMonth)/4)!==m) activeMonth=null;
   renderMarkers();
 }
 
+// ── ВОСПРОИЗВЕДЕНИЕ ──
 function togglePlay(){
   const btn=document.getElementById('playBtn');
   if(playInterval){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
@@ -566,6 +629,7 @@ function togglePlay(){
   },600);
 }
 
+// ── ГЕОЛОКАЦИЯ ──
 function locateMe(){
   if(!navigator.geolocation){alert('Геолокация недоступна');return;}
   navigator.geolocation.getCurrentPosition(pos=>{
@@ -576,6 +640,7 @@ function locateMe(){
   },()=>alert('Не удалось определить местоположение'));
 }
 
+// ── ТЕМА ──
 function setTheme(theme){
   document.getElementById('theme-css').href=`CSS/${theme}.css?v=2`;
   localStorage.setItem('ev_race_theme',theme);
@@ -583,25 +648,30 @@ function setTheme(theme){
   document.body.className=document.body.className.replace(/theme-\S+/g,'').trim();
   document.body.classList.add('theme-'+theme);
   tileLayer.setUrl(TILES[theme]||TILES['arcade']);
+  // операторы
   document.querySelectorAll('.map-op-btn').forEach(btn=>{
     const op=btn.dataset.op; const isOn=btn.classList.contains('on');
     if(theme==='arcade'){
       if(isOn){btn.style.background=OP_COLORS[op];btn.style.color=OP_DARK.includes(op)?'#003':'#fff';btn.style.borderColor=OP_COLORS[op];}
-      else{btn.style.background='transparent';btn.style.color='#1a1a1a';btn.style.borderColor='#1a1a1a';}
+      else{btn.style.background='transparent';btn.style.color='#333';btn.style.borderColor='#1a1a1a';}
     } else {btn.style.background='';btn.style.color='';btn.style.borderColor='';}
   });
 }
 
+// ── БУРГЕР ──
 function toggleBurger(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('burgerBtn').classList.toggle('open');}
 function closeBurger(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('burgerBtn').classList.remove('open');}
 
+// ── ЗАГРУЗКА ──
 async function loadStations(){
   try{
     const res=await fetch(SURL+'/rest/v1/stations?select=operator,station_type,city,address,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng&lat=not.is.null',{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
     if(!res.ok){console.error('Supabase:',res.status);return;}
     const data=await res.json();
     if(!Array.isArray(data)){console.error('Not array:',data);return;}
-    allStations=data; renderMarkers();
+    allStations=data;
+    buildMonthButtons();
+    renderMarkers();
   }catch(e){console.error('Load:',e);}
 }
 
