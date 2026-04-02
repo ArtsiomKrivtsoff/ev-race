@@ -151,7 +151,43 @@ body.theme-tesla-dark .popup-route-btn{font-family:'Roboto',sans-serif;border-ra
 body.theme-tesla-dark .marker-cluster-small,body.theme-tesla-dark .marker-cluster-medium,body.theme-tesla-dark .marker-cluster-large{background-color:rgba(0,188,212,.12)!important;}
 body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cluster-medium div,body.theme-tesla-dark .marker-cluster-large div{background-color:rgba(0,188,212,.25)!important;color:#00bcd4!important;font-family:'Roboto',sans-serif!important;border-radius:50%!important;}
 
-@media(max-width:600px){
+/* ── ДЕСКТОП САЙДБАР ── */
+.map-sidebar { display:none; }
+
+@media(min-width:1024px) {
+  .page-wrap { flex-direction:row; }
+  #map { flex:1; min-width:0; min-height:0; }
+  .map-top { left:280px; }
+  .map-bottom { display:none; }
+  .map-sidebar {
+    display:flex; flex-direction:column;
+    width:280px; flex-shrink:0;
+    background:rgba(10,10,10,0.95);
+    border-right:1px solid var(--green-dark,#003d0f);
+    padding:12px 10px; overflow-y:auto; z-index:2; gap:12px;
+  }
+  .sidebar-section { display:flex; flex-direction:column; gap:6px; }
+  .sidebar-label {
+    font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px;
+    color:var(--green-dim,#00aa2b); padding-bottom:4px;
+    border-bottom:1px solid var(--green-dark,#003d0f);
+  }
+  .sidebar-ops { display:flex; flex-wrap:wrap; gap:4px; }
+  .sidebar-utils { display:flex; flex-direction:column; gap:4px; }
+  .sidebar-caption {
+    font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:0.5px;
+    color:var(--green-dark,#003d0f); line-height:1.6; margin-top:auto;
+    padding-top:8px; border-top:1px solid var(--green-dark,#003d0f);
+  }
+  body.theme-tesla-light .map-sidebar { background:rgba(255,255,255,.98); border-right-color:#ddd; }
+  body.theme-tesla-light .sidebar-label { font-family:'Roboto',sans-serif; color:#888; border-bottom-color:#eee; font-size:10px; letter-spacing:1px; }
+  body.theme-tesla-light .sidebar-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#bbb; border-top-color:#eee; letter-spacing:0; }
+  body.theme-tesla-dark .map-sidebar { background:rgba(20,20,20,.98); border-right-color:#2a2a2a; }
+  body.theme-tesla-dark .sidebar-label { font-family:'Roboto',sans-serif; color:#555; border-bottom-color:#1a1a1a; font-size:10px; letter-spacing:1px; }
+  body.theme-tesla-dark .sidebar-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#333; border-top-color:#1a1a1a; letter-spacing:0; }
+}
+
+@media(max-width:1023px) {
   .map-top-bar{gap:4px;padding:4px 6px;margin:6px 6px 0;}
   .map-bottom-bar{margin:0 6px calc(6px + env(safe-area-inset-bottom,0px)) 6px;padding:6px;}
 }
@@ -187,12 +223,12 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
   <div class="page-wrap">
     <div id="map"></div>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ: тип DC/AC/ACDC -->
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ: тип DC/AC/ACDC + бейдж -->
     <div class="map-top">
       <div class="map-top-bar">
-        <button class="op-filter-btn" data-type="DC"   onclick="toggleType(this)">DC</button>
-        <button class="op-filter-btn" data-type="AC"   onclick="toggleType(this)">AC</button>
-        <button class="op-filter-btn" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
+        <button class="op-filter-btn map-type-radio" data-type="DC"   onclick="toggleType(this)">DC</button>
+        <button class="op-filter-btn map-type-radio" data-type="AC"   onclick="toggleType(this)">AC</button>
+        <button class="op-filter-btn map-type-radio" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
         <span class="map-badge" id="map-badge">...</span>
       </div>
     </div>
@@ -203,19 +239,48 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
       <button class="map-zoom-btn" onclick="map.zoomOut()">&#x2212;</button>
     </div>
 
-    <!-- НИЖНЯЯ ПАНЕЛЬ -->
+    <!-- ДЕСКТОП САЙДБАР (≥1024px) -->
+    <div class="map-sidebar" id="map-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">ОПЕРАТОР</div>
+        <div class="op-filters sidebar-ops">
+          <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
+          <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
+          <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
+          <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
+          <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
+          <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
+          <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
+          <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
+          <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">ВРЕМЯ</div>
+        <div class="map-slider-row">
+          <span class="map-slider-label" id="slider-label-d">ЯНВ</span>
+          <input class="map-slider" type="range" id="time-slider-d" min="0" max="1" value="1" step="1" oninput="onSlider(this.value,'d')">
+          <span class="map-slider-label" id="slider-label-end-d">АПР</span>
+          <button class="map-play-btn" id="playBtn-d" onclick="togglePlay()">&#x25BA;</button>
+        </div>
+      </div>
+      <div class="sidebar-section sidebar-utils">
+        <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
+        <button class="map-util-btn" id="heatBtn-d" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
+        <button class="map-util-btn" id="resetBtn-d" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
+      </div>
+      <div class="sidebar-caption">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
+    </div>
+
+    <!-- МОБИЛЬНАЯ НИЖНЯЯ ПАНЕЛЬ (< 1024px) -->
     <div class="map-bottom">
       <div class="map-bottom-bar">
-
-        <!-- Слайдер времени -->
         <div class="map-slider-row">
           <span class="map-slider-label" id="slider-label">ЯНВ</span>
-          <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value)">
+          <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value,'m')">
           <span class="map-slider-label" id="slider-label-end">АПР</span>
           <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
         </div>
-
-        <!-- Операторы — горизонтальный скролл -->
         <div class="map-scroll-wrap" style="margin-bottom:5px;">
           <div class="op-filters map-hscroll">
             <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
@@ -230,17 +295,12 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
           </div>
           <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
         </div>
-
-        <!-- Утилиты -->
         <div class="map-utils-row">
           <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
           <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
           <button class="map-util-btn" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
         </div>
-
-        <!-- Подпись — всегда отдельная строка -->
         <div class="map-caption-row">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
-
       </div>
     </div>
   </div>
@@ -270,6 +330,9 @@ let activeOp=null,activeType=null;
 document.getElementById('time-slider').max=TOTAL_WEEKS-1;
 document.getElementById('time-slider').value=TOTAL_WEEKS-1;
 document.getElementById('slider-label-end').textContent=MONTH_NAMES[CUR_MONTH];
+document.getElementById('time-slider-d').max=TOTAL_WEEKS-1;
+document.getElementById('time-slider-d').value=TOTAL_WEEKS-1;
+document.getElementById('slider-label-end-d').textContent=MONTH_NAMES[CUR_MONTH];
 
 const map=L.map('map',{center:[53.7,28.0],zoom:7,zoomControl:false,scrollWheelZoom:true});
 let tileLayer=L.tileLayer(TILES['arcade'],{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',maxZoom:19}).addTo(map);
@@ -347,7 +410,7 @@ function updateBadge(filtered){
 
 function updateResetBtn(){
   const has=activeOp!==null||activeType!==null;
-  document.getElementById('resetBtn').style.display=has?'inline-block':'none';
+  ['resetBtn','resetBtn-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=has?'inline-block':'none';});
 }
 
 map.on('moveend zoomend',()=>updateBadge(getFiltered()));
@@ -374,10 +437,10 @@ function renderMarkers(){
 // Тип — радиокнопка
 function toggleType(btn){
   const t=btn.dataset.type;
-  if(activeType===t){activeType=null;btn.classList.remove('on');}
+  if(activeType===t){activeType=null;document.querySelectorAll(`[data-type="${t}"]`).forEach(b=>b.classList.remove('on'));}
   else{
-    if(activeType){const p=document.querySelector(`.op-filter-btn[data-type="${activeType}"]`);if(p)p.classList.remove('on');}
-    activeType=t;btn.classList.add('on');
+    if(activeType)document.querySelectorAll(`[data-type="${activeType}"]`).forEach(b=>b.classList.remove('on'));
+    activeType=t;document.querySelectorAll(`[data-type="${t}"]`).forEach(b=>b.classList.add('on'));
   }
   renderMarkers();
 }
@@ -385,48 +448,61 @@ function toggleType(btn){
 // Оператор — радиокнопка
 function toggleOp(btn){
   const op=btn.dataset.op;
-  if(activeOp===op){activeOp=null;btn.classList.remove('on');}
+  if(activeOp===op){activeOp=null;document.querySelectorAll(`[data-op="${op}"]`).forEach(b=>b.classList.remove('on'));}
   else{
-    if(activeOp){const p=document.querySelector(`.op-filter-btn[data-op="${activeOp}"]`);if(p)p.classList.remove('on');}
-    activeOp=op;btn.classList.add('on');
+    if(activeOp)document.querySelectorAll(`[data-op="${activeOp}"]`).forEach(b=>b.classList.remove('on'));
+    activeOp=op;document.querySelectorAll(`[data-op="${op}"]`).forEach(b=>b.classList.add('on'));
   }
   renderMarkers();
 }
 
 function toggleHeat(){
   heatMode=!heatMode;
-  document.getElementById('heatBtn').classList.toggle('on',heatMode);
+  ['heatBtn','heatBtn-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',heatMode);});
   renderMarkers();
 }
 
 function resetFilters(){
-  activeOp=null;activeType=null;activeMonth=null;
+  activeOp=null;activeType=null;
   document.querySelectorAll('.op-filter-btn').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll('.map-type-radio').forEach(b=>b.classList.remove('on'));
   sliderWeek=TOTAL_WEEKS-1;
-  document.getElementById('time-slider').value=TOTAL_WEEKS-1;
-  document.getElementById('slider-label').textContent='ЯНВ';
-  if(playInterval){clearInterval(playInterval);playInterval=null;const pb=document.getElementById('playBtn');pb.innerHTML='&#x25BA;';pb.classList.remove('playing');}
-  heatMode=false;document.getElementById('heatBtn').classList.remove('on');
+  ['time-slider','time-slider-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=TOTAL_WEEKS-1;});
+  ['slider-label','slider-label-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='ЯНВ';});
+  ['playBtn','playBtn-d'].forEach(id=>{const el=document.getElementById(id);if(el){el.innerHTML='&#x25BA;';el.classList.remove('playing');}});
+  if(playInterval){clearInterval(playInterval);playInterval=null;}
+  heatMode=false;
+  ['heatBtn','heatBtn-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('on');});
   renderMarkers();
 }
 
 function onSlider(val){
   sliderWeek=parseInt(val);
-  document.getElementById('slider-label').textContent=weekLabel(sliderWeek);
+  ['time-slider','time-slider-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=sliderWeek;});
+  ['slider-label','slider-label-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=weekLabel(sliderWeek);});
   renderMarkers();
 }
 
 function togglePlay(){
-  const btn=document.getElementById('playBtn');
-  if(playInterval){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
-  sliderWeek=0;document.getElementById('time-slider').value=0;
-  document.getElementById('slider-label').textContent=weekLabel(0);
-  renderMarkers();btn.innerHTML='&#x25A0;';btn.classList.add('playing');
+  const btns=['playBtn','playBtn-d'].map(id=>document.getElementById(id)).filter(Boolean);
+  if(playInterval){
+    clearInterval(playInterval);playInterval=null;
+    btns.forEach(b=>{b.innerHTML='&#x25BA;';b.classList.remove('playing');});
+    return;
+  }
+  sliderWeek=0;
+  ['time-slider','time-slider-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=0;});
+  ['slider-label','slider-label-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=weekLabel(0);});
+  renderMarkers();
+  btns.forEach(b=>{b.innerHTML='&#x25A0;';b.classList.add('playing');});
   playInterval=setInterval(()=>{
-    if(sliderWeek>=TOTAL_WEEKS-1){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
-    sliderWeek++;document.getElementById('time-slider').value=sliderWeek;
-    document.getElementById('slider-label').textContent=weekLabel(sliderWeek);
+    if(sliderWeek>=TOTAL_WEEKS-1){
+      clearInterval(playInterval);playInterval=null;
+      btns.forEach(b=>{b.innerHTML='&#x25BA;';b.classList.remove('playing');});
+      return;
+    }
+    sliderWeek++;
+    ['time-slider','time-slider-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=sliderWeek;});
+    ['slider-label','slider-label-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=weekLabel(sliderWeek);});
     renderMarkers();
   },600);
 }
