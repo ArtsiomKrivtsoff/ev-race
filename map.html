@@ -58,12 +58,17 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 .map-play-btn:hover{background:var(--green-dark,#003d0f);color:var(--green,#00ff41);}
 .map-play-btn.playing{border-color:#ff4444;color:#ff4444;}
 
-/* Месяцы — используем month-btn из CSS файлов */
-.map-month-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px;}
+/* ── ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ ── */
+.map-scroll-wrap{position:relative;overflow:hidden;margin-bottom:5px;}
+.map-hscroll{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:5px;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;}
+.map-hscroll::-webkit-scrollbar{display:none;}
+.map-scroll-fade{position:absolute;top:0;right:0;bottom:2px;width:40px;background:linear-gradient(to right,transparent,rgba(10,10,10,0.92));pointer-events:none;}
+body.theme-tesla-light .map-scroll-fade{background:linear-gradient(to right,transparent,rgba(255,255,255,0.96));}
+body.theme-tesla-dark  .map-scroll-fade{background:linear-gradient(to right,transparent,rgba(20,20,20,0.94));}
 
 /* Утилиты */
 .map-utils-row{display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding-top:5px;border-top:1px solid var(--green-dark,#003d0f);margin-top:2px;}
-.map-util-btn{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;padding:3px 8px;border:1px solid var(--green-dark,#003d0f);background:transparent;color:var(--green-dim,#00aa2b);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
+.map-util-btn{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;padding:3px 8px;border:1px solid var(--green-dark,#003d0f);background:transparent;color:var(--green-dim,#00aa2b);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;white-space:nowrap;line-height:1.4;}
 .map-util-btn:hover{background:var(--green-dark,#003d0f);color:var(--green,#00ff41);}
 .map-util-btn.on{border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);}
 .map-caption{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--green-dark,#003d0f);margin-left:auto;}
@@ -99,7 +104,7 @@ body.theme-tesla-light .map-slider{accent-color:#111;}
 body.theme-tesla-light .map-play-btn{font-family:'Roboto',sans-serif;border:1.5px solid #d0d2d4;border-radius:50%;color:#555;width:28px;height:28px;}
 body.theme-tesla-light .map-play-btn.playing{border-color:#cc3333;color:#cc3333;}
 body.theme-tesla-light .map-utils-row{border-top-color:#eee;}
-body.theme-tesla-light .map-util-btn{font-family:'Roboto',sans-serif;font-size:11px;border:1.5px solid #d0d2d4;border-radius:20px;background:#f7f7f7;color:#555;padding:3px 10px;}
+body.theme-tesla-light .map-util-btn{font-family:'Roboto',sans-serif;font-size:11px;border:1.5px solid #d0d2d4;border-radius:20px;background:#f7f7f7;color:#555;padding:3px 10px;line-height:1.4;}
 body.theme-tesla-light .map-util-btn.on{border-color:#cc3333;color:#cc3333;background:rgba(204,51,51,.06);}
 body.theme-tesla-light .map-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#bbb;letter-spacing:0;}
 body.theme-tesla-light .map-zoom-btn{background:rgba(255,255,255,.96);border:0.5px solid #ddd;color:#333;border-radius:4px;}
@@ -122,7 +127,7 @@ body.theme-tesla-dark .map-slider{accent-color:#f0f0f0;}
 body.theme-tesla-dark .map-play-btn{font-family:'Roboto',sans-serif;border:1.5px solid #2a2a2a;border-radius:50%;color:#555;background:#1e1e1e;width:28px;height:28px;}
 body.theme-tesla-dark .map-play-btn.playing{border-color:#ff6666;color:#ff6666;}
 body.theme-tesla-dark .map-utils-row{border-top-color:#1a1a1a;}
-body.theme-tesla-dark .map-util-btn{font-family:'Roboto',sans-serif;font-size:11px;border:1.5px solid #2a2a2a;border-radius:20px;background:#1e1e1e;color:#555;padding:3px 10px;}
+body.theme-tesla-dark .map-util-btn{font-family:'Roboto',sans-serif;font-size:11px;border:1.5px solid #2a2a2a;border-radius:20px;background:#1e1e1e;color:#555;padding:3px 10px;line-height:1.4;}
 body.theme-tesla-dark .map-util-btn.on{border-color:#ff6666;color:#ff6666;background:rgba(204,51,51,.1);}
 body.theme-tesla-dark .map-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#333;letter-spacing:0;}
 body.theme-tesla-dark .map-zoom-btn{background:rgba(20,20,20,.94);border:0.5px solid #333;color:#aaa;border-radius:4px;}
@@ -200,27 +205,33 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
           <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
         </div>
 
-        <!-- Кнопки месяцев -->
-        <div class="map-month-row" id="month-row"></div>
+        <!-- Кнопки месяцев — горизонтальный скролл -->
+        <div class="map-scroll-wrap" style="margin-bottom:5px;">
+          <div class="month-filters map-hscroll" id="month-row"></div>
+          <div class="map-scroll-fade"></div>
+        </div>
 
-        <!-- Операторы — классы из CSS файлов -->
-        <div class="op-filters">
-          <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
-          <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
-          <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
-          <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
-          <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">Гродн. ЦСМС</button>
-          <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
-          <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
-          <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
-          <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
+        <!-- Операторы — горизонтальный скролл -->
+        <div class="map-scroll-wrap" style="margin-bottom:5px;">
+          <div class="op-filters map-hscroll">
+            <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
+            <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
+            <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
+            <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
+            <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
+            <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
+            <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
+            <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
+            <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
+          </div>
+          <div class="map-scroll-fade"></div>
         </div>
 
         <!-- Утилиты -->
         <div class="map-utils-row">
           <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
           <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
-          <button class="reset-btn" id="resetBtn" onclick="resetFilters()">&#x2715; СБРОСИТЬ</button>
+          <button class="map-util-btn map-reset-fade" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
           <span class="map-caption">На карте станции Беларуси 2026</span>
         </div>
 
@@ -330,7 +341,7 @@ function updateBadge(filtered){
 
 function updateResetBtn(){
   const has=activeOp!==null||activeType!==null||activeMonth!==null;
-  document.getElementById('resetBtn').classList.toggle('visible',has);
+  document.getElementById('resetBtn').style.display=has?'inline-block':'none';
 }
 
 map.on('moveend zoomend',()=>updateBadge(getFiltered()));
