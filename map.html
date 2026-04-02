@@ -8,7 +8,7 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://evrace.by/map.html">
 <meta property="og:title" content="Карта зарядных станций Беларуси 2026 — EV RACE">
-<meta property="og:description" content="Интерактивная карта зарядных станций Беларуси 2026. DC, AC, ACDC станции всех операторов.">
+<meta property="og:description" content="Интерактивная карта зарядных станций Беларуси 2026.">
 <meta property="og:image" content="https://evrace.by/og.png">
 <meta property="og:url" content="https://evrace.by/map.html">
 <meta property="og:type" content="website">
@@ -29,243 +29,116 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
 
 <style>
-html, body { height:100%; overflow:hidden; margin:0; padding:0; }
-.container { display:flex; flex-direction:column; height:100vh; height:100dvh; max-width:100% !important; padding:0 !important; }
-.page-wrap { display:flex; flex-direction:column; flex:1; min-height:0; padding:0 !important; position:relative; }
-#map { flex:1; min-height:0; width:100%; z-index:1; }
+html,body{height:100%;overflow:hidden;margin:0;padding:0;}
+.container{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:100%!important;padding:0!important;}
+.page-wrap{display:flex;flex-direction:column;flex:1;min-height:0;padding:0!important;position:relative;}
+#map{flex:1;min-height:0;width:100%;z-index:1;}
 
-/* ── FLOATING ── */
-.map-top, .map-bottom { position:absolute; left:0; right:0; z-index:400; pointer-events:none; }
-.map-top { top:0; }
-.map-bottom { bottom:0; }
-.map-top > *, .map-bottom > * { pointer-events:auto; }
+.map-top,.map-bottom{position:absolute;left:0;right:0;z-index:400;pointer-events:none;}
+.map-top{top:0;}.map-bottom{bottom:0;}
+.map-top>*,.map-bottom>*{pointer-events:auto;}
 
-/* ── ВЕРХНЯЯ ПАНЕЛЬ ── */
-.map-top-bar {
-  margin:8px 8px 0; display:flex; align-items:center; gap:5px; flex-wrap:wrap;
-  padding:5px 8px; background:rgba(10,10,10,0.88);
-  border:1px solid var(--green-dark,#003d0f);
-}
+/* Верхняя панель */
+.map-top-bar{margin:8px 8px 0;display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:5px 8px;background:rgba(10,10,10,0.88);border:1px solid var(--green-dark,#003d0f);}
+.map-badge{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--green,#00ff41);white-space:nowrap;flex-shrink:0;}
 
-/* Arcade типы */
-.map-type-btn {
-  font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:1px;
-  padding:4px 8px; border:1px solid var(--green-dark,#003d0f);
-  background:transparent; color:var(--green-dark,#003d0f);
-  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent;
-}
-.map-type-btn.on { background:var(--green-dark,#003d0f); border-color:var(--green-dim,#00aa2b); color:var(--green,#00ff41); }
+/* Зум */
+.map-zoom{position:absolute;right:8px;top:50px;display:flex;flex-direction:column;gap:3px;z-index:400;}
+.map-zoom-btn{width:24px;height:24px;border:1px solid var(--green-dim,#00aa2b);background:rgba(10,10,10,0.88);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
+.map-zoom-btn:hover{background:var(--green-dark,#003d0f);}
 
-/* Бейдж */
-.map-badge {
-  margin-left:auto; font-family:'Share Tech Mono',monospace;
-  font-size:8px; letter-spacing:1px; color:var(--green,#00ff41);
-  white-space:nowrap; flex-shrink:0;
-}
-
-/* ── МЕСЯЧНЫЕ КНОПКИ ── */
-.map-month-row {
-  display:flex; gap:4px; flex-wrap:wrap; margin-bottom:5px;
-}
-.map-month-btn {
-  font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:1px;
-  padding:3px 7px; border:1px solid var(--green-dark,#003d0f);
-  background:transparent; color:var(--green-dim,#00aa2b);
-  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
-}
-.map-month-btn.on { background:var(--green-dark,#003d0f); border-color:var(--green-dim,#00aa2b); color:var(--green,#00ff41); }
-
-/* ── ЗУМ ── */
-.map-zoom { position:absolute; right:8px; top:50px; display:flex; flex-direction:column; gap:3px; z-index:400; }
-.map-zoom-btn {
-  width:24px; height:24px; border:1px solid var(--green-dim,#00aa2b);
-  background:rgba(10,10,10,0.88); color:var(--green,#00ff41);
-  font-family:'Share Tech Mono',monospace; font-size:14px;
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
-  -webkit-tap-highlight-color:transparent;
-}
-.map-zoom-btn:hover { background:var(--green-dark,#003d0f); }
-
-/* ── НИЖНЯЯ ПАНЕЛЬ ── */
-.map-bottom-bar {
-  margin:0 8px calc(8px + env(safe-area-inset-bottom,0px)) 8px;
-  padding:7px 8px 6px;
-  background:rgba(10,10,10,0.92);
-  border:1px solid var(--green-dark,#003d0f);
-}
+/* Нижняя панель */
+.map-bottom-bar{margin:0 8px calc(8px + env(safe-area-inset-bottom,0px)) 8px;padding:7px 8px 6px;background:rgba(10,10,10,0.92);border:1px solid var(--green-dark,#003d0f);}
 
 /* Слайдер */
-.map-slider-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
-.map-slider-label {
-  font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1px;
-  color:var(--green-dim,#00aa2b); white-space:nowrap; flex-shrink:0; min-width:28px;
-}
-.map-slider { flex:1; height:3px; cursor:pointer; accent-color:var(--green,#00ff41); }
-.map-play-btn {
-  font-family:'Share Tech Mono',monospace; font-size:9px;
-  width:24px; height:24px; border:1px solid var(--green-dim,#00aa2b);
-  background:transparent; color:var(--green-dim,#00aa2b);
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
-  flex-shrink:0; -webkit-tap-highlight-color:transparent;
-}
-.map-play-btn:hover { background:var(--green-dark,#003d0f); color:var(--green,#00ff41); }
-.map-play-btn.playing { border-color:#ff4444; color:#ff4444; }
+.map-slider-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.map-slider-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--green-dim,#00aa2b);white-space:nowrap;flex-shrink:0;min-width:28px;}
+.map-slider{flex:1;height:3px;cursor:pointer;accent-color:var(--green,#00ff41);}
+.map-play-btn{font-family:'Share Tech Mono',monospace;font-size:9px;width:24px;height:24px;border:1px solid var(--green-dim,#00aa2b);background:transparent;color:var(--green-dim,#00aa2b);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+.map-play-btn:hover{background:var(--green-dark,#003d0f);color:var(--green,#00ff41);}
+.map-play-btn.playing{border-color:#ff4444;color:#ff4444;}
 
-/* Операторы — радиокнопка */
-.map-ops-row { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:5px; }
-.map-op-btn {
-  font-family:'Share Tech Mono',monospace; font-size:8px;
-  padding:3px 7px; border:1px solid #1a1a1a;
-  background:transparent; color:#333;
-  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
-}
-.map-op-btn.on { border-color:transparent; }
+/* Месяцы — используем month-btn из CSS файлов */
+.map-month-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px;}
 
-/* Нижняя строка утилит */
-.map-utils-row {
-  display:flex; gap:4px; align-items:center; flex-wrap:wrap;
-  padding-top:5px; border-top:1px solid var(--green-dark,#003d0f);
-  margin-top:2px;
-}
-.map-util-btn {
-  font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1px;
-  padding:3px 8px; border:1px solid var(--green-dark,#003d0f);
-  background:transparent; color:var(--green-dim,#00aa2b);
-  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
-}
-.map-util-btn:hover { background:var(--green-dark,#003d0f); color:var(--green,#00ff41); }
-.map-util-btn.on { border-color:#ff4444; color:#ff4444; background:rgba(255,68,68,.08); }
+/* Утилиты */
+.map-utils-row{display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding-top:5px;border-top:1px solid var(--green-dark,#003d0f);margin-top:2px;}
+.map-util-btn{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;padding:3px 8px;border:1px solid var(--green-dark,#003d0f);background:transparent;color:var(--green-dim,#00aa2b);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
+.map-util-btn:hover{background:var(--green-dark,#003d0f);color:var(--green,#00ff41);}
+.map-util-btn.on{border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);}
+.map-caption{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--green-dark,#003d0f);margin-left:auto;}
 
-/* Сброс */
-.map-reset-btn {
-  font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1px;
-  padding:3px 10px; border:1px solid #ff4444; color:#ff4444;
-  background:rgba(255,68,68,.1); cursor:pointer; transition:all .15s;
-  -webkit-tap-highlight-color:transparent; white-space:nowrap; display:none;
-}
-.map-reset-btn.visible { display:inline-block; }
-.map-reset-btn:hover { background:rgba(255,68,68,.25); }
+/* Popup */
+.leaflet-popup-content-wrapper{background:var(--card-bg,#0d1f0d)!important;border:1px solid var(--green-dim,#00aa2b)!important;border-radius:0!important;box-shadow:none!important;padding:0!important;}
+.leaflet-popup-content{margin:0!important;}
+.leaflet-popup-tip-container{display:none!important;}
+.leaflet-popup-close-button{color:var(--green-dim,#00aa2b)!important;font-size:18px!important;top:6px!important;right:8px!important;}
+.popup-wrap{padding:12px 14px;min-width:200px;max-width:280px;}
+.popup-op{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:bold;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid var(--green-dark,#003d0f);}
+.popup-station{margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #0a1a0a;}
+.popup-station:last-of-type{border-bottom:none;margin-bottom:0;}
+.popup-row{font-family:'Share Tech Mono',monospace;font-size:10px;color:#555;margin-bottom:3px;line-height:1.6;}
+.popup-row span{color:var(--green,#00ff41);}
+.popup-total{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--green-dim,#00aa2b);padding-top:6px;border-top:1px solid var(--green-dark,#003d0f);margin-top:4px;}
+.popup-route-btn{display:block;width:100%;margin-top:8px;padding:6px 0;font-size:9px;font-family:'Share Tech Mono',monospace;text-align:center;border:none;cursor:pointer;color:#fff;letter-spacing:1px;}
 
-/* Подпись */
-.map-caption {
-  font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:1px;
-  color:var(--green-dark,#003d0f); margin-left:auto;
-}
+/* Кластеры */
+.marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background-color:rgba(0,255,65,.1)!important;}
+.marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background-color:rgba(0,255,65,.25)!important;color:var(--green,#00ff41)!important;font-family:'Share Tech Mono',monospace!important;font-size:10px!important;}
 
-/* ── POPUP ── */
-.leaflet-popup-content-wrapper {
-  background:var(--card-bg,#0d1f0d) !important; border:1px solid var(--green-dim,#00aa2b) !important;
-  border-radius:0 !important; box-shadow:none !important; padding:0 !important;
-}
-.leaflet-popup-content { margin:0 !important; }
-.leaflet-popup-tip-container { display:none !important; }
-.leaflet-popup-close-button { color:var(--green-dim,#00aa2b) !important; font-size:18px !important; top:6px !important; right:8px !important; }
-.popup-wrap { padding:12px 14px; min-width:200px; max-width:280px; }
-.popup-op { font-family:'Share Tech Mono',monospace; font-size:11px; font-weight:bold; margin-bottom:8px; padding-bottom:7px; border-bottom:1px solid var(--green-dark,#003d0f); }
-.popup-station { margin-bottom:6px; padding-bottom:6px; border-bottom:1px solid #0a1a0a; }
-.popup-station:last-of-type { border-bottom:none; margin-bottom:0; }
-.popup-row { font-family:'Share Tech Mono',monospace; font-size:10px; color:#555; margin-bottom:3px; line-height:1.6; }
-.popup-row span { color:var(--green,#00ff41); }
-.popup-total { font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--green-dim,#00aa2b); padding-top:6px; border-top:1px solid var(--green-dark,#003d0f); margin-top:4px; }
-.popup-route-btn { display:block; width:100%; margin-top:8px; padding:6px 0; font-size:9px; font-family:'Share Tech Mono',monospace; text-align:center; border:none; cursor:pointer; color:#fff; letter-spacing:1px; }
+/* Гео */
+.geo-pulse{width:12px;height:12px;background:#00e5ff;border-radius:50%;border:2px solid #fff;animation:gpulse 1.5s infinite;}
+@keyframes gpulse{0%{box-shadow:0 0 0 0 rgba(0,229,255,.4);}70%{box-shadow:0 0 0 8px rgba(0,229,255,0);}100%{box-shadow:0 0 0 0 rgba(0,229,255,0);}}
 
-/* Кластеры Arcade */
-.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background-color:rgba(0,255,65,.1) !important; }
-.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
-  background-color:rgba(0,255,65,.25) !important; color:var(--green,#00ff41) !important;
-  font-family:'Share Tech Mono',monospace !important; font-size:10px !important;
-}
+/* Tesla Light */
+body.theme-tesla-light .map-top-bar{background:rgba(255,255,255,.96);border:0.5px solid #ddd;border-radius:10px;}
+body.theme-tesla-light .map-bottom-bar{background:rgba(255,255,255,.96);border:0.5px solid #ddd;border-radius:10px;}
+body.theme-tesla-light .map-badge{font-family:'Roboto',sans-serif;font-size:11px;color:#111;font-weight:500;}
+body.theme-tesla-light .map-slider-label{font-family:'Roboto',sans-serif;font-size:11px;color:#888;}
+body.theme-tesla-light .map-slider{accent-color:#111;}
+body.theme-tesla-light .map-play-btn{font-family:'Roboto',sans-serif;border:1.5px solid #d0d2d4;border-radius:50%;color:#555;width:28px;height:28px;}
+body.theme-tesla-light .map-play-btn.playing{border-color:#cc3333;color:#cc3333;}
+body.theme-tesla-light .map-utils-row{border-top-color:#eee;}
+body.theme-tesla-light .map-util-btn{font-family:'Roboto',sans-serif;font-size:11px;border:1.5px solid #d0d2d4;border-radius:20px;background:#f7f7f7;color:#555;padding:3px 10px;}
+body.theme-tesla-light .map-util-btn.on{border-color:#cc3333;color:#cc3333;background:rgba(204,51,51,.06);}
+body.theme-tesla-light .map-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#bbb;letter-spacing:0;}
+body.theme-tesla-light .map-zoom-btn{background:rgba(255,255,255,.96);border:0.5px solid #ddd;color:#333;border-radius:4px;}
+body.theme-tesla-light .leaflet-popup-content-wrapper{background:#fff!important;border:0.5px solid #ddd!important;border-radius:10px!important;}
+body.theme-tesla-light .popup-op{font-family:'Roboto',sans-serif;border-bottom-color:#eee;}
+body.theme-tesla-light .popup-station{border-bottom-color:#f0f0f0;}
+body.theme-tesla-light .popup-row{font-family:'Roboto',sans-serif;color:#888;}
+body.theme-tesla-light .popup-row span{color:#111;}
+body.theme-tesla-light .popup-total{font-family:'Roboto',sans-serif;color:#888;border-top-color:#eee;}
+body.theme-tesla-light .popup-route-btn{font-family:'Roboto',sans-serif;border-radius:20px;}
+body.theme-tesla-light .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background-color:rgba(0,120,212,.12)!important;}
+body.theme-tesla-light .marker-cluster-small div,body.theme-tesla-light .marker-cluster-medium div,body.theme-tesla-light .marker-cluster-large div{background-color:rgba(0,120,212,.25)!important;color:#0078d4!important;font-family:'Roboto',sans-serif!important;border-radius:50%!important;}
 
-/* Гео маркер */
-.geo-pulse { width:12px; height:12px; background:#00e5ff; border-radius:50%; border:2px solid #fff; animation:gpulse 1.5s infinite; }
-@keyframes gpulse { 0%{box-shadow:0 0 0 0 rgba(0,229,255,.4);} 70%{box-shadow:0 0 0 8px rgba(0,229,255,0);} 100%{box-shadow:0 0 0 0 rgba(0,229,255,0);} }
+/* Tesla Dark */
+body.theme-tesla-dark .map-top-bar{background:rgba(20,20,20,.94);border:0.5px solid #2a2a2a;border-radius:10px;}
+body.theme-tesla-dark .map-bottom-bar{background:rgba(20,20,20,.94);border:0.5px solid #2a2a2a;border-radius:10px;}
+body.theme-tesla-dark .map-badge{font-family:'Roboto',sans-serif;font-size:11px;color:#f0f0f0;font-weight:500;}
+body.theme-tesla-dark .map-slider-label{font-family:'Roboto',sans-serif;font-size:11px;color:#555;}
+body.theme-tesla-dark .map-slider{accent-color:#f0f0f0;}
+body.theme-tesla-dark .map-play-btn{font-family:'Roboto',sans-serif;border:1.5px solid #2a2a2a;border-radius:50%;color:#555;background:#1e1e1e;width:28px;height:28px;}
+body.theme-tesla-dark .map-play-btn.playing{border-color:#ff6666;color:#ff6666;}
+body.theme-tesla-dark .map-utils-row{border-top-color:#1a1a1a;}
+body.theme-tesla-dark .map-util-btn{font-family:'Roboto',sans-serif;font-size:11px;border:1.5px solid #2a2a2a;border-radius:20px;background:#1e1e1e;color:#555;padding:3px 10px;}
+body.theme-tesla-dark .map-util-btn.on{border-color:#ff6666;color:#ff6666;background:rgba(204,51,51,.1);}
+body.theme-tesla-dark .map-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#333;letter-spacing:0;}
+body.theme-tesla-dark .map-zoom-btn{background:rgba(20,20,20,.94);border:0.5px solid #333;color:#aaa;border-radius:4px;}
+body.theme-tesla-dark .leaflet-popup-content-wrapper{background:#1e1e1e!important;border:0.5px solid #2a2a2a!important;border-radius:10px!important;}
+body.theme-tesla-dark .popup-op{font-family:'Roboto',sans-serif;border-bottom-color:#2a2a2a;}
+body.theme-tesla-dark .popup-station{border-bottom-color:#222;}
+body.theme-tesla-dark .popup-row{font-family:'Roboto',sans-serif;color:#555;}
+body.theme-tesla-dark .popup-row span{color:#f0f0f0;}
+body.theme-tesla-dark .popup-total{font-family:'Roboto',sans-serif;color:#555;border-top-color:#2a2a2a;}
+body.theme-tesla-dark .popup-route-btn{font-family:'Roboto',sans-serif;border-radius:20px;}
+body.theme-tesla-dark .marker-cluster-small,body.theme-tesla-dark .marker-cluster-medium,body.theme-tesla-dark .marker-cluster-large{background-color:rgba(0,188,212,.12)!important;}
+body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cluster-medium div,body.theme-tesla-dark .marker-cluster-large div{background-color:rgba(0,188,212,.25)!important;color:#00bcd4!important;font-family:'Roboto',sans-serif!important;border-radius:50%!important;}
 
-/* ── TESLA LIGHT ── */
-body.theme-tesla-light .map-top-bar { background:rgba(255,255,255,.96); border:0.5px solid #ddd; border-radius:10px; }
-body.theme-tesla-light .map-bottom-bar { background:rgba(255,255,255,.96); border:0.5px solid #ddd; border-radius:10px; }
-body.theme-tesla-light .map-type-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:4px 10px; }
-body.theme-tesla-light .map-type-btn.on { background:#111; color:#fff; border-color:#111; }
-body.theme-tesla-light .map-badge { font-family:'Roboto',sans-serif; font-size:11px; color:#111; font-weight:500; }
-body.theme-tesla-light .map-month-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:4px 10px; }
-body.theme-tesla-light .map-month-btn.on { background:#111; color:#fff; border-color:#111; }
-body.theme-tesla-light .map-slider-label { font-family:'Roboto',sans-serif; font-size:11px; color:#888; }
-body.theme-tesla-light .map-slider { accent-color:#111; }
-body.theme-tesla-light .map-play-btn { font-family:'Roboto',sans-serif; border:1.5px solid #d0d2d4; border-radius:50%; color:#555; width:28px; height:28px; }
-body.theme-tesla-light .map-play-btn.playing { border-color:#cc3333; color:#cc3333; }
-body.theme-tesla-light .map-op-btn { font-family:'Roboto',sans-serif; font-size:11px; border-radius:20px; border:1.5px solid #d0d2d4; background:#f7f7f7; color:#555; padding:4px 10px; display:inline-flex; align-items:center; gap:5px; }
-body.theme-tesla-light .map-op-btn::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#bbb; transition:background .15s; flex-shrink:0; }
-body.theme-tesla-light .map-op-btn.op-bf.on{color:#005EEB;border-color:rgba(0,94,235,.4);background:rgba(0,94,235,.05);}body.theme-tesla-light .map-op-btn.op-bf.on::before{background:#005EEB;}
-body.theme-tesla-light .map-op-btn.op-fo.on{color:#b44fff;border-color:rgba(180,79,255,.4);background:rgba(180,79,255,.05);}body.theme-tesla-light .map-op-btn.op-fo.on::before{background:#b44fff;}
-body.theme-tesla-light .map-op-btn.op-za.on{color:#00aacc;border-color:rgba(0,207,255,.4);background:rgba(0,207,255,.05);}body.theme-tesla-light .map-op-btn.op-za.on::before{background:#00aacc;}
-body.theme-tesla-light .map-op-btn.op-uc.on{color:#F5821F;border-color:rgba(245,130,31,.4);background:rgba(245,130,31,.05);}body.theme-tesla-light .map-op-btn.op-uc.on::before{background:#F5821F;}
-body.theme-tesla-light .map-op-btn.op-cs.on{color:#FF6B6B;border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.05);}body.theme-tesla-light .map-op-btn.op-cs.on::before{background:#FF6B6B;}
-body.theme-tesla-light .map-op-btn.op-ma.on{color:#5aaa59;border-color:rgba(118,210,117,.4);background:rgba(118,210,117,.05);}body.theme-tesla-light .map-op-btn.op-ma.on::before{background:#76d275;}
-body.theme-tesla-light .map-op-btn.op-ev.on{color:#832af5;border-color:rgba(131,42,245,.4);background:rgba(131,42,245,.05);}body.theme-tesla-light .map-op-btn.op-ev.on::before{background:#832af5;}
-body.theme-tesla-light .map-op-btn.op-or.on{color:#FF6B00;border-color:rgba(255,107,0,.4);background:rgba(255,107,0,.05);}body.theme-tesla-light .map-op-btn.op-or.on::before{background:#FF6B00;}
-body.theme-tesla-light .map-op-btn.op-pr.on{color:#24c3d3;border-color:rgba(36,195,211,.4);background:rgba(36,195,211,.05);}body.theme-tesla-light .map-op-btn.op-pr.on::before{background:#24c3d3;}
-body.theme-tesla-light .map-utils-row { border-top-color:#eee; }
-body.theme-tesla-light .map-util-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:3px 10px; }
-body.theme-tesla-light .map-util-btn.on { border-color:#cc3333; color:#cc3333; background:rgba(204,51,51,.06); }
-body.theme-tesla-light .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #cc3333; color:#cc3333; background:rgba(204,51,51,.06); border-radius:20px; padding:3px 12px; }
-body.theme-tesla-light .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#bbb; letter-spacing:0; }
-body.theme-tesla-light .map-zoom-btn { background:rgba(255,255,255,.96); border:0.5px solid #ddd; color:#333; border-radius:4px; }
-body.theme-tesla-light .leaflet-popup-content-wrapper { background:#fff !important; border:0.5px solid #ddd !important; border-radius:10px !important; }
-body.theme-tesla-light .popup-op { font-family:'Roboto',sans-serif; border-bottom-color:#eee; }
-body.theme-tesla-light .popup-station { border-bottom-color:#f0f0f0; }
-body.theme-tesla-light .popup-row { font-family:'Roboto',sans-serif; color:#888; }
-body.theme-tesla-light .popup-row span { color:#111; }
-body.theme-tesla-light .popup-total { font-family:'Roboto',sans-serif; color:#888; border-top-color:#eee; }
-body.theme-tesla-light .popup-route-btn { font-family:'Roboto',sans-serif; border-radius:20px; }
-body.theme-tesla-light .marker-cluster-small, body.theme-tesla-light .marker-cluster-medium, body.theme-tesla-light .marker-cluster-large { background-color:rgba(0,120,212,.12) !important; }
-body.theme-tesla-light .marker-cluster-small div, body.theme-tesla-light .marker-cluster-medium div, body.theme-tesla-light .marker-cluster-large div { background-color:rgba(0,120,212,.25) !important; color:#0078d4 !important; font-family:'Roboto',sans-serif !important; border-radius:50% !important; }
-
-/* ── TESLA DARK ── */
-body.theme-tesla-dark .map-top-bar { background:rgba(20,20,20,.94); border:0.5px solid #2a2a2a; border-radius:10px; }
-body.theme-tesla-dark .map-bottom-bar { background:rgba(20,20,20,.94); border:0.5px solid #2a2a2a; border-radius:10px; }
-body.theme-tesla-dark .map-type-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:4px 10px; }
-body.theme-tesla-dark .map-type-btn.on { background:#2a2a2a; color:#f0f0f0; border-color:#444; }
-body.theme-tesla-dark .map-badge { font-family:'Roboto',sans-serif; font-size:11px; color:#f0f0f0; font-weight:500; }
-body.theme-tesla-dark .map-month-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:4px 10px; }
-body.theme-tesla-dark .map-month-btn.on { background:#2a2a2a; color:#f0f0f0; border-color:#444; }
-body.theme-tesla-dark .map-slider-label { font-family:'Roboto',sans-serif; font-size:11px; color:#555; }
-body.theme-tesla-dark .map-slider { accent-color:#f0f0f0; }
-body.theme-tesla-dark .map-play-btn { font-family:'Roboto',sans-serif; border:1.5px solid #2a2a2a; border-radius:50%; color:#555; background:#1e1e1e; width:28px; height:28px; }
-body.theme-tesla-dark .map-play-btn.playing { border-color:#ff6666; color:#ff6666; }
-body.theme-tesla-dark .map-op-btn { font-family:'Roboto',sans-serif; font-size:11px; border-radius:20px; border:1.5px solid #2a2a2a; background:#1e1e1e; color:#555; padding:4px 10px; display:inline-flex; align-items:center; gap:5px; }
-body.theme-tesla-dark .map-op-btn::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#444; transition:background .15s; flex-shrink:0; }
-body.theme-tesla-dark .map-op-btn.op-bf.on{color:#4d8fff;border-color:rgba(0,94,235,.5);background:rgba(0,94,235,.1);}body.theme-tesla-dark .map-op-btn.op-bf.on::before{background:#4d8fff;}
-body.theme-tesla-dark .map-op-btn.op-fo.on{color:#cc88ff;border-color:rgba(180,79,255,.5);background:rgba(180,79,255,.1);}body.theme-tesla-dark .map-op-btn.op-fo.on::before{background:#cc88ff;}
-body.theme-tesla-dark .map-op-btn.op-za.on{color:#66ddff;border-color:rgba(0,207,255,.5);background:rgba(0,207,255,.1);}body.theme-tesla-dark .map-op-btn.op-za.on::before{background:#66ddff;}
-body.theme-tesla-dark .map-op-btn.op-uc.on{color:#ffaa55;border-color:rgba(245,130,31,.5);background:rgba(245,130,31,.1);}body.theme-tesla-dark .map-op-btn.op-uc.on::before{background:#ffaa55;}
-body.theme-tesla-dark .map-op-btn.op-cs.on{color:#ff9999;border-color:rgba(255,107,107,.5);background:rgba(255,107,107,.1);}body.theme-tesla-dark .map-op-btn.op-cs.on::before{background:#ff9999;}
-body.theme-tesla-dark .map-op-btn.op-ma.on{color:#76d275;border-color:rgba(118,210,117,.5);background:rgba(118,210,117,.1);}body.theme-tesla-dark .map-op-btn.op-ma.on::before{background:#76d275;}
-body.theme-tesla-dark .map-op-btn.op-ev.on{color:#b066ff;border-color:rgba(131,42,245,.5);background:rgba(131,42,245,.1);}body.theme-tesla-dark .map-op-btn.op-ev.on::before{background:#b066ff;}
-body.theme-tesla-dark .map-op-btn.op-or.on{color:#ff8833;border-color:rgba(255,107,0,.5);background:rgba(255,107,0,.1);}body.theme-tesla-dark .map-op-btn.op-or.on::before{background:#ff8833;}
-body.theme-tesla-dark .map-op-btn.op-pr.on{color:#24c3d3;border-color:rgba(36,195,211,.5);background:rgba(36,195,211,.1);}body.theme-tesla-dark .map-op-btn.op-pr.on::before{background:#24c3d3;}
-body.theme-tesla-dark .map-utils-row { border-top-color:#1a1a1a; }
-body.theme-tesla-dark .map-util-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:3px 10px; }
-body.theme-tesla-dark .map-util-btn.on { border-color:#ff6666; color:#ff6666; background:rgba(204,51,51,.1); }
-body.theme-tesla-dark .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #cc3333; color:#ff6666; background:rgba(204,51,51,.1); border-radius:20px; padding:3px 12px; }
-body.theme-tesla-dark .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#333; letter-spacing:0; }
-body.theme-tesla-dark .map-zoom-btn { background:rgba(20,20,20,.94); border:0.5px solid #333; color:#aaa; border-radius:4px; }
-body.theme-tesla-dark .leaflet-popup-content-wrapper { background:#1e1e1e !important; border:0.5px solid #2a2a2a !important; border-radius:10px !important; }
-body.theme-tesla-dark .popup-op { font-family:'Roboto',sans-serif; border-bottom-color:#2a2a2a; }
-body.theme-tesla-dark .popup-station { border-bottom-color:#222; }
-body.theme-tesla-dark .popup-row { font-family:'Roboto',sans-serif; color:#555; }
-body.theme-tesla-dark .popup-row span { color:#f0f0f0; }
-body.theme-tesla-dark .popup-total { font-family:'Roboto',sans-serif; color:#555; border-top-color:#2a2a2a; }
-body.theme-tesla-dark .popup-route-btn { font-family:'Roboto',sans-serif; border-radius:20px; }
-body.theme-tesla-dark .marker-cluster-small, body.theme-tesla-dark .marker-cluster-medium, body.theme-tesla-dark .marker-cluster-large { background-color:rgba(0,188,212,.12) !important; }
-body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-cluster-medium div, body.theme-tesla-dark .marker-cluster-large div { background-color:rgba(0,188,212,.25) !important; color:#00bcd4 !important; font-family:'Roboto',sans-serif !important; border-radius:50% !important; }
-
-@media(max-width:600px) {
-  .map-top-bar { gap:4px; padding:4px 6px; margin:6px 6px 0; }
-  .map-bottom-bar { margin:0 6px calc(6px + env(safe-area-inset-bottom,0px)) 6px; padding:6px; }
-  .map-type-btn { font-size:8px; padding:3px 6px; }
-  body.theme-tesla-light .map-type-btn, body.theme-tesla-dark .map-type-btn { font-size:10px; padding:3px 8px; }
-  body.theme-tesla-light .map-op-btn, body.theme-tesla-dark .map-op-btn { font-size:10px; padding:3px 8px; }
-  body.theme-tesla-light .map-util-btn, body.theme-tesla-dark .map-util-btn { font-size:10px; padding:3px 8px; }
-  body.theme-tesla-light .map-month-btn, body.theme-tesla-dark .map-month-btn { font-size:10px; padding:3px 8px; }
+@media(max-width:600px){
+  .map-top-bar{gap:4px;padding:4px 6px;margin:6px 6px 0;}
+  .map-bottom-bar{margin:0 6px calc(6px + env(safe-area-inset-bottom,0px)) 6px;padding:6px;}
 }
 </style>
 </head>
@@ -279,8 +152,8 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
     <div class="nav-desktop">
       <a class="nav-link" href="/">ГЛАВНАЯ</a>
       <a class="nav-link" href="https://evrace.by/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
-      <a class="nav-link active" href="#">КАРТА</a>
       <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+      <a class="nav-link active" href="#">КАРТА</a>
     </div>
     <div class="theme-seg">
       <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡</button>
@@ -292,19 +165,19 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
   <div class="nav-mobile-drop" id="mobileMenu">
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
     <a class="nav-mobile-link" href="https://evrace.by/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
-    <a class="nav-mobile-link active" href="#" onclick="closeBurger()">КАРТА</a>
     <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
+    <a class="nav-mobile-link active" href="#" onclick="closeBurger()">КАРТА</a>
   </div>
 
   <div class="page-wrap">
     <div id="map"></div>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ: тип DC/AC/ACDC -->
     <div class="map-top">
       <div class="map-top-bar">
-        <button class="map-type-btn on" data-type="DC"   onclick="toggleType(this)">DC</button>
-        <button class="map-type-btn on" data-type="AC"   onclick="toggleType(this)">AC</button>
-        <button class="map-type-btn on" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
+        <button class="op-filter-btn" data-type="DC"   onclick="toggleType(this)">DC</button>
+        <button class="op-filter-btn" data-type="AC"   onclick="toggleType(this)">AC</button>
+        <button class="op-filter-btn" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
         <span class="map-badge" id="map-badge">...</span>
       </div>
     </div>
@@ -319,7 +192,7 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
     <div class="map-bottom">
       <div class="map-bottom-bar">
 
-        <!-- Слайдер -->
+        <!-- Слайдер времени -->
         <div class="map-slider-row">
           <span class="map-slider-label" id="slider-label">ЯНВ</span>
           <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value)">
@@ -327,27 +200,27 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
           <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
         </div>
 
-        <!-- Месяцы -->
+        <!-- Кнопки месяцев -->
         <div class="map-month-row" id="month-row"></div>
 
-        <!-- Операторы -->
-        <div class="map-ops-row">
-          <button class="map-op-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
-          <button class="map-op-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
-          <button class="map-op-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
-          <button class="map-op-btn op-uc" data-op="united"     onclick="toggleOp(this)">United</button>
-          <button class="map-op-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
-          <button class="map-op-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
-          <button class="map-op-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
-          <button class="map-op-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
-          <button class="map-op-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
+        <!-- Операторы — классы из CSS файлов -->
+        <div class="op-filters">
+          <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
+          <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
+          <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
+          <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
+          <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">Гродн. ЦСМС</button>
+          <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
+          <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
+          <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
+          <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
         </div>
 
         <!-- Утилиты -->
         <div class="map-utils-row">
-          <button class="map-util-btn" onclick="locateMe()">ГДЕ Я</button>
+          <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
           <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
-          <button class="map-reset-btn" id="resetBtn" onclick="resetFilters()">&#x2715; СБРОСИТЬ</button>
+          <button class="reset-btn" id="resetBtn" onclick="resetFilters()">&#x2715; СБРОСИТЬ</button>
           <span class="map-caption">На карте станции Беларуси 2026</span>
         </div>
 
@@ -362,39 +235,26 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
 <script>
 const SURL='https://uvrboxrddqlasgrnnnne.supabase.co';
 const SKEY='sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
-
 const OP_COLORS={batteryfly:'#005EEB',forevo:'#b44fff',zaryadka:'#00cfff',united:'#F5821F',csms:'#FF6B6B',malanka:'#76d275',evika:'#832af5',orange:'#FF6B00',prizma:'#24c3d3'};
 const OP_NAMES={batteryfly:'BatteryFly',forevo:'forEVo',zaryadka:'Zaryadka',united:'United Company',csms:'Гродн. ЦСМС',malanka:'Malanka',evika:'Evika!',orange:'Orange',prizma:'Prizma'};
-const OP_DARK=['zaryadka','malanka','prizma'];
 const TILES={'arcade':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png','tesla-light':'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png','tesla-dark':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'};
 const MONTH_NAMES=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
 
-// Слайдер по неделям до текущего месяца
 const NOW=new Date();
-const CUR_MONTH=NOW.getMonth(); // апрель = 3
+const CUR_MONTH=NOW.getMonth();
 const TOTAL_WEEKS=(CUR_MONTH+1)*4;
 
-function weekToDate(week){
-  const month=Math.floor(week/4);
-  const weekInMonth=week%4;
-  const day=weekInMonth*7+1;
-  return new Date(2026,month,Math.min(day,28));
-}
-function weekLabel(week){ return MONTH_NAMES[Math.min(Math.floor(week/4),11)]; }
-function monthToWeek(m){ return m*4+3; } // конец месяца = последняя неделя
+function weekToDate(w){const m=Math.floor(w/4);const d=(w%4)*7+1;return new Date(2026,m,Math.min(d,28));}
+function weekLabel(w){return MONTH_NAMES[Math.min(Math.floor(w/4),11)];}
+function monthToWeek(m){return m*4+3;}
 
-// Состояние
 let allStations=[],sliderWeek=TOTAL_WEEKS-1,heatMode=false,playInterval=null,geoMarker=null,heatLayer=null;
-let activeOp=null; // радиокнопка — один оператор или null
-let activeMonth=null; // выбранный месяц или null
-const activeTypes=new Set(['DC','AC','ACDC']);
+let activeOp=null,activeType=null,activeMonth=null;
 
-// Инит слайдера
 document.getElementById('time-slider').max=TOTAL_WEEKS-1;
 document.getElementById('time-slider').value=TOTAL_WEEKS-1;
 document.getElementById('slider-label-end').textContent=MONTH_NAMES[CUR_MONTH];
 
-// Карта
 const map=L.map('map',{center:[53.7,28.0],zoom:7,zoomControl:false,scrollWheelZoom:true});
 let tileLayer=L.tileLayer(TILES['arcade'],{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',maxZoom:19}).addTo(map);
 const clusterGroup=L.markerClusterGroup({maxClusterRadius:50,spiderfyOnMaxZoom:true,showCoverageOnHover:false,zoomToBoundsOnClick:true});
@@ -408,19 +268,14 @@ function makeIcon(color){
 const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 function buildRoute(lat,lng,name){
-  if(/iPad|iPhone|iPod/.test(navigator.userAgent)) window.open(`maps://maps.apple.com/?daddr=${lat},${lng}`);
+  if(/iPad|iPhone|iPod/.test(navigator.userAgent))window.open(`maps://maps.apple.com/?daddr=${lat},${lng}`);
   else window.open(`geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(name)})`);
 }
 
-// Группировка по координатам
 function groupByCoords(stations){
-  const groups={};
-  stations.forEach(s=>{
-    const key=`${s.lat.toFixed(5)},${s.lng.toFixed(5)}`;
-    if(!groups[key]) groups[key]=[];
-    groups[key].push(s);
-  });
-  return groups;
+  const g={};
+  stations.forEach(s=>{const k=`${s.lat.toFixed(5)},${s.lng.toFixed(5)}`;if(!g[k])g[k]=[];g[k].push(s);});
+  return g;
 }
 
 function makePopup(stations){
@@ -428,32 +283,34 @@ function makePopup(stations){
   const color=OP_COLORS[first.operator]||'#00ff41';
   const opName=OP_NAMES[first.operator]||first.operator;
   const addr=[first.city,first.address].filter(Boolean).join(', ');
-  let stationsHtml='',totalDC=0,totalAC=0;
+  let html='',totalDC=0,totalAC=0,totalCount=0;
   stations.forEach(s=>{
-    const dc=s.dc_power?`DC ${s.dc_power} кВт`:'';
-    const ac=s.ac_power?`AC ${s.ac_power} кВт`:'';
+    const cnt=s.count||1;
+    totalCount+=cnt;
+    const dc=s.dc_power?`DC ${s.dc_power} кВт${cnt>1?` ×${cnt}`:''}`:'' ;
+    const ac=s.ac_power?`AC ${s.ac_power} кВт${cnt>1?` ×${cnt}`:''}`:'' ;
     const pwr=[dc,ac].filter(Boolean).join(' · ')||'—';
     const guns=[s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' · ')||'—';
     const date=s.station_date?s.station_date.slice(0,10).split('-').reverse().join('.'):'';
-    if(s.dc_power) totalDC+=s.dc_power;
-    if(s.ac_power) totalAC+=s.ac_power;
-    stationsHtml+=`<div class="popup-station"><div class="popup-row">&#x26A1; <span>${pwr}</span></div><div class="popup-row">&#x1F50C; <span>${guns}</span></div>${date?`<div class="popup-row">&#x1F4C5; <span>${date}</span></div>`:''}</div>`;
+    if(s.dc_power)totalDC+=s.dc_power*cnt;
+    if(s.ac_power)totalAC+=s.ac_power*cnt;
+    html+=`<div class="popup-station"><div class="popup-row">&#x26A1; <span>${pwr}</span></div><div class="popup-row">&#x1F50C; <span>${guns}</span></div>${date?`<div class="popup-row">&#x1F4C5; <span>${date}</span></div>`:''}</div>`;
   });
   const totalPwr=[];
-  if(totalDC) totalPwr.push(`DC ${totalDC} кВт`);
-  if(totalAC) totalPwr.push(`AC ${totalAC} кВт`);
-  const totalStr=stations.length>1?`<div class="popup-total">&#x2211; ${stations.length} станции · ${totalPwr.join(' · ')}</div>`:'';
+  if(totalDC)totalPwr.push(`DC ${totalDC} кВт`);
+  if(totalAC)totalPwr.push(`AC ${totalAC} кВт`);
+  const totalStr=totalCount>1?`<div class="popup-total">&#x2211; ${totalCount} станции · ${totalPwr.join(' · ')}</div>`:'';
   const btn=isMobile?`<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${first.lat},${first.lng},'${opName.replace(/'/g,"\\'")}')">&#x25BA; МАРШРУТ</button>`:'';
-  return `<div class="popup-wrap"><div class="popup-op" style="color:${color}">${opName}</div><div class="popup-row">&#x1F4CD; <span>${addr}</span></div>${stationsHtml}${totalStr}${btn}</div>`;
+  return `<div class="popup-wrap"><div class="popup-op" style="color:${color}">${opName}</div><div class="popup-row">&#x1F4CD; <span>${addr}</span></div>${html}${totalStr}${btn}</div>`;
 }
 
 function getFiltered(){
   const cutoff=weekToDate(sliderWeek);
   return allStations.filter(s=>{
-    if(!s.lat||!s.lng) return false;
-    if(activeOp && s.operator!==activeOp) return false;
-    if(!activeTypes.has(s.station_type)) return false;
-    if(s.station_date&&new Date(s.station_date)>cutoff) return false;
+    if(!s.lat||!s.lng)return false;
+    if(activeOp&&s.operator!==activeOp)return false;
+    if(activeType&&s.station_type!==activeType)return false;
+    if(s.station_date&&new Date(s.station_date)>cutoff)return false;
     return true;
   });
 }
@@ -465,15 +322,15 @@ function updateBadge(filtered){
   const ac=vis.filter(s=>s.station_type==='AC').length;
   const acdc=vis.filter(s=>s.station_type==='ACDC').length;
   const parts=[];
-  if(dc) parts.push(`DC:${dc}`);
-  if(ac) parts.push(`AC:${ac}`);
-  if(acdc) parts.push(`ACDC:${acdc}`);
+  if(dc)parts.push(`DC:${dc}`);
+  if(ac)parts.push(`AC:${ac}`);
+  if(acdc)parts.push(`ACDC:${acdc}`);
   document.getElementById('map-badge').textContent=parts.join(' · ')||'0';
 }
 
 function updateResetBtn(){
-  const hasFilter=activeOp!==null||activeMonth!==null||!activeTypes.has('DC')||!activeTypes.has('AC')||!activeTypes.has('ACDC');
-  document.getElementById('resetBtn').classList.toggle('visible',hasFilter);
+  const has=activeOp!==null||activeType!==null||activeMonth!==null;
+  document.getElementById('resetBtn').classList.toggle('visible',has);
 }
 
 map.on('moveend zoomend',()=>updateBadge(getFiltered()));
@@ -483,14 +340,12 @@ function renderMarkers(){
   if(heatLayer){map.removeLayer(heatLayer);heatLayer=null;}
   const filtered=getFiltered();
   if(heatMode){
-    const pts=filtered.map(s=>[s.lat,s.lng,1]);
-    heatLayer=L.heatLayer(pts,{radius:25,blur:15,maxZoom:12}).addTo(map);
+    heatLayer=L.heatLayer(filtered.map(s=>[s.lat,s.lng,1]),{radius:25,blur:15,maxZoom:12}).addTo(map);
   } else {
     const groups=groupByCoords(filtered);
     Object.values(groups).forEach(group=>{
-      const first=group[0];
-      const color=OP_COLORS[first.operator]||'#00ff41';
-      const m=L.marker([first.lat,first.lng],{icon:makeIcon(color)});
+      const color=OP_COLORS[group[0].operator]||'#00ff41';
+      const m=L.marker([group[0].lat,group[0].lng],{icon:makeIcon(color)});
       m.bindPopup(makePopup(group),{maxWidth:300,minWidth:200});
       clusterGroup.addLayer(m);
     });
@@ -499,59 +354,47 @@ function renderMarkers(){
   updateResetBtn();
 }
 
-// ── ФИЛЬТР ОПЕРАТОРОВ — радиокнопка ──
-function toggleOp(btn){
-  const op=btn.dataset.op;
-  const theme=localStorage.getItem('ev_race_theme')||'arcade';
-  if(activeOp===op){
-    // повторный клик — сброс
-    activeOp=null;
-    btn.classList.remove('on');
-    if(theme==='arcade'){btn.style.background='transparent';btn.style.color='#333';btn.style.borderColor='#1a1a1a';}
-  } else {
-    // снимаем предыдущий
-    if(activeOp){
-      const prev=document.querySelector(`.map-op-btn[data-op="${activeOp}"]`);
-      if(prev){prev.classList.remove('on');if(theme==='arcade'){prev.style.background='transparent';prev.style.color='#333';prev.style.borderColor='#1a1a1a';}}
-    }
-    activeOp=op;
-    btn.classList.add('on');
-    if(theme==='arcade'){btn.style.background=OP_COLORS[op];btn.style.color=OP_DARK.includes(op)?'#003':'#fff';btn.style.borderColor=OP_COLORS[op];}
+// Тип — радиокнопка
+function toggleType(btn){
+  const t=btn.dataset.type;
+  if(activeType===t){activeType=null;btn.classList.remove('on');}
+  else{
+    if(activeType){const p=document.querySelector(`.op-filter-btn[data-type="${activeType}"]`);if(p)p.classList.remove('on');}
+    activeType=t;btn.classList.add('on');
   }
   renderMarkers();
 }
 
-// ── ФИЛЬТР ТИПА ──
-function toggleType(btn){
-  const t=btn.dataset.type;
-  if(activeTypes.has(t)){if(activeTypes.size===1) return; activeTypes.delete(t); btn.classList.remove('on');}
-  else {activeTypes.add(t); btn.classList.add('on');}
+// Оператор — радиокнопка
+function toggleOp(btn){
+  const op=btn.dataset.op;
+  if(activeOp===op){activeOp=null;btn.classList.remove('on');}
+  else{
+    if(activeOp){const p=document.querySelector(`.op-filter-btn[data-op="${activeOp}"]`);if(p)p.classList.remove('on');}
+    activeOp=op;btn.classList.add('on');
+  }
   renderMarkers();
 }
 
-// ── ТЕПЛО ──
 function toggleHeat(){
   heatMode=!heatMode;
   document.getElementById('heatBtn').classList.toggle('on',heatMode);
   renderMarkers();
 }
 
-// ── МЕСЯЦ ──
 function buildMonthButtons(){
   const row=document.getElementById('month-row');
-  // считаем станции по месяцам
   const counts={};
-  for(let m=0;m<=CUR_MONTH;m++) counts[m]=0;
+  for(let m=0;m<=CUR_MONTH;m++)counts[m]=0;
   allStations.forEach(s=>{
-    if(!s.station_date) return;
-    const d=new Date(s.station_date);
-    const m=d.getMonth();
-    if(m<=CUR_MONTH) counts[m]=(counts[m]||0)+1;
+    if(!s.station_date)return;
+    const m=new Date(s.station_date).getMonth();
+    if(m<=CUR_MONTH)counts[m]=(counts[m]||0)+(s.count||1);
   });
   row.innerHTML='';
   for(let m=0;m<=CUR_MONTH;m++){
     const btn=document.createElement('button');
-    btn.className='map-month-btn';
+    btn.className='month-btn';
     btn.dataset.month=m;
     btn.textContent=`${MONTH_NAMES[m]} | ${counts[m]||0}`;
     btn.onclick=()=>selectMonth(btn,m);
@@ -561,17 +404,14 @@ function buildMonthButtons(){
 
 function selectMonth(btn,m){
   if(activeMonth===m){
-    // сброс месяца
-    activeMonth=null;
-    btn.classList.remove('on');
+    activeMonth=null;btn.classList.remove('on');
     sliderWeek=TOTAL_WEEKS-1;
     document.getElementById('time-slider').value=TOTAL_WEEKS-1;
     document.getElementById('slider-label').textContent='ЯНВ';
   } else {
     activeMonth=m;
-    document.querySelectorAll('.map-month-btn').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('.month-btn').forEach(b=>b.classList.remove('on'));
     btn.classList.add('on');
-    // двигаем ползунок на конец этого месяца
     sliderWeek=monthToWeek(m);
     document.getElementById('time-slider').value=sliderWeek;
     document.getElementById('slider-label').textContent=MONTH_NAMES[m];
@@ -579,68 +419,53 @@ function selectMonth(btn,m){
   renderMarkers();
 }
 
-// ── СБРОС ──
 function resetFilters(){
-  const theme=localStorage.getItem('ev_race_theme')||'arcade';
-  activeOp=null;
-  document.querySelectorAll('.map-op-btn').forEach(b=>{
-    b.classList.remove('on');
-    if(theme==='arcade'){b.style.background='transparent';b.style.color='#333';b.style.borderColor='#1a1a1a';}
-    else{b.style.background='';b.style.color='';b.style.borderColor='';}
-  });
-  activeTypes.clear(); ['DC','AC','ACDC'].forEach(t=>activeTypes.add(t));
-  document.querySelectorAll('.map-type-btn').forEach(b=>b.classList.add('on'));
-  activeMonth=null;
-  document.querySelectorAll('.map-month-btn').forEach(b=>b.classList.remove('on'));
+  activeOp=null;activeType=null;activeMonth=null;
+  document.querySelectorAll('.op-filter-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.month-btn').forEach(b=>b.classList.remove('on'));
   sliderWeek=TOTAL_WEEKS-1;
   document.getElementById('time-slider').value=TOTAL_WEEKS-1;
   document.getElementById('slider-label').textContent='ЯНВ';
   if(playInterval){clearInterval(playInterval);playInterval=null;const pb=document.getElementById('playBtn');pb.innerHTML='&#x25BA;';pb.classList.remove('playing');}
-  heatMode=false; document.getElementById('heatBtn').classList.remove('on');
+  heatMode=false;document.getElementById('heatBtn').classList.remove('on');
   renderMarkers();
 }
 
-// ── СЛАЙДЕР ──
 function onSlider(val){
   sliderWeek=parseInt(val);
   const m=Math.floor(sliderWeek/4);
   document.getElementById('slider-label').textContent=weekLabel(sliderWeek);
-  // синхронизируем кнопки месяцев
-  document.querySelectorAll('.map-month-btn').forEach(b=>{
-    const bm=parseInt(b.dataset.month);
-    b.classList.toggle('on',bm===m&&activeMonth===m);
-  });
-  if(activeMonth!==null&&Math.floor(monthToWeek(activeMonth)/4)!==m) activeMonth=null;
+  if(activeMonth!==null&&Math.floor(monthToWeek(activeMonth)/4)!==m){
+    activeMonth=null;
+    document.querySelectorAll('.month-btn').forEach(b=>b.classList.remove('on'));
+  }
   renderMarkers();
 }
 
-// ── ВОСПРОИЗВЕДЕНИЕ ──
 function togglePlay(){
   const btn=document.getElementById('playBtn');
   if(playInterval){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
-  sliderWeek=0; document.getElementById('time-slider').value=0;
+  sliderWeek=0;document.getElementById('time-slider').value=0;
   document.getElementById('slider-label').textContent=weekLabel(0);
-  renderMarkers(); btn.innerHTML='&#x25A0;'; btn.classList.add('playing');
+  renderMarkers();btn.innerHTML='&#x25A0;';btn.classList.add('playing');
   playInterval=setInterval(()=>{
     if(sliderWeek>=TOTAL_WEEKS-1){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
-    sliderWeek++; document.getElementById('time-slider').value=sliderWeek;
+    sliderWeek++;document.getElementById('time-slider').value=sliderWeek;
     document.getElementById('slider-label').textContent=weekLabel(sliderWeek);
     renderMarkers();
   },600);
 }
 
-// ── ГЕОЛОКАЦИЯ ──
 function locateMe(){
   if(!navigator.geolocation){alert('Геолокация недоступна');return;}
   navigator.geolocation.getCurrentPosition(pos=>{
     const{latitude:lat,longitude:lng}=pos.coords;
-    if(geoMarker) map.removeLayer(geoMarker);
+    if(geoMarker)map.removeLayer(geoMarker);
     geoMarker=L.marker([lat,lng],{icon:L.divIcon({html:'<div class="geo-pulse"></div>',className:'',iconSize:[12,12],iconAnchor:[6,6]})}).addTo(map).bindPopup('Вы здесь').openPopup();
     map.setView([lat,lng],13);
   },()=>alert('Не удалось определить местоположение'));
 }
 
-// ── ТЕМА ──
 function setTheme(theme){
   document.getElementById('theme-css').href=`CSS/${theme}.css?v=2`;
   localStorage.setItem('ev_race_theme',theme);
@@ -648,30 +473,18 @@ function setTheme(theme){
   document.body.className=document.body.className.replace(/theme-\S+/g,'').trim();
   document.body.classList.add('theme-'+theme);
   tileLayer.setUrl(TILES[theme]||TILES['arcade']);
-  // операторы
-  document.querySelectorAll('.map-op-btn').forEach(btn=>{
-    const op=btn.dataset.op; const isOn=btn.classList.contains('on');
-    if(theme==='arcade'){
-      if(isOn){btn.style.background=OP_COLORS[op];btn.style.color=OP_DARK.includes(op)?'#003':'#fff';btn.style.borderColor=OP_COLORS[op];}
-      else{btn.style.background='transparent';btn.style.color='#333';btn.style.borderColor='#1a1a1a';}
-    } else {btn.style.background='';btn.style.color='';btn.style.borderColor='';}
-  });
 }
 
-// ── БУРГЕР ──
 function toggleBurger(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('burgerBtn').classList.toggle('open');}
 function closeBurger(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('burgerBtn').classList.remove('open');}
 
-// ── ЗАГРУЗКА ──
 async function loadStations(){
   try{
-    const res=await fetch(SURL+'/rest/v1/stations?select=operator,station_type,city,address,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng&lat=not.is.null',{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
+    const res=await fetch(SURL+'/rest/v1/stations?select=operator,station_type,city,address,count,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng&lat=not.is.null',{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
     if(!res.ok){console.error('Supabase:',res.status);return;}
     const data=await res.json();
     if(!Array.isArray(data)){console.error('Not array:',data);return;}
-    allStations=data;
-    buildMonthButtons();
-    renderMarkers();
+    allStations=data;buildMonthButtons();renderMarkers();
   }catch(e){console.error('Load:',e);}
 }
 
@@ -681,7 +494,7 @@ async function trackVisit(){
 
 (function init(){
   const saved=localStorage.getItem('ev_race_theme')||'arcade';
-  setTheme(saved); loadStations(); trackVisit();
+  setTheme(saved);loadStations();trackVisit();
 })();
 </script>
 </body>
