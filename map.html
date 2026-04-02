@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>EV RACE 2026 — Карта зарядных станций Беларуси</title>
 <meta name="description" content="Интерактивная карта зарядных станций Беларуси 2026. DC, AC, ACDC станции всех операторов: BatteryFly, forEVo, Zaryadka, United Company, ЦСМС, Malanka, Evika!, Orange, Prizma.">
 <meta name="robots" content="index, follow">
@@ -30,11 +30,15 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 
 <style>
 html, body { height:100%; overflow:hidden; margin:0; padding:0; }
-.container { display:flex; flex-direction:column; height:100vh; max-width:100% !important; padding:0 !important; }
+.container {
+  display:flex; flex-direction:column;
+  height:100vh; height:100dvh;
+  max-width:100% !important; padding:0 !important;
+}
 .page-wrap { display:flex; flex-direction:column; flex:1; min-height:0; padding:0 !important; position:relative; }
 #map { flex:1; min-height:0; width:100%; z-index:1; }
 
-/* ── FLOATING ОБЁРТКИ ── */
+/* ── FLOATING ── */
 .map-top, .map-bottom { position:absolute; left:0; right:0; z-index:400; pointer-events:none; }
 .map-top { top:0; }
 .map-bottom { bottom:0; }
@@ -42,14 +46,12 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
 
 /* ── ВЕРХНЯЯ ПАНЕЛЬ ── */
 .map-top-bar {
-  margin:8px 8px 0;
-  display:flex; align-items:center; gap:5px;
-  padding:5px 8px;
-  background:rgba(10,10,10,0.88);
+  margin:8px 8px 0; display:flex; align-items:center; gap:5px;
+  padding:5px 8px; background:rgba(10,10,10,0.88);
   border:1px solid var(--green-dark,#003d0f);
 }
 
-/* Arcade: кнопки типа */
+/* Arcade типы */
 .map-type-btn {
   font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:1px;
   padding:4px 8px; border:1px solid var(--green-dark,#003d0f);
@@ -57,25 +59,6 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
   cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent;
 }
 .map-type-btn.on { background:var(--green-dark,#003d0f); border-color:var(--green-dim,#00aa2b); color:var(--green,#00ff41); }
-
-/* Тепло */
-.map-heat-btn {
-  font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:1px;
-  padding:4px 7px; border:1px solid var(--green-dark,#003d0f);
-  background:transparent; color:var(--green-dark,#003d0f);
-  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
-}
-.map-heat-btn.on { border-color:#ff4444; color:#ff4444; background:rgba(255,68,68,.08); }
-
-/* Геолокация */
-.map-geo-btn {
-  width:26px; height:26px; border-radius:50%;
-  border:1px solid var(--green-dim,#00aa2b); background:transparent;
-  color:var(--green-dim,#00aa2b); font-size:13px;
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
-  flex-shrink:0; -webkit-tap-highlight-color:transparent;
-}
-.map-geo-btn:hover { background:var(--green-dark,#003d0f); }
 
 /* Сброс */
 .map-reset-btn {
@@ -106,13 +89,14 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
 
 /* ── НИЖНЯЯ ПАНЕЛЬ ── */
 .map-bottom-bar {
-  margin:0 8px 8px; padding:7px 8px 5px;
+  margin:0 8px calc(8px + env(safe-area-inset-bottom,0px)) 8px;
+  padding:7px 8px 6px;
   background:rgba(10,10,10,0.92);
   border:1px solid var(--green-dark,#003d0f);
 }
 
 /* Слайдер */
-.map-slider-row { display:flex; align-items:center; gap:6px; margin-bottom:7px; }
+.map-slider-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
 .map-slider-label {
   font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1px;
   color:var(--green-dim,#00aa2b); white-space:nowrap; flex-shrink:0; min-width:28px;
@@ -128,7 +112,7 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
 .map-play-btn:hover { background:var(--green-dark,#003d0f); color:var(--green,#00ff41); }
 .map-play-btn.playing { border-color:#ff4444; color:#ff4444; }
 
-/* Операторы Arcade */
+/* Операторы */
 .map-ops-row { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:5px; }
 .map-op-btn {
   font-family:'Share Tech Mono',monospace; font-size:8px;
@@ -137,10 +121,25 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
 }
 .map-op-btn.inactive { opacity:0.25; }
 
+/* Нижняя строка утилит */
+.map-utils-row {
+  display:flex; gap:4px; align-items:center;
+  padding-top:5px; border-top:1px solid var(--green-dark,#003d0f);
+  margin-top:2px;
+}
+.map-util-btn {
+  font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1px;
+  padding:3px 8px; border:1px solid var(--green-dark,#003d0f);
+  background:transparent; color:var(--green-dim,#00aa2b);
+  cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; white-space:nowrap;
+}
+.map-util-btn:hover { background:var(--green-dark,#003d0f); color:var(--green,#00ff41); }
+.map-util-btn.on { border-color:#ff4444; color:#ff4444; background:rgba(255,68,68,.08); }
+
 /* Подпись */
 .map-caption {
   font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:1px;
-  color:var(--green-dark,#003d0f); padding-top:4px; border-top:1px solid var(--green-dark,#003d0f);
+  color:var(--green-dark,#003d0f); margin-left:auto;
 }
 
 /* ── POPUP ── */
@@ -150,12 +149,15 @@ html, body { height:100%; overflow:hidden; margin:0; padding:0; }
 }
 .leaflet-popup-content { margin:0 !important; }
 .leaflet-popup-tip-container { display:none !important; }
-.leaflet-popup-close-button { color:var(--green-dim,#00aa2b) !important; font-size:16px !important; top:5px !important; right:7px !important; }
-.popup-wrap { padding:10px 12px; min-width:180px; max-width:240px; }
-.popup-op { font-family:'Share Tech Mono',monospace; font-size:9px; font-weight:bold; margin-bottom:6px; padding-bottom:6px; border-bottom:1px solid var(--green-dark,#003d0f); }
-.popup-row { font-family:'Share Tech Mono',monospace; font-size:8px; color:#555; margin-bottom:3px; line-height:1.6; }
+.leaflet-popup-close-button { color:var(--green-dim,#00aa2b) !important; font-size:18px !important; top:6px !important; right:8px !important; }
+.popup-wrap { padding:12px 14px; min-width:200px; max-width:280px; }
+.popup-op { font-family:'Share Tech Mono',monospace; font-size:11px; font-weight:bold; margin-bottom:8px; padding-bottom:7px; border-bottom:1px solid var(--green-dark,#003d0f); }
+.popup-station { margin-bottom:6px; padding-bottom:6px; border-bottom:1px solid #0a1a0a; }
+.popup-station:last-of-type { border-bottom:none; margin-bottom:0; }
+.popup-row { font-family:'Share Tech Mono',monospace; font-size:10px; color:#555; margin-bottom:3px; line-height:1.6; }
 .popup-row span { color:var(--green,#00ff41); }
-.popup-route-btn { display:block; width:100%; margin-top:8px; padding:5px 0; font-size:8px; font-family:'Share Tech Mono',monospace; text-align:center; border:none; cursor:pointer; color:#fff; letter-spacing:1px; }
+.popup-total { font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--green-dim,#00aa2b); padding-top:6px; border-top:1px solid var(--green-dark,#003d0f); margin-top:4px; }
+.popup-route-btn { display:block; width:100%; margin-top:8px; padding:6px 0; font-size:9px; font-family:'Share Tech Mono',monospace; text-align:center; border:none; cursor:pointer; color:#fff; letter-spacing:1px; }
 
 /* Кластеры Arcade */
 .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background-color:rgba(0,255,65,.1) !important; }
@@ -173,9 +175,6 @@ body.theme-tesla-light .map-top-bar { background:rgba(255,255,255,.96); border:0
 body.theme-tesla-light .map-bottom-bar { background:rgba(255,255,255,.96); border:0.5px solid #ddd; border-radius:10px; }
 body.theme-tesla-light .map-type-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:4px 10px; }
 body.theme-tesla-light .map-type-btn.on { background:#111; color:#fff; border-color:#111; }
-body.theme-tesla-light .map-heat-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:4px 10px; }
-body.theme-tesla-light .map-heat-btn.on { border-color:#cc3333; color:#cc3333; background:rgba(204,51,51,.06); }
-body.theme-tesla-light .map-geo-btn { border-color:#0078d4; color:#0078d4; }
 body.theme-tesla-light .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#aaa; padding:4px 10px; }
 body.theme-tesla-light .map-badge { font-family:'Roboto',sans-serif; font-size:11px; color:#111; font-weight:500; }
 body.theme-tesla-light .map-slider-label { font-family:'Roboto',sans-serif; font-size:11px; color:#888; }
@@ -185,30 +184,26 @@ body.theme-tesla-light .map-play-btn.playing { border-color:#cc3333; color:#cc33
 body.theme-tesla-light .map-op-btn { font-family:'Roboto',sans-serif; font-size:11px; border-radius:20px; border:1.5px solid #d0d2d4; background:#f7f7f7; color:#555; padding:4px 10px; display:inline-flex; align-items:center; gap:5px; }
 body.theme-tesla-light .map-op-btn::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#bbb; transition:background .15s; flex-shrink:0; }
 body.theme-tesla-light .map-op-btn.inactive { opacity:0.4; }
-body.theme-tesla-light .map-op-btn.op-bf.on { color:#005EEB; border-color:rgba(0,94,235,.4); background:rgba(0,94,235,.05); }
-body.theme-tesla-light .map-op-btn.op-bf.on::before { background:#005EEB; }
-body.theme-tesla-light .map-op-btn.op-fo.on { color:#b44fff; border-color:rgba(180,79,255,.4); background:rgba(180,79,255,.05); }
-body.theme-tesla-light .map-op-btn.op-fo.on::before { background:#b44fff; }
-body.theme-tesla-light .map-op-btn.op-za.on { color:#00aacc; border-color:rgba(0,207,255,.4); background:rgba(0,207,255,.05); }
-body.theme-tesla-light .map-op-btn.op-za.on::before { background:#00aacc; }
-body.theme-tesla-light .map-op-btn.op-uc.on { color:#F5821F; border-color:rgba(245,130,31,.4); background:rgba(245,130,31,.05); }
-body.theme-tesla-light .map-op-btn.op-uc.on::before { background:#F5821F; }
-body.theme-tesla-light .map-op-btn.op-cs.on { color:#FF6B6B; border-color:rgba(255,107,107,.4); background:rgba(255,107,107,.05); }
-body.theme-tesla-light .map-op-btn.op-cs.on::before { background:#FF6B6B; }
-body.theme-tesla-light .map-op-btn.op-ma.on { color:#5aaa59; border-color:rgba(118,210,117,.4); background:rgba(118,210,117,.05); }
-body.theme-tesla-light .map-op-btn.op-ma.on::before { background:#76d275; }
-body.theme-tesla-light .map-op-btn.op-ev.on { color:#832af5; border-color:rgba(131,42,245,.4); background:rgba(131,42,245,.05); }
-body.theme-tesla-light .map-op-btn.op-ev.on::before { background:#832af5; }
-body.theme-tesla-light .map-op-btn.op-or.on { color:#FF6B00; border-color:rgba(255,107,0,.4); background:rgba(255,107,0,.05); }
-body.theme-tesla-light .map-op-btn.op-or.on::before { background:#FF6B00; }
-body.theme-tesla-light .map-op-btn.op-pr.on { color:#24c3d3; border-color:rgba(36,195,211,.4); background:rgba(36,195,211,.05); }
-body.theme-tesla-light .map-op-btn.op-pr.on::before { background:#24c3d3; }
-body.theme-tesla-light .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#aaa; border-top-color:#eee; letter-spacing:0; }
+body.theme-tesla-light .map-op-btn.op-bf.on{color:#005EEB;border-color:rgba(0,94,235,.4);background:rgba(0,94,235,.05);}body.theme-tesla-light .map-op-btn.op-bf.on::before{background:#005EEB;}
+body.theme-tesla-light .map-op-btn.op-fo.on{color:#b44fff;border-color:rgba(180,79,255,.4);background:rgba(180,79,255,.05);}body.theme-tesla-light .map-op-btn.op-fo.on::before{background:#b44fff;}
+body.theme-tesla-light .map-op-btn.op-za.on{color:#00aacc;border-color:rgba(0,207,255,.4);background:rgba(0,207,255,.05);}body.theme-tesla-light .map-op-btn.op-za.on::before{background:#00aacc;}
+body.theme-tesla-light .map-op-btn.op-uc.on{color:#F5821F;border-color:rgba(245,130,31,.4);background:rgba(245,130,31,.05);}body.theme-tesla-light .map-op-btn.op-uc.on::before{background:#F5821F;}
+body.theme-tesla-light .map-op-btn.op-cs.on{color:#FF6B6B;border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.05);}body.theme-tesla-light .map-op-btn.op-cs.on::before{background:#FF6B6B;}
+body.theme-tesla-light .map-op-btn.op-ma.on{color:#5aaa59;border-color:rgba(118,210,117,.4);background:rgba(118,210,117,.05);}body.theme-tesla-light .map-op-btn.op-ma.on::before{background:#76d275;}
+body.theme-tesla-light .map-op-btn.op-ev.on{color:#832af5;border-color:rgba(131,42,245,.4);background:rgba(131,42,245,.05);}body.theme-tesla-light .map-op-btn.op-ev.on::before{background:#832af5;}
+body.theme-tesla-light .map-op-btn.op-or.on{color:#FF6B00;border-color:rgba(255,107,0,.4);background:rgba(255,107,0,.05);}body.theme-tesla-light .map-op-btn.op-or.on::before{background:#FF6B00;}
+body.theme-tesla-light .map-op-btn.op-pr.on{color:#24c3d3;border-color:rgba(36,195,211,.4);background:rgba(36,195,211,.05);}body.theme-tesla-light .map-op-btn.op-pr.on::before{background:#24c3d3;}
+body.theme-tesla-light .map-utils-row { border-top-color:#eee; }
+body.theme-tesla-light .map-util-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #d0d2d4; border-radius:20px; background:#f7f7f7; color:#555; padding:3px 10px; }
+body.theme-tesla-light .map-util-btn.on { border-color:#cc3333; color:#cc3333; background:rgba(204,51,51,.06); }
+body.theme-tesla-light .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#bbb; letter-spacing:0; }
 body.theme-tesla-light .map-zoom-btn { background:rgba(255,255,255,.96); border:0.5px solid #ddd; color:#333; border-radius:4px; }
 body.theme-tesla-light .leaflet-popup-content-wrapper { background:#fff !important; border:0.5px solid #ddd !important; border-radius:10px !important; }
 body.theme-tesla-light .popup-op { font-family:'Roboto',sans-serif; border-bottom-color:#eee; }
+body.theme-tesla-light .popup-station { border-bottom-color:#f0f0f0; }
 body.theme-tesla-light .popup-row { font-family:'Roboto',sans-serif; color:#888; }
 body.theme-tesla-light .popup-row span { color:#111; }
+body.theme-tesla-light .popup-total { font-family:'Roboto',sans-serif; color:#888; border-top-color:#eee; }
 body.theme-tesla-light .popup-route-btn { font-family:'Roboto',sans-serif; border-radius:20px; }
 body.theme-tesla-light .marker-cluster-small, body.theme-tesla-light .marker-cluster-medium, body.theme-tesla-light .marker-cluster-large { background-color:rgba(0,120,212,.12) !important; }
 body.theme-tesla-light .marker-cluster-small div, body.theme-tesla-light .marker-cluster-medium div, body.theme-tesla-light .marker-cluster-large div { background-color:rgba(0,120,212,.25) !important; color:#0078d4 !important; font-family:'Roboto',sans-serif !important; border-radius:50% !important; }
@@ -218,9 +213,6 @@ body.theme-tesla-dark .map-top-bar { background:rgba(20,20,20,.94); border:0.5px
 body.theme-tesla-dark .map-bottom-bar { background:rgba(20,20,20,.94); border:0.5px solid #2a2a2a; border-radius:10px; }
 body.theme-tesla-dark .map-type-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:4px 10px; }
 body.theme-tesla-dark .map-type-btn.on { background:#2a2a2a; color:#f0f0f0; border-color:#444; }
-body.theme-tesla-dark .map-heat-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:4px 10px; }
-body.theme-tesla-dark .map-heat-btn.on { border-color:#ff6666; color:#ff6666; background:rgba(204,51,51,.1); }
-body.theme-tesla-dark .map-geo-btn { border-color:#00bcd4; color:#00bcd4; }
 body.theme-tesla-dark .map-reset-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#444; padding:4px 10px; }
 body.theme-tesla-dark .map-badge { font-family:'Roboto',sans-serif; font-size:11px; color:#f0f0f0; font-weight:500; }
 body.theme-tesla-dark .map-slider-label { font-family:'Roboto',sans-serif; font-size:11px; color:#555; }
@@ -230,41 +222,38 @@ body.theme-tesla-dark .map-play-btn.playing { border-color:#ff6666; color:#ff666
 body.theme-tesla-dark .map-op-btn { font-family:'Roboto',sans-serif; font-size:11px; border-radius:20px; border:1.5px solid #2a2a2a; background:#1e1e1e; color:#555; padding:4px 10px; display:inline-flex; align-items:center; gap:5px; }
 body.theme-tesla-dark .map-op-btn::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#444; transition:background .15s; flex-shrink:0; }
 body.theme-tesla-dark .map-op-btn.inactive { opacity:0.4; }
-body.theme-tesla-dark .map-op-btn.op-bf.on { color:#4d8fff; border-color:rgba(0,94,235,.5); background:rgba(0,94,235,.1); }
-body.theme-tesla-dark .map-op-btn.op-bf.on::before { background:#4d8fff; }
-body.theme-tesla-dark .map-op-btn.op-fo.on { color:#cc88ff; border-color:rgba(180,79,255,.5); background:rgba(180,79,255,.1); }
-body.theme-tesla-dark .map-op-btn.op-fo.on::before { background:#cc88ff; }
-body.theme-tesla-dark .map-op-btn.op-za.on { color:#66ddff; border-color:rgba(0,207,255,.5); background:rgba(0,207,255,.1); }
-body.theme-tesla-dark .map-op-btn.op-za.on::before { background:#66ddff; }
-body.theme-tesla-dark .map-op-btn.op-uc.on { color:#ffaa55; border-color:rgba(245,130,31,.5); background:rgba(245,130,31,.1); }
-body.theme-tesla-dark .map-op-btn.op-uc.on::before { background:#ffaa55; }
-body.theme-tesla-dark .map-op-btn.op-cs.on { color:#ff9999; border-color:rgba(255,107,107,.5); background:rgba(255,107,107,.1); }
-body.theme-tesla-dark .map-op-btn.op-cs.on::before { background:#ff9999; }
-body.theme-tesla-dark .map-op-btn.op-ma.on { color:#76d275; border-color:rgba(118,210,117,.5); background:rgba(118,210,117,.1); }
-body.theme-tesla-dark .map-op-btn.op-ma.on::before { background:#76d275; }
-body.theme-tesla-dark .map-op-btn.op-ev.on { color:#b066ff; border-color:rgba(131,42,245,.5); background:rgba(131,42,245,.1); }
-body.theme-tesla-dark .map-op-btn.op-ev.on::before { background:#b066ff; }
-body.theme-tesla-dark .map-op-btn.op-or.on { color:#ff8833; border-color:rgba(255,107,0,.5); background:rgba(255,107,0,.1); }
-body.theme-tesla-dark .map-op-btn.op-or.on::before { background:#ff8833; }
-body.theme-tesla-dark .map-op-btn.op-pr.on { color:#24c3d3; border-color:rgba(36,195,211,.5); background:rgba(36,195,211,.1); }
-body.theme-tesla-dark .map-op-btn.op-pr.on::before { background:#24c3d3; }
-body.theme-tesla-dark .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#333; border-top-color:#1a1a1a; letter-spacing:0; }
+body.theme-tesla-dark .map-op-btn.op-bf.on{color:#4d8fff;border-color:rgba(0,94,235,.5);background:rgba(0,94,235,.1);}body.theme-tesla-dark .map-op-btn.op-bf.on::before{background:#4d8fff;}
+body.theme-tesla-dark .map-op-btn.op-fo.on{color:#cc88ff;border-color:rgba(180,79,255,.5);background:rgba(180,79,255,.1);}body.theme-tesla-dark .map-op-btn.op-fo.on::before{background:#cc88ff;}
+body.theme-tesla-dark .map-op-btn.op-za.on{color:#66ddff;border-color:rgba(0,207,255,.5);background:rgba(0,207,255,.1);}body.theme-tesla-dark .map-op-btn.op-za.on::before{background:#66ddff;}
+body.theme-tesla-dark .map-op-btn.op-uc.on{color:#ffaa55;border-color:rgba(245,130,31,.5);background:rgba(245,130,31,.1);}body.theme-tesla-dark .map-op-btn.op-uc.on::before{background:#ffaa55;}
+body.theme-tesla-dark .map-op-btn.op-cs.on{color:#ff9999;border-color:rgba(255,107,107,.5);background:rgba(255,107,107,.1);}body.theme-tesla-dark .map-op-btn.op-cs.on::before{background:#ff9999;}
+body.theme-tesla-dark .map-op-btn.op-ma.on{color:#76d275;border-color:rgba(118,210,117,.5);background:rgba(118,210,117,.1);}body.theme-tesla-dark .map-op-btn.op-ma.on::before{background:#76d275;}
+body.theme-tesla-dark .map-op-btn.op-ev.on{color:#b066ff;border-color:rgba(131,42,245,.5);background:rgba(131,42,245,.1);}body.theme-tesla-dark .map-op-btn.op-ev.on::before{background:#b066ff;}
+body.theme-tesla-dark .map-op-btn.op-or.on{color:#ff8833;border-color:rgba(255,107,0,.5);background:rgba(255,107,0,.1);}body.theme-tesla-dark .map-op-btn.op-or.on::before{background:#ff8833;}
+body.theme-tesla-dark .map-op-btn.op-pr.on{color:#24c3d3;border-color:rgba(36,195,211,.5);background:rgba(36,195,211,.1);}body.theme-tesla-dark .map-op-btn.op-pr.on::before{background:#24c3d3;}
+body.theme-tesla-dark .map-utils-row { border-top-color:#1a1a1a; }
+body.theme-tesla-dark .map-util-btn { font-family:'Roboto',sans-serif; font-size:11px; border:1.5px solid #2a2a2a; border-radius:20px; background:#1e1e1e; color:#555; padding:3px 10px; }
+body.theme-tesla-dark .map-util-btn.on { border-color:#ff6666; color:#ff6666; background:rgba(204,51,51,.1); }
+body.theme-tesla-dark .map-caption { font-family:'Roboto',sans-serif; font-size:10px; color:#333; letter-spacing:0; }
 body.theme-tesla-dark .map-zoom-btn { background:rgba(20,20,20,.94); border:0.5px solid #333; color:#aaa; border-radius:4px; }
 body.theme-tesla-dark .leaflet-popup-content-wrapper { background:#1e1e1e !important; border:0.5px solid #2a2a2a !important; border-radius:10px !important; }
 body.theme-tesla-dark .popup-op { font-family:'Roboto',sans-serif; border-bottom-color:#2a2a2a; }
+body.theme-tesla-dark .popup-station { border-bottom-color:#222; }
 body.theme-tesla-dark .popup-row { font-family:'Roboto',sans-serif; color:#555; }
 body.theme-tesla-dark .popup-row span { color:#f0f0f0; }
+body.theme-tesla-dark .popup-total { font-family:'Roboto',sans-serif; color:#555; border-top-color:#2a2a2a; }
 body.theme-tesla-dark .popup-route-btn { font-family:'Roboto',sans-serif; border-radius:20px; }
 body.theme-tesla-dark .marker-cluster-small, body.theme-tesla-dark .marker-cluster-medium, body.theme-tesla-dark .marker-cluster-large { background-color:rgba(0,188,212,.12) !important; }
 body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-cluster-medium div, body.theme-tesla-dark .marker-cluster-large div { background-color:rgba(0,188,212,.25) !important; color:#00bcd4 !important; font-family:'Roboto',sans-serif !important; border-radius:50% !important; }
 
 @media(max-width:600px) {
-  .map-heat-btn { display:none; }
   .map-top-bar { gap:4px; padding:4px 6px; margin:6px 6px 0; }
-  .map-bottom-bar { margin:0 6px 6px; padding:6px; }
-  .map-type-btn, .map-reset-btn { font-size:8px; padding:3px 6px; }
+  .map-bottom-bar { margin:0 6px calc(6px + env(safe-area-inset-bottom,0px)) 6px; padding:6px; }
+  .map-type-btn { font-size:8px; padding:3px 6px; }
+  .map-reset-btn { font-size:8px; padding:3px 6px; }
   body.theme-tesla-light .map-type-btn, body.theme-tesla-dark .map-type-btn { font-size:10px; padding:3px 8px; }
   body.theme-tesla-light .map-op-btn, body.theme-tesla-dark .map-op-btn { font-size:10px; padding:3px 8px; }
+  body.theme-tesla-light .map-util-btn, body.theme-tesla-dark .map-util-btn { font-size:10px; padding:3px 8px; }
 }
 </style>
 </head>
@@ -296,7 +285,6 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
   </div>
 
   <div class="page-wrap">
-
     <div id="map"></div>
 
     <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
@@ -305,8 +293,6 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
         <button class="map-type-btn on" data-type="DC"   onclick="toggleType(this)">DC</button>
         <button class="map-type-btn on" data-type="AC"   onclick="toggleType(this)">AC</button>
         <button class="map-type-btn on" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
-        <button class="map-heat-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛО</button>
-        <button class="map-geo-btn"  onclick="locateMe()">&#x25CE;</button>
         <button class="map-reset-btn" onclick="resetFilters()">&#x2715;</button>
         <span class="map-badge" id="map-badge">...</span>
       </div>
@@ -321,12 +307,16 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
     <!-- НИЖНЯЯ ПАНЕЛЬ -->
     <div class="map-bottom">
       <div class="map-bottom-bar">
+
+        <!-- Слайдер -->
         <div class="map-slider-row">
           <span class="map-slider-label" id="slider-label">ЯНВ</span>
-          <input class="map-slider" type="range" id="time-slider" min="0" max="11" value="11" oninput="onSlider(this.value)">
-          <span class="map-slider-label">ДЕК</span>
+          <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value)">
+          <span class="map-slider-label" id="slider-label-end">АПР</span>
           <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
         </div>
+
+        <!-- Операторы -->
         <div class="map-ops-row">
           <button class="map-op-btn op-bf on" data-op="batteryfly" onclick="toggleOp(this)" style="background:#005EEB;color:#fff;border-color:#005EEB;">BatteryFly</button>
           <button class="map-op-btn op-fo on" data-op="forevo"     onclick="toggleOp(this)" style="background:#b44fff;color:#fff;border-color:#b44fff;">forEVo</button>
@@ -338,10 +328,16 @@ body.theme-tesla-dark .marker-cluster-small div, body.theme-tesla-dark .marker-c
           <button class="map-op-btn op-or on" data-op="orange"     onclick="toggleOp(this)" style="background:#FF6B00;color:#fff;border-color:#FF6B00;">Orange</button>
           <button class="map-op-btn op-pr on" data-op="prizma"     onclick="toggleOp(this)" style="background:#24c3d3;color:#003;border-color:#24c3d3;">Prizma</button>
         </div>
-        <div class="map-caption">На карте зарядные станции, запущенные в Беларуси в 2026 году</div>
+
+        <!-- Утилиты: ГДЕ Я + ТЕПЛО + подпись -->
+        <div class="map-utils-row">
+          <button class="map-util-btn" onclick="locateMe()">ГДЕ Я</button>
+          <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛ. КАРТА</button>
+          <span class="map-caption">На карте станции Беларуси 2026</span>
+        </div>
+
       </div>
     </div>
-
   </div>
 </div>
 
@@ -356,11 +352,34 @@ const OP_COLORS={batteryfly:'#005EEB',forevo:'#b44fff',zaryadka:'#00cfff',united
 const OP_NAMES={batteryfly:'BatteryFly',forevo:'forEVo',zaryadka:'Zaryadka',united:'United Company',csms:'Гродн. ЦСМС',malanka:'Malanka',evika:'Evika!',orange:'Orange',prizma:'Prizma'};
 const OP_DARK=['zaryadka','malanka','prizma'];
 const TILES={'arcade':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png','tesla-light':'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png','tesla-dark':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'};
-const MONTHS=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
+const MONTH_NAMES=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
+
+// Слайдер — недели: 4 шага на месяц, до текущего месяца включительно
+const NOW = new Date();
+const CUR_MONTH = NOW.getMonth(); // 0-11, сейчас апрель = 3
+const TOTAL_WEEKS = (CUR_MONTH + 1) * 4; // всего шагов: апрель = 16
+
+function weekToDate(week) {
+  // week 0 = 1 января, каждые 4 недели = 1 месяц
+  const month = Math.floor(week / 4);
+  const weekInMonth = week % 4;
+  const day = weekInMonth * 7 + 1;
+  return new Date(2026, month, Math.min(day, 28));
+}
+
+function weekLabel(week) {
+  const month = Math.floor(week / 4);
+  return MONTH_NAMES[Math.min(month, 11)];
+}
 
 const activeOps=new Set(Object.keys(OP_COLORS));
 const activeTypes=new Set(['DC','AC','ACDC']);
-let allStations=[],sliderMonth=11,heatMode=false,playInterval=null,geoMarker=null,heatLayer=null;
+let allStations=[],sliderWeek=TOTAL_WEEKS-1,heatMode=false,playInterval=null,geoMarker=null,heatLayer=null;
+
+// Инициализируем слайдер
+document.getElementById('time-slider').max = TOTAL_WEEKS - 1;
+document.getElementById('time-slider').value = TOTAL_WEEKS - 1;
+document.getElementById('slider-label-end').textContent = MONTH_NAMES[CUR_MONTH];
 
 const map=L.map('map',{center:[53.7,28.0],zoom:7,zoomControl:false,scrollWheelZoom:true});
 let tileLayer=L.tileLayer(TILES['arcade'],{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',maxZoom:19}).addTo(map);
@@ -379,26 +398,70 @@ function buildRoute(lat,lng,name){
   else window.open(`geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(name)})`);
 }
 
-function makePopup(s){
-  const color=OP_COLORS[s.operator]||'#00ff41';
-  const opName=OP_NAMES[s.operator]||s.operator;
-  const dc=s.dc_power?`DC ${s.dc_power} кВт`:'';
-  const ac=s.ac_power?`AC ${s.ac_power} кВт`:'';
-  const pwr=[dc,ac].filter(Boolean).join(' · ')||'—';
-  const guns=[s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' · ')||'—';
-  const date=s.station_date?s.station_date.slice(0,10).split('-').reverse().join('.'):'—';
-  const addr=[s.city,s.address].filter(Boolean).join(', ');
-  const btn=isMobile?`<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${s.lat},${s.lng},'${opName.replace(/'/g,"\\'")}')">&#x25BA; МАРШРУТ</button>`:'';
-  return `<div class="popup-wrap"><div class="popup-op" style="color:${color}">${opName}</div><div class="popup-row">&#x1F4CD; <span>${addr}</span></div><div class="popup-row">&#x26A1; <span>${pwr}</span></div><div class="popup-row">&#x1F50C; <span>${guns}</span></div><div class="popup-row">&#x1F4C5; <span>${date}</span></div>${btn}</div>`;
+// Группировка по координатам
+function groupByCoords(stations) {
+  const groups = {};
+  stations.forEach(s => {
+    const key = `${s.lat.toFixed(5)},${s.lng.toFixed(5)}`;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(s);
+  });
+  return groups;
+}
+
+function makePopup(stations) {
+  const first = stations[0];
+  const color  = OP_COLORS[first.operator] || '#00ff41';
+  const opName = OP_NAMES[first.operator]  || first.operator;
+  const addr   = [first.city, first.address].filter(Boolean).join(', ');
+
+  let stationsHtml = '';
+  let totalDC = 0, totalAC = 0;
+  const dates = [];
+
+  stations.forEach(s => {
+    const dc  = s.dc_power  ? `DC ${s.dc_power} кВт`  : '';
+    const ac  = s.ac_power  ? `AC ${s.ac_power} кВт`  : '';
+    const pwr = [dc,ac].filter(Boolean).join(' · ') || '—';
+    const guns = [s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' · ') || '—';
+    const date = s.station_date ? s.station_date.slice(0,10).split('-').reverse().join('.') : '';
+    if (date) dates.push(date);
+    if (s.dc_power) totalDC += s.dc_power;
+    if (s.ac_power) totalAC += s.ac_power;
+    stationsHtml += `<div class="popup-station">
+      <div class="popup-row">&#x26A1; <span>${pwr}</span></div>
+      <div class="popup-row">&#x1F50C; <span>${guns}</span></div>
+      ${date ? `<div class="popup-row">&#x1F4C5; <span>${date}</span></div>` : ''}
+    </div>`;
+  });
+
+  const totalPwr = [];
+  if (totalDC) totalPwr.push(`DC ${totalDC} кВт`);
+  if (totalAC) totalPwr.push(`AC ${totalAC} кВт`);
+  const totalStr = stations.length > 1
+    ? `<div class="popup-total">&#x2211; ${stations.length} станции · ${totalPwr.join(' · ')}</div>`
+    : '';
+
+  const btn = isMobile
+    ? `<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${first.lat},${first.lng},'${opName.replace(/'/g,"\\'")}')">&#x25BA; МАРШРУТ</button>`
+    : '';
+
+  return `<div class="popup-wrap">
+    <div class="popup-op" style="color:${color}">${opName}</div>
+    <div class="popup-row">&#x1F4CD; <span>${addr}</span></div>
+    ${stationsHtml}
+    ${totalStr}
+    ${btn}
+  </div>`;
 }
 
 function getFiltered(){
-  const cutoff=new Date(2026,sliderMonth+1,0);
+  const cutoff = weekToDate(sliderWeek);
   return allStations.filter(s=>{
     if(!s.lat||!s.lng) return false;
     if(!activeOps.has(s.operator)) return false;
     if(!activeTypes.has(s.station_type)) return false;
-    if(s.station_date&&new Date(s.station_date)>cutoff) return false;
+    if(s.station_date && new Date(s.station_date) > cutoff) return false;
     return true;
   });
 }
@@ -426,10 +489,12 @@ function renderMarkers(){
     const pts=filtered.map(s=>[s.lat,s.lng,1]);
     heatLayer=L.heatLayer(pts,{radius:25,blur:15,maxZoom:12}).addTo(map);
   } else {
-    filtered.forEach(s=>{
-      const color=OP_COLORS[s.operator]||'#00ff41';
-      const m=L.marker([s.lat,s.lng],{icon:makeIcon(color)});
-      m.bindPopup(makePopup(s),{maxWidth:260,minWidth:180});
+    const groups = groupByCoords(filtered);
+    Object.values(groups).forEach(group => {
+      const first = group[0];
+      const color = OP_COLORS[first.operator]||'#00ff41';
+      const m = L.marker([first.lat,first.lng],{icon:makeIcon(color)});
+      m.bindPopup(makePopup(group),{maxWidth:300,minWidth:200});
       clusterGroup.addLayer(m);
     });
   }
@@ -441,12 +506,10 @@ function toggleOp(btn){
   const theme=localStorage.getItem('ev_race_theme')||'arcade';
   if(activeOps.has(op)){
     if(activeOps.size===1) return;
-    activeOps.delete(op);
-    btn.classList.remove('on'); btn.classList.add('inactive');
+    activeOps.delete(op); btn.classList.remove('on'); btn.classList.add('inactive');
     if(theme==='arcade'){btn.style.background='transparent';btn.style.color='#1a1a1a';btn.style.borderColor='#1a1a1a';}
   } else {
-    activeOps.add(op);
-    btn.classList.add('on'); btn.classList.remove('inactive');
+    activeOps.add(op); btn.classList.add('on'); btn.classList.remove('inactive');
     if(theme==='arcade'){btn.style.background=OP_COLORS[op];btn.style.color=OP_DARK.includes(op)?'#003':'#fff';btn.style.borderColor=OP_COLORS[op];}
   }
   renderMarkers();
@@ -475,7 +538,8 @@ function resetFilters(){
   });
   activeTypes.clear(); ['DC','AC','ACDC'].forEach(t=>activeTypes.add(t));
   document.querySelectorAll('.map-type-btn').forEach(b=>b.classList.add('on'));
-  sliderMonth=11; document.getElementById('time-slider').value=11;
+  sliderWeek=TOTAL_WEEKS-1;
+  document.getElementById('time-slider').value=TOTAL_WEEKS-1;
   document.getElementById('slider-label').textContent='ЯНВ';
   if(playInterval){clearInterval(playInterval);playInterval=null;const pb=document.getElementById('playBtn');pb.innerHTML='&#x25BA;';pb.classList.remove('playing');}
   heatMode=false; document.getElementById('heatBtn').classList.remove('on');
@@ -483,23 +547,23 @@ function resetFilters(){
 }
 
 function onSlider(val){
-  sliderMonth=parseInt(val);
-  document.getElementById('slider-label').textContent=MONTHS[sliderMonth];
+  sliderWeek=parseInt(val);
+  document.getElementById('slider-label').textContent=weekLabel(sliderWeek);
   renderMarkers();
 }
 
 function togglePlay(){
   const btn=document.getElementById('playBtn');
   if(playInterval){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
-  sliderMonth=0; document.getElementById('time-slider').value=0;
-  document.getElementById('slider-label').textContent=MONTHS[0];
+  sliderWeek=0; document.getElementById('time-slider').value=0;
+  document.getElementById('slider-label').textContent=weekLabel(0);
   renderMarkers(); btn.innerHTML='&#x25A0;'; btn.classList.add('playing');
   playInterval=setInterval(()=>{
-    if(sliderMonth>=11){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
-    sliderMonth++; document.getElementById('time-slider').value=sliderMonth;
-    document.getElementById('slider-label').textContent=MONTHS[sliderMonth];
+    if(sliderWeek>=TOTAL_WEEKS-1){clearInterval(playInterval);playInterval=null;btn.innerHTML='&#x25BA;';btn.classList.remove('playing');return;}
+    sliderWeek++; document.getElementById('time-slider').value=sliderWeek;
+    document.getElementById('slider-label').textContent=weekLabel(sliderWeek);
     renderMarkers();
-  },800);
+  },600);
 }
 
 function locateMe(){
