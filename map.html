@@ -33,30 +33,30 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 .container{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:100%!important;padding:0!important;}
 .page-wrap{display:flex;flex-direction:row;flex:1;min-height:0;padding:0!important;}
 
-/* ── КАРТА ── */
-#map{flex:1;min-width:0;min-height:0;z-index:1;}
+/* ── MAP AREA ── */
+.map-area{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;}
+.map-container{flex:1;min-height:0;position:relative;}
+#map{width:100%;height:100%;}
 
-/* ── FLOATING ПАНЕЛИ (мобиль portrait) ── */
-.map-top,.map-bottom{position:absolute;z-index:400;pointer-events:none;}
-.map-top{top:0;left:0;right:0;}.map-bottom{bottom:0;left:0;right:0;}
-.map-top>*,.map-bottom>*{pointer-events:auto;}
-
-/* Верхняя панель */
-.map-top-bar{margin:8px 8px 0;display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:5px 8px;background:rgba(10,10,10,0.88);border:1px solid var(--green-dark,#003d0f);}
+/* Верхняя панель — в потоке */
+.map-top-bar-wrap{flex-shrink:0;}
+.map-top-bar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:5px 8px;background:rgba(10,10,10,0.88);border-bottom:1px solid var(--green-dark,#003d0f);}
 .map-badge{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--green,#00ff41);white-space:nowrap;flex-shrink:0;}
 
+/* Нижняя панель — в потоке */
+.map-bottom-bar-wrap{flex-shrink:0;}
+
 /* Зум */
-.map-zoom{position:absolute;right:8px;top:50px;display:flex;flex-direction:column;gap:3px;z-index:400;}
+.map-zoom{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:3px;z-index:400;}
 .map-zoom-btn{width:24px;height:24px;border:1px solid var(--green-dim,#00aa2b);background:rgba(10,10,10,0.88);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
 .map-zoom-btn:hover{background:var(--green-dark,#003d0f);}
 
-/* ── САЙДБАР — по умолчанию скрыт ── */
+/* ── САЙДБАР — скрыт по умолчанию ── */
 .map-sidebar{display:none;}
 
 /* ── ДЕСКТОП и LANDSCAPE: сайдбар слева ── */
 @media(min-width:768px),(orientation:landscape) and (max-height:500px){
-  .map-top{left:260px;}
-  .map-bottom{display:none;}
+  .map-top-bar-wrap{display:none;}
   .map-sidebar{
     display:flex;flex-direction:column;
     width:260px;flex-shrink:0;order:-1;
@@ -65,6 +65,7 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
     background:rgba(10,10,10,0.95);
     border-right:1px solid var(--green-dark,#003d0f);
   }
+  .map-bottom-bar-wrap{display:none;}
   .sidebar-section{display:flex;flex-direction:column;gap:5px;}
   .sidebar-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--green-dim,#00aa2b);padding-bottom:4px;border-bottom:1px solid var(--green-dark,#003d0f);}
   .sidebar-ops{display:flex;flex-wrap:wrap;gap:4px;}
@@ -79,17 +80,18 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
   body.theme-tesla-dark .sidebar-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#333;border-top-color:#1a1a1a;letter-spacing:0;}
 }
 
-/* Landscape мобиль — сайдбар компактнее */
+/* Landscape мобиль — компактнее */
 @media(orientation:landscape) and (max-height:500px){
-  .map-sidebar{width:200px;padding:6px;}
-  .map-top{left:200px;}
+  .map-sidebar{width:180px;padding:6px;gap:6px;}
   .sidebar-caption{display:none;}
 }
 
-/* Portrait мобиль — панели снизу/сверху */
+/* Portrait мобиль */
 @media(orientation:portrait) and (max-width:767px){
+  .map-top-bar-wrap{display:block;}
+  .map-bottom-bar-wrap{display:block;}
   .map-sidebar{display:none!important;}
-  .map-bottom{display:block;}
+  .map-bottom-bar{padding:6px;margin-bottom:env(safe-area-inset-bottom,0px);}
 }
 .map-bottom-bar{margin:0 8px calc(8px + env(safe-area-inset-bottom,0px)) 8px;padding:7px 8px 6px;background:rgba(10,10,10,0.92);border:1px solid var(--green-dark,#003d0f);}
 
@@ -227,23 +229,7 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
   <div class="page-wrap">
     <div id="map"></div>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ: тип DC/AC/ACDC + бейдж -->
-    <div class="map-top">
-      <div class="map-top-bar">
-        <button class="op-filter-btn map-type-radio" data-type="DC"   onclick="toggleType(this)">DC</button>
-        <button class="op-filter-btn map-type-radio" data-type="AC"   onclick="toggleType(this)">AC</button>
-        <button class="op-filter-btn map-type-radio" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
-        <span class="map-badge" id="map-badge">...</span>
-      </div>
-    </div>
-
-    <!-- ЗУМ -->
-    <div class="map-zoom">
-      <button class="map-zoom-btn" onclick="map.zoomIn()">+</button>
-      <button class="map-zoom-btn" onclick="map.zoomOut()">&#x2212;</button>
-    </div>
-
-    <!-- ДЕСКТОП САЙДБАР (≥1024px) -->
+    <!-- ДЕСКТОП/LANDSCAPE САЙДБАР — слева -->
     <div class="map-sidebar" id="map-sidebar">
       <div class="sidebar-section">
         <div class="sidebar-label">ОПЕРАТОР</div>
@@ -260,10 +246,18 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
         </div>
       </div>
       <div class="sidebar-section">
+        <div class="sidebar-label">ТИП</div>
+        <div class="op-filters" style="gap:4px;">
+          <button class="op-filter-btn map-type-radio" data-type="DC"   onclick="toggleType(this)">DC</button>
+          <button class="op-filter-btn map-type-radio" data-type="AC"   onclick="toggleType(this)">AC</button>
+          <button class="op-filter-btn map-type-radio" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
         <div class="sidebar-label">ВРЕМЯ</div>
         <div class="map-slider-row">
           <span class="map-slider-label" id="slider-label-d">ЯНВ</span>
-          <input class="map-slider" type="range" id="time-slider-d" min="0" max="1" value="1" step="1" oninput="onSlider(this.value,'d')">
+          <input class="map-slider" type="range" id="time-slider-d" min="0" max="1" value="1" step="1" oninput="onSlider(this.value)">
           <span class="map-slider-label" id="slider-label-end-d">АПР</span>
           <button class="map-play-btn" id="playBtn-d" onclick="togglePlay()">&#x25BA;</button>
         </div>
@@ -276,35 +270,58 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
       <div class="sidebar-caption">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
     </div>
 
-    <!-- МОБИЛЬНАЯ НИЖНЯЯ ПАНЕЛЬ (< 1024px) -->
-    <div class="map-bottom">
-      <div class="map-bottom-bar">
-        <div class="map-slider-row">
-          <span class="map-slider-label" id="slider-label">ЯНВ</span>
-          <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value,'m')">
-          <span class="map-slider-label" id="slider-label-end">АПР</span>
-          <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
+    <!-- MAP AREA: верхняя панель + карта + зум + нижняя панель -->
+    <div class="map-area">
+      <!-- Верхняя панель DC/AC/ACDC (только мобиль portrait) -->
+      <div class="map-top-bar-wrap">
+        <div class="map-top-bar">
+          <button class="op-filter-btn map-type-radio" data-type="DC"   onclick="toggleType(this)">DC</button>
+          <button class="op-filter-btn map-type-radio" data-type="AC"   onclick="toggleType(this)">AC</button>
+          <button class="op-filter-btn map-type-radio" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
+          <span class="map-badge" id="map-badge">...</span>
         </div>
-        <div class="map-scroll-wrap" style="margin-bottom:5px;">
-          <div class="op-filters map-hscroll">
-            <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
-            <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
-            <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
-            <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
-            <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
-            <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
-            <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
-            <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
-            <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
+      </div>
+
+      <!-- Карта -->
+      <div class="map-container">
+        <div id="map"></div>
+        <!-- Зум -->
+        <div class="map-zoom">
+          <button class="map-zoom-btn" onclick="map.zoomIn()">+</button>
+          <button class="map-zoom-btn" onclick="map.zoomOut()">&#x2212;</button>
+        </div>
+      </div>
+
+      <!-- Нижняя панель (мобиль portrait) -->
+      <div class="map-bottom-bar-wrap">
+        <div class="map-bottom-bar">
+          <div class="map-slider-row">
+            <span class="map-slider-label" id="slider-label">ЯНВ</span>
+            <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value)">
+            <span class="map-slider-label" id="slider-label-end">АПР</span>
+            <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
           </div>
-          <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
+          <div class="map-scroll-wrap" style="margin-bottom:5px;">
+            <div class="op-filters map-hscroll">
+              <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
+              <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
+              <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
+              <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
+              <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
+              <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
+              <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
+              <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
+              <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
+            </div>
+            <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
+          </div>
+          <div class="map-utils-row">
+            <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
+            <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
+            <button class="map-util-btn" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
+          </div>
+          <div class="map-caption-row">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
         </div>
-        <div class="map-utils-row">
-          <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
-          <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
-          <button class="map-util-btn" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
-        </div>
-        <div class="map-caption-row">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
       </div>
     </div>
   </div>
