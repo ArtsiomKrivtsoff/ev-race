@@ -147,28 +147,7 @@ html, body {
   white-space: nowrap;
 }
 
-/* Город-фильтры — горизонтальный скролл на мобиле */
-.city-scroll {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  gap: 5px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  flex: 1;
-}
-.city-scroll::-webkit-scrollbar { display: none; }
-.mf-city {
-  background: transparent;
-  color: var(--green-dim, #00aa2b);
-  border: 1px solid #003d0f;
-  white-space: nowrap;
-}
-.mf-city.active-city {
-  background: #003d0f;
-  color: var(--green, #00ff41);
-  border-color: var(--green-dim, #00aa2b);
-}
+
 
 /* ── КАРТА ── */
 #map {
@@ -210,15 +189,15 @@ html, body {
   font-weight: bold;
   margin-bottom: 6px;
   padding-bottom: 6px;
-  border-bottom: 1px solid #003d0f;
+  border-bottom: 1px solid var(--green-dark, #003d0f);
 }
 .popup-row {
   font-size: 8px;
-  color: #aaa;
+  color: var(--text-muted, #aaa);
   margin-bottom: 4px;
   line-height: 1.6;
 }
-.popup-row span { color: #00ff41; }
+.popup-row span { color: var(--green, #00ff41); }
 .popup-route-btn {
   display: block;
   width: 100%;
@@ -237,14 +216,12 @@ html, body {
 /* Кластеры */
 .marker-cluster-small,
 .marker-cluster-medium,
-.marker-cluster-large {
-  background-color: rgba(0,255,65,0.15) !important;
-}
+.marker-cluster-large { background-color: rgba(0,255,65,0.15) !important; }
 .marker-cluster-small div,
 .marker-cluster-medium div,
 .marker-cluster-large div {
   background-color: rgba(0,255,65,0.3) !important;
-  color: #00ff41 !important;
+  color: var(--green, #00ff41) !important;
   font-family: 'Press Start 2P', monospace !important;
   font-size: 10px !important;
 }
@@ -252,10 +229,9 @@ html, body {
 /* Геолокация маркер */
 .geo-pulse {
   width: 14px; height: 14px;
-  background: #00e5ff;
+  background: var(--winter, #00e5ff);
   border-radius: 50%;
   border: 2px solid #fff;
-  box-shadow: 0 0 0 4px rgba(0,229,255,0.3);
   animation: pulse 1.5s infinite;
 }
 @keyframes pulse {
@@ -264,16 +240,11 @@ html, body {
   100% { box-shadow: 0 0 0 0 rgba(0,229,255,0); }
 }
 
-/* ── TESLA LIGHT переопределения ── */
-body.theme-tesla-light .map-filters {
-  background: #fff;
-  border-bottom-color: #ddd;
-}
+/* ── TESLA LIGHT ── */
+body.theme-tesla-light .map-filters { background: #fff; border-bottom-color: #ddd; }
 body.theme-tesla-light .filter-lbl { color: #888; }
 body.theme-tesla-light .mf-type { color: #333; border-color: #ccc; }
-body.theme-tesla-light .mf-type.active-type { background: #333; color: #fff; }
-body.theme-tesla-light .mf-city { color: #555; border-color: #ddd; }
-body.theme-tesla-light .mf-city.active-city { background: #eee; color: #111; border-color: #999; }
+body.theme-tesla-light .mf-type.active-type { background: #333; color: #fff; border-color: #333; }
 body.theme-tesla-light .mf-count { color: #111; }
 body.theme-tesla-light .mf-geo-btn { color: #0078d4; border-color: #0078d4; }
 body.theme-tesla-light .mf-reset-btn { color: #aaa; border-color: #ddd; }
@@ -281,17 +252,18 @@ body.theme-tesla-light .leaflet-popup-content-wrapper { background: #fff !import
 body.theme-tesla-light .popup-row { color: #555; }
 body.theme-tesla-light .popup-row span { color: #111; }
 body.theme-tesla-light .popup-op { border-bottom-color: #eee; }
+body.theme-tesla-light .marker-cluster-small,
+body.theme-tesla-light .marker-cluster-medium,
+body.theme-tesla-light .marker-cluster-large { background-color: rgba(0,120,212,0.15) !important; }
+body.theme-tesla-light .marker-cluster-small div,
+body.theme-tesla-light .marker-cluster-medium div,
+body.theme-tesla-light .marker-cluster-large div { background-color: rgba(0,120,212,0.3) !important; color: #0078d4 !important; }
 
-/* ── TESLA DARK переопределения ── */
-body.theme-tesla-dark .map-filters {
-  background: #1c1c1c;
-  border-bottom-color: #333;
-}
+/* ── TESLA DARK ── */
+body.theme-tesla-dark .map-filters { background: #1c1c1c; border-bottom-color: #333; }
 body.theme-tesla-dark .filter-lbl { color: #666; }
 body.theme-tesla-dark .mf-type { color: #ccc; border-color: #444; }
-body.theme-tesla-dark .mf-type.active-type { background: #444; color: #fff; }
-body.theme-tesla-dark .mf-city { color: #666; border-color: #2a2a2a; }
-body.theme-tesla-dark .mf-city.active-city { background: #2a2a2a; color: #fff; border-color: #555; }
+body.theme-tesla-dark .mf-type.active-type { background: #444; color: #fff; border-color: #555; }
 body.theme-tesla-dark .mf-count { color: #ccc; }
 body.theme-tesla-dark .mf-geo-btn { color: #00bcd4; border-color: #00bcd4; }
 body.theme-tesla-dark .mf-reset-btn { color: #444; border-color: #2a2a2a; }
@@ -299,6 +271,12 @@ body.theme-tesla-dark .leaflet-popup-content-wrapper { background: #1c1c1c !impo
 body.theme-tesla-dark .popup-row { color: #888; }
 body.theme-tesla-dark .popup-row span { color: #ccc; }
 body.theme-tesla-dark .popup-op { border-bottom-color: #2a2a2a; }
+body.theme-tesla-dark .marker-cluster-small,
+body.theme-tesla-dark .marker-cluster-medium,
+body.theme-tesla-dark .marker-cluster-large { background-color: rgba(0,188,212,0.15) !important; }
+body.theme-tesla-dark .marker-cluster-small div,
+body.theme-tesla-dark .marker-cluster-medium div,
+body.theme-tesla-dark .marker-cluster-large div { background-color: rgba(0,188,212,0.3) !important; color: #00bcd4 !important; }
 
 /* Мобиле */
 @media (max-width: 600px) {
@@ -360,14 +338,12 @@ body.theme-tesla-dark .popup-op { border-bottom-color: #2a2a2a; }
           <span class="mf-count" id="mf-count">...</span>
         </div>
       </div>
-      <!-- Строка 2: тип + города -->
+      <!-- Строка 2: тип -->
       <div class="filter-row-map">
         <span class="filter-lbl">ТИП:</span>
-        <button class="mf-btn mf-type" data-type="DC"   onclick="toggleType(this)">DC</button>
-        <button class="mf-btn mf-type" data-type="AC"   onclick="toggleType(this)">AC</button>
-        <button class="mf-btn mf-type" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
-        <span class="filter-lbl" style="margin-left:8px">ГОРОД:</span>
-        <div class="city-scroll" id="city-scroll"></div>
+        <button class="mf-btn mf-type active-type" data-type="DC"   onclick="toggleType(this)">DC</button>
+        <button class="mf-btn mf-type active-type" data-type="AC"   onclick="toggleType(this)">AC</button>
+        <button class="mf-btn mf-type active-type" data-type="ACDC" onclick="toggleType(this)">ACDC</button>
       </div>
     </div>
 
@@ -397,15 +373,14 @@ const OP_COLORS = {
 // ── ТАЙЛЫ ПО ТЕМЕ ──
 const TILE_URLS = {
   'arcade':      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-  'tesla-light': 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-  'tesla-dark':  'https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png'
+  'tesla-light': 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+  'tesla-dark':  'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
 };
 const TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
 
 // ── СОСТОЯНИЕ ФИЛЬТРОВ ──
 const activeOps   = new Set(Object.keys(OP_NAMES));
 const activeTypes = new Set(['DC','AC','ACDC']);
-let   activeCity  = null;
 let   allStations = [];
 let   geoMarker   = null;
 
@@ -491,7 +466,6 @@ function renderMarkers() {
     if (!s.lat || !s.lng) return false;
     if (!activeOps.has(s.operator)) return false;
     if (!activeTypes.has(s.station_type)) return false;
-    if (activeCity && s.city !== activeCity) return false;
     return true;
   });
 
@@ -533,26 +507,6 @@ function toggleType(btn) {
   renderMarkers();
 }
 
-// ── ФИЛЬТРЫ: ГОРОД ──
-function setCity(city, btn) {
-  document.querySelectorAll('.mf-city').forEach(b => b.classList.remove('active-city'));
-  if (activeCity === city) {
-    activeCity = null;
-  } else {
-    activeCity = city;
-    btn.classList.add('active-city');
-  }
-  renderMarkers();
-}
-
-function buildCityFilter(stations) {
-  const cities = [...new Set(stations.map(s => s.city).filter(Boolean))].sort();
-  const wrap = document.getElementById('city-scroll');
-  wrap.innerHTML = cities.map(c =>
-    `<button class="mf-btn mf-city" onclick="setCity('${c}',this)">${c}</button>`
-  ).join('');
-}
-
 // ── СБРОС ──
 function resetFilters() {
   activeOps.clear();
@@ -561,10 +515,7 @@ function resetFilters() {
 
   activeTypes.clear();
   ['DC','AC','ACDC'].forEach(t => activeTypes.add(t));
-  document.querySelectorAll('.mf-type').forEach(b => b.classList.remove('active-type'));
-
-  activeCity = null;
-  document.querySelectorAll('.mf-city').forEach(b => b.classList.remove('active-city'));
+  document.querySelectorAll('.mf-type').forEach(b => b.classList.add('active-type'));
 
   renderMarkers();
 }
@@ -639,7 +590,6 @@ async function loadStations() {
       document.getElementById('mf-count').textContent = 'ERR';
       return;
     }
-    buildCityFilter(allStations);
     renderMarkers();
   } catch(e) {
     console.error('Ошибка загрузки:', e);
