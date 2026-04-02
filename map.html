@@ -321,12 +321,13 @@ function makePopup(stations){
 }
 
 function getFiltered(){
+  const isMax=sliderWeek>=TOTAL_WEEKS-1;
   const cutoff=weekToDate(sliderWeek);
   return allStations.filter(s=>{
-    if(!s.lat||!s.lng)return false;
-    if(activeOp&&s.operator!==activeOp)return false;
-    if(activeType&&s.station_type!==activeType)return false;
-    if(s.station_date&&new Date(s.station_date)>cutoff)return false;
+    if(!s.lat||!s.lng) return false;
+    if(activeOp&&s.operator!==activeOp) return false;
+    if(activeType&&s.station_type!==activeType) return false;
+    if(!isMax&&s.station_date&&new Date(s.station_date)>cutoff) return false;
     return true;
   });
 }
