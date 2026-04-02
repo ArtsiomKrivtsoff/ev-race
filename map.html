@@ -39,12 +39,12 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 #map{width:100%;height:100%;}
 
 /* Верхняя панель — в потоке */
-.map-top-bar-wrap{flex-shrink:0;}
+.map-top-bar-wrap{flex-shrink:0;display:none;}
 .map-top-bar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:5px 8px;background:rgba(10,10,10,0.88);border-bottom:1px solid var(--green-dark,#003d0f);}
 .map-badge{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--green,#00ff41);white-space:nowrap;flex-shrink:0;}
 
 /* Нижняя панель — в потоке */
-.map-bottom-bar-wrap{flex-shrink:0;}
+.map-bottom-bar-wrap{flex-shrink:0;display:none;}
 
 /* Зум */
 .map-zoom{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:3px;z-index:400;}
@@ -54,9 +54,10 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
 /* ── САЙДБАР — скрыт по умолчанию ── */
 .map-sidebar{display:none;}
 
-/* ── ДЕСКТОП и LANDSCAPE: сайдбар слева ── */
-@media(min-width:768px),(orientation:landscape) and (max-height:500px){
+/* ── ДЕСКТОП/ПЛАНШЕТ: сайдбар слева (≥768px) ── */
+@media(min-width:768px){
   .map-top-bar-wrap{display:none;}
+  .map-bottom-bar-wrap{display:none;}
   .map-sidebar{
     display:flex;flex-direction:column;
     width:260px;flex-shrink:0;order:-1;
@@ -65,13 +66,11 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
     background:rgba(10,10,10,0.95);
     border-right:1px solid var(--green-dark,#003d0f);
   }
-  .map-bottom-bar-wrap{display:none;}
   .sidebar-section{display:flex;flex-direction:column;gap:5px;}
   .sidebar-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--green-dim,#00aa2b);padding-bottom:4px;border-bottom:1px solid var(--green-dark,#003d0f);}
   .sidebar-ops{display:flex;flex-wrap:wrap;gap:4px;}
   .sidebar-utils{display:flex;flex-direction:column;gap:4px;}
   .sidebar-caption{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:0.5px;color:var(--green-dark,#003d0f);line-height:1.6;margin-top:auto;padding-top:8px;border-top:1px solid var(--green-dark,#003d0f);}
-
   body.theme-tesla-light .map-sidebar{background:rgba(255,255,255,.98);border-right-color:#ddd;}
   body.theme-tesla-light .sidebar-label{font-family:'Roboto',sans-serif;font-size:10px;color:#888;border-bottom-color:#eee;letter-spacing:1px;}
   body.theme-tesla-light .sidebar-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#bbb;border-top-color:#eee;letter-spacing:0;}
@@ -80,18 +79,12 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
   body.theme-tesla-dark .sidebar-caption{font-family:'Roboto',sans-serif;font-size:10px;color:#333;border-top-color:#1a1a1a;letter-spacing:0;}
 }
 
-/* Landscape мобиль — компактнее */
-@media(orientation:landscape) and (max-height:500px){
-  .map-sidebar{width:180px;padding:6px;gap:6px;}
-  .sidebar-caption{display:none;}
-}
-
-/* Portrait мобиль */
-@media(orientation:portrait) and (max-width:767px){
+/* ── МОБИЛЬ: панели сверху и снизу (<768px) ── */
+@media(max-width:767px){
+  .map-sidebar{display:none!important;}
   .map-top-bar-wrap{display:block;}
   .map-bottom-bar-wrap{display:block;}
-  .map-sidebar{display:none!important;}
-  .map-bottom-bar{padding:6px;margin-bottom:env(safe-area-inset-bottom,0px);}
+  .map-bottom-bar{padding:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));}
 }
 .map-bottom-bar{margin:0 8px calc(8px + env(safe-area-inset-bottom,0px)) 8px;padding:7px 8px 6px;background:rgba(10,10,10,0.92);border:1px solid var(--green-dark,#003d0f);}
 
