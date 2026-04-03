@@ -48,7 +48,7 @@
   .theme-seg-btn:not(.active):hover { color:var(--green-dim); }
 
   /* мобильное выпадающее меню */
-  .nav-mobile-drop { display:none; position:relative; flex-direction:column; background:#0d1f0d; border:1px solid var(--green-dark); border-top:none; }
+ .nav-mobile-drop { display:none; position:fixed; top:41px; left:0; right:0; z-index:999; flex-direction:column; background:#0d1f0d; border:1px solid var(--green-dark); border-top:none; }
   .nav-mobile-drop.open { display:flex; }
   .nav-mobile-link { font-family:'Share Tech Mono',monospace; font-size:13px; padding:14px 16px; color:var(--green-dim); text-decoration:none; border-bottom:1px solid var(--green-dark); letter-spacing:1px; transition:color .15s; -webkit-tap-highlight-color:transparent; }
   .nav-mobile-link:last-child { border-bottom:none; }
