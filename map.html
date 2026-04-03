@@ -147,6 +147,35 @@ body.theme-tesla-light .map-badge-desktop{background:rgba(255,255,255,.96);borde
 body.theme-tesla-dark .map-badge-desktop{background:rgba(20,20,20,.92);border-color:#2a2a2a;color:#f0f0f0;font-family:'Roboto',sans-serif;font-size:11px;border-radius:8px;}
 @media(min-width:600px){.map-badge-desktop{display:block;}}
 
+/* ── ПЕРЕКЛЮЧАТЕЛЬ ТЕПЛОВОЙ КАРТЫ ── */
+.heat-mode-seg{display:inline-flex;border:1px solid var(--green-dark,#003d0f);overflow:hidden;flex-shrink:0;}
+.heat-seg-btn{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;padding:3px 6px;border:none;background:transparent;color:var(--green-dark,#003d0f);cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
+.heat-seg-btn.on{background:var(--green-dark,#003d0f);color:var(--green,#00ff41);}
+body.theme-tesla-light .heat-mode-seg{border-color:#d0d2d4;border-radius:20px;}
+body.theme-tesla-light .heat-seg-btn{font-family:'Roboto',sans-serif;font-size:10px;color:#555;}
+body.theme-tesla-light .heat-seg-btn.on{background:#111;color:#fff;}
+body.theme-tesla-dark .heat-mode-seg{border-color:#2a2a2a;border-radius:20px;}
+body.theme-tesla-dark .heat-seg-btn{font-family:'Roboto',sans-serif;font-size:10px;color:#555;}
+body.theme-tesla-dark .heat-seg-btn.on{background:#2a2a2a;color:#f0f0f0;}
+
+/* ── ТАБ СВОРАЧИВАНИЯ ── */
+.map-bottom{position:relative;}
+.bottom-tab{
+  position:absolute;top:-26px;right:16px;
+  width:36px;height:27px;
+  background:rgba(10,10,10,0.92);
+  border:1px solid var(--green-dark,#003d0f);
+  border-bottom:none;
+  border-radius:6px 6px 0 0;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:401;color:var(--green-dim,#00aa2b);
+  -webkit-tap-highlight-color:transparent;
+}
+.bottom-content{transition:max-height .3s ease,opacity .3s ease;overflow:hidden;}
+.bottom-content.collapsed{max-height:0;opacity:0;pointer-events:none;}
+body.theme-tesla-light .bottom-tab{background:rgba(255,255,255,.96);border-color:#ddd;color:#888;}
+body.theme-tesla-dark  .bottom-tab{background:rgba(20,20,20,.94);border-color:#2a2a2a;color:#555;}
+
 /* ── TESLA LIGHT ── */
 body.theme-tesla-light .map-top-bar{background:rgba(255,255,255,.96);border:0.5px solid #ddd;border-radius:10px;}
 body.theme-tesla-light .map-bottom-bar{background:rgba(255,255,255,.96);border:0.5px solid #ddd;border-radius:10px;}
@@ -261,6 +290,9 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
       <div class="sidebar-section sidebar-utils">
         <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
         <button class="map-util-btn" id="heatBtn-d" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
+        <div class="heat-mode-seg" id="heatSeg-d" style="display:none;">
+          <button class="heat-seg-btn on" id="heatPwr-d" onclick="setHeatMode('power')">МОЩНОСТЬ</button><button class="heat-seg-btn" id="heatCnt-d" onclick="setHeatMode('count')">КОЛ-ВО</button>
+        </div>
         <button class="map-util-btn" id="resetBtn-d" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
       </div>
       <div class="sidebar-caption">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
@@ -285,34 +317,44 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
     <div class="map-badge-desktop" id="map-badge-d">...</div>
 
     <!-- НИЖНЯЯ ПАНЕЛЬ (мобиль) -->
-    <div class="map-bottom">
-      <div class="map-bottom-bar">
-        <div class="map-slider-row">
-          <span class="map-slider-label" id="slider-label">ЯНВ</span>
-          <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value)">
-          <span class="map-slider-label" id="slider-label-end">АПР</span>
-          <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
-        </div>
-        <div class="map-scroll-wrap">
-          <div class="op-filters map-hscroll">
-            <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
-            <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
-            <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
-            <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
-            <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
-            <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
-            <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
-            <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
-            <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
+    <div class="map-bottom" id="map-bottom">
+      <!-- Таб-выступ справа -->
+      <div class="bottom-tab" id="bottomTab" onclick="toggleBottomPanel()">
+        <svg class="tab-arrow" id="tabArrow" width="14" height="8" viewBox="0 0 14 8"><path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <!-- Содержимое панели -->
+      <div class="bottom-content" id="bottomContent">
+        <div class="map-bottom-bar">
+          <div class="map-slider-row">
+            <span class="map-slider-label" id="slider-label">ЯНВ</span>
+            <input class="map-slider" type="range" id="time-slider" min="0" max="1" value="1" step="1" oninput="onSlider(this.value)">
+            <span class="map-slider-label" id="slider-label-end">АПР</span>
+            <button class="map-play-btn" id="playBtn" onclick="togglePlay()">&#x25BA;</button>
           </div>
-          <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
+          <div class="map-scroll-wrap">
+            <div class="op-filters map-hscroll">
+              <button class="op-filter-btn op-bf" data-op="batteryfly" onclick="toggleOp(this)">BatteryFly</button>
+              <button class="op-filter-btn op-fo" data-op="forevo"     onclick="toggleOp(this)">forEVo</button>
+              <button class="op-filter-btn op-za" data-op="zaryadka"   onclick="toggleOp(this)">Zaryadka</button>
+              <button class="op-filter-btn op-uc" data-op="united"     onclick="toggleOp(this)">United Co.</button>
+              <button class="op-filter-btn op-cs" data-op="csms"       onclick="toggleOp(this)">ЦСМС</button>
+              <button class="op-filter-btn op-ma" data-op="malanka"    onclick="toggleOp(this)">Malanka</button>
+              <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
+              <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
+              <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
+            </div>
+            <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
+          </div>
+          <div class="map-utils-row">
+            <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
+            <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
+            <div class="heat-mode-seg" id="heatSeg" style="display:none;">
+              <button class="heat-seg-btn on" id="heatPwr" onclick="setHeatMode('power')">МОЩНОСТЬ</button><button class="heat-seg-btn" id="heatCnt" onclick="setHeatMode('count')">КОЛ-ВО</button>
+            </div>
+            <button class="map-util-btn" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
+          </div>
+          <div class="map-caption-row">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
         </div>
-        <div class="map-utils-row">
-          <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
-          <button class="map-util-btn" id="heatBtn" onclick="toggleHeat()">ТЕПЛОВАЯ КАРТА</button>
-          <button class="map-util-btn" id="resetBtn" onclick="resetFilters()" style="display:none;border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,.08);">&#x2715; СБРОСИТЬ</button>
-        </div>
-        <div class="map-caption-row">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
       </div>
     </div>
   </div>
@@ -332,7 +374,7 @@ const NOW=new Date(),CUR_MONTH=NOW.getMonth(),TOTAL_WEEKS=(CUR_MONTH+1)*4;
 function weekToDate(w){const m=Math.floor(w/4);return new Date(2026,m,Math.min((w%4)*7+1,28));}
 function weekLabel(w){return MONTH_NAMES[Math.min(Math.floor(w/4),11)];}
 
-let allStations=[],sliderWeek=TOTAL_WEEKS-1,heatMode=false,playInterval=null,geoMarker=null,heatLayer=null,activeOp=null,activeType=null;
+let allStations=[],sliderWeek=TOTAL_WEEKS-1,heatMode=false,heatWeight='power',playInterval=null,geoMarker=null,heatLayer=null,activeOp=null,activeType=null;
 
 ['time-slider','time-slider-d'].forEach(id=>{const el=document.getElementById(id);if(el){el.max=TOTAL_WEEKS-1;el.value=TOTAL_WEEKS-1;}});
 ['slider-label-end','slider-label-end-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=MONTH_NAMES[CUR_MONTH];});
@@ -416,7 +458,13 @@ function renderMarkers(){
   if(heatLayer){map.removeLayer(heatLayer);heatLayer=null;}
   const filtered=getFiltered();
   if(heatMode){
-    heatLayer=L.heatLayer(filtered.map(s=>[s.lat,s.lng,1]),{radius:25,blur:15,maxZoom:12}).addTo(map);
+    const pts=filtered.map(s=>{
+      const cnt=s.count||1;
+      const w=heatWeight==='power'?(s.dc_power||s.ac_power||1)*cnt:cnt;
+      return[s.lat,s.lng,w];
+    });
+    const maxW=Math.max(...pts.map(p=>p[2]),1);
+    heatLayer=L.heatLayer(pts.map(p=>[p[0],p[1],p[2]/maxW]),{radius:30,blur:20,maxZoom:12}).addTo(map);
   } else {
     const groups=groupByCoords(filtered);
     Object.values(groups).forEach(group=>{
@@ -446,6 +494,21 @@ function toggleOp(btn){
 function toggleHeat(){
   heatMode=!heatMode;
   ['heatBtn','heatBtn-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',heatMode);});
+  // показываем/скрываем переключатель
+  ['heatSeg','heatSeg-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=heatMode?'inline-flex':'none';});
+  if(heatMode){
+    heatWeight='power';
+    ['heatPwr','heatPwr-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('on');});
+    ['heatCnt','heatCnt-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('on');});
+  }
+  renderMarkers();
+}
+
+function setHeatMode(mode){
+  heatWeight=mode;
+  const isPwr=mode==='power';
+  ['heatPwr','heatPwr-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',isPwr);});
+  ['heatCnt','heatCnt-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',!isPwr);});
   renderMarkers();
 }
 
@@ -457,8 +520,9 @@ function resetFilters(){
   ['slider-label','slider-label-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='ЯНВ';});
   ['playBtn','playBtn-d'].forEach(id=>{const el=document.getElementById(id);if(el){el.innerHTML='&#x25BA;';el.classList.remove('playing');}});
   if(playInterval){clearInterval(playInterval);playInterval=null;}
-  heatMode=false;
+  heatMode=false;heatWeight='power';
   ['heatBtn','heatBtn-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('on');});
+  ['heatSeg','heatSeg-d'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   renderMarkers();
 }
 
@@ -502,6 +566,13 @@ function setTheme(theme){
   document.body.className=document.body.className.replace(/theme-\S+/g,'').trim();
   document.body.classList.add('theme-'+theme);
   tileLayer.setUrl(TILES[theme]||TILES['arcade']);
+}
+
+function toggleBottomPanel(){
+  const content=document.getElementById('bottomContent');
+  const arrow=document.getElementById('tabArrow');
+  const collapsed=content.classList.toggle('collapsed');
+  arrow.style.transform=collapsed?'rotate(180deg)':'rotate(0deg)';
 }
 
 function toggleBurger(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('burgerBtn').classList.toggle('open');}
