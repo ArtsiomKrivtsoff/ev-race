@@ -98,6 +98,15 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
       <div class="stat-card"><div class="stat-label">АВТО СРАЗУ</div><div class="stat-val" id="stat-cars" style="color:#00ffff">...</div></div>
     </div>
 
+    <!-- ПОИСК -->
+    <div class="search-wrap">
+      <span class="filter-label">ПОИСК:</span>
+      <div class="search-input-wrap">
+        <input class="search-input" id="search-input" type="text" placeholder="АДРЕС, ЛОКАЦИЯ, ГОРОД, РАЗЪЁМ..." autocomplete="off" oninput="setSearch(this.value)">
+        <span class="search-clear" id="search-clear" onclick="clearSearch()">&#x2715;</span>
+      </div>
+    </div>
+
     <!-- ФИЛЬТРЫ -->
     <div class="filters-wrap">
       <div class="filter-row">
@@ -222,6 +231,7 @@ let allStations=[];
 let filterMonth='all';
 let filterOp='all';
 let filterCity='all';
+let filterSearch='';
 
 // ============================================================
 // ТЕМА
@@ -309,6 +319,11 @@ function getFiltered(){
     }
     if(filterOp!=='all'&&s.operator!==filterOp)return false;
     if(filterCity!=='all'&&(s.city||'').toLowerCase()!==filterCity)return false;
+    if(filterSearch){
+      const q=filterSearch.toLowerCase();
+      const hay=[s.city,s.address,s.location_name,OP_NAMES[s.operator]||s.operator,s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' ').toLowerCase();
+      if(!hay.includes(q))return false;
+    }
     return true;
   });
 }
@@ -360,9 +375,22 @@ function setCity(val){
   });
   applyFilters();
 }
+function setSearch(val){
+  filterSearch=val.trim();
+  document.getElementById('search-clear').style.display=filterSearch?'block':'none';
+  applyFilters();
+}
+function clearSearch(){
+  filterSearch='';
+  document.getElementById('search-input').value='';
+  document.getElementById('search-clear').style.display='none';
+  applyFilters();
+}
 function resetFilters(){
-  filterMonth='all';filterOp='all';filterCity='all';
+  filterMonth='all';filterOp='all';filterCity='all';filterSearch='';
   document.querySelectorAll('#month-filter span,#op-filter span,#city-filter span').forEach(el=>el.classList.remove('on'));
+  document.getElementById('search-input').value='';
+  document.getElementById('search-clear').style.display='none';
   applyFilters();
 }
 function applyFilters(){
