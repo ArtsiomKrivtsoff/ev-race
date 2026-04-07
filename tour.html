@@ -263,7 +263,6 @@ function processData(stations){
   ALL_OPS.forEach(op=>{stPts[op]=0;pwPts[op]=0;stW[op]=0;pwW[op]=0;totalSt[op]=0;totalPow[op]=0;});
   stations.forEach(s=>{totalSt[s.operator]=(totalSt[s.operator]||0)+(s.count||1);totalPow[s.operator]=(totalPow[s.operator]||0)+((s.dc_power||0)*(s.count||1));});
   const roundResults={};
-  const stRH={},pwRH={};
   Object.keys(byRound).map(Number).sort((a,b)=>a-b).forEach(rn=>{
     const rd=byRound[rn];
     const bySt=Object.entries(rd).sort((a,b)=>b[1].stations-a[1].stations);
@@ -272,16 +271,21 @@ function processData(stations){
       byStations:bySt.map(([op,d],i)=>({op,stations:d.stations,power:d.power,lastDate:d.lastDate,place:i+1,points:PTS[i]||0})),
       byPower:byPw.map(([op,d],i)=>({op,stations:d.stations,power:d.power,lastDate:d.lastDate,place:i+1,points:PTS[i]||0}))
     };
-    if(rn<curRound){
-      bySt.forEach(([op],i)=>{stPts[op]+=PTS[i]||0;if(i===0)stW[op]++;});
-      byPw.forEach(([op],i)=>{pwPts[op]+=PTS[i]||0;if(i===0)pwW[op]++;});
-      const stS=[...ALL_OPS].sort((a,b)=>stPts[b]!==stPts[a]?stPts[b]-stPts[a]:stW[b]-stW[a]);
-      const pwS=[...ALL_OPS].sort((a,b)=>pwPts[b]!==pwPts[a]?pwPts[b]-pwPts[a]:pwW[b]-pwW[a]);
-      stRH[rn]={};pwRH[rn]={};
-      stS.forEach((op,i)=>stRH[rn][op]=i+1);
-      pwS.forEach((op,i)=>pwRH[rn][op]=i+1);
-    }
   });
+  // Снапшоты рейтинга после каждого завершённого раунда (даже пустого)
+  const stRH={},pwRH={};
+  for(let rn=1;rn<curRound;rn++){
+    const rd=byRound[rn]||{};
+    const bySt=Object.entries(rd).sort((a,b)=>b[1].stations-a[1].stations);
+    const byPw=Object.entries(rd).sort((a,b)=>b[1].power-a[1].power);
+    bySt.forEach(([op],i)=>{stPts[op]+=PTS[i]||0;if(i===0)stW[op]++;});
+    byPw.forEach(([op],i)=>{pwPts[op]+=PTS[i]||0;if(i===0)pwW[op]++;});
+    const stS=[...ALL_OPS].sort((a,b)=>stPts[b]!==stPts[a]?stPts[b]-stPts[a]:stW[b]-stW[a]);
+    const pwS=[...ALL_OPS].sort((a,b)=>pwPts[b]!==pwPts[a]?pwPts[b]-pwPts[a]:pwW[b]-pwW[a]);
+    stRH[rn]={};pwRH[rn]={};
+    stS.forEach((op,i)=>stRH[rn][op]=i+1);
+    pwS.forEach((op,i)=>pwRH[rn][op]=i+1);
+  }
   return{byRound,roundResults,stPts,pwPts,stW,pwW,totalSt,totalPow,curRound,stRH,pwRH};
 }
 
