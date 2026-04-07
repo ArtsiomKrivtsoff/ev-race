@@ -98,15 +98,6 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
       <div class="stat-card"><div class="stat-label">АВТО СРАЗУ</div><div class="stat-val" id="stat-cars" style="color:#00ffff">...</div></div>
     </div>
 
-    <!-- ПОИСК -->
-    <div class="search-wrap">
-      <span class="filter-label">ПОИСК:</span>
-      <div class="search-input-wrap">
-        <input class="search-input" id="search-input" type="text" placeholder="АДРЕС, ЛОКАЦИЯ, ГОРОД, РАЗЪЁМ..." autocomplete="off" oninput="setSearch(this.value)">
-        <span class="search-clear" id="search-clear" onclick="clearSearch()">&#x2715;</span>
-      </div>
-    </div>
-
     <!-- ФИЛЬТРЫ -->
     <div class="filters-wrap">
       <div class="filter-row">
@@ -131,6 +122,15 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
         <span class="filter-label">ГОРОД:</span>
         <div class="city-filters" id="city-filter"></div>
         <span class="reset-btn" id="reset-btn" onclick="resetFilters()">&#x2715; СБРОСИТЬ</span>
+      </div>
+    </div>
+
+    <!-- ПОИСК -->
+    <div class="search-wrap">
+      <span class="filter-label">ПОИСК:</span>
+      <div class="search-input-wrap">
+        <input class="search-input" id="search-input" type="text" placeholder="АДРЕС, ЛОКАЦИЯ, ГОРОД, РАЗЪЁМ..." autocomplete="off" oninput="setSearch(this.value)">
+        <span class="search-clear" id="search-clear" onclick="clearSearch()">&#x2715;</span>
       </div>
     </div>
 
