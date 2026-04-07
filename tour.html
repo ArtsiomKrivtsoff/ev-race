@@ -6,34 +6,14 @@
 <title>Турнирная таблица EV RACE 2026 — рейтинг операторов зарядных станций Беларуси</title>
 <meta name="description" content="Турнирная таблица гонки зарядных станций Беларуси 2026. Рейтинг операторов DC зарядки: BatteryFly, forEVo, Zaryadka, United Company, Гродненский ЦСМС. 53 круга, финал 31 декабря 2026.">
 <meta name="keywords" content="рейтинг операторов зарядных станций Беларусь, DC зарядка Беларусь 2026, BatteryFly forEVo Zaryadka, операторы ЭЗС рейтинг, сколько зарядных станций Беларусь 2026">
-<meta name="author" content="Artsiom Krivtsoff">
-<meta name="robots" content="index, follow">
-<meta name="geo.region" content="BY">
-<meta name="geo.placename" content="Беларусь">
-<link rel="canonical" href="https://evrace.by/tour.html">
 <meta property="og:title" content="Турнирная таблица EV RACE 2026 — рейтинг операторов ЭЗС Беларуси">
 <meta property="og:description" content="53 круга, 5 операторов DC зарядки Беларуси. Актуальный рейтинг — кто лидирует в гонке зарядных станций 2026?">
 <meta property="og:image" content="https://evrace.by/og.png">
 <meta property="og:url" content="https://evrace.by/tour.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="ru_BY">
-<meta property="og:site_name" content="EV RACE 2026">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://evrace.by/tour.html">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Турнирная таблица EV RACE 2026",
-  "description": "Рейтинг операторов DC зарядных станций Беларуси 2026. 53 круга, финал 31 декабря.",
-  "url": "https://evrace.by/tour.html",
-  "inLanguage": "ru-BY",
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "EV RACE 2026",
-    "url": "https://evrace.by"
-  }
-}
-</script>
 
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
@@ -54,12 +34,11 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
       <span></span><span></span><span></span>
     </button>
-   <div class="nav-desktop">
-  <a class="nav-link" href="/">ГЛАВНАЯ</a>
-  <a class="nav-link active" href="#">ТУРНИРНАЯ ТАБЛИЦА</a>
-  <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
-  <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
-</div>
+    <div class="nav-desktop">
+      <a class="nav-link" href="/">ГЛАВНАЯ</a>
+      <a class="nav-link active" href="#">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+    </div>
     <div class="theme-seg">
       <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
       <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
@@ -68,12 +47,11 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
   </div>
 
   <!-- МОБИЛЬНОЕ МЕНЮ -->
- <div class="nav-mobile-drop" id="mobileMenu">
+  <div class="nav-mobile-drop" id="mobileMenu">
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
     <a class="nav-mobile-link active" href="#" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
-    <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
-    <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
-</div>
+    <a class="nav-mobile-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+  </div>
 
   <div class="page-wrap">
 
@@ -345,8 +323,8 @@ function renderStandings(data){
       const pos=i+1;
       let dH='<span class="change-same">—</span>';
       if(prevR&&lastR){
-        const curPos=lastR[op]||pos;
-        const prvPos=prevR[op]||pos;
+        const curPos=lastR[op]||ALL_OPS.length;
+        const prvPos=prevR[op]||ALL_OPS.length;
         const diff=prvPos-curPos;
         if(diff>0)dH=`<span class="change-up">▲${diff}</span>`;
         else if(diff<0)dH=`<span class="change-down">▼${Math.abs(diff)}</span>`;
