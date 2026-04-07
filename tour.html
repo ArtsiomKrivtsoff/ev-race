@@ -337,7 +337,7 @@ function renderStandings(data){
     const prevRn=cR.length>1?cR[cR.length-2]:null;
     const lastR=lastRn?rH[lastRn]:null;
     const prevR=prevRn?rH[prevRn]:null;
-    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num">ОЧК</th><th class="th-num">Δ</th><th class="th-num">ПОБЕД</th><th class="th-last">${totLabel}</th><th class="th-tempo">СТ/НЕД</th></tr></thead><tbody>`;
+    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num">ОЧК</th><th class="th-num">Δ</th><th class="th-num">ПОБЕД</th><th class="th-last">${totLabel}</th>${showKwt?'':'<th class="th-tempo">СТ/НЕД</th>'}</tr></thead><tbody>`;
     sorted.forEach((op,i)=>{
       const pos=i+1;
       let dH='<span class="change-same">—</span>';
@@ -350,7 +350,7 @@ function renderStandings(data){
       }
       const tv=showKwt?(totals[op]?totals[op]:'—'):(totals[op]||0);
       const tp=tempo[op]>0?tempo[op].toFixed(1):'—';
-      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></td><td><span class="pts">${pts[op]}</span></td><td>${dH}</td><td class="td-wins">${wins[op]}</td><td class="td-last">${tv}</td><td class="td-tempo">${tp}</td></tr>`;
+      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></td><td><span class="pts">${pts[op]}</span></td><td>${dH}</td><td class="td-wins">${wins[op]}</td><td class="td-last">${tv}</td>${showKwt?'':`<td class="td-tempo">${tp}</td>`}</tr>`;
     });
     html+='</tbody></table>';
     document.getElementById(wrapId).innerHTML=html;
@@ -376,14 +376,12 @@ function renderForecast(data){
   const tempo=calcTempo(data);
   const remaining=TOTAL_ROUNDS-curRound+1;
   const forecasts=ALL_OPS.map(op=>({op,forecast:Math.round(totalSt[op]+(tempo[op]*remaining))}));
-  const maxF=Math.max(...forecasts.map(f=>f.forecast),1);
   const totalF=forecasts.reduce((s,f)=>s+f.forecast,0);
   const mult=totalF>0?(1010/totalF).toFixed(1):null;
   let html='<div class="forecast-section">';
   forecasts.forEach(({op,forecast})=>{
-    const pct=Math.round((forecast/maxF)*100);
-    const tp=tempo[op]>0?tempo[op].toFixed(1):'0';
-    html+=`<div class="forecast-item"><div class="forecast-op"><span class="dot" style="background:${opColor(op)}"></span>${opName(op)}</div><div class="forecast-bar-wrap"><div class="forecast-bar" style="width:${pct}%;background:${opColor(op)}"></div></div><div class="forecast-num">~<strong>${forecast}</strong> ст. <span style="opacity:.6">(${tp}/нед)</span></div></div>`;
+    const tp=tempo[op]>0?tempo[op].toFixed(1):'—';
+    html+=`<div class="forecast-item"><div class="forecast-op"><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></div><div class="forecast-num">~<strong>${forecast}</strong> ст. <span class="forecast-tempo">(${tp}/нед)</span></div></div>`;
   });
   const noteText=totalF>0&&mult?`При текущем темпе все вместе финишируют с ~${totalF} ст. из 1010. Нужно ускориться в ${mult}×`:'Недостаточно данных для прогноза';
   html+=`<div class="forecast-note">${noteText}</div></div>`;
@@ -403,9 +401,7 @@ function renderHistory(data){
     let badges='';
     if(winSt)badges+=`<span class="hist-winner-st">★ ${opName(winSt.op)} ${winSt.stations} ст.</span>`;
     if(winPw&&winPw.power>0){
-      const sameWinner=winSt&&winPw.op===winSt.op;
-      if(!sameWinner)badges+=`<span class="hist-winner-pw">⚡ ${opName(winPw.op)} ${winPw.power} кВт</span>`;
-      else badges+=`<span class="hist-winner-pw">⚡ ${winPw.power} кВт</span>`;
+      badges+=`<span class="hist-winner-pw">⚡ ${opName(winPw.op)} ${winPw.power} кВт</span>`;
     }
     const rest=resSt.slice(1).map(r=>`<span class="hist-op"><span class="dot" style="background:${opColor(r.op)}"></span><span style="color:${opColor(r.op)}">${opName(r.op)}</span><span style="color:#aaa"> ${r.stations} ст.</span></span>`).join('<span class="sep"> · </span>');
     html+=`<div class="hist-row"><div class="hist-meta"><div class="hist-round">КРУГ #${rn}</div><div class="hist-dates">${d.label} · завершён</div></div><div class="hist-ops">${badges}${rest?'<span class="sep"> · </span>'+rest:''}</div></div>`;
