@@ -38,6 +38,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
       <a class="nav-link" href="/">ГЛАВНАЯ</a>
       <a class="nav-link active" href="#">ТУРНИРНАЯ ТАБЛИЦА</a>
       <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+      <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
     </div>
     <div class="theme-seg">
       <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
@@ -50,7 +51,8 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
   <div class="nav-mobile-drop" id="mobileMenu">
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
     <a class="nav-mobile-link active" href="#" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
-    <a class="nav-mobile-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+    <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
+    <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
   </div>
 
   <div class="page-wrap">
@@ -79,6 +81,10 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 
     <div class="section-head">▶ РЕЙТИНГ ПО МОЩНОСТИ</div>
     <div class="standings-wrap" id="standings-power-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+
+    <!-- ПРОГНОЗ -->
+    <div class="section-head">▶ ПРОГНОЗ НА ФИНАЛ</div>
+    <div id="forecast-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
 
     <!-- ИСТОРИЯ -->
     <div class="section-head">▶ ИСТОРИЯ КРУГОВ</div>
@@ -312,8 +318,17 @@ function renderCurrentRound(data){
   }
   document.getElementById('current-round-wrap').innerHTML=`<div class="cur-round"><div class="cur-round-header"><div class="cur-round-num">КРУГ #${curRound} / ${TOTAL_ROUNDS}</div><div class="cur-round-dates">${dates.label}<br><span style="color:var(--yellow);font-size:10px">ИДЁТ</span></div></div>${inner}</div>`;
 }
+function calcTempo(data){
+  // темп = totalSt[op] / кол-во раундов где оператор был активен
+  const active={};ALL_OPS.forEach(op=>active[op]=0);
+  Object.values(data.byRound).forEach(rd=>{Object.keys(rd).forEach(op=>{if(rd[op].stations>0)active[op]++;});});
+  const tempo={};
+  ALL_OPS.forEach(op=>{tempo[op]=active[op]>0?(data.totalSt[op]/active[op]):0;});
+  return tempo;
+}
 function renderStandings(data){
   const{stPts,pwPts,stW,pwW,totalSt,totalPow,stRH,pwRH}=data;
+  const tempo=calcTempo(data);
   function render(pts,wins,rH,wrapId,totals,totLabel,showKwt){
     const sorted=[...ALL_OPS].sort((a,b)=>pts[b]!==pts[a]?pts[b]-pts[a]:wins[b]-wins[a]);
     const rc=['r1','r2','r3','',''];
@@ -322,7 +337,7 @@ function renderStandings(data){
     const prevRn=cR.length>1?cR[cR.length-2]:null;
     const lastR=lastRn?rH[lastRn]:null;
     const prevR=prevRn?rH[prevRn]:null;
-    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num">ОЧК</th><th class="th-num">Δ</th><th class="th-num">ПОБЕД</th><th class="th-last">${totLabel}</th></tr></thead><tbody>`;
+    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num">ОЧК</th><th class="th-num">Δ</th><th class="th-num">ПОБЕД</th><th class="th-last">${totLabel}</th><th class="th-tempo">СТ/НЕД</th></tr></thead><tbody>`;
     sorted.forEach((op,i)=>{
       const pos=i+1;
       let dH='<span class="change-same">—</span>';
@@ -334,7 +349,8 @@ function renderStandings(data){
         else if(diff<0)dH=`<span class="change-down">▼${Math.abs(diff)}</span>`;
       }
       const tv=showKwt?(totals[op]?totals[op]:'—'):(totals[op]||0);
-      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></td><td><span class="pts">${pts[op]}</span></td><td>${dH}</td><td class="td-wins">${wins[op]}</td><td class="td-last">${tv}</td></tr>`;
+      const tp=tempo[op]>0?tempo[op].toFixed(1):'—';
+      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></td><td><span class="pts">${pts[op]}</span></td><td>${dH}</td><td class="td-wins">${wins[op]}</td><td class="td-last">${tv}</td><td class="td-tempo">${tp}</td></tr>`;
     });
     html+='</tbody></table>';
     document.getElementById(wrapId).innerHTML=html;
@@ -355,17 +371,44 @@ function renderRoundsGrid(data){
   }
   document.getElementById('rounds-grid').innerHTML=html;
 }
+function renderForecast(data){
+  const{totalSt,curRound}=data;
+  const tempo=calcTempo(data);
+  const remaining=TOTAL_ROUNDS-curRound+1;
+  const forecasts=ALL_OPS.map(op=>({op,forecast:Math.round(totalSt[op]+(tempo[op]*remaining))}));
+  const maxF=Math.max(...forecasts.map(f=>f.forecast),1);
+  const totalF=forecasts.reduce((s,f)=>s+f.forecast,0);
+  const mult=totalF>0?(1010/totalF).toFixed(1):null;
+  let html='<div class="forecast-section">';
+  forecasts.forEach(({op,forecast})=>{
+    const pct=Math.round((forecast/maxF)*100);
+    const tp=tempo[op]>0?tempo[op].toFixed(1):'0';
+    html+=`<div class="forecast-item"><div class="forecast-op"><span class="dot" style="background:${opColor(op)}"></span>${opName(op)}</div><div class="forecast-bar-wrap"><div class="forecast-bar" style="width:${pct}%;background:${opColor(op)}"></div></div><div class="forecast-num">~<strong>${forecast}</strong> ст. <span style="opacity:.6">(${tp}/нед)</span></div></div>`;
+  });
+  const noteText=totalF>0&&mult?`При текущем темпе все вместе финишируют с ~${totalF} ст. из 1010. Нужно ускориться в ${mult}×`:'Недостаточно данных для прогноза';
+  html+=`<div class="forecast-note">${noteText}</div></div>`;
+  document.getElementById('forecast-wrap').innerHTML=html;
+}
 function renderHistory(data){
   const{roundResults,curRound}=data;
   const comp=Object.keys(roundResults).map(Number).filter(r=>r<curRound).sort((a,b)=>b-a);
   if(!comp.length){document.getElementById('history-wrap').innerHTML='<div class="loading" style="color:#333">ЗАВЕРШЁННЫХ КРУГОВ ЕЩЁ НЕТ</div>';return;}
   let html='';
   comp.forEach(rn=>{
-    const d=getRoundDates(rn);const res=roundResults[rn].byStations;
-    const oH=res.map((r)=>{
-      return `<span class="hist-op"><span class="dot" style="background:${opColor(r.op)}"></span><span style="color:${opColor(r.op)}">${opName(r.op)}</span><span style="color:#aaa"> ${r.stations} ст.</span></span>`;
-    }).join('<span class="sep"> · </span>');
-    html+=`<div class="hist-row"><div class="hist-meta"><div class="hist-round">КРУГ #${rn}</div><div class="hist-dates">${d.label} · завершён</div></div><div class="hist-ops">${oH}</div></div>`;
+    const d=getRoundDates(rn);
+    const resSt=roundResults[rn].byStations;
+    const resPw=roundResults[rn].byPower;
+    const winSt=resSt[0];
+    const winPw=resPw[0];
+    let badges='';
+    if(winSt)badges+=`<span class="hist-winner-st">★ ${opName(winSt.op)} ${winSt.stations} ст.</span>`;
+    if(winPw&&winPw.power>0){
+      const sameWinner=winSt&&winPw.op===winSt.op;
+      if(!sameWinner)badges+=`<span class="hist-winner-pw">⚡ ${opName(winPw.op)} ${winPw.power} кВт</span>`;
+      else badges+=`<span class="hist-winner-pw">⚡ ${winPw.power} кВт</span>`;
+    }
+    const rest=resSt.slice(1).map(r=>`<span class="hist-op"><span class="dot" style="background:${opColor(r.op)}"></span><span style="color:${opColor(r.op)}">${opName(r.op)}</span><span style="color:#aaa"> ${r.stations} ст.</span></span>`).join('<span class="sep"> · </span>');
+    html+=`<div class="hist-row"><div class="hist-meta"><div class="hist-round">КРУГ #${rn}</div><div class="hist-dates">${d.label} · завершён</div></div><div class="hist-ops">${badges}${rest?'<span class="sep"> · </span>'+rest:''}</div></div>`;
   });
   document.getElementById('history-wrap').innerHTML=html;
 }
@@ -382,12 +425,13 @@ async function init(){
   try{
     const stations=await fetchStations();if(!Array.isArray(stations))throw new Error('No data');
     const data=processData(stations);
-    renderCurrentRound(data);renderStandings(data);renderRoundsGrid(data);renderHistory(data);
+    renderCurrentRound(data);renderStandings(data);renderForecast(data);renderRoundsGrid(data);renderHistory(data);
   }catch(e){
     console.log('Error:',e);
     document.getElementById('current-round-wrap').innerHTML='<div class="loading" style="color:#333">ОШИБКА ЗАГРУЗКИ</div>';
     document.getElementById('standings-stations-wrap').innerHTML='<div class="loading" style="color:#333">ОШИБКА ЗАГРУЗКИ</div>';
     document.getElementById('standings-power-wrap').innerHTML='<div class="loading" style="color:#333">ОШИБКА ЗАГРУЗКИ</div>';
+    document.getElementById('forecast-wrap').innerHTML='<div class="loading" style="color:#333">ОШИБКА ЗАГРУЗКИ</div>';
   }
   trackVisit();
 }
