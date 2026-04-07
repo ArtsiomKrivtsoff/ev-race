@@ -272,14 +272,13 @@
   /* ПРОГНОЗ */
   .forecast-section{border:1px solid var(--green-dark);background:var(--card-bg);padding:16px 16px 14px;margin-bottom:24px;position:relative;}
   .forecast-section::before{content:' ПРОГНОЗ НА ФИНАЛ ';position:absolute;top:-10px;left:14px;background:var(--bg);padding:0 6px;font-family:'Press Start 2P',monospace;font-size:9px;color:var(--green-dim);letter-spacing:2px;}
-  .forecast-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .forecast-item{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
   .forecast-item:last-child{margin-bottom:0;}
-  .forecast-op{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green-dim);width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;}
-  .forecast-bar-wrap{flex:1;height:5px;background:#001a00;border:1px solid var(--green-dark);}
-  .forecast-bar{height:100%;background:var(--green);transition:width 1s ease;}
-  .forecast-num{font-size:10px;color:var(--green-dim);min-width:65px;text-align:right;white-space:nowrap;}
-  .forecast-num strong{color:var(--green);font-family:'Press Start 2P',monospace;font-size:9px;}
-  .forecast-note{font-size:10px;color:var(--green-dark);margin-top:12px;padding-top:10px;border-top:1px solid var(--green-dark);letter-spacing:1px;line-height:1.8;}
+  .forecast-op{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green-dim);flex-shrink:0;}
+  .forecast-num{font-size:11px;color:var(--green-dim);text-align:right;white-space:nowrap;}
+  .forecast-num strong{color:var(--green);font-family:'Press Start 2P',monospace;font-size:12px;}
+  .forecast-tempo{font-size:9px;color:var(--green-dark);}
+  .forecast-note{font-size:11px;color:var(--green);margin-top:12px;padding:10px 12px;border:1px solid var(--green-dark);background:rgba(0,255,65,.04);letter-spacing:1px;line-height:1.9;}
 
   /* ============================================================
      СТРАНИЦА СТАНЦИЙ — arcade.css overrides

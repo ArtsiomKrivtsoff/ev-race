@@ -678,14 +678,16 @@
   /* ПРОГНОЗ */
   .forecast-section{background:#1e1e1e;border-radius:12px;padding:18px 20px 16px;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.3);border:1px solid #2a2a2a;}
   .forecast-title{font-size:11px;color:#444;letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-bottom:14px;}
-  .forecast-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .forecast-item{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
   .forecast-item:last-child{margin-bottom:0;}
-  .forecast-op{display:flex;align-items:center;gap:6px;font-size:13px;color:#aaa;width:140px;flex-shrink:0;white-space:nowrap;overflow:hidden;}
-  .forecast-bar-wrap{flex:1;height:5px;background:#2a2a2a;border-radius:3px;overflow:hidden;}
-  .forecast-bar{height:100%;border-radius:3px;transition:width 1s ease;}
-  .forecast-num{font-size:12px;color:#555;min-width:65px;text-align:right;white-space:nowrap;}
-  .forecast-num strong{color:#aaa;font-weight:500;}
-  .forecast-note{font-size:11px;color:#333;margin-top:12px;padding-top:10px;border-top:1px solid #2a2a2a;line-height:1.8;}
+  .forecast-op{display:flex;align-items:center;gap:6px;font-size:13px;color:#aaa;flex-shrink:0;}
+  .forecast-num{font-size:13px;color:#666;text-align:right;white-space:nowrap;}
+  .forecast-num strong{color:#ccc;font-weight:500;font-size:15px;}
+  .forecast-tempo{font-size:11px;color:#444;}
+  .forecast-note{font-size:13px;color:#aaa;font-weight:500;margin-top:14px;padding:12px 14px;border-radius:8px;background:#252525;line-height:1.7;}
+
+  /* META-ROW ОТСТУП */
+  .meta-row{margin-top:20px;}
 
   /* ============================================================
      СТРАНИЦА СТАНЦИЙ — Tesla Dark
