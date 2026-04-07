@@ -665,6 +665,26 @@
 
   .new-badge { margin-left: 6px; }
 
+  /* ТЕМП */
+  .td-tempo{text-align:right;background:#f0faf0;color:#2a7a2a;font-size:13px;}
+  .th-tempo{text-align:right;background:#f5fbf5;color:#aaa !important;}
+
+  /* БЕЙДЖИ ПОБЕДИТЕЛЕЙ В ИСТОРИИ */
+  .hist-winner-st{font-size:11px;padding:2px 8px;background:#e8f0fe;color:#185FA5;border-radius:4px;white-space:nowrap;font-weight:500;}
+  .hist-winner-pw{font-size:11px;padding:2px 8px;background:#e6f4ea;color:#2a7a2a;border-radius:4px;white-space:nowrap;font-weight:500;}
+
+  /* ПРОГНОЗ */
+  .forecast-section{background:#fff;border-radius:12px;padding:18px 20px 16px;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .forecast-title{font-size:11px;color:#aaa;letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-bottom:14px;}
+  .forecast-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .forecast-item:last-child{margin-bottom:0;}
+  .forecast-op{display:flex;align-items:center;gap:6px;font-size:13px;color:#333;width:140px;flex-shrink:0;white-space:nowrap;overflow:hidden;}
+  .forecast-bar-wrap{flex:1;height:5px;background:#f0f0f0;border-radius:3px;overflow:hidden;}
+  .forecast-bar{height:100%;border-radius:3px;transition:width 1s ease;}
+  .forecast-num{font-size:12px;color:#888;min-width:65px;text-align:right;white-space:nowrap;}
+  .forecast-num strong{color:#333;font-weight:500;}
+  .forecast-note{font-size:11px;color:#bbb;margin-top:12px;padding-top:10px;border-top:1px solid #f0f0f0;line-height:1.8;}
+
   /* ============================================================
      СТРАНИЦА СТАНЦИЙ — Tesla Light
      ============================================================ */
