@@ -354,6 +354,7 @@
   .op-ev{background:rgba(131,42,245,.15);color:#b066ff;border:1px solid rgba(131,42,245,.25);}
   .op-or{background:rgba(255,107,0,.15);color:#ff8833;border:1px solid rgba(255,107,0,.25);}
   .op-pr{background:rgba(36,195,211,.15);color:#24c3d3;border:1px solid rgba(36,195,211,.25);}
+  .op-gt{background:rgba(26,58,107,.15);color:#4a7cc7;border:1px solid rgba(26,58,107,.25);}
   .gun-pill{font-size:9px;padding:2px 7px;border:1px solid #1a3a1a;color:#00aa28;display:inline-flex;align-items:center;gap:3px;}
   .gun-dot{width:5px;height:5px;background:var(--green);border-radius:1px;flex-shrink:0;display:inline-block;}
 
