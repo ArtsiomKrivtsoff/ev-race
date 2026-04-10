@@ -299,10 +299,7 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
           <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
           <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
           <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
-        </div>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-label">ТИП</div>
+          <button class="op-filter-btn op-gt" data-op="gto"        onclick="toggleOp(this)">Белтехосмотр</button>
         <div class="op-filters" style="gap:4px;">
           <button class="op-filter-btn map-type-radio" data-type="DC"   onclick="toggleType(this)">DC</button>
           <button class="op-filter-btn map-type-radio" data-type="AC"   onclick="toggleType(this)">AC</button>
@@ -373,8 +370,7 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
               <button class="op-filter-btn op-ev" data-op="evika"      onclick="toggleOp(this)">Evika!</button>
               <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
               <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
-            </div>
-            <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
+              <button class="op-filter-btn op-gt" data-op="gto"        onclick="toggleOp(this)">Белтехосмотр</button>
           </div>
           <div class="map-utils-row">
             <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
@@ -397,8 +393,8 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
 <script>
 const SURL='https://uvrboxrddqlasgrnnnne.supabase.co';
 const SKEY='sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
-const OP_COLORS={batteryfly:'#005EEB',forevo:'#b44fff',zaryadka:'#00cfff',united:'#F5821F',csms:'#FF6B6B',malanka:'#76d275',evika:'#832af5',orange:'#FF6B00',prizma:'#24c3d3'};
-const OP_NAMES={batteryfly:'BatteryFly',forevo:'forEVo',zaryadka:'Zaryadka',united:'United Company',csms:'Гродн. ЦСМС',malanka:'Malanka',evika:'Evika!',orange:'Orange',prizma:'Prizma'};
+const OP_COLORS={batteryfly:'#005EEB',forevo:'#b44fff',zaryadka:'#00cfff',united:'#F5821F',csms:'#FF6B6B',malanka:'#76d275',evika:'#832af5',orange:'#FF6B00',prizma:'#24c3d3',gto:'#1a3a6b'};
+const OP_NAMES={batteryfly:'BatteryFly',forevo:'forEVo',zaryadka:'Zaryadka',united:'United Company',csms:'ЦСМС',malanka:'Malanka',evika:'Evika!',orange:'Orange',prizma:'Prizma',gto:'Белтехосмотр'};
 const TILES={'arcade':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png','tesla-light':'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png','tesla-dark':'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'};
 const MONTH_NAMES=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
 const NOW=new Date(),CUR_MONTH=NOW.getMonth(),TOTAL_WEEKS=(CUR_MONTH+1)*4;
