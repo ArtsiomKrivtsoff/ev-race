@@ -394,7 +394,12 @@ function resetFilters(){
   document.getElementById('search-clear').style.display='none';
   applyFilters();
 }
+function expandAll(){
+  showAll=true;
+  renderTable(getFiltered());
+}
 function applyFilters(){
+  showAll=false;
   updateResetBtn();
   const filtered=getFiltered();
   renderStats(filtered);
@@ -429,6 +434,9 @@ function renderStats(stations){
   document.getElementById('stat-cars').textContent=cars||'\u2014';
 }
 
+let showAll=false;
+const PREVIEW_COUNT=10;
+
 // ============================================================
 // TABLE + CARDS
 // ============================================================
@@ -436,11 +444,16 @@ function renderTable(stations){
   const totalStCount=stations.reduce((n,s)=>n+(s.count||1),0);
   document.getElementById('table-head').textContent='\u25BA \u0421\u0422\u0410\u041d\u0426\u0418\u0419 \u0423\u0421\u0422\u0410\u041d\u041e\u0412\u041b\u0415\u041d\u041e: '+totalStCount;
 
+  const hasFilter=filterMonth!=='all'||filterOp!=='all'||filterCity!=='all'||filterSearch!=='';
+  const limit=(showAll||hasFilter)?stations.length:PREVIEW_COUNT;
+  const visible=stations.slice(0,limit);
+  const hidden=stations.length-limit;
+
   const tbody=document.getElementById('reg-tbody');
   if(stations.length===0){
     tbody.innerHTML='<tr><td colspan="9" class="loading">\u041d\u0415\u0422 \u0414\u0410\u041d\u041d\u042b\u0425 \u041f\u041e \u0412\u042b\u0411\u0420\u0410\u041d\u041d\u042b\u041c \u0424\u0418\u041b\u042c\u0422\u0420\u0410\u041c</td></tr>';
   } else {
-    tbody.innerHTML=stations.map(s=>{
+    tbody.innerHTML=visible.map(s=>{
       const newBadge=isNew(s.station_date)?' <span class="new-badge">NEW</span>':'';
       const locHtml=s.location_name
         ?'<span class="loc-name">'+s.location_name+'</span><span class="loc-address">'+(s.address||'')+'</span>'
@@ -466,8 +479,12 @@ function renderTable(stations){
     if(!groups[key])groups[key]=[];
     groups[key].push(s);
   });
+  const groupEntries=Object.entries(groups);
+  const visibleGroups=groupEntries.slice(0,limit);
+  const hiddenGroups=groupEntries.length-visibleGroups.length;
+
   let cardsHtml='';
-  Object.entries(groups).forEach(([locKey,locs])=>{
+  visibleGroups.forEach(([locKey,locs])=>{
     const first=locs[0];
     const totalPower=locs.reduce((n,s)=>n+(((s.dc_power||0)+(s.ac_power||0))*(s.count||1)),0);
     const totalGuns=locs.reduce((n,s)=>{
@@ -489,6 +506,21 @@ function renderTable(stations){
     cardsHtml+='<div class="loc-card"><div class="loc-head"><div class="loc-head-left">'+opBadge(first.operator)+'<span class="loc-city">'+(first.city||'\u2014')+'</span>'+locNameHtml+locAddrHtml+'</div><div class="loc-head-right"><div class="loc-total-power">'+(totalPower?totalPower+' \u043a\u0412\u0442':'\u2014')+'</div><div class="loc-total-label">\u0412\u0421\u0415\u0413\u041e</div>'+(totalGuns?'<div class="loc-total-label" style="margin-top:2px">'+totalGuns+' \u043f\u0438\u0441\u0442.</div>':'')+'</div></div>'+stationsHtml+'<div class="loc-footer"><span class="loc-date">'+fmtDate(latestDate)+'</span>'+newBadge+'</div></div>';
   });
   cardsWrap.innerHTML=cardsHtml;
+
+  // Кнопка "Показать все"
+  let showBtn=document.getElementById('show-all-btn');
+  if(!showBtn){
+    showBtn=document.createElement('div');
+    showBtn.id='show-all-btn';
+    cardsWrap.parentNode.insertBefore(showBtn,cardsWrap.nextSibling);
+  }
+  if(hiddenGroups>0||hidden>0){
+    const rem=hiddenGroups||hidden;
+    showBtn.innerHTML='<button class="show-all-btn" onclick="expandAll()">&#x25BC; ПОКАЗАТЬ ВСЕ ('+(stations.length)+' СТАНЦИЙ)</button>';
+    showBtn.style.display='block';
+  } else {
+    showBtn.style.display='none';
+  }
 }
 
 // ============================================================
@@ -508,7 +540,7 @@ async function trackVisit(){
 // ============================================================
 async function init(){
   try{
-    const res=await fetch(SURL+'/rest/v1/stations?select=*&order=station_date.desc',{
+    const res=await fetch(SURL+'/rest/v1/stations?select=*&order=station_date.desc,station_time.desc.nullslast',{
       headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}
     });
     allStations=await res.json();
