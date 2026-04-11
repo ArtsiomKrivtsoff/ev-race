@@ -414,7 +414,9 @@
 
   .loading{text-align:center;padding:30px;font-size:12px;color:var(--green-dark);letter-spacing:2px;}
 
-  @media(min-width:600px){.stats-row{grid-template-columns:repeat(6,1fr);}}
+  @media(min-width:600px){.stats-row{grid-template-columns:repeat(3,1fr);}}
+  .show-all-btn{display:block;width:100%;margin:10px 0 20px;padding:12px;background:transparent;border:1px solid var(--green-dark);color:var(--green-dim);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+  .show-all-btn:hover{border-color:var(--green-dim);color:var(--green);}
   @media(max-width:640px){
     .stats-row{grid-template-columns:repeat(2,1fr);}
     .table-wrap{display:none;}
