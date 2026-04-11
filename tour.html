@@ -355,7 +355,7 @@ function renderStandings(data){
   function render(pts,wins,rH,wrapId,totals,totLabel,showKwt){
     const sorted=[...ALL_OPS].sort((a,b)=>pts[b]!==pts[a]?pts[b]-pts[a]:wins[b]-wins[a]);
     const rc=['r1','r2','r3','',''];
-    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num">ОЧК</th><th class="th-num">ПОБЕД</th><th class="th-last">${totLabel}</th>${showKwt?'':'<th class="th-tempo">СТ/НЕД</th>'}</tr></thead><tbody>`;
+    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num">ОЧКИ</th><th class="th-num">ПОБЕД</th><th class="th-last">${totLabel}</th>${showKwt?'':'<th class="th-tempo">СТ/НЕД</th>'}</tr></thead><tbody>`;
     sorted.forEach((op,i)=>{
       const pos=i+1;
       const tv=showKwt?(totals[op]?totals[op]:'—'):(totals[op]||0);
@@ -387,8 +387,8 @@ function renderRoundsGrid(data){
     } else if(isPast&&res){
       const winSt=res.byStations&&res.byStations[0];
       const winPw=res.byPower&&res.byPower[0];
-      const stLine=winSt?`<div class="r-win">★ <span style="color:${opColor(winSt.op)}">${opName(winSt.op)}</span> ст.</div>`:'<div class="r-win">—</div>';
-      const pwLine=winPw&&winPw.power>0?`<div class="r-win">⚡ <span style="color:${opColor(winPw.op)}">${opName(winPw.op)}</span> кВт</div>`:'<div class="r-win">—</div>';
+      const stLine=winSt?`<div class="r-win">★ <span style="color:${opColor(winSt.op)}">${opName(winSt.op)}</span> ${winSt.stations} ст.</div>`:'<div class="r-win">—</div>';
+      const pwLine=winPw&&winPw.power>0?`<div class="r-win">⚡ <span style="color:${opColor(winPw.op)}">${opName(winPw.op)}</span> ${winPw.power} кВт</div>`:'<div class="r-win">—</div>';
       wH=stLine+pwLine;
     } else {
       wH='<div class="r-win">—</div>';
@@ -397,25 +397,33 @@ function renderRoundsGrid(data){
   }
   const gridWrap=document.createElement('div');
   gridWrap.className='rounds-grid-wrap';
-  gridWrap.innerHTML=`<div class="rounds-grid">${html}</div><div class="rounds-grid-fade"></div>`;
+  gridWrap.innerHTML=`<div class="rounds-grid" id="rounds-grid-inner">${html}</div><div class="rounds-grid-fade"></div>`;
   const container=document.getElementById('rounds-grid');
   container.innerHTML='';
   container.appendChild(gridWrap);
-  // кнопка
   const btn=document.createElement('button');
   btn.className='rounds-toggle-btn';
   btn.textContent='▼ ПОКАЗАТЬ ВСЕ КРУГИ';
   container.appendChild(btn);
-  // логика показа
   const cells=gridWrap.querySelectorAll('.round-cell');
-  function applyLimit(expanded){
-    cells.forEach((c,i)=>{c.style.display=expanded||i<showCount?'':'none';});
-    gridWrap.classList.toggle('expanded',expanded);
-    btn.textContent=expanded?'▲ СВЕРНУТЬ':'▼ ПОКАЗАТЬ ВСЕ КРУГИ';
-    if(cells.length<=showCount){btn.style.display='none';gridWrap.classList.add('expanded');}
-  }
-  applyLimit(false);
-  btn.addEventListener('click',()=>applyLimit(!gridWrap.classList.contains('expanded')));
+  const totalCells=cells.length;
+  if(totalCells<=showCount){btn.style.display='none';gridWrap.classList.add('expanded');return;}
+  // скрываем ячейки начиная с showCount+1
+  cells.forEach((c,i)=>{if(i>=showCount)c.style.display='none';});
+  btn.addEventListener('click',()=>{
+    const expanded=gridWrap.classList.contains('expanded');
+    if(expanded){
+      // сворачиваем
+      cells.forEach((c,i)=>{if(i>=showCount)c.style.display='none';});
+      gridWrap.classList.remove('expanded');
+      btn.textContent='▼ ПОКАЗАТЬ ВСЕ КРУГИ';
+    } else {
+      // раскрываем плавно
+      cells.forEach(c=>{c.style.display='';});
+      gridWrap.classList.add('expanded');
+      btn.textContent='▲ СВЕРНУТЬ';
+    }
+  });
 }
 function renderForecast(data){
   const{totalSt,curRound}=data;
@@ -424,9 +432,9 @@ function renderForecast(data){
   const forecasts=ALL_OPS.map(op=>({op,forecast:Math.round(totalSt[op]+(tempo[op]*remaining))}));
   const totalF=forecasts.reduce((s,f)=>s+f.forecast,0);
   const mult=totalF>0?(1010/totalF).toFixed(1):null;
-  let html='<div class="forecast-section">';
+  let html='<div class="forecast-section"><div class="forecast-hint">Считается по среднему темпу каждого оператора. Обновляется после каждой новой станции.</div>';
   forecasts.forEach(({op,forecast})=>{
-    html+=`<div class="forecast-item"><div class="forecast-op"><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></div><div class="forecast-num">~<strong>${forecast}</strong> ст.</div></div>`;
+    html+=`<div class="forecast-item"><div class="forecast-op"><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></div><div class="forecast-num"><span class="forecast-tilde">~</span><strong>${forecast}</strong> ст.</div></div>`;
   });
   const noteText=totalF>0&&mult?`При текущем темпе все вместе финишируют с ~${totalF} ст. из 1010. Нужно ускориться в ${mult}×`:'Недостаточно данных для прогноза';
   html+=`<div class="forecast-note">${noteText}</div></div>`;
