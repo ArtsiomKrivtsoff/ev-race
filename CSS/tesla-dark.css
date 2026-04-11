@@ -547,13 +547,23 @@
   .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;flex-shrink:0;}
   .pts{font-family:'Roboto',sans-serif;font-size:13px;color:#f0f0f0;font-weight:500;}
   .change-up{color:#22aa44;font-size:11px;}.change-down{color:#cc3333;font-size:11px;}.change-same{color:#333;font-size:11px;}
-  .rounds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 clamp(16px,4vw,24px) 20px;}
+  .rounds-grid-wrap{position:relative;margin-bottom:8px;}
+  .rounds-grid-wrap .rounds-grid-fade{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,#141414);pointer-events:none;}
+  .rounds-grid-wrap.expanded .rounds-grid-fade{display:none;}
+  .rounds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 clamp(16px,4vw,24px);}
   .round-cell{background:#1e1e1e;border:1px solid #2a2a2a;padding:9px 5px;text-align:center;border-radius:8px;}
   .round-cell.active{border-color:#f0f0f0;background:#252525;}
   .round-cell.future{opacity:.3;}
-  .r-num{font-family:'Roboto',sans-serif;font-size:9px;color:#444;margin-bottom:5px;font-weight:500;letter-spacing:1px;}
-  .r-win{font-size:11px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#aaa;}
-  .r-date{font-size:10px;color:#444;}
+  .r-num{font-family:'Roboto',sans-serif;font-size:9px;color:#444;margin-bottom:4px;font-weight:500;letter-spacing:1px;}
+  .r-win{font-size:10px;margin-bottom:3px;line-height:1.5;color:#aaa;}
+  .r-date{font-size:9px;color:#444;}
+  .rounds-toggle-btn{display:block;width:100%;border:0.5px solid #2a2a2a;background:transparent;color:#444;font-family:'Roboto',sans-serif;font-size:12px;padding:12px;cursor:pointer;margin:8px 0 20px;border-radius:8px;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+  .rounds-toggle-btn:hover{border-color:#555;color:#aaa;}
+  .hist-grid-wrap{position:relative;margin-bottom:8px;}
+  .hist-grid-wrap .hist-grid-fade{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,#141414);pointer-events:none;}
+  .hist-grid-wrap.expanded .hist-grid-fade{display:none;}
+  .hist-toggle-btn{display:block;width:100%;border:0.5px solid #2a2a2a;background:transparent;color:#444;font-family:'Roboto',sans-serif;font-size:12px;padding:12px;cursor:pointer;margin:8px clamp(16px,4vw,24px) 20px;border-radius:8px;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+  .hist-toggle-btn:hover{border-color:#555;color:#aaa;}
   .hist-row{padding:13px 20px;border-bottom:none;}
   .hist-row:nth-child(even){background:#1a1a1a;}
   .hist-row:nth-child(odd){background:#1e1e1e;}
@@ -671,19 +681,20 @@
   .td-tempo{text-align:right;background:rgba(34,170,68,.08);color:#22aa44;font-size:13px;}
   .th-tempo{text-align:right;background:rgba(34,170,68,.04);color:#444 !important;}
 
-  /* БЕЙДЖИ ПОБЕДИТЕЛЕЙ В ИСТОРИИ */
-  .hist-winner-st{font-size:11px;padding:2px 8px;background:rgba(24,95,165,.2);color:#5b9de0;border-radius:4px;white-space:nowrap;font-weight:500;}
-  .hist-winner-pw{font-size:11px;padding:2px 8px;background:rgba(34,170,68,.15);color:#22aa44;border-radius:4px;white-space:nowrap;font-weight:500;}
+  /* ВЫРАВНИВАНИЕ КОЛОНОК РЕЙТИНГА */
+  .standings th.th-num{text-align:center;}
+  .standings th.th-last{text-align:right;}
+  .standings th.th-tempo{text-align:right;}
+  .standings td.td-wins{text-align:center;color:#aaa;font-size:13px;}
+  .standings td.td-last{text-align:right;color:#666;font-size:13px;font-family:'Roboto',sans-serif;}
 
   /* ПРОГНОЗ */
   .forecast-section{background:#1e1e1e;border-radius:12px;padding:18px 20px 16px;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.3);border:1px solid #2a2a2a;}
-  .forecast-title{font-size:11px;color:#444;letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-bottom:14px;}
   .forecast-item{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
   .forecast-item:last-child{margin-bottom:0;}
   .forecast-op{display:flex;align-items:center;gap:6px;font-size:13px;color:#aaa;flex-shrink:0;}
-  .forecast-num{font-size:13px;color:#666;text-align:right;white-space:nowrap;}
+  .forecast-num{font-size:13px;color:#666;text-align:right;white-space:nowrap;min-width:80px;}
   .forecast-num strong{color:#ccc;font-weight:500;font-size:15px;}
-  .forecast-tempo{font-size:11px;color:#444;}
   .forecast-note{font-size:13px;color:#aaa;font-weight:500;margin-top:14px;padding:12px 14px;border-radius:8px;background:#252525;line-height:1.7;}
 
   /* META-ROW ОТСТУП */

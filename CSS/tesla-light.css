@@ -545,13 +545,23 @@
   .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;flex-shrink:0;}
   .pts{font-family:'Roboto',sans-serif;font-size:13px;color:#111;font-weight:500;}
   .change-up{color:#22aa44;font-size:11px;}.change-down{color:#cc3333;font-size:11px;}.change-same{color:#ddd;font-size:11px;}
-  .rounds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 clamp(16px,4vw,24px) 20px;}
+  .rounds-grid-wrap{position:relative;margin-bottom:8px;}
+  .rounds-grid-wrap .rounds-grid-fade{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,#eef0f2);pointer-events:none;}
+  .rounds-grid-wrap.expanded .rounds-grid-fade{display:none;}
+  .rounds-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 clamp(16px,4vw,24px);}
   .round-cell{background:#fff;border:1px solid #eee;padding:9px 5px;text-align:center;border-radius:8px;}
   .round-cell.active{border-color:#111;background:#f5f5f5;}
   .round-cell.future{opacity:.4;}
-  .r-num{font-family:'Roboto',sans-serif;font-size:9px;color:#aaa;margin-bottom:5px;font-weight:500;letter-spacing:1px;}
-  .r-win{font-size:11px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#333;}
-  .r-date{font-size:10px;color:#bbb;}
+  .r-num{font-family:'Roboto',sans-serif;font-size:9px;color:#aaa;margin-bottom:4px;font-weight:500;letter-spacing:1px;}
+  .r-win{font-size:10px;margin-bottom:3px;line-height:1.5;color:#333;}
+  .r-date{font-size:9px;color:#bbb;}
+  .rounds-toggle-btn{display:block;width:100%;border:0.5px solid #ddd;background:transparent;color:#aaa;font-family:'Roboto',sans-serif;font-size:12px;padding:12px;cursor:pointer;margin:8px 0 20px;border-radius:8px;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+  .rounds-toggle-btn:hover{border-color:#999;color:#333;}
+  .hist-grid-wrap{position:relative;margin-bottom:8px;}
+  .hist-grid-wrap .hist-grid-fade{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,#eef0f2);pointer-events:none;}
+  .hist-grid-wrap.expanded .hist-grid-fade{display:none;}
+  .hist-toggle-btn{display:block;width:100%;border:0.5px solid #ddd;background:transparent;color:#aaa;font-family:'Roboto',sans-serif;font-size:12px;padding:12px;cursor:pointer;margin:8px clamp(16px,4vw,24px) 20px;border-radius:8px;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+  .hist-toggle-btn:hover{border-color:#999;color:#333;}
   .hist-row{padding:13px 20px;border-bottom:none;}
   .hist-row:nth-child(even){background:#f9f9f9;}
   .hist-row:nth-child(odd){background:#fff;}
@@ -665,23 +675,24 @@
 
   .new-badge { margin-left: 6px; }
 
-  /* ТЕМП */
-  .td-tempo{text-align:right;background:#d6f0d6;color:#1a6b1a;font-size:13px;font-weight:500;}
-  .th-tempo{text-align:right;background:#e8f7e8;color:#888 !important;}
+  /* ТЕМП — полупрозрачный чтобы зебра просвечивала */
+  .td-tempo{text-align:right;background:rgba(34,170,68,.08);color:#1a6b1a;font-size:13px;font-weight:500;}
+  .th-tempo{text-align:right;background:rgba(34,170,68,.05);color:#aaa !important;}
 
-  /* БЕЙДЖИ ПОБЕДИТЕЛЕЙ В ИСТОРИИ */
-  .hist-winner-st{font-size:11px;padding:2px 8px;background:#e8f0fe;color:#185FA5;border-radius:4px;white-space:nowrap;font-weight:500;}
-  .hist-winner-pw{font-size:11px;padding:2px 8px;background:#e6f4ea;color:#2a7a2a;border-radius:4px;white-space:nowrap;font-weight:500;}
+  /* ВЫРАВНИВАНИЕ КОЛОНОК РЕЙТИНГА */
+  .standings th.th-num{text-align:center;}
+  .standings th.th-last{text-align:right;}
+  .standings th.th-tempo{text-align:right;}
+  .standings td.td-wins{text-align:center;color:#555;font-size:13px;}
+  .standings td.td-last{text-align:right;color:#555;font-size:13px;font-family:'Roboto',sans-serif;}
 
   /* ПРОГНОЗ */
   .forecast-section{background:#fff;border-radius:12px;padding:18px 20px 16px;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
-  .forecast-title{font-size:11px;color:#aaa;letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-bottom:14px;}
   .forecast-item{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
   .forecast-item:last-child{margin-bottom:0;}
   .forecast-op{display:flex;align-items:center;gap:6px;font-size:13px;color:#333;flex-shrink:0;}
-  .forecast-num{font-size:13px;color:#555;text-align:right;white-space:nowrap;}
+  .forecast-num{font-size:13px;color:#555;text-align:right;white-space:nowrap;min-width:80px;}
   .forecast-num strong{color:#111;font-weight:500;font-size:15px;}
-  .forecast-tempo{font-size:11px;color:#aaa;}
   .forecast-note{font-size:13px;color:#333;font-weight:500;margin-top:14px;padding:12px 14px;border-radius:8px;background:#f5f5f5;line-height:1.7;}
 
   /* ============================================================
