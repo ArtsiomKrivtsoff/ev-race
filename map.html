@@ -84,7 +84,7 @@ html,body{height:100%;overflow:hidden;margin:0;padding:0;}
   .map-bottom{display:none;}
   .map-sidebar{
     display:flex;flex-direction:column;
-    position:absolute;left:0;top:0;bottom:0;width:260px;
+    position:absolute;left:0;top:var(--statusbar-h,41px);bottom:0;width:260px;
     z-index:2;overflow-y:auto;gap:10px;padding:10px 8px;
     background:rgba(10,10,10,0.97);
     border-right:1px solid var(--green-dark,#003d0f);
@@ -300,6 +300,10 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
           <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
           <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
           <button class="op-filter-btn op-gt" data-op="gto"        onclick="toggleOp(this)">Белтехосмотр</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">ТИП</div>
         <div class="op-filters" style="gap:4px;">
           <button class="op-filter-btn map-type-radio" data-type="DC"   onclick="toggleType(this)">DC</button>
           <button class="op-filter-btn map-type-radio" data-type="AC"   onclick="toggleType(this)">AC</button>
@@ -371,6 +375,8 @@ body.theme-tesla-dark .marker-cluster-small div,body.theme-tesla-dark .marker-cl
               <button class="op-filter-btn op-or" data-op="orange"     onclick="toggleOp(this)">Orange</button>
               <button class="op-filter-btn op-pr" data-op="prizma"     onclick="toggleOp(this)">Prizma</button>
               <button class="op-filter-btn op-gt" data-op="gto"        onclick="toggleOp(this)">Белтехосмотр</button>
+            </div>
+            <div class="map-scroll-fade"><span class="map-scroll-arrow">›</span></div>
           </div>
           <div class="map-utils-row">
             <button class="map-util-btn" onclick="locateMe()">ГДЕ Я?</button>
@@ -619,7 +625,22 @@ async function trackVisit(){
   try{await fetch(SURL+'/rest/v1/visits',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({visited_at:new Date().toISOString(),page:'map'})});}catch(e){}
 }
 
-(function init(){const saved=localStorage.getItem('ev_race_theme')||'arcade';setTheme(saved);loadStations();trackVisit();})();
+(function init(){
+  const saved=localStorage.getItem('ev_race_theme')||'arcade';
+  setTheme(saved);
+  // Вычисляем высоту статус-бара и применяем к сайдбару
+  const sb=document.getElementById('statusbar');
+  if(sb){
+    const h=sb.offsetHeight;
+    document.documentElement.style.setProperty('--statusbar-h', h+'px');
+    // Пересчитываем после загрузки шрифтов
+    window.addEventListener('load',()=>{
+      const h2=sb.offsetHeight;
+      document.documentElement.style.setProperty('--statusbar-h', h2+'px');
+    });
+  }
+  loadStations();trackVisit();
+})();
 </script>
 </body>
 </html>
