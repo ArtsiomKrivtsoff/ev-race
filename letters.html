@@ -690,7 +690,7 @@ function updateCounter() {
   const val = document.getElementById('fieldBody').value.length;
   const el = document.getElementById('bodyCounter');
   el.textContent = val + ' / 1000';
-  el.className = 'form-counter' + (val > 900 ? ' warn' : '') + (val >= 1000 ? ' over' : '');
+  el.className = 'form-counter' + (val > 900 ? ' warn' : '') + (val >= 2000 ? ' over' : '');
   checkFormReady();
 }
 
