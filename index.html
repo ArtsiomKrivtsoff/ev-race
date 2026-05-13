@@ -46,10 +46,10 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <!-- ТЕМА: меняется JS-ом -->
-<link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=2">
+<link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=3">
 <!-- prefetch остальных тем чтобы переключение было мгновенным -->
-<link rel="prefetch" href="CSS/tesla-light.css?v=2">
-<link rel="prefetch" href="CSS/tesla-dark.css?v=2">
+<link rel="prefetch" href="CSS/tesla-light.css?v=3">
+<link rel="prefetch" href="CSS/tesla-dark.css?v=3">
 </head>
 <body>
 
@@ -84,7 +84,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <a class="nav-mobile-link" href="tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
     <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
     <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
-</div>
+  </div>
 
   <div class="page-wrap">
 
@@ -216,6 +216,26 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 </div><!-- /container -->
 <script>
 // ============================================================
+// ДИНАМИЧЕСКАЯ ВЫСОТА STATUSBAR
+// (фикс для .nav-mobile-drop — было хардкод top:41px)
+// ============================================================
+(function setStatusbarHeight() {
+  function update() {
+    const bar = document.getElementById('statusbar');
+    if (!bar) return;
+    document.documentElement.style.setProperty('--statusbar-h', bar.offsetHeight + 'px');
+  }
+  window.addEventListener('load', update);
+  window.addEventListener('resize', update);
+  if (window.ResizeObserver) {
+    document.addEventListener('DOMContentLoaded', () => {
+      const bar = document.getElementById('statusbar');
+      if (bar) new ResizeObserver(update).observe(bar);
+    });
+  }
+})();
+
+// ============================================================
 // ДАННЫЕ ОПЕРАТОРОВ
 // ============================================================
 const OPERATORS_META = [
@@ -247,28 +267,22 @@ const VOTE_MESSAGES = {
 const THEMES = ['arcade','tesla-light','tesla-dark'];
 
 function setTheme(theme) {
-  // меняем CSS
-  document.getElementById('theme-css').href = 'CSS/' + theme + '.css?v=2';
+  document.getElementById('theme-css').href = 'CSS/' + theme + '.css?v=3';
   localStorage.setItem('ev_race_theme', theme);
 
-  // кнопки в статус-баре
   THEMES.forEach(t => {
     const btn = document.getElementById('btn-' + t);
     if (btn) btn.classList.toggle('active', t === theme);
   });
-  // кнопки внизу
   THEMES.forEach(t => {
     const btn = document.getElementById('foot-' + t);
     if (btn) btn.classList.toggle('active', t === theme);
   });
-  // Turnstile тема
   const ts = document.getElementById('vote-turnstile');
   if (ts) ts.setAttribute('data-theme', theme === 'tesla-light' ? 'light' : 'dark');
-  // перерисовать операторов — медали зависят от темы
   if (document.getElementById('operators-grid').children.length > 0) renderOperators();
 }
 
-// восстановить тему при загрузке
 (function() {
   const saved = localStorage.getItem('ev_race_theme');
   if (saved && THEMES.includes(saved)) setTheme(saved);
@@ -390,7 +404,7 @@ function medalSVG_tesla(rank, hasCount, isDark) {
 }
 
 function medalSVG_arcade(rank, hasCount) {
-  if (!hasCount) return `<span style="font-family:monospace;font-size:8px;color:#333">#${rank}</span>`;
+  if (!hasCount) return `<span style="font-family:monospace;font-size:9px;color:#333">#${rank}</span>`;
   const colors = {
     1:{outer:'#ffd700',inner:'#ffec6e',text:'#7a5c00',ribbon:'#e6a800'},
     2:{outer:'#c0c0c0',inner:'#e8e8e8',text:'#555',ribbon:'#999'},
@@ -410,7 +424,7 @@ function medalSVG_arcade(rank, hasCount) {
     <rect x="3" y="13" width="10" height="1" fill="${c.inner}"/>
     <text x="8" y="11" font-family="monospace" font-size="6" font-weight="bold" fill="${c.text}" text-anchor="middle">${rank}</text>
   </svg>`;
-  return `<span style="font-family:monospace;font-size:8px;color:#555">#${rank}</span>`;
+  return `<span style="font-family:monospace;font-size:9px;color:#555">#${rank}</span>`;
 }
 
 // ============================================================
@@ -529,7 +543,7 @@ async function showResults(myVote) {
   const subtext = myPct>=40 ? `${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
                   myPct>=20 ? `ТОЛЬКО ${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
                               `ЛИШЬ ${myPct}% ИГРОКОВ ВЕРЯТ В ${opName.toUpperCase()}`;
-  document.getElementById('vote-message').innerHTML = `${msg}<br><span style="font-size:8px;color:var(--text-dim)">${subtext}</span>`;
+  document.getElementById('vote-message').innerHTML = `${msg}<br><span style="font-size:9px;color:var(--text-dim)">${subtext}</span>`;
 
   const barsDiv = document.getElementById('vote-bars');
   barsDiv.innerHTML = '';
