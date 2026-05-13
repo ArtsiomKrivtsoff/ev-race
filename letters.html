@@ -13,7 +13,7 @@
 <link rel="canonical" href="https://evrace.by/letters.html">
 <meta property="og:title" content="Письма операторам зарядных станций — EV RACE 2026">
 <meta property="og:description" content="Публичные обращения к операторам зарядных станций Беларуси. Напиши — будет опубликовано.">
-<meta property="og:image" content="https://evrace.by/og-letters.png">
+<meta property="og:image" content="https://evrace.by/og.png">
 <meta property="og:url" content="https://evrace.by/letters.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_BY">
@@ -44,15 +44,9 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 }
 .write-btn:hover,.write-btn:active { background:rgba(255,215,0,.08); }
 
-.let-filter-wrap { position:relative; overflow:hidden; margin-bottom:16px; }
-.let-filter-scroll { display:flex; flex-wrap:nowrap; overflow-x:auto; gap:6px;
-  -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:2px; }
-.let-filter-scroll::-webkit-scrollbar { display:none; }
-.let-filter-fade { position:absolute; top:0; right:0; bottom:2px; width:40px;
-  background:linear-gradient(to right,transparent,rgba(10,10,10,0.92)); pointer-events:none; }
-body.theme-tesla-light .let-filter-fade { background:linear-gradient(to right,transparent,rgba(238,240,242,0.98)); }
-body.theme-tesla-dark .let-filter-fade { background:linear-gradient(to right,transparent,rgba(20,20,20,0.95)); }
-@media(min-width:600px) { .let-filter-scroll { flex-wrap:wrap; overflow-x:visible; } .let-filter-fade { display:none; } }
+.let-filter-wrap { margin-bottom:16px; }
+.let-filter-scroll { display:flex; flex-wrap:wrap; gap:6px; }
+.let-filter-fade { display:none; }
 
 .let-filter-btn {
   font-family:'Press Start 2P',monospace; font-size:7px;
@@ -164,11 +158,6 @@ body.theme-tesla-light .form-inp, body.theme-tesla-light .form-textarea { backgr
 body.theme-tesla-dark .form-inp, body.theme-tesla-dark .form-textarea { background:#0a0a0a; }
 
 .empty-state { text-align:center; padding:40px 20px; font-size:11px; color:var(--green-dark,#003d0f); letter-spacing:2px; line-height:2; }
-#scroll-top{position:fixed;bottom:20px;right:16px;z-index:500;width:44px;height:44px;border:1px solid var(--green,#00ff41);background:rgba(0,255,65,.12);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:20px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;}
-#scroll-top.visible{display:flex;}
-#scroll-top:hover{background:rgba(0,255,65,.25);}
-body.theme-tesla-light #scroll-top{border-color:#aaa;background:rgba(0,0,0,.08);color:#333;}
-body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255,.1);color:#ccc;}
 </style>
 </head>
 <body>
@@ -267,7 +256,6 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
 
   </div>
 </div>
-<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
 
 <!-- МОДАЛКА -->
 <div class="modal-overlay" id="modalOverlay" onclick="onOverlayClick(event)">
@@ -552,7 +540,6 @@ async function submitLetter() {
 function showErr(msg) { const el = document.getElementById('formError'); el.textContent = msg; el.style.display = 'block'; }
 
 loadLetters();
-window.addEventListener('scroll',function(){const b=document.getElementById('scroll-top');if(b)b.classList.toggle('visible',window.scrollY>300);});
 </script>
 </body>
 </html>
