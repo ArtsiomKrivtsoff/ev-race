@@ -50,6 +50,13 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <!-- prefetch остальных тем чтобы переключение было мгновенным -->
 <link rel="prefetch" href="CSS/tesla-light.css?v=3">
 <link rel="prefetch" href="CSS/tesla-dark.css?v=3">
+<style>
+#scroll-top{position:fixed;bottom:20px;right:16px;z-index:500;width:44px;height:44px;border:1px solid var(--green,#00ff41);background:rgba(0,255,65,.12);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:20px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+#scroll-top.visible{display:flex;}
+#scroll-top:hover{background:rgba(0,255,65,.25);}
+body.theme-tesla-light #scroll-top{border-color:#aaa;background:rgba(0,0,0,.08);color:#333;}
+body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255,.1);color:#ccc;}
+</style>
 </head>
 <body>
 
@@ -69,6 +76,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
       <a class="nav-link active" href="#">ГЛАВНАЯ</a>
       <a class="nav-link" href="tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
       <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+      <a class="nav-link" href="https://evrace.by/letters.html">ПИСЬМА</a>
       <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
     </div>
     <div class="theme-seg">
@@ -83,6 +91,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <a class="nav-mobile-link active" href="#" onclick="closeBurger()">ГЛАВНАЯ</a>
     <a class="nav-mobile-link" href="tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
     <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
+    <a class="nav-mobile-link" href="https://evrace.by/letters.html" onclick="closeBurger()">ПИСЬМА</a>
     <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
   </div>
 
@@ -214,7 +223,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 
   </div><!-- /page-wrap -->
 </div><!-- /container -->
-<script>
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
 // ============================================================
 // ДИНАМИЧЕСКАЯ ВЫСОТА STATUSBAR
 // (фикс для .nav-mobile-drop — было хардкод top:41px)
@@ -687,6 +696,7 @@ renderVoteOptions();
 checkVoted();
 trackVisit();
 loadStationsData();
+window.addEventListener('scroll',function(){const b=document.getElementById('scroll-top');if(b)b.classList.toggle('visible',window.scrollY>300);});
 </script>
 </body>
 </html>
