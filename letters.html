@@ -164,6 +164,11 @@ body.theme-tesla-light .form-inp, body.theme-tesla-light .form-textarea { backgr
 body.theme-tesla-dark .form-inp, body.theme-tesla-dark .form-textarea { background:#0a0a0a; }
 
 .empty-state { text-align:center; padding:40px 20px; font-size:11px; color:var(--green-dark,#003d0f); letter-spacing:2px; line-height:2; }
+#scroll-top{position:fixed;bottom:20px;right:16px;z-index:500;width:44px;height:44px;border:1px solid var(--green,#00ff41);background:rgba(0,255,65,.12);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:20px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+#scroll-top.visible{display:flex;}
+#scroll-top:hover{background:rgba(0,255,65,.25);}
+body.theme-tesla-light #scroll-top{border-color:#aaa;background:rgba(0,0,0,.08);color:#333;}
+body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255,.1);color:#ccc;}
 </style>
 </head>
 <body>
@@ -262,6 +267,7 @@ body.theme-tesla-dark .form-inp, body.theme-tesla-dark .form-textarea { backgrou
 
   </div>
 </div>
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
 
 <!-- МОДАЛКА -->
 <div class="modal-overlay" id="modalOverlay" onclick="onOverlayClick(event)">
@@ -546,6 +552,7 @@ async function submitLetter() {
 function showErr(msg) { const el = document.getElementById('formError'); el.textContent = msg; el.style.display = 'block'; }
 
 loadLetters();
+window.addEventListener('scroll',function(){const b=document.getElementById('scroll-top');if(b)b.classList.toggle('visible',window.scrollY>300);});
 </script>
 </body>
 </html>
