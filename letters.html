@@ -736,11 +736,7 @@ async function submitLetter() {
 try {
     const res = await fetch(FN_URL, {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'apikey': SKEY,
-        'Authorization': 'Bearer ' + SKEY
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         operator: selectedOp,
         author_name: document.getElementById('fieldName').value.trim() || null,
