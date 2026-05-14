@@ -29,16 +29,8 @@
   "inLanguage": "ru-BY",
   "spatialCoverage": "Беларусь",
   "temporalCoverage": "2026",
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "EV RACE 2026",
-    "url": "https://evrace.by"
-  },
-  "creator": {
-    "@type": "Person",
-    "name": "Artsiom Krivtsoff",
-    "url": "https://me.imeyuskazat.by"
-  }
+  "isPartOf": { "@type": "WebSite", "name": "EV RACE 2026", "url": "https://evrace.by" },
+  "creator": { "@type": "Person", "name": "Artsiom Krivtsoff", "url": "https://me.imeyuskazat.by" }
 }
 </script>
 <script type="text/javascript">
@@ -46,527 +38,177 @@
 ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
-<link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=2">
-<link rel="prefetch" href="CSS/tesla-light.css?v=2">
-<link rel="prefetch" href="CSS/tesla-dark.css?v=2">
-<style>
-#scroll-top{position:fixed;bottom:20px;right:16px;z-index:500;width:44px;height:44px;border:1px solid var(--green,#00ff41);background:rgba(0,255,65,.12);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:20px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;}
-#scroll-top.visible{display:flex;}
-#scroll-top:hover{background:rgba(0,255,65,.25);}
-body.theme-tesla-light #scroll-top{border-color:#aaa;background:rgba(0,0,0,.08);color:#333;}
-body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255,.1);color:#ccc;}
-</style>
+<link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=4">
+<link rel="prefetch" href="CSS/tesla-light.css?v=4">
+<link rel="prefetch" href="CSS/tesla-dark.css?v=4">
 </head>
 <body>
 <div class="container">
 
-  <!-- СТАТУС-БАР -->
   <div class="statusbar" id="statusbar">
     <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
       <span></span><span></span><span></span>
     </button>
     <div class="nav-desktop">
-  <a class="nav-link" href="/">ГЛАВНАЯ</a>
-  <a class="nav-link" href="https://evrace.by/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
-  <a class="nav-link active" href="#">СТАНЦИИ 2026</a>
-  <a class="nav-link" href="https://evrace.by/letters.html">ПИСЬМА</a>
-  <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
-</div>
+      <a class="nav-link" href="/">ГЛАВНАЯ</a>
+      <a class="nav-link" href="https://evrace.by/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <a class="nav-link active" href="#">СТАНЦИИ 2026</a>
+      <a class="nav-link" href="https://evrace.by/letters.html">ПИСЬМА</a>
+      <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
+    </div>
     <div class="theme-seg">
       <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
-      <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">&#x2600; TESLA</button>
-      <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">&#x25D1; TESLA</button>
+      <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
+      <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
     </div>
   </div>
 
-  <!-- МОБИЛЬНОЕ МЕНЮ -->
- <div class="nav-mobile-drop" id="mobileMenu">
+  <div class="nav-mobile-drop" id="mobileMenu">
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
     <a class="nav-mobile-link" href="https://evrace.by/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
     <a class="nav-mobile-link active" href="#" onclick="closeBurger()">СТАНЦИИ 2026</a>
     <a class="nav-mobile-link" href="https://evrace.by/letters.html" onclick="closeBurger()">ПИСЬМА</a>
     <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
-</div>
+  </div>
 
   <div class="page-wrap">
 
-    <!-- HERO -->
     <div class="hero">
       <div class="header-subtitle">#ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
       <div class="hero-title">EV RACE<span class="cursor">_</span></div>
       <div class="header-year">БЕЛАРУСЬ 2026</div>
     </div>
 
-    <!-- СТАТИСТИКА -->
+    <!-- СТАТИСТИКА: compound-карточки (DC|кВт, AC|кВт) с минимумом 11px вместо 8px -->
     <div class="stats-row">
-      <div class="stat-card"><div class="stat-label">DC СТАНЦИЙ | КВТ</div><div class="stat-val" id="stat-dc" style="font-size:clamp(8px,1.5vw,13px)">...</div></div>
-      <div class="stat-card"><div class="stat-label">AC СТАНЦИЙ | КВТ</div><div class="stat-val" id="stat-ac" style="font-size:clamp(8px,1.5vw,13px)">...</div></div>
-      <div class="stat-card"><div class="stat-label">DC КОННЕКТ.</div><div class="stat-val" id="stat-guns">...</div></div>
-      <div class="stat-card"><div class="stat-label">AC КОННЕКТ.</div><div class="stat-val" id="stat-ac-guns">...</div></div>
-      <div class="stat-card"><div class="stat-label">ГОРОДОВ</div><div class="stat-val" id="stat-cities">...</div></div>
-      <div class="stat-card"><div class="stat-label">АВТО СРАЗУ</div><div class="stat-val" id="stat-cars" style="color:#00ffff">...</div></div>
+      <div class="stat-card"><div class="stat-label">DC СТАНЦИЙ <span class="stat-val-unit">| КВТ</span></div><div class="stat-val stat-val--compound" id="stat-dc">…</div></div>
+      <div class="stat-card"><div class="stat-label">AC СТАНЦИЙ <span class="stat-val-unit">| КВТ</span></div><div class="stat-val stat-val--compound" id="stat-ac">…</div></div>
+      <div class="stat-card"><div class="stat-label">DC КОННЕКТ.</div><div class="stat-val" id="stat-guns">…</div></div>
+      <div class="stat-card"><div class="stat-label">AC КОННЕКТ.</div><div class="stat-val" id="stat-ac-guns">…</div></div>
+      <div class="stat-card"><div class="stat-label">ГОРОДОВ</div><div class="stat-val" id="stat-cities">…</div></div>
+      <div class="stat-card"><div class="stat-label">АВТО СРАЗУ</div><div class="stat-val" id="stat-cars" style="color:var(--cyan)">…</div></div>
     </div>
 
-    <!-- ФИЛЬТРЫ -->
-    <div class="filters-wrap">
-      <div class="filter-row">
-        <span class="filter-label">МЕСЯЦ:</span>
-        <div class="month-filters" id="month-filter"></div>
-      </div>
-      <div class="filter-row">
-        <span class="filter-label">ОПЕРАТОР:</span>
-        <div class="op-filters" id="op-filter">
-          <span class="op-filter-btn op-bf" onclick="setOp('batteryfly')" data-op="batteryfly">BatteryFly</span>
-          <span class="op-filter-btn op-fo" onclick="setOp('forevo')" data-op="forevo">forEVo</span>
-          <span class="op-filter-btn op-za" onclick="setOp('zaryadka')" data-op="zaryadka">Zaryadka</span>
-          <span class="op-filter-btn op-uc" onclick="setOp('united')" data-op="united">United Co.</span>
-          <span class="op-filter-btn op-cs" onclick="setOp('csms')" data-op="csms">ЦСМС</span>
-          <span class="op-filter-btn op-ma" onclick="setOp('malanka')" data-op="malanka">Malanka</span>
-          <span class="op-filter-btn op-ev" onclick="setOp('evika')" data-op="evika">Evika!</span>
-          <span class="op-filter-btn op-or" onclick="setOp('orange')" data-op="orange">Orange</span>
-          <span class="op-filter-btn op-pr" onclick="setOp('prizma')" data-op="prizma">Prizma</span>
-          <span class="op-filter-btn op-gt" onclick="setOp('gto')" data-op="gto">Белтехосмотр</span>
+    <!-- STICKY ФИЛЬТРЫ -->
+    <div class="filters-sticky">
+      <div class="filters-wrap">
+        <div class="filter-row">
+          <span class="filter-label">МЕСЯЦ:</span>
+          <div class="month-filters" id="month-filter"></div>
+        </div>
+        <div class="filter-row">
+          <span class="filter-label">ОПЕРАТОР:</span>
+          <div class="op-filters" id="op-filter">
+            <span class="op-filter-btn op-bf" onclick="setOp('batteryfly')" data-op="batteryfly">BatteryFly</span>
+            <span class="op-filter-btn op-fo" onclick="setOp('forevo')" data-op="forevo">forEVo</span>
+            <span class="op-filter-btn op-za" onclick="setOp('zaryadka')" data-op="zaryadka">Zaryadka</span>
+            <span class="op-filter-btn op-uc" onclick="setOp('united')" data-op="united">United Co.</span>
+            <span class="op-filter-btn op-cs" onclick="setOp('csms')" data-op="csms">ЦСМС</span>
+            <span class="op-filter-btn op-ma" onclick="setOp('malanka')" data-op="malanka">Malanka</span>
+            <span class="op-filter-btn op-ev" onclick="setOp('evika')" data-op="evika">Evika!</span>
+            <span class="op-filter-btn op-or" onclick="setOp('orange')" data-op="orange">Orange</span>
+            <span class="op-filter-btn op-pr" onclick="setOp('prizma')" data-op="prizma">Prizma</span>
+            <span class="op-filter-btn op-gt" onclick="setOp('gto')" data-op="gto">Белтехосмотр</span>
+          </div>
+        </div>
+        <div class="filter-row">
+          <span class="filter-label">ГОРОД:</span>
+          <div class="city-filters" id="city-filter"></div>
+          <span class="reset-btn" id="reset-btn" onclick="resetFilters()">✕ СБРОСИТЬ <span class="reset-count" id="reset-count"></span></span>
         </div>
       </div>
-      <div class="filter-row">
-        <span class="filter-label">ГОРОД:</span>
-        <div class="city-filters" id="city-filter"></div>
-        <span class="reset-btn" id="reset-btn" onclick="resetFilters()">&#x2715; СБРОСИТЬ</span>
+      <div class="search-wrap" style="margin-bottom:0">
+        <span class="filter-label">ПОИСК:</span>
+        <div class="search-input-wrap">
+          <input class="search-input" id="search-input" type="text" placeholder="АДРЕС, ЛОКАЦИЯ, ГОРОД, РАЗЪЁМ…" autocomplete="off" oninput="setSearch(this.value)">
+          <span class="search-clear" id="search-clear" onclick="clearSearch()">✕</span>
+        </div>
       </div>
     </div>
 
-    <!-- ПОИСК -->
-    <div class="search-wrap">
-      <span class="filter-label">ПОИСК:</span>
-      <div class="search-input-wrap">
-        <input class="search-input" id="search-input" type="text" placeholder="АДРЕС, ЛОКАЦИЯ, ГОРОД, РАЗЪЁМ..." autocomplete="off" oninput="setSearch(this.value)">
-        <span class="search-clear" id="search-clear" onclick="clearSearch()">&#x2715;</span>
+    <!-- ЗАГОЛОВОК + TOGGLE ВИДА -->
+    <div class="section-head section-head-stations" id="table-head">
+      <span id="table-head-text">ЗАГРУЗКА…</span>
+      <div class="view-toggle" role="tablist" aria-label="Вид списка">
+        <button class="view-toggle-btn"       id="view-list"  onclick="setView('list')"  data-view="list">СПИСОК</button>
+        <button class="view-toggle-btn active" id="view-group" onclick="setView('group')" data-view="group">ГРУППА</button>
       </div>
     </div>
-
-    <!-- ЗАГОЛОВОК ТАБЛИЦЫ -->
-    <div class="section-head section-head-stations" id="table-head">ЗАГРУЗКА...</div>
 
     <!-- DESKTOP TABLE -->
     <div class="table-wrap">
       <table class="reg" id="reg-table">
         <thead>
-          <tr>
+          <tr id="reg-head-row">
             <th>ОПЕРАТОР</th>
             <th>ТИП</th>
-            <th>ГОРОД</th>
+            <th class="sortable" data-sort="city">ГОРОД</th>
             <th>ЛОКАЦИЯ / АДРЕС</th>
             <th class="center">ПИСТОЛЕТ 1</th>
             <th class="center">ПИСТОЛЕТ 2</th>
             <th class="center">ПИСТОЛЕТ 3</th>
-            <th style="text-align:right">МОЩНОСТЬ</th>
-            <th style="text-align:right">ДАТА</th>
+            <th class="right sortable" data-sort="power">МОЩНОСТЬ</th>
+            <th class="right sortable sort-desc" data-sort="date">ДАТА</th>
+            <th class="right">РЕЙТИНГ</th>
           </tr>
         </thead>
         <tbody id="reg-tbody">
-          <tr><td colspan="9" class="loading">ЗАГРУЗКА ДАННЫХ...</td></tr>
+          <tr><td colspan="10" class="loading">ЗАГРУЗКА ДАННЫХ…</td></tr>
         </tbody>
       </table>
     </div>
 
     <!-- MOBILE CARDS -->
     <div class="cards-wrap" id="cards-wrap">
-      <div class="loading">ЗАГРУЗКА ДАННЫХ...</div>
+      <div class="loading">ЗАГРУЗКА ДАННЫХ…</div>
     </div>
 
-    <!-- BIG PHRASE -->
+    <!-- LOAD MORE -->
+    <div id="load-more-wrap"></div>
+
     <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
 
-    <!-- АВТОР -->
     <div class="author-section">
-      <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank">&#x25BA; ОБ АВТОРЕ &#x25C4;</a>
-      <a class="author-chat-btn" href="https://t.me/evclubb" target="_blank">&#x25BA; ЗЕЛЁНЫЙ ЧАТ &#x25C4;<span class="chat-sub">крупнейшее электромобильное сообщество в Беларуси</span></a>
-      <div class="section-label">&#x25BC; TG-КАНАЛЫ #ИМЕЮСКАЗАТЬ &#x25BC;</div>
+      <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank">▶ ОБ АВТОРЕ ◀</a>
+      <a class="author-chat-btn" href="https://t.me/evclubb" target="_blank">▶ ЗЕЛЁНЫЙ ЧАТ ◀<span class="chat-sub">крупнейшее электромобильное сообщество в Беларуси</span></a>
+      <div class="section-label">▼ TG-КАНАЛЫ #ИМЕЮСКАЗАТЬ ▼</div>
       <div class="author-links">
         <a class="author-link-btn" href="https://t.me/imeyuskazat" target="_blank">EV ОПЫТ</a>
         <a class="author-link-btn" href="https://t.me/imeyuskazat_lifestyle" target="_blank">EV LIFE</a>
         <a class="author-link-btn" href="https://t.me/imeyuskazat_evnews" target="_blank">EV WORLD NEWS</a>
       </div>
-      <div class="section-label">&#x25BC; ИНОЕ #НЕТЕЛЕГА &#x25BC;</div>
+      <div class="section-label">▼ ИНОЕ #НЕТЕЛЕГА ▼</div>
       <div class="author-links">
         <a class="author-link-btn" href="https://www.instagram.com/artsiomkrivtsoff/" target="_blank">Instagram</a>
-        <a class="author-link-btn" href="http://tiktok.com/@artsiomkrivtsoff" target="_blank">TikTok</a>
+        <a class="author-link-btn" href="https://tiktok.com/@artsiomkrivtsoff" target="_blank">TikTok</a>
         <a class="author-link-btn" href="https://www.youtube.com/@imeyuskazat" target="_blank">YouTube</a>
       </div>
-      <div class="section-label">&#x25BC; СВЯЗАТЬСЯ | УСТАНОВИТЬ ЗАРЯДНУЮ СТАНЦИЮ | ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ &#x25BC;</div>
+      <div class="section-label">▼ СВЯЗАТЬСЯ | УСТАНОВИТЬ ЗАРЯДНУЮ СТАНЦИЮ | ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ ▼</div>
       <div class="author-contacts">
-        <a class="author-contact-btn" href="tel:+375295170067">&#x1F4DE; +375 29 517-00-67</a>
-        <a class="author-contact-btn" href="https://t.me/Krivtsoffag" target="_blank">&#x2708; TELEGRAM</a>
+        <a class="author-contact-btn" href="tel:+375295170067">📞 +375 29 517-00-67</a>
+        <a class="author-contact-btn" href="https://t.me/Krivtsoffag" target="_blank">✈ TELEGRAM</a>
       </div>
     </div>
 
-    <!-- ПОСЕЩЕНИЯ -->
-    <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">...</span> РАЗ</div>
+    <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">…</span> РАЗ</div>
 
-    <!-- ПЕРЕКЛЮЧАТЕЛЬ ВНИЗУ -->
     <div class="theme-footer-switch">
       <span class="theme-foot-lbl">СТИЛЬ</span>
       <button class="theme-foot-btn active" id="foot-arcade"      title="Arcade"      onclick="setTheme('arcade')">⬡</button>
-      <button class="theme-foot-btn"        id="foot-tesla-light" title="Tesla Light" onclick="setTheme('tesla-light')">&#x2600;</button>
-      <button class="theme-foot-btn"        id="foot-tesla-dark"  title="Tesla Dark"  onclick="setTheme('tesla-dark')">&#x25D1;</button>
+      <button class="theme-foot-btn"        id="foot-tesla-light" title="Tesla Light" onclick="setTheme('tesla-light')">☀</button>
+      <button class="theme-foot-btn"        id="foot-tesla-dark"  title="Tesla Dark"  onclick="setTheme('tesla-dark')">◑</button>
     </div>
 
-    <!-- ФУТЕР -->
     <div class="footer">
       <div class="footer-disclaimer">Эта страница создана в развлекательных и информационных целях.<br>Все данные об установленных станциях носят информационный характер и не являются официальной статистикой.<br>Страница не запрашивает и не хранит ваши личные данные.</div>
       <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
     </div>
 
-  </div><!-- /page-wrap -->
-</div><!-- /container -->
-<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
-<script>
-const SURL='https://uvrboxrddqlasgrnnnne.supabase.co';
-const SKEY='sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
+  </div>
+</div>
 
-const OP_NAMES={
-  batteryfly:'BatteryFly', forevo:'forEVo', zaryadka:'Zaryadka',
-  united:'United Company', csms:'ЦСМС',
-  malanka:'Malanka', evika:'Evika!', orange:'Orange', prizma:'Prizma', gto:'Белтехосмотр'
-};
-const OP_CLASS={
-  batteryfly:'op-bf', forevo:'op-fo', zaryadka:'op-za',
-  united:'op-uc', csms:'op-cs',
-  malanka:'op-ma', evika:'op-ev', orange:'op-or', prizma:'op-pr', gto:'op-gt'
-};
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх" aria-label="Наверх">↑</button>
 
-const MONTHS=['\u042f\u041d\u0412','\u0424\u0415\u0412','\u041c\u0410\u0420','\u0410\u041f\u0420','\u041c\u0410\u0419','\u0418\u042e\u041d','\u0418\u042e\u041b','\u0410\u0412\u0413','\u0421\u0415\u041d','\u041e\u041a\u0422','\u041d\u041e\u042f','\u0414\u0415\u041a'];
-const MONTH_SEASON=['winter','winter','spring','spring','spring','summer','summer','summer','autumn','autumn','autumn','winter'];
-
-let allStations=[];
-let filterMonth='all';
-let filterOp='all';
-let filterCity='all';
-let filterSearch='';
-
-// ============================================================
-// ТЕМА
-// ============================================================
-const THEMES=['arcade','tesla-light','tesla-dark'];
-function setTheme(theme){
-  document.getElementById('theme-css').href='CSS/'+theme+'.css?v=2';
-  localStorage.setItem('ev_race_theme',theme);
-  THEMES.forEach(t=>{
-    const b=document.getElementById('btn-'+t);if(b)b.classList.toggle('active',t===theme);
-    const f=document.getElementById('foot-'+t);if(f)f.classList.toggle('active',t===theme);
-  });
-}
-(function(){const s=localStorage.getItem('ev_race_theme');if(s&&THEMES.includes(s))setTheme(s);})();
-
-// ============================================================
-// БУРГЕР
-// ============================================================
-function toggleBurger(){
-  const btn=document.getElementById('burgerBtn');
-  const menu=document.getElementById('mobileMenu');
-  const open=menu.classList.toggle('open');
-  btn.classList.toggle('open',open);
-}
-function closeBurger(){
-  document.getElementById('mobileMenu').classList.remove('open');
-  document.getElementById('burgerBtn').classList.remove('open');
-}
-document.addEventListener('click',function(e){
-  const menu=document.getElementById('mobileMenu');
-  const btn=document.getElementById('burgerBtn');
-  if(menu&&menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target)){
-    menu.classList.remove('open');btn.classList.remove('open');
-  }
-});
-
-// ============================================================
-// HELPERS
-// ============================================================
-function getCurrentRoundEnd(){
-  const now=new Date();
-  const dow=now.getDay();
-  const fri=new Date(now);
-  const diff=dow<=5?(5-dow):(5+7-dow);
-  fri.setDate(fri.getDate()+diff);
-  fri.setHours(23,59,59,0);
-  return fri;
-}
-function isNew(dateStr){
-  const d=new Date(dateStr+'T00:00:00');
-  const roundEnd=getCurrentRoundEnd();
-  const mon=new Date(roundEnd);
-  mon.setDate(mon.getDate()-4);
-  mon.setHours(0,0,0,0);
-  return d>=mon&&d<=roundEnd;
-}
-function opBadge(op){
-  return '<span class="op-badge '+(OP_CLASS[op]||'')+'">'+(OP_NAMES[op]||op)+'</span>';
-}
-function typeBadge(t){
-  if(!t)return '';
-  if(t==='DC')return '<span class="badge-dc">DC</span>';
-  if(t==='AC')return '<span class="badge-ac">AC</span>';
-  if(t==='ACDC')return '<span class="badge-acdc">AC+DC</span>';
-  return '';
-}
-function gunCell(type){
-  if(!type)return '<span class="no-gun">\u2014</span>';
-  return '<span class="gun-pill"><span class="gun-dot"></span>'+type+'</span>';
-}
-function fmtDate(dateStr){
-  if(!dateStr)return '\u2014';
-  const p=dateStr.split('-');
-  return p[2]+'.'+p[1]+'.'+p[0].slice(2);
-}
-
-// ============================================================
-// FILTERS
-// ============================================================
-function getFiltered(){
-  return allStations.filter(s=>{
-    if(filterMonth!=='all'){
-      const m=parseInt(s.station_date.split('-')[1],10)-1;
-      if(m!==parseInt(filterMonth,10))return false;
-    }
-    if(filterOp!=='all'&&s.operator!==filterOp)return false;
-    if(filterCity!=='all'&&(s.city||'').toLowerCase()!==filterCity)return false;
-    if(filterSearch){
-      const q=filterSearch.toLowerCase();
-      const hay=[s.city,s.address,s.location_name,OP_NAMES[s.operator]||s.operator,s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' ').toLowerCase();
-      if(!hay.includes(q))return false;
-    }
-    return true;
-  });
-}
-function buildMonthFilter(stations){
-  const counts={};
-  stations.forEach(s=>{
-    const m=parseInt(s.station_date.split('-')[1],10)-1;
-    counts[m]=(counts[m]||0)+(s.count||1);
-  });
-  const wrap=document.getElementById('month-filter');
-  let html='';
-  MONTHS.forEach((name,i)=>{
-    if(!counts[i])return;
-    html+='<span class="month-btn '+MONTH_SEASON[i]+'" onclick="setMonth('+i+')" data-month="'+i+'">'+name+' | '+counts[i]+'</span>';
-  });
-  wrap.innerHTML=html;
-}
-function buildCityFilter(stations){
-  const cities=[...new Set(stations.map(s=>s.city).filter(Boolean))].sort();
-  const wrap=document.getElementById('city-filter');
-  let html='';
-  cities.forEach(c=>{
-    html+='<span class="city-btn" onclick="setCity(\''+c.toLowerCase()+'\')" data-city="'+c.toLowerCase()+'">'+c.toUpperCase()+'</span>';
-  });
-  wrap.innerHTML=html;
-}
-function updateResetBtn(){
-  const active=filterMonth!=='all'||filterOp!=='all'||filterCity!=='all';
-  document.getElementById('reset-btn').classList.toggle('visible',active);
-}
-function setMonth(val){
-  filterMonth=filterMonth===val?'all':val;
-  document.querySelectorAll('#month-filter span').forEach(el=>{
-    el.classList.toggle('on',String(el.dataset.month)===String(filterMonth));
-  });
-  applyFilters();
-}
-function setOp(val){
-  filterOp=filterOp===val?'all':val;
-  document.querySelectorAll('#op-filter span').forEach(el=>{
-    el.classList.toggle('on',el.dataset.op===filterOp);
-  });
-  applyFilters();
-}
-function setCity(val){
-  filterCity=filterCity===val?'all':val;
-  document.querySelectorAll('#city-filter span').forEach(el=>{
-    el.classList.toggle('on',el.dataset.city===filterCity);
-  });
-  applyFilters();
-}
-function setSearch(val){
-  filterSearch=val.trim();
-  document.getElementById('search-clear').style.display=filterSearch?'block':'none';
-  applyFilters();
-}
-function clearSearch(){
-  filterSearch='';
-  document.getElementById('search-input').value='';
-  document.getElementById('search-clear').style.display='none';
-  applyFilters();
-}
-function resetFilters(){
-  filterMonth='all';filterOp='all';filterCity='all';filterSearch='';
-  document.querySelectorAll('#month-filter span,#op-filter span,#city-filter span').forEach(el=>el.classList.remove('on'));
-  document.getElementById('search-input').value='';
-  document.getElementById('search-clear').style.display='none';
-  applyFilters();
-}
-function expandAll(){
-  showAll=true;
-  renderTable(getFiltered());
-}
-function applyFilters(){
-  showAll=false;
-  updateResetBtn();
-  const filtered=getFiltered();
-  renderStats(filtered);
-  renderTable(filtered);
-}
-
-// ============================================================
-// STATS
-// ============================================================
-function renderStats(stations){
-  const dc=stations.filter(s=>s.station_type==='DC'||s.station_type==='ACDC'||!s.station_type);
-  const dcCount=dc.reduce((n,s)=>n+(s.count||1),0);
-  const ac=stations.filter(s=>s.station_type==='AC');
-  const acCount=ac.reduce((n,s)=>n+(s.count||1),0);
-  const guns=dc.reduce((n,s)=>{
-    const c=s.count||1;
-    if(s.gun1_type)n+=c;if(s.gun2_type)n+=c;if(s.gun3_type)n+=c;return n;
-  },0);
-  const acGuns=ac.reduce((n,s)=>{
-    const c=s.count||1;
-    if(s.gun1_type)n+=c;if(s.gun2_type)n+=c;if(s.gun3_type)n+=c;return n;
-  },0);
-  const cars=stations.reduce((n,s)=>n+((s.simultaneous_charge||1)*(s.count||1)),0);
-  const cities=new Set(stations.map(s=>s.city).filter(Boolean)).size;
-  const dcPower=dc.reduce((n,s)=>n+((s.dc_power||0)*(s.count||1)),0);
-  const acPowerTotal=stations.reduce((n,s)=>n+((s.ac_power||0)*(s.count||1)),0);
-  document.getElementById('stat-dc').textContent=dcPower?dcCount+' | '+dcPower.toLocaleString('ru'):dcCount||'\u2014';
-  document.getElementById('stat-ac').textContent=acPowerTotal?acCount+' | '+acPowerTotal.toLocaleString('ru'):acCount||'\u2014';
-  document.getElementById('stat-guns').textContent=guns||'\u2014';
-  document.getElementById('stat-ac-guns').textContent=acGuns||'\u2014';
-  document.getElementById('stat-cities').textContent=cities;
-  document.getElementById('stat-cars').textContent=cars||'\u2014';
-}
-
-let showAll=false;
-const PREVIEW_COUNT=10;
-
-// ============================================================
-// TABLE + CARDS
-// ============================================================
-function renderTable(stations){
-  const totalStCount=stations.reduce((n,s)=>n+(s.count||1),0);
-  document.getElementById('table-head').textContent='\u25BA \u0421\u0422\u0410\u041d\u0426\u0418\u0419 \u0423\u0421\u0422\u0410\u041d\u041e\u0412\u041b\u0415\u041d\u041e: '+totalStCount;
-
-  const hasFilter=filterMonth!=='all'||filterOp!=='all'||filterCity!=='all'||filterSearch!=='';
-  const limit=(showAll||hasFilter)?stations.length:PREVIEW_COUNT;
-  const visible=stations.slice(0,limit);
-  const hidden=stations.length-limit;
-
-  const tbody=document.getElementById('reg-tbody');
-  if(stations.length===0){
-    tbody.innerHTML='<tr><td colspan="9" class="loading">\u041d\u0415\u0422 \u0414\u0410\u041d\u041d\u042b\u0425 \u041f\u041e \u0412\u042b\u0411\u0420\u0410\u041d\u041d\u042b\u041c \u0424\u0418\u041b\u042c\u0422\u0420\u0410\u041c</td></tr>';
-  } else {
-    tbody.innerHTML=visible.map(s=>{
-      const newBadge=isNew(s.station_date)?' <span class="new-badge">NEW</span>':'';
-      const locHtml=s.location_name
-        ?'<span class="loc-name">'+s.location_name+'</span><span class="loc-address">'+(s.address||'')+'</span>'
-        :'<span class="loc-address">'+(s.address||'\u2014')+'</span>';
-      const dc=s.dc_power||0;const ac=s.ac_power||0;const cnt=s.count||1;
-      let pwrHtml='\u2014';
-      if(dc||ac){
-        const pwrStr=dc&&ac?dc+'+'+ac+' \u043a\u0412\u0442':(dc||ac)+' \u043a\u0412\u0442';
-        pwrHtml=cnt>1?pwrStr+' <span style="color:var(--yellow)">\xd7'+cnt+'</span>':pwrStr;
-      }
-      return '<tr><td>'+opBadge(s.operator)+'</td><td>'+typeBadge(s.station_type)+'</td><td class="city">'+(s.city||'\u2014')+'</td><td class="addr">'+locHtml+'</td><td class="center">'+gunCell(s.gun1_type)+'</td><td class="center">'+gunCell(s.gun2_type)+'</td><td class="center">'+gunCell(s.gun3_type)+'</td><td class="power" style="text-align:right">'+pwrHtml+'</td><td class="date" style="text-align:right">'+fmtDate(s.station_date)+newBadge+'</td></tr>';
-    }).join('');
-  }
-
-  const cardsWrap=document.getElementById('cards-wrap');
-  if(stations.length===0){
-    cardsWrap.innerHTML='<div class="loading">\u041d\u0415\u0422 \u0414\u0410\u041d\u041d\u042b\u0425 \u041f\u041e \u0412\u042b\u0411\u0420\u0410\u041d\u041d\u042b\u041c \u0424\u0418\u041b\u042c\u0422\u0420\u0410\u041c</div>';
-    return;
-  }
-  const groups={};
-  stations.forEach(s=>{
-    const key=s.location_name||s.address||'unknown';
-    if(!groups[key])groups[key]=[];
-    groups[key].push(s);
-  });
-  const groupEntries=Object.entries(groups);
-  const visibleGroups=groupEntries.slice(0,limit);
-  const hiddenGroups=groupEntries.length-visibleGroups.length;
-
-  let cardsHtml='';
-  visibleGroups.forEach(([locKey,locs])=>{
-    const first=locs[0];
-    const totalPower=locs.reduce((n,s)=>n+(((s.dc_power||0)+(s.ac_power||0))*(s.count||1)),0);
-    const totalGuns=locs.reduce((n,s)=>{
-      const c=s.count||1;
-      if(s.gun1_type)n+=c;if(s.gun2_type)n+=c;if(s.gun3_type)n+=c;return n;
-    },0);
-    const latestDate=locs.reduce((d,s)=>s.station_date>d?s.station_date:d,'');
-    const newBadge=isNew(latestDate)?'<span class="new-badge">NEW</span>':'';
-    const stationsHtml=locs.map(s=>{
-      const guns=[s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean);
-      const gunsHtml=guns.map(g=>'<span class="gun-pill"><span class="gun-dot"></span>'+g+'</span>').join('');
-      const cnt=s.count||1;const dcP=s.dc_power||0;const acP=s.ac_power||0;
-      const pwrStr=dcP&&acP?dcP+'+'+acP+' \u043a\u0412\u0442':(dcP||acP)?(dcP||acP)+' \u043a\u0412\u0442':'\u2014';
-      const powerHtml=pwrStr==='\u2014'?'\u2014':(cnt>1?pwrStr+' <span style="color:var(--yellow)">\xd7'+cnt+'</span>':pwrStr);
-      return '<div class="station-row"><div class="st-left">'+typeBadge(s.station_type)+'<div class="st-guns">'+(gunsHtml||'<span style="color:#1a3a1a;font-size:9px">\u2014</span>')+'</div></div><div class="st-right"><span class="st-power">'+powerHtml+'</span></div></div>';
-    }).join('');
-    const locNameHtml=first.location_name?'<span class="loc-name">'+first.location_name+'</span>':'';
-    const locAddrHtml=first.address?'<span class="loc-addr">'+first.address+'</span>':'';
-    cardsHtml+='<div class="loc-card"><div class="loc-head"><div class="loc-head-left">'+opBadge(first.operator)+'<span class="loc-city">'+(first.city||'\u2014')+'</span>'+locNameHtml+locAddrHtml+'</div><div class="loc-head-right"><div class="loc-total-power">'+(totalPower?totalPower+' \u043a\u0412\u0442':'\u2014')+'</div><div class="loc-total-label">\u0412\u0421\u0415\u0413\u041e</div>'+(totalGuns?'<div class="loc-total-label" style="margin-top:2px">'+totalGuns+' \u043f\u0438\u0441\u0442.</div>':'')+'</div></div>'+stationsHtml+'<div class="loc-footer"><span class="loc-date">'+fmtDate(latestDate)+'</span>'+newBadge+'</div></div>';
-  });
-  cardsWrap.innerHTML=cardsHtml;
-
-  // Кнопка "Показать все"
-  let showBtn=document.getElementById('show-all-btn');
-  if(!showBtn){
-    showBtn=document.createElement('div');
-    showBtn.id='show-all-btn';
-    cardsWrap.parentNode.insertBefore(showBtn,cardsWrap.nextSibling);
-  }
-  if(hiddenGroups>0||hidden>0){
-    const rem=hiddenGroups||hidden;
-    showBtn.innerHTML='<button class="show-all-btn" onclick="expandAll()">&#x25BC; ПОКАЗАТЬ ВСЕ ('+(stations.length)+' СТАНЦИЙ)</button>';
-    showBtn.style.display='block';
-  } else {
-    showBtn.style.display='none';
-  }
-}
-
-// ============================================================
-// VISIT
-// ============================================================
-async function trackVisit(){
-  try{
-    await fetch(SURL+'/rest/v1/visits',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({visited_at:new Date().toISOString(),page:'stations'})});
-    const res=await fetch(SURL+'/rest/v1/visits?select=id&page=eq.stations',{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Prefer':'count=exact','Range':'0-0'}});
-    const c=res.headers.get('content-range')?.split('/')[1]||'...';
-    document.getElementById('visit-count').textContent=Number(c).toLocaleString('ru');
-  }catch(e){document.getElementById('visit-count').textContent='...';}
-}
-
-// ============================================================
-// INIT
-// ============================================================
-async function init(){
-  try{
-    const res=await fetch(SURL+'/rest/v1/stations?select=*&order=station_date.desc,station_time.desc.nullslast',{
-      headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}
-    });
-    allStations=await res.json();
-    if(!Array.isArray(allStations))allStations=[];
-    buildMonthFilter(allStations);
-    buildCityFilter(allStations);
-    applyFilters();
-  }catch(e){
-    console.log('Error:',e);
-    document.getElementById('reg-tbody').innerHTML='<tr><td colspan="9" class="loading">\u041e\u0428\u0418\u0411\u041a\u0410 \u0417\u0410\u0413\u0420\u0423\u0417\u041a\u0418</td></tr>';
-    document.getElementById('cards-wrap').innerHTML='<div class="loading">\u041e\u0428\u0418\u0411\u041a\u0410 \u0417\u0410\u0413\u0420\u0423\u0417\u041a\u0418</div>';
-  }
-  trackVisit();
-}
-init();
-window.addEventListener('scroll',function(){const b=document.getElementById('scroll-top');if(b)b.classList.toggle('visible',window.scrollY>300);});
-</script>
+<script src="stations.js?v=4"></script>
 </body>
 </html>
