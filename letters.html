@@ -112,9 +112,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 .modal-close:hover { color:var(--green-dim,#00aa2b); }
 
 .modal-op-wrap { position:relative; overflow:hidden; margin-bottom:14px; }
-.modal-op-scroll { display:flex; flex-wrap:nowrap; overflow-x:auto; gap:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:3px; }
-.modal-op-scroll::-webkit-scrollbar { display:none; }
-@media(min-width:600px) { .modal-op-scroll { flex-wrap:wrap; overflow-x:visible; } }
+.modal-op-scroll { display:flex; flex-wrap:wrap; gap:6px; }
 
 .modal-op-btn { font-family:'Press Start 2P',monospace; font-size:7px; padding:6px 10px; border:1px solid; background:transparent; cursor:pointer; white-space:nowrap; flex-shrink:0; opacity:.45; transition:all .2s; -webkit-tap-highlight-color:transparent; }
 .modal-op-btn:hover { opacity:.75; }
@@ -172,8 +170,8 @@ body.theme-tesla-dark .form-inp, body.theme-tesla-dark .form-textarea { backgrou
       <a class="nav-link" href="/">ГЛАВНАЯ</a>
       <a class="nav-link" href="https://evrace.by/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
       <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
-      <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
       <a class="nav-link active" href="#">ПИСЬМА</a>
+      <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
     </div>
     <div class="theme-seg">
       <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
@@ -186,8 +184,8 @@ body.theme-tesla-dark .form-inp, body.theme-tesla-dark .form-textarea { backgrou
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
     <a class="nav-mobile-link" href="https://evrace.by/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
     <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
-    <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
     <a class="nav-mobile-link active" href="#" onclick="closeBurger()">ПИСЬМА</a>
+    <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
   </div>
 
   <div class="page-wrap">
@@ -434,7 +432,7 @@ function renderLetters() {
     const newBadge = isNew(l.published_at) ? '<span class="new-badge" style="margin-left:4px;">NEW</span>' : '';
     const wantBadge = l.want_reply && !l.op_reply ? '<span class="letter-want-reply">📬 ЖДЁТ ОТВЕТА</span>' : '';
     const replyHtml = l.op_reply ? `<div class="letter-reply"><div class="letter-reply-label">ОТВЕТ ОПЕРАТОРА · ${(OP_NAMES[l.operator]||l.operator).toUpperCase()} · ${fmtDate(l.published_at)}</div><div class="letter-reply-text">${escHtml(l.op_reply)}</div></div>` : '';
-    html += `<div class="letter-card"><div class="letter-to">${opBadge(l.operator)}${newBadge}${wantBadge}</div><div class="letter-body">&laquo;${escHtml(l.body)}&raquo;</div><div class="letter-footer"><span class="letter-author">${escHtml(l.author_name||'Аноним')}</span><span>${fmtDate(l.published_at)}</span></div>${replyHtml}</div>`;
+    html += `<div class="letter-card"><div class="letter-to">${opBadge(l.operator)}${newBadge}${wantBadge}</div><div class="letter-body">&laquo;${escHtml(l.body).replace(/\n/g,'<br>')}&raquo;</div><div class="letter-footer"><span class="letter-author">${escHtml(l.author_name||'Аноним')}</span><span>${fmtDate(l.published_at)}</span></div>${replyHtml}</div>`;
   });
   wrap.innerHTML = html;
 
