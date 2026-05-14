@@ -816,3 +816,183 @@ table.reg td.date  { font-size: 10px; color: var(--text-dim); }
   .table-wrap { display: none; }
   .cards-wrap { display: block; }
 }
+
+/* ============================================================
+   STATIONS — новые компоненты (sticky filters, sort, heatmap,
+   NEW-flash, rating-slot, view-toggle, scroll-top, locationKey)
+   ============================================================ */
+
+/* sticky-обёртка фильтров — раньше прилипала под statusbar;
+   на мобиле перекрывала весь экран → отключили целиком */
+.filters-sticky {
+  background: var(--bg);
+  margin: 0 calc(var(--s-4) * -1) var(--s-4);     /* выходит за page-wrap padding */
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+/* кликабельные заголовки таблицы — сортировка */
+table.reg th.sortable {
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .15s;
+}
+table.reg th.sortable:hover { color: var(--green); }
+table.reg th.sortable::after {
+  content: ' ◇';                                  /* по умолчанию пустой ромб */
+  opacity: .35;
+  font-size: 8px;
+}
+table.reg th.sortable.sort-asc::after  { content: ' ▲'; opacity: 1; color: var(--green); }
+table.reg th.sortable.sort-desc::after { content: ' ▼'; opacity: 1; color: var(--green); }
+
+/* heatmap-фон на кнопках месяцев — управляется --heat: 0..1 через JS */
+.month-btn {
+  position: relative;
+  --heat: 0;
+}
+.month-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: currentColor;
+  opacity: calc(var(--heat) * 0.12);
+  pointer-events: none;
+  transition: opacity .3s;
+}
+
+/* подсветка NEW при загрузке (2 секунды) */
+@keyframes new-flash-arcade {
+  0%, 50% { box-shadow: inset 0 0 0 2px var(--green), 0 0 16px rgba(0,255,65,.35); background: rgba(0,255,65,.06); }
+  100%    { box-shadow: inset 0 0 0 0 transparent, 0 0 0 transparent; background: transparent; }
+}
+.new-flash {
+  animation: new-flash-arcade 2s ease-out 1;
+}
+
+/* slot под народный рейтинг (пока disabled, "СКОРО") */
+.loc-rating {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--border-dim);
+  padding: 4px 8px;
+  border: 1px dashed var(--border-faint);
+  border-radius: var(--radius);
+  cursor: not-allowed;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.loc-rating:hover { color: var(--text-dim); border-color: var(--border-dim); }
+.loc-rating-stars { letter-spacing: 1px; font-size: 10px; line-height: 1; }
+.loc-rating-soon  { font-size: 8px; opacity: .7; }
+
+/* в loc-head-right (мобайл) и в th "РЕЙТИНГ" (десктоп) — отдельные размещения */
+.loc-card .loc-rating { margin-top: var(--s-2); }
+
+/* view-toggle: "СПИСОК / ГРУППА" на десктопе */
+.view-toggle {
+  display: inline-flex; align-items: center; gap: 2px;
+  padding: 3px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius);
+  margin-left: auto;
+}
+.view-toggle-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  letter-spacing: var(--ls-tight);
+  padding: 5px 10px;
+  border: none; background: transparent;
+  color: var(--border-dim);
+  cursor: pointer;
+  transition: all .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.view-toggle-btn.active           { background: rgba(0,255,65,.1); color: var(--green); }
+.view-toggle-btn:not(.active):hover { color: var(--text-dim); }
+@media (max-width: 640px) {
+  .view-toggle { display: none; }                  /* на мобиле только группа */
+}
+
+/* hover-подсветка locationId в группированном виде */
+.loc-card[data-loc-id]:hover,
+table.reg tbody tr[data-loc-id]:hover td {
+  background: rgba(0,255,65,.05) !important;
+}
+
+/* "Показать ещё 50" — отдельный стиль (общий .show-all-btn уже есть) */
+.load-more-btn {
+  display: block; width: 100%;
+  margin: var(--s-3) 0 var(--s-5);
+  padding: var(--s-3);
+  background: rgba(0,255,65,.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--green);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  letter-spacing: var(--ls);
+  cursor: pointer;
+  transition: all .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.load-more-btn:hover { background: rgba(0,255,65,.1); }
+.load-more-btn .lm-rem { color: var(--yellow); }
+
+/* scroll-top — раньше был inline в HTML, теперь через переменные темы */
+#scroll-top {
+  position: fixed;
+  bottom: var(--s-5); right: var(--s-4);
+  z-index: 500;
+  width: 44px; height: 44px;
+  border: 1px solid var(--green);
+  border-radius: var(--radius);
+  background: rgba(0,255,65,.12);
+  color: var(--green);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 20px; line-height: 1;
+  cursor: pointer;
+  display: none; align-items: center; justify-content: center;
+  transition: all .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+#scroll-top.visible { display: flex; }
+#scroll-top:hover   { background: rgba(0,255,65,.25); }
+
+/* стандартный класс для no-gun ячеек на мобиле */
+.st-no-gun {
+  color: var(--border-faint);
+  font-size: 10px;
+}
+
+/* фикс: 8px на статах был нечитаем — заменили на 11px минимум */
+.stat-val.stat-val--compound {
+  font-size: clamp(11px, 1.8vw, 14px);
+}
+.stat-val-unit {
+  font-size: .6em;
+  color: var(--text-dim);
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* алиасы выравнивания (вместо inline style="text-align:right") */
+table.reg th.right, table.reg td.right { text-align: right; }
+
+/* семантический оверрайд для section-head-stations */
+.section-head.section-head-stations {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+.section-head-stations .view-toggle { margin-left: auto; }
+
+/* reset-btn — добавлен счётчик */
+.reset-btn .reset-count {
+  background: rgba(255,68,68,.25);
+  padding: 0 4px;
+  margin-left: 4px;
+  border-radius: 2px;
+}
