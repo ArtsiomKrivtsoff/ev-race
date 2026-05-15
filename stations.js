@@ -20,7 +20,7 @@ const OP_CLASS = {
 const MONTHS = ['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
 const MONTH_SEASON = ['winter','winter','spring','spring','spring','summer','summer','summer','autumn','autumn','autumn','winter'];
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 20;
 
 // =============================================================
 // СОСТОЯНИЕ
@@ -81,18 +81,38 @@ function saveStateToURL() {
 })();
 
 // =============================================================
+// FX TOGGLE — «АРКАДА / ЧЁТКО» (читаемый режим без glow/scanlines)
+// =============================================================
+function toggleFx() {
+  const on = document.body.classList.toggle('reduced-fx');
+  localStorage.setItem('ev_race_reduced_fx', on ? '1' : '0');
+  document.querySelector('.fx-seg.fx-on') ?.classList.toggle('active', !on);
+  document.querySelector('.fx-seg.fx-off')?.classList.toggle('active',  on);
+}
+(function () {
+  if (localStorage.getItem('ev_race_reduced_fx') === '1') {
+    document.body.classList.add('reduced-fx');
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.fx-seg.fx-on') ?.classList.remove('active');
+      document.querySelector('.fx-seg.fx-off')?.classList.add('active');
+    });
+  }
+})();
+
+// =============================================================
 // ТЕМА
 // =============================================================
 const THEMES = ['arcade','tesla-light','tesla-dark'];
 function setTheme(theme) {
   document.getElementById('theme-css').href = 'CSS/' + theme + '.css?v=4';
   localStorage.setItem('ev_race_theme', theme);
+  document.documentElement.dataset.theme = theme;
   THEMES.forEach(t => {
     document.getElementById('btn-'  + t)?.classList.toggle('active', t === theme);
     document.getElementById('foot-' + t)?.classList.toggle('active', t === theme);
   });
 }
-(function () { const s = localStorage.getItem('ev_race_theme'); if (s && THEMES.includes(s)) setTheme(s); })();
+(function () { const s = localStorage.getItem('ev_race_theme'); if (s && THEMES.includes(s)) setTheme(s); else document.documentElement.dataset.theme = 'arcade'; })();
 
 // =============================================================
 // БУРГЕР
@@ -422,6 +442,9 @@ function renderGroupRows(group) {
   // если в группе 1 станция — рисуем обычной строкой как в list view
   if (group.stations.length === 1) return renderTableRow(first);
 
+  // сумма станций по полю count (a НЕ количество строк!)
+  const totalStCount = group.stations.reduce((n, s) => n + (s.count || 1), 0);
+
   // несколько станций в одной локации — заголовок локации + строки
   const operators = [...new Set(group.stations.map(s => s.operator))];
   const opBadges = operators.map(o => opBadge(o)).join(' ');
@@ -431,7 +454,7 @@ function renderGroupRows(group) {
 
   let html = '<tr data-loc-id="' + group.key + '" class="' + flash.trim() + '" style="background:rgba(0,255,65,.03)">'
     + '<td>' + opBadges + '</td>'
-    + '<td colspan="2" style="color:var(--cyan);font-family:\'Press Start 2P\',monospace;font-size:9px">📍 ' + group.stations.length + ' СТ.</td>'
+    + '<td colspan="2" style="color:var(--cyan);font-family:\'Press Start 2P\',monospace;font-size:9px">📍 ' + totalStCount + ' СТ.</td>'
     + '<td class="addr">' + locHtml + '</td>'
     + '<td colspan="3" class="center" style="color:var(--text-dim);font-size:10px">' + totalGuns + ' пист. всего</td>'
     + '<td class="power right">' + (totalPower ? totalPower.toLocaleString('ru') + ' кВт' : '—') + '</td>'
