@@ -95,6 +95,8 @@ body { animation: flicker calc(8s / var(--anim-flicker)) infinite; }
 :root[data-anim-flicker="0"] body { animation: none; }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0; }
+@media (min-width: 1280px) { .container { max-width: 1280px; } }
+@media (min-width: 1600px) { .container { max-width: 1440px; } }
 .page-wrap { padding: 0 var(--s-4) var(--s-4); }
 
 /* ============================================================
@@ -760,7 +762,8 @@ body { animation: flicker calc(8s / var(--anim-flicker)) infinite; }
 
 /* DESKTOP TABLE */
 .table-wrap { overflow-x: auto; margin-bottom: var(--s-6); }
-table.reg   { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 740px; }
+table.reg   { width: 100%; border-collapse: collapse; font-size: 12px; }
+@media (max-width: 1023px) { table.reg { min-width: 740px; } }
 table.reg thead tr { border-bottom: 1px solid var(--border-faint); }
 table.reg th       { font-size: 9px; color: var(--text-dim); text-align: left; padding: var(--s-2); font-weight: normal; white-space: nowrap; letter-spacing: var(--ls-tight); }
 table.reg th.center{ text-align: center; }
@@ -996,3 +999,107 @@ table.reg th.right, table.reg td.right { text-align: right; }
   margin-left: 4px;
   border-radius: 2px;
 }
+
+/* ============================================================
+   DESKTOP SCALING — увеличиваем шрифты и контролы на больших экранах
+   (Пользователи жаловались, что на компе всё мелкое)
+   ============================================================ */
+@media (min-width: 1024px) {
+  /* Навигация */
+  .nav-link             { font-size: 12px; padding: 10px 16px; }
+  .theme-seg-btn        { font-size: 12px; padding: 6px 12px; }
+
+  /* Стат-карточки */
+  .stat-card            { padding: 16px var(--s-3); }
+  .stat-label           { font-size: 11px; letter-spacing: var(--ls); margin-bottom: var(--s-2); }
+  .stat-val             { font-size: clamp(15px, 1.6vw, 22px); }
+  .stat-val--compound   { font-size: clamp(13px, 1.4vw, 18px); }
+
+  /* Фильтры */
+  .filter-label         { font-size: 12px; min-width: 110px; }
+  .month-btn,
+  .op-filter-btn,
+  .city-btn,
+  .reset-btn            { font-size: 10px; padding: 7px 11px; }
+
+  /* Поиск */
+  .search-input         { font-size: 13px; padding: 12px 0; }
+  .search-input::placeholder { font-size: 12px; }
+
+  /* Заголовки таблиц */
+  .section-head         { font-size: 13px; padding-bottom: var(--s-3); }
+  .view-toggle-btn      { font-size: 11px; padding: 7px 13px; }
+
+  /* Таблица */
+  table.reg             { font-size: 14px; }
+  table.reg th          { font-size: 11px; padding: var(--s-3) var(--s-2); }
+  table.reg td          { padding: var(--s-3) var(--s-2); }
+  table.reg td.city     { font-size: 14px; }
+  table.reg td.power    { font-size: 12px; }
+  table.reg td.date     { font-size: 12px; }
+  table.reg td.addr .loc-name    { font-size: 13px; }
+  table.reg td.addr .loc-address { font-size: 12px; }
+
+  /* Бейджи */
+  .badge-dc, .badge-ac, .badge-acdc,
+  .op-badge             { font-size: 10px; padding: 4px 8px; }
+  .gun-pill             { font-size: 11px; padding: 3px 9px; }
+  .new-badge            { font-size: 10px; padding: 3px 7px; }
+
+  /* Рейтинг */
+  .loc-rating           { font-size: 10px; padding: 5px 10px; }
+
+  /* Большие плашки */
+  .header-intro         { font-size: clamp(15px, 1.4vw, 18px); }
+  .footer-disclaimer    { font-size: 13px; }
+}
+
+/* ============================================================
+   READABILITY — для пользователей, кому glow/scanlines мешают
+   (включается классом .reduced-fx на body — можно повесить через Tweaks)
+   ============================================================ */
+body.reduced-fx::before                  { display: none; }
+body.reduced-fx                          { animation: none; }
+body.reduced-fx .hero-title              { text-shadow: 0 0 6px var(--green); }
+body.reduced-fx .total-count             { text-shadow: 0 0 6px var(--green); }
+body.reduced-fx .total-pct-value         { text-shadow: none; }
+body.reduced-fx .countdown-num           { text-shadow: 0 0 4px var(--yellow); }
+body.reduced-fx .header-year             { text-shadow: 0 0 4px var(--yellow); }
+body.reduced-fx .start-point             { text-shadow: 0 0 6px var(--cyan); }
+body.reduced-fx .stat-val                { text-shadow: 0 0 4px var(--yellow); }
+body.reduced-fx .op-score                { text-shadow: 0 0 4px var(--green); }
+body.reduced-fx .big-phrase              { text-shadow: 0 0 6px var(--yellow); }
+
+/* ============================================================
+   READABILITY TOGGLE — кнопка-переключатель «АРКАДА / ЧЁТКО»
+   Показывается только на десктопе (с эффектами на мобиле особо
+   не проблема, там экран маленький).
+   ============================================================ */
+.fx-toggle {
+  display: none;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: transparent;
+  border: 1px solid rgba(255,215,0,.3);
+  border-radius: var(--radius);
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.fx-seg {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  letter-spacing: var(--ls-tight);
+  padding: 5px 9px;
+  color: rgba(255,215,0,.4);
+  transition: all .15s;
+  white-space: nowrap;
+}
+.fx-seg.active { background: rgba(255,215,0,.12); color: var(--yellow); text-shadow: 0 0 6px var(--yellow); }
+.fx-toggle:hover .fx-seg:not(.active) { color: rgba(255,215,0,.7); }
+@media (min-width: 1024px) {
+  .fx-toggle { display: inline-flex; }
+}
+html[data-theme="tesla-light"] .fx-toggle,
+html[data-theme="tesla-dark"]  .fx-toggle { display: none !important; }
