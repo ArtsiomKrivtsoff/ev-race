@@ -53,10 +53,10 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
       <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
       <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
     </div>
-    <div class="fx-toggle" id="fxToggle" role="group" aria-label="Эффекты">
-      <button class="fx-seg active" id="fx-arcade" onclick="setFx('arcade')">ЭФФЕКТЫ</button>
-      <button class="fx-seg"        id="fx-crisp"  onclick="setFx('crisp')">ЧЁТКО</button>
-    </div>
+    <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Отключает сканлайны и свечение текста — для лучшей читаемости">
+      <span class="fx-seg fx-on  active" data-state="on">ЭФФЕКТЫ</span>
+      <span class="fx-seg fx-off"        data-state="off">ЧЁТКО</span>
+    </button>
   </div>
 
   <!-- МОБИЛЬНОЕ МЕНЮ -->
@@ -93,10 +93,10 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
     <div id="forecast-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
 
     <!-- РЕЙТИНГИ -->
-    <div class="section-head">▶ РЕЙТИНГ ПО СТАНЦИЯМ</div>
+    <div class="section-head">▶ КТО СТАВИТ БОЛЬШЕ СТАНЦИЙ <span class="section-sub">· очки за круг по количеству</span></div>
     <div class="standings-wrap" id="standings-stations-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
 
-    <div class="section-head">▶ РЕЙТИНГ ПО МОЩНОСТИ</div>
+    <div class="section-head">▶ КТО СТАВИТ БОЛЬШЕ МОЩНОСТИ <span class="section-sub">· очки за круг по кВт</span></div>
     <div class="standings-wrap" id="standings-power-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
 
     <!-- ИСТОРИЯ -->
@@ -104,7 +104,8 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
     <div id="history-wrap"></div>
 
     <!-- СЕТКА СЕЗОНА -->
-    <div class="section-head">▶ СЕТКА СЕЗОНА</div>
+    <div class="section-head">▶ ПОБЕДИТЕЛИ КРУГОВ</div>
+    <div class="rounds-legend"><span class="lg-item"><b>★</b> победа по станциям</span><span class="lg-sep">·</span><span class="lg-item"><b>⚡</b> победа по мощности</span></div>
     <div id="rounds-grid"></div>
 
     <div style="height:20px"></div>
@@ -218,24 +219,29 @@ function setTheme(theme){
     const f=document.getElementById('foot-'+t);if(f)f.classList.toggle('active',t===theme);
   });
 }
-function setFx(mode){
-  const crisp = mode === 'crisp';
-  document.body.classList.toggle('reduced-fx', crisp);
-  document.documentElement.setAttribute('data-anim-flicker', crisp?'0':'1');
-  document.documentElement.setAttribute('data-anim-blink',   crisp?'0':'1');
-  document.documentElement.setAttribute('data-anim-shine',   crisp?'0':'1');
-  localStorage.setItem('ev_race_fx', mode);
-  const a=document.getElementById('fx-arcade');
-  const c=document.getElementById('fx-crisp');
-  if(a) a.classList.toggle('active', !crisp);
-  if(c) c.classList.toggle('active',  crisp);
+function toggleFx(){
+  const on = document.body.classList.toggle('reduced-fx');
+  localStorage.setItem('ev_race_reduced_fx', on?'1':'0');
+  document.documentElement.setAttribute('data-anim-flicker', on?'0':'1');
+  document.documentElement.setAttribute('data-anim-blink',   on?'0':'1');
+  document.documentElement.setAttribute('data-anim-shine',   on?'0':'1');
+  document.querySelector('.fx-seg.fx-on') ?.classList.toggle('active', !on);
+  document.querySelector('.fx-seg.fx-off')?.classList.toggle('active',  on);
 }
 (function(){
   const s=localStorage.getItem('ev_race_theme');
   if(s&&THEMES.includes(s)) setTheme(s);
   else document.documentElement.setAttribute('data-theme','arcade');
-  const fx=localStorage.getItem('ev_race_fx');
-  if(fx==='crisp') setFx('crisp');
+  if(localStorage.getItem('ev_race_reduced_fx')==='1'){
+    document.body.classList.add('reduced-fx');
+    document.documentElement.setAttribute('data-anim-flicker','0');
+    document.documentElement.setAttribute('data-anim-blink','0');
+    document.documentElement.setAttribute('data-anim-shine','0');
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.querySelector('.fx-seg.fx-on') ?.classList.remove('active');
+      document.querySelector('.fx-seg.fx-off')?.classList.add('active');
+    });
+  }
 })();
 
 function toggleBurger(){
@@ -439,13 +445,16 @@ function renderStandings(data){
   function render(pts,wins,rH,wrapId,totals,totLabel,showKwt){
     const sorted=[...ALL_OPS].sort((a,b)=>pts[b]!==pts[a]?pts[b]-pts[a]:wins[b]-wins[a]);
     const rc=['r1','r2','r3','',''];
-    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num">ОЧКИ</th><th class="th-num">ПОБЕД</th><th class="th-last">${totLabel}</th>${showKwt?'':'<th class="th-tempo">СТ/НЕД</th>'}</tr></thead><tbody>`;
+    // Цветной класс для колонки метрики (станции — зелёный, мощность — жёлтый)
+    const metricCls = showKwt ? 'td-metric power' : 'td-metric stations';
+    const metricThCls = showKwt ? 'th-metric power' : 'th-metric stations';
+    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num th-pts">ОЧКИ</th><th class="th-num">ПОБЕД</th><th class="th-last ${metricThCls}">${totLabel}</th>${showKwt?'':'<th class="th-tempo">СТ/НЕД</th>'}</tr></thead><tbody>`;
     sorted.forEach((op,i)=>{
       const pos=i+1;
       const tv=showKwt?(totals[op]?totals[op]:'—'):(totals[op]||0);
       const tp=tempo[op]>0?tempo[op].toFixed(1):'—';
       const badge=badges[op]?`<span class="streak-badge ${badges[op].cls}">${badges[op].icon}${badges[op].n?' <span class="n">'+badges[op].n+'</span>':''}${badges[op].label?' '+badges[op].label:''}</span>`:'';
-      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span>${badge}</td><td class="td-num"><span class="pts">${pts[op]}</span></td><td class="td-wins">${wins[op]}</td><td class="td-last">${tv}</td>${showKwt?'':`<td class="td-tempo">${tp}</td>`}</tr>`;
+      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span>${badge}</td><td class="td-num td-pts"><span class="pts">${pts[op]}</span></td><td class="td-wins">${wins[op]}</td><td class="td-last ${metricCls}">${tv}${showKwt?' <span class="unit">кВт</span>':''}</td>${showKwt?'':`<td class="td-tempo">${tp}</td>`}</tr>`;
     });
     html+='</tbody></table>';
     document.getElementById(wrapId).innerHTML=html;
@@ -487,8 +496,8 @@ function computeStreakBadges(byRound,curRound,totalSt){
       if(stillCold){ if(stations===0) cold++; else stillCold=false; }
       if(!stillHot && !stillCold) break;
     }
-    if(hot>=2)       badges[op]={cls:'hot',  icon:'🔥', n:hot,  label:'в топ-3'};
-    else if(cold>=2) badges[op]={cls:'cold', icon:'❄',  n:cold, label:'без станций'};
+    if(hot>=2)       badges[op]={cls:'hot',  icon:'🔥', n:hot,  label:'круга в топ-3'};
+    else if(cold>=2) badges[op]={cls:'cold', icon:'❄',  n:cold, label:'круга без станций'};
     else             badges[op]=null;
   });
   return badges;
@@ -508,15 +517,23 @@ function renderRoundsGrid(data){
     const res=roundResults[i];
     let wH='';
     if(isAct){
-      wH=`<div class="r-win" style="color:var(--green)">ИДЁТ</div>`;
+      // Live-лидер текущего круга: кто сейчас впереди по станциям
+      const cur=byRound[i]||{};
+      const sortedCur=Object.entries(cur).sort((a,b)=>b[1].stations-a[1].stations);
+      const leader=sortedCur[0];
+      if(leader && leader[1].stations>0){
+        wH=`<div class="r-win r-live">★ <span style="color:${opColor(leader[0])}">${opName(leader[0])}</span> ${leader[1].stations} ст.</div><div class="r-win r-idet">ИДЁТ</div>`;
+      } else {
+        wH=`<div class="r-win" style="color:var(--text-dim)">никто не ставил</div><div class="r-win r-idet">ИДЁТ</div>`;
+      }
     } else if(isPast&&res){
       const winSt=res.byStations&&res.byStations[0];
       const winPw=res.byPower&&res.byPower[0];
-      const stLine=winSt?`<div class="r-win">★ <span style="color:${opColor(winSt.op)}">${opName(winSt.op)}</span> ${winSt.stations} ст.</div>`:'<div class="r-win">—</div>';
-      const pwLine=winPw&&winPw.power>0?`<div class="r-win">⚡ <span style="color:${opColor(winPw.op)}">${opName(winPw.op)}</span> ${winPw.power} кВт</div>`:'<div class="r-win">—</div>';
+      const stLine=(winSt && winSt.stations>0)?`<div class="r-win">★ <span style="color:${opColor(winSt.op)}">${opName(winSt.op)}</span> ${winSt.stations} ст.</div>`:'<div class="r-win r-empty">— никто не поставил</div>';
+      const pwLine=winPw&&winPw.power>0?`<div class="r-win">⚡ <span style="color:${opColor(winPw.op)}">${opName(winPw.op)}</span> ${winPw.power} кВт</div>`:'';
       wH=stLine+pwLine;
     } else {
-      wH='<div class="r-win">—</div>';
+      wH='<div class="r-win r-empty">—</div>';
     }
     html+=`<div class="round-cell ${cls}"><div class="r-num">КРУГ ${String(i).padStart(2,'0')}</div>${wH}<div class="r-date">${d.label}</div></div>`;
   }
