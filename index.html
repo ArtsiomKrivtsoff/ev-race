@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>EV RACE 2026 — гонка за 1010 зарядных станций Беларуси</title>
-<meta name="description" content="Следим в реальном времени за гонкой операторов DC зарядных станций Беларуси 2026. BatteryFly, forEVo, Zaryadka, United Company, ЦСМС — кто установит больше к 31 декабря? Сделай ставку!">
-<meta name="keywords" content="зарядные станции Беларусь 2026, операторы ЭЗС Беларусь, DC зарядка Беларусь, BatteryFly, forEVo, Zaryadka, электрозарядные станции Беларусь, частные операторы зарядных станций, где зарядить электромобиль Беларусь">
+<meta name="description" content="Следим в реальном времени за гонкой операторов зарядных станций Беларуси 2026. BatteryFly, forEVo, Zaryadka, United Company, ЦСМС — кто установит больше к 31 декабря? Сделай ставку!">
+<meta name="keywords" content="зарядные станции Беларусь 2026, операторы ЭЗС Беларусь, BatteryFly, forEVo, Zaryadka, ЦСМС, United Company, электрозарядные станции Беларусь, частные операторы зарядных станций, где зарядить электромобиль Беларусь">
 <meta name="author" content="Artsiom Krivtsoff">
 <meta name="robots" content="index, follow">
 <meta name="geo.region" content="BY">
 <meta name="geo.placename" content="Беларусь">
 <link rel="canonical" href="https://evrace.by/">
 <meta property="og:title" content="EV RACE 2026 — гонка за 1010 зарядных станций Беларуси">
-<meta property="og:description" content="5 операторов DC зарядки соревнуются кто установит больше станций к 31 декабря 2026. Следим в реальном времени. Сделай ставку на победителя!">
+<meta property="og:description" content="5 операторов соревнуются кто установит больше зарядных станций к 31 декабря 2026. Следим в реальном времени. Сделай ставку на победителя!">
 <meta property="og:image" content="https://evrace.by/og.png">
 <meta property="og:url" content="https://evrace.by/">
 <meta property="og:type" content="website">
@@ -25,7 +25,7 @@
   "@type": "WebSite",
   "name": "EV RACE 2026",
   "url": "https://evrace.by",
-  "description": "Публичный трекер гонки операторов DC зарядных станций Беларуси 2026. 5 операторов, 1010 станций, финал 31 декабря.",
+  "description": "Публичный трекер гонки операторов зарядных станций Беларуси 2026. 5 операторов, 1010 станций, финал 31 декабря.",
   "inLanguage": "ru-BY",
   "author": {
     "@type": "Person",
@@ -48,8 +48,8 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <!-- ТЕМА: меняется JS-ом -->
 <link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=3">
 <!-- prefetch остальных тем чтобы переключение было мгновенным -->
-<link rel="prefetch" href="CSS/tesla-light.css?v=3">
-<link rel="prefetch" href="CSS/tesla-dark.css?v=3">
+<link rel="prefetch" href="CSS/tesla-light.css">
+<link rel="prefetch" href="CSS/tesla-dark.css">
 <style>
 #scroll-top{position:fixed;bottom:20px;right:16px;z-index:500;width:44px;height:44px;border:1px solid var(--green,#00ff41);background:rgba(0,255,65,.12);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:20px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;}
 #scroll-top.visible{display:flex;}
@@ -84,6 +84,10 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
       <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
       <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
     </div>
+    <div class="fx-toggle" id="fxToggle" role="group" aria-label="Эффекты">
+      <button class="fx-seg active" id="fx-arcade" onclick="setFx('arcade')">ЭФФЕКТЫ</button>
+      <button class="fx-seg"        id="fx-crisp"  onclick="setFx('crisp')">ЧЁТКО</button>
+    </div>
   </div><!-- /statusbar -->
 
   <!-- МОБИЛЬНОЕ МЕНЮ (вне statusbar, выпадает вниз) -->
@@ -105,8 +109,13 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
     <div class="header-intro">
       <strong>18 марта 2026 года</strong> в Министерстве энергетики Республики Беларусь прошёл круглый стол по развитию зарядной инфраструктуры. Пять частных операторов озвучили министру свои планы по запуску быстрых зарядных станций до конца 2026 года.<br><br>
       Планы каждого озвучивать не стану, НО...<br><br>
-      Суммарно все обещали ввести в работу до конца 2026 года <span class="highlight">1010 DC зарядных станций</span>.<br><br>
+      Суммарно все обещали ввести в работу до конца 2026 года <span class="highlight">1010 зарядных станций</span>.<br><br>
       Эта страница считает. Сравним заявленное с реальным 31 декабря!
+    </div>
+    <div class="upd-block upd2">
+      <div class="upd-label">► UPD 2 · 16.05.2026</div>
+      <div class="upd-text">100 DC станций за полгода. Серьёзно?<br>Окей. Меняю правила — теперь считаю AC тоже.<br>Не потому что так надо. Потому что хочу живой гонки, а не похорон.<br>Вперёд.</div>
+      <div class="upd-sign">Блюститель честного заряда · <span>Artsiom Krivtsoff</span></div>
     </div>
     <div class="upd-block">
       <div class="upd-label">► UPD 26.03.2026</div>
@@ -133,7 +142,7 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
     <div class="total-numbers">
       <div>
         <div class="total-count" id="total-count">0</div>
-        <div class="total-goal">из <span>1010</span> DC станций</div>
+        <div class="total-goal">из <span>1010</span> станций</div>
       </div>
       <div class="total-pct-block">
         <div class="total-pct-label">ВЫПОЛНЕНО</div>
@@ -189,7 +198,7 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
     <div class="section-label">▼ ИНОЕ #НЕТЕЛЕГА ▼</div>
     <div class="author-links">
       <a class="author-link-btn" href="https://www.instagram.com/artsiomkrivtsoff/" target="_blank">Instagram</a>
-      <a class="author-link-btn" href="http://tiktok.com/@artsiomkrivtsoff" target="_blank">TikTok</a>
+      <a class="author-link-btn" href="https://tiktok.com/@artsiomkrivtsoff" target="_blank">TikTok</a>
       <a class="author-link-btn" href="https://www.youtube.com/@imeyuskazat" target="_blank">YouTube</a>
     </div>
     <div class="section-label">▼ СВЯЗАТЬСЯ | УСТАНОВИТЬ ЗАРЯДНУЮ СТАНЦИЮ | ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ ▼</div>
@@ -256,7 +265,7 @@ const OPERATORS_META = [
   { id:'csms',       name:'ЦСМС', color:'#FF6B6B', logo:'logos/csms.png',       darkBg:false },
 ];
 const TOTAL_GOAL = 1010;
-let OPERATORS    = OPERATORS_META.map(o=>({...o,count:0,added:0,updated:'—'}));
+let OPERATORS    = OPERATORS_META.map(o=>({...o,total:0,dc:0,ac:0,added:0,updated:'—',goal:1}));
 let LAST_UPDATED = '—';
 let selectedOperator = null;
 
@@ -279,6 +288,7 @@ const THEMES = ['arcade','tesla-light','tesla-dark'];
 function setTheme(theme) {
   document.getElementById('theme-css').href = 'CSS/' + theme + '.css?v=3';
   localStorage.setItem('ev_race_theme', theme);
+  document.documentElement.setAttribute('data-theme', theme);
 
   THEMES.forEach(t => {
     const btn = document.getElementById('btn-' + t);
@@ -293,9 +303,29 @@ function setTheme(theme) {
   if (document.getElementById('operators-grid').children.length > 0) renderOperators();
 }
 
+// ============================================================
+// FX TOGGLE — «ЭФФЕКТЫ / ЧЁТКО» (только для arcade-темы)
+// ============================================================
+function setFx(mode) {
+  // mode: 'arcade' (полные эффекты) или 'crisp' (без сканлайнов/мерцания)
+  const crisp = mode === 'crisp';
+  document.body.classList.toggle('reduced-fx', crisp);
+  document.documentElement.setAttribute('data-anim-flicker', crisp ? '0' : '1');
+  document.documentElement.setAttribute('data-anim-blink',   crisp ? '0' : '1');
+  document.documentElement.setAttribute('data-anim-shine',   crisp ? '0' : '1');
+  localStorage.setItem('ev_race_fx', mode);
+  const a = document.getElementById('fx-arcade');
+  const c = document.getElementById('fx-crisp');
+  if (a) a.classList.toggle('active', !crisp);
+  if (c) c.classList.toggle('active',  crisp);
+}
+
 (function() {
   const saved = localStorage.getItem('ev_race_theme');
   if (saved && THEMES.includes(saved)) setTheme(saved);
+  else document.documentElement.setAttribute('data-theme', 'arcade');
+  const fx = localStorage.getItem('ev_race_fx');
+  if (fx === 'crisp') setFx('crisp');
 })();
 
 // ============================================================
@@ -349,7 +379,15 @@ async function loadStationsData() {
       data.forEach(row => {
         const op = OPERATORS.find(o=>o.id===row.operator);
         if (op) {
-          op.count   = row.total || 0;
+          // Новый RPC отдаёт dc_count/ac_count + total. Если ещё старая версия
+          // (без полей разбивки) — фолбэк: total целиком в DC.
+          const dc = row.dc_count != null ? Number(row.dc_count) : null;
+          const ac = row.ac_count != null ? Number(row.ac_count) : null;
+          const total = row.total != null ? Number(row.total) : ((dc||0)+(ac||0));
+          op.total   = total || 0;
+          op.dc      = dc != null ? dc : op.total;
+          op.ac      = ac != null ? ac : 0;
+          op.count   = op.total;            // обратная совместимость со stacked-баром
           op.added   = row.last_added || 0;
           op.goal    = row.goal || 1;
           if (row.last_date) {
@@ -441,46 +479,91 @@ function medalSVG_arcade(rank, hasCount) {
 // РЕНДЕР ОПЕРАТОРОВ
 // ============================================================
 function renderOperators() {
-  const anyCount = OPERATORS.some(o=>o.count>0);
-  const sorted   = anyCount ? [...OPERATORS].sort((a,b)=>b.count-a.count) : [...OPERATORS];
-  const total    = sorted.reduce((s,o)=>s+o.count,0);
-  const pct      = Math.round(total/TOTAL_GOAL*100);
+  // Сортировка по total. У debut (total=0) — порядок остаётся как в OPERATORS_META.
+  const anyTotal = OPERATORS.some(o=>o.total>0);
+  const sorted   = anyTotal
+    ? [...OPERATORS].sort((a,b) => {
+        // тотал по убыванию; нули в конце в исходном порядке
+        if ((b.total>0) - (a.total>0) !== 0) return (b.total>0) - (a.total>0);
+        return b.total - a.total;
+      })
+    : [...OPERATORS];
+  const total = sorted.reduce((s,o)=>s+o.total,0);
+  const pct   = Math.round(total/TOTAL_GOAL*100);
 
   document.getElementById('total-count').textContent  = total;
   document.getElementById('total-pct').textContent    = pct+'%';
   document.getElementById('updated-date').textContent = 'ОБНОВЛЕНО: '+LAST_UPDATED;
 
+  // Stacked-бар общего прогресса — segment на оператора (по total)
   const stackedBar = document.getElementById('total-bar-stacked');
   stackedBar.innerHTML = '';
   if (total>0) {
     sorted.forEach(op=>{
-      if (op.count<=0) return;
+      if (op.total<=0) return;
       const seg = document.createElement('div');
       seg.className = 'stack-seg';
       seg.style.cssText = `width:0%;background:${op.color};`;
-      seg.title = `${op.name}: ${op.count}`;
+      seg.title = `${op.name}: ${op.total} (DC ${op.dc} · AC ${op.ac})`;
       stackedBar.appendChild(seg);
-      setTimeout(()=>{ seg.style.width=(op.count/TOTAL_GOAL*100)+'%'; },150);
+      setTimeout(()=>{ seg.style.width=(op.total/TOTAL_GOAL*100)+'%'; },150);
     });
   }
 
   const grid = document.getElementById('operators-grid');
   grid.innerHTML = '';
   sorted.forEach((op,i)=>{
-    const barPct = op.goal ? Math.min(op.count/op.goal*100,100) : 0;
-    const card   = document.createElement('div');
-    card.className = 'op-card';
-    card.innerHTML = `
-      <div class="op-rank"><div class="medal">${medalSVG(i+1,op.count>0)}</div></div>
-      <div class="op-top">
-        <img class="op-logo${op.darkBg?' dark-bg':''}" src="${op.logo}" alt="${op.name}">
-        <div class="op-name">${op.name}</div>
-        <div class="op-score">${op.count}<span class="score-x"> / X</span></div>
-      </div>
-      <div class="op-bar-wrap"><div class="op-bar-fill" style="width:0%;background:${op.color}"></div></div>
-      <div class="op-meta">Обновлено: ${op.updated} · Добавлено: +${op.added} ст.</div>`;
+    const isDebut = op.total === 0;
+    const card    = document.createElement('div');
+    card.className = 'op-card v2' + (isDebut ? ' debut' : '');
+
+    // ширины сегментов бара (от total оператора)
+    const dcW = op.total>0 ? (op.dc/op.total*100) : 0;
+    const acW = op.total>0 ? (op.ac/op.total*100) : 0;
+
+    if (isDebut) {
+      card.innerHTML = `
+        <div class="op-rank"><div class="medal">${medalSVG(i+1,false)}</div></div>
+        <div class="op-head">
+          <img class="op-logo${op.darkBg?' dark-bg':''}" src="${op.logo}" alt="${op.name}">
+          <div class="op-name">${op.name}</div>
+        </div>
+        <div class="op-debut"><span class="zzz">💤</span>ОЖИДАЕМ ДЕБЮТА<br>В 2026</div>
+        <div class="op-bar-v2"><div class="seg-dc" style="width:0%;background:${op.color}"></div></div>
+        <div class="op-split">
+          <span class="op-chip chip-dc dim">DC <b>0</b></span>
+          <span class="op-chip chip-ac dim">AC <b>0</b></span>
+        </div>`;
+    } else {
+      card.innerHTML = `
+        <div class="op-rank"><div class="medal">${medalSVG(i+1,true)}</div></div>
+        <div class="op-head">
+          <img class="op-logo${op.darkBg?' dark-bg':''}" src="${op.logo}" alt="${op.name}">
+          <div class="op-name">${op.name}</div>
+        </div>
+        <div class="op-total">
+          <span class="op-total-num" style="color:${op.color};text-shadow:0 0 16px ${op.color}">${op.total}</span>
+          <span class="op-total-label">СТАНЦИЙ</span>
+        </div>
+        <div class="op-bar-v2">
+          <div class="seg-dc" style="width:0%;background:${op.color}"></div>
+          <div class="seg-ac" style="width:0%;background:${op.color}"></div>
+        </div>
+        <div class="op-split">
+          <span class="op-chip chip-dc">DC <b>${op.dc}</b></span>
+          <span class="op-chip chip-ac">AC <b>${op.ac}</b></span>
+        </div>
+        <div class="op-meta">Обновлено: ${op.updated} · Добавлено: +${op.added} ст.</div>`;
+    }
     grid.appendChild(card);
-    setTimeout(()=>{ card.querySelector('.op-bar-fill').style.width=barPct+'%'; },150+i*100);
+    if (!isDebut) {
+      setTimeout(()=>{
+        const dc = card.querySelector('.seg-dc');
+        const ac = card.querySelector('.seg-ac');
+        if (dc) dc.style.width = dcW + '%';
+        if (ac) ac.style.width = acW + '%';
+      }, 150 + i*100);
+    }
   });
 }
 
