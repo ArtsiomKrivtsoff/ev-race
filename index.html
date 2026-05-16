@@ -84,10 +84,10 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
       <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
       <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
     </div>
-    <div class="fx-toggle" id="fxToggle" role="group" aria-label="Эффекты">
-      <button class="fx-seg active" id="fx-arcade" onclick="setFx('arcade')">ЭФФЕКТЫ</button>
-      <button class="fx-seg"        id="fx-crisp"  onclick="setFx('crisp')">ЧЁТКО</button>
-    </div>
+    <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Отключает сканлайны и свечение текста — для лучшей читаемости">
+      <span class="fx-seg fx-on  active" data-state="on">ЭФФЕКТЫ</span>
+      <span class="fx-seg fx-off"        data-state="off">ЧЁТКО</span>
+    </button>
   </div><!-- /statusbar -->
 
   <!-- МОБИЛЬНОЕ МЕНЮ (вне statusbar, выпадает вниз) -->
@@ -304,28 +304,33 @@ function setTheme(theme) {
 }
 
 // ============================================================
-// FX TOGGLE — «ЭФФЕКТЫ / ЧЁТКО» (только для arcade-темы)
+// FX TOGGLE — «АРКАДА / ЧЁТКО» (читаемый режим без glow/scanlines)
+// Совместимо со стилем на stations.html
 // ============================================================
-function setFx(mode) {
-  // mode: 'arcade' (полные эффекты) или 'crisp' (без сканлайнов/мерцания)
-  const crisp = mode === 'crisp';
-  document.body.classList.toggle('reduced-fx', crisp);
-  document.documentElement.setAttribute('data-anim-flicker', crisp ? '0' : '1');
-  document.documentElement.setAttribute('data-anim-blink',   crisp ? '0' : '1');
-  document.documentElement.setAttribute('data-anim-shine',   crisp ? '0' : '1');
-  localStorage.setItem('ev_race_fx', mode);
-  const a = document.getElementById('fx-arcade');
-  const c = document.getElementById('fx-crisp');
-  if (a) a.classList.toggle('active', !crisp);
-  if (c) c.classList.toggle('active',  crisp);
+function toggleFx() {
+  const on = document.body.classList.toggle('reduced-fx');
+  localStorage.setItem('ev_race_reduced_fx', on ? '1' : '0');
+  document.documentElement.setAttribute('data-anim-flicker', on ? '0' : '1');
+  document.documentElement.setAttribute('data-anim-blink',   on ? '0' : '1');
+  document.documentElement.setAttribute('data-anim-shine',   on ? '0' : '1');
+  document.querySelector('.fx-seg.fx-on') ?.classList.toggle('active', !on);
+  document.querySelector('.fx-seg.fx-off')?.classList.toggle('active',  on);
 }
 
 (function() {
   const saved = localStorage.getItem('ev_race_theme');
   if (saved && THEMES.includes(saved)) setTheme(saved);
   else document.documentElement.setAttribute('data-theme', 'arcade');
-  const fx = localStorage.getItem('ev_race_fx');
-  if (fx === 'crisp') setFx('crisp');
+  if (localStorage.getItem('ev_race_reduced_fx') === '1') {
+    document.body.classList.add('reduced-fx');
+    document.documentElement.setAttribute('data-anim-flicker','0');
+    document.documentElement.setAttribute('data-anim-blink','0');
+    document.documentElement.setAttribute('data-anim-shine','0');
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.querySelector('.fx-seg.fx-on') ?.classList.remove('active');
+      document.querySelector('.fx-seg.fx-off')?.classList.add('active');
+    });
+  }
 })();
 
 // ============================================================
@@ -517,9 +522,11 @@ function renderOperators() {
     const card    = document.createElement('div');
     card.className = 'op-card v2' + (isDebut ? ' debut' : '');
 
-    // ширины сегментов бара (от total оператора)
-    const dcW = op.total>0 ? (op.dc/op.total*100) : 0;
-    const acW = op.total>0 ? (op.ac/op.total*100) : 0;
+    // Прогресс-бар: заполняется на total/goal (план оператора), цифра goal скрыта.
+    // Внутри fill — DC и AC сегменты пропорционально.
+    const fillPct = (op.goal > 0) ? Math.min(op.total / op.goal * 100, 100) : 0;
+    const dcW = op.total>0 ? fillPct * (op.dc/op.total) : 0;
+    const acW = op.total>0 ? fillPct * (op.ac/op.total) : 0;
 
     if (isDebut) {
       card.innerHTML = `
@@ -542,7 +549,7 @@ function renderOperators() {
           <div class="op-name">${op.name}</div>
         </div>
         <div class="op-total">
-          <span class="op-total-num" style="color:${op.color};text-shadow:0 0 16px ${op.color}">${op.total}</span>
+          <span class="op-total-num" style="color:${op.color};text-shadow:0 0 16px ${op.color}">${op.total}<span class="op-total-x"> / X</span></span>
           <span class="op-total-label">СТАНЦИЙ</span>
         </div>
         <div class="op-bar-v2">
