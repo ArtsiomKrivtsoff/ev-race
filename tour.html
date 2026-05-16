@@ -503,7 +503,7 @@ function computeStreakBadges(byRound,curRound,totalSt){
   return badges;
 }
 function renderRoundsGrid(data){
-  const{roundResults,curRound}=data;
+  const{roundResults,curRound,byRound}=data;
   const COLS_DESKTOP=5,COLS_MOBILE=3;
   const isMobile=window.innerWidth<480;
   const cols=isMobile?COLS_MOBILE:COLS_DESKTOP;
