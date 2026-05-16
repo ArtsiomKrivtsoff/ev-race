@@ -14,8 +14,13 @@ const OP_NAMES = {
 const OP_CLASS = {
   batteryfly:'op-bf', forevo:'op-fo', zaryadka:'op-za',
   united:'op-uc', csms:'op-cs',
-  malanka:'op-ma', evika:'op-ev', orange:'op-or', prizma:'op-pr', gto:'op-gt'
+  malanka:'op-ma', evika:'op-ev', orange:'op-or', prizma:'op-pr'
+  // gto и любые мелкие ИП — без фирменного стиля, фолбэк на op-other
 };
+
+// Операторы-агрегаторы (со своим приложением, принимают чужих).
+// Фильтрация по ним работает по operator==X OR aggregator==X.
+const AGGREGATORS = new Set(['malanka','batteryfly','zaryadka','forevo']);
 
 const MONTHS = ['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
 const MONTH_SEASON = ['winter','winter','spring','spring','spring','summer','summer','summer','autumn','autumn','autumn','winter'];
@@ -159,7 +164,16 @@ function isNew(dateStr) {
   const mon = new Date(roundEnd); mon.setDate(mon.getDate() - 4); mon.setHours(0,0,0,0);
   return d >= mon && d <= roundEnd;
 }
-function opBadge(op)   { return '<span class="op-badge ' + (OP_CLASS[op] || '') + '">' + (OP_NAMES[op] || op) + '</span>'; }
+function opBadge(op, agg) {
+  const cls = OP_CLASS[op] || 'op-other';
+  const name = OP_NAMES[op] || op;
+  // вторая строка "в <агрегатор>" — только если поле заполнено и отличается от самого оператора
+  const showVia = agg && agg !== op;
+  const viaName = showVia ? (OP_NAMES[agg] || agg) : null;
+  const badge = '<span class="op-badge ' + cls + '">' + name + '</span>';
+  if (!showVia) return badge;
+  return '<span class="op-cell">' + badge + '<span class="op-via">в ' + viaName + '</span></span>';
+}
 function typeBadge(t)  {
   if (!t)        return '';
   if (t === 'DC')   return '<span class="badge-dc">DC</span>';
@@ -192,11 +206,25 @@ function getFiltered() {
       const m = parseInt(s.station_date.split('-')[1], 10) - 1;
       if (m !== parseInt(STATE.filterMonth, 10)) return false;
     }
-    if (STATE.filterOp   !== 'all' && s.operator !== STATE.filterOp) return false;
+    if (STATE.filterOp !== 'all') {
+      const op = STATE.filterOp;
+      // Если это агрегатор — выводим и собственные станции, и чужих в его софте
+      const matches = AGGREGATORS.has(op)
+        ? (s.operator === op || s.aggregator === op)
+        : (s.operator === op);
+      if (!matches) return false;
+    }
     if (STATE.filterCity !== 'all' && (s.city || '').toLowerCase() !== STATE.filterCity) return false;
     if (STATE.filterSearch) {
       const q = STATE.filterSearch.toLowerCase();
-      const hay = [s.city, s.address, s.location_name, OP_NAMES[s.operator] || s.operator, s.gun1_type, s.gun2_type, s.gun3_type].filter(Boolean).join(' ').toLowerCase();
+      const hay = [
+        s.city, s.address, s.location_name,
+        OP_NAMES[s.operator] || s.operator,
+        s.operator,
+        s.aggregator ? (OP_NAMES[s.aggregator] || s.aggregator) : null,
+        s.aggregator,
+        s.gun1_type, s.gun2_type, s.gun3_type
+      ].filter(Boolean).join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -417,7 +445,7 @@ function renderTableRow(s) {
   }
   const flash = (firstRender && isNew(s.station_date)) ? ' new-flash' : '';
   return '<tr data-loc-id="' + locKey + '" class="' + flash.trim() + '">'
-    + '<td>' + opBadge(s.operator) + '</td>'
+    + '<td>' + opBadge(s.operator, s.aggregator) + '</td>'
     + '<td>' + typeBadge(s.station_type) + '</td>'
     + '<td class="city">' + (s.city || '—') + '</td>'
     + '<td class="addr">' + locHtml + '</td>'
@@ -446,8 +474,12 @@ function renderGroupRows(group) {
   const totalStCount = group.stations.reduce((n, s) => n + (s.count || 1), 0);
 
   // несколько станций в одной локации — заголовок локации + строки
-  const operators = [...new Set(group.stations.map(s => s.operator))];
-  const opBadges = operators.map(o => opBadge(o)).join(' ');
+  // У каждого оператора в группе может быть свой aggregator → показываем все уникальные пары
+  const seenOps = new Set();
+  const opBadges = group.stations
+    .filter(s => { const key = s.operator + '|' + (s.aggregator || ''); if (seenOps.has(key)) return false; seenOps.add(key); return true; })
+    .map(s => opBadge(s.operator, s.aggregator))
+    .join(' ');
   const locHtml = first.location_name
     ? '<strong style="color:var(--green)">' + first.location_name + '</strong><br><span class="loc-address">' + (first.address || '') + '</span>'
     : '<span style="color:var(--green)">' + (first.address || '—') + '</span>';
@@ -508,7 +540,7 @@ function renderMobile(stations) {
 
     return '<div class="loc-card' + flash + '" data-loc-id="' + g.key + '">'
       + '<div class="loc-head">'
-        + '<div class="loc-head-left">' + opBadge(first.operator) + '<span class="loc-city">' + (first.city || '—') + '</span>' + locNameHtml + locAddrHtml + '</div>'
+        + '<div class="loc-head-left">' + opBadge(first.operator, first.aggregator) + '<span class="loc-city">' + (first.city || '—') + '</span>' + locNameHtml + locAddrHtml + '</div>'
         + '<div class="loc-head-right">'
           + '<div class="loc-total-power">' + (totalPower ? totalPower + ' кВт' : '—') + '</div>'
           + '<div class="loc-total-label">ВСЕГО</div>'
