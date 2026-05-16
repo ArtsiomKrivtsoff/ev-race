@@ -440,21 +440,18 @@ function calcTempo(data){
 }
 function renderStandings(data){
   const{stPts,pwPts,stW,pwW,totalSt,totalPow,stRH,pwRH,byRound,curRound}=data;
-  const tempo=calcTempo(data);
   const badges=computeStreakBadges(byRound,curRound,totalSt);
   function render(pts,wins,rH,wrapId,totals,totLabel,showKwt){
     const sorted=[...ALL_OPS].sort((a,b)=>pts[b]!==pts[a]?pts[b]-pts[a]:wins[b]-wins[a]);
     const rc=['r1','r2','r3','',''];
-    // Цветной класс для колонки метрики (станции — зелёный, мощность — жёлтый)
     const metricCls = showKwt ? 'td-metric power' : 'td-metric stations';
     const metricThCls = showKwt ? 'th-metric power' : 'th-metric stations';
-    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num th-pts">ОЧКИ</th><th class="th-num">ПОБЕД</th><th class="th-last ${metricThCls}">${totLabel}</th>${showKwt?'':'<th class="th-tempo">СТ/НЕД</th>'}</tr></thead><tbody>`;
+    let html=`<table class="standings"><thead><tr><th class="th-rank">#</th><th>ОПЕРАТОР</th><th class="th-num th-pts">ОЧКИ</th><th class="th-num">ПОБЕД</th><th class="th-last ${metricThCls}">${totLabel}</th></tr></thead><tbody>`;
     sorted.forEach((op,i)=>{
       const pos=i+1;
       const tv=showKwt?(totals[op]?totals[op]:'—'):(totals[op]||0);
-      const tp=tempo[op]>0?tempo[op].toFixed(1):'—';
       const badge=badges[op]?`<span class="streak-badge ${badges[op].cls}">${badges[op].icon}${badges[op].n?' <span class="n">'+badges[op].n+'</span>':''}${badges[op].label?' '+badges[op].label:''}</span>`:'';
-      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span>${badge}</td><td class="td-num td-pts"><span class="pts">${pts[op]}</span></td><td class="td-wins">${wins[op]}</td><td class="td-last ${metricCls}">${tv}${showKwt?' <span class="unit">кВт</span>':''}</td>${showKwt?'':`<td class="td-tempo">${tp}</td>`}</tr>`;
+      html+=`<tr><td><span class="rank ${rc[i]}">${String(pos).padStart(2,'0')}</span></td><td><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span>${badge}</td><td class="td-num td-pts"><span class="pts">${pts[op]}</span></td><td class="td-wins">${wins[op]}</td><td class="td-last ${metricCls}">${tv}${showKwt?' <span class="unit">кВт</span>':''}</td></tr>`;
     });
     html+='</tbody></table>';
     document.getElementById(wrapId).innerHTML=html;
@@ -571,13 +568,19 @@ function renderForecast(data){
   const{totalSt,curRound}=data;
   const tempo=calcTempo(data);
   const remaining=TOTAL_ROUNDS-curRound+1;
-  const forecasts=ALL_OPS.map(op=>({op,forecast:Math.round(totalSt[op]+(tempo[op]*remaining))}));
+  const forecasts=ALL_OPS.map(op=>({op,tempo:tempo[op],forecast:Math.round(totalSt[op]+(tempo[op]*remaining))}));
+  // Сортировка — по прогнозу убыванию
+  forecasts.sort((a,b)=>b.forecast-a.forecast);
   const totalF=forecasts.reduce((s,f)=>s+f.forecast,0);
   const mult=totalF>0?(1010/totalF).toFixed(1):null;
-  let html='<div class="forecast-section"><div class="forecast-hint">Считается по среднему темпу каждого оператора. Обновляется после каждой новой станции.</div>';
-  forecasts.forEach(({op,forecast})=>{
-    html+=`<div class="forecast-item"><div class="forecast-op"><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></div><div class="forecast-num"><span class="forecast-tilde">~</span><strong>${forecast}</strong> ст.</div></div>`;
+  let html=`<div class="forecast-section">
+    <div class="forecast-hint">Считается по среднему темпу каждого оператора. Обновляется после каждой новой станции.</div>
+    <table class="forecast-table"><thead><tr><th>ОПЕРАТОР</th><th class="num">СТ / НЕД</th><th class="num">ПРОГНОЗ К ФИНАЛУ</th></tr></thead><tbody>`;
+  forecasts.forEach(({op,tempo:tp,forecast})=>{
+    const tpStr = tp>0 ? tp.toFixed(1) : '—';
+    html+=`<tr><td class="op"><span class="dot" style="background:${opColor(op)}"></span><span style="color:${opColor(op)}">${opName(op)}</span></td><td class="num tempo">${tpStr}</td><td class="num forecast"><span class="forecast-tilde">~</span><strong>${forecast}</strong> <span class="unit">ст.</span></td></tr>`;
   });
+  html+='</tbody></table>';
   const noteText=totalF>0&&mult?`При текущем темпе все вместе финишируют с ~${totalF} ст. из 1010. Нужно ускориться в ${mult}×`:'Недостаточно данных для прогноза';
   html+=`<div class="forecast-note">${noteText}</div></div>`;
   document.getElementById('forecast-wrap').innerHTML=html;
