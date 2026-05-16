@@ -693,6 +693,23 @@ body { animation: flicker calc(8s / var(--anim-flicker)) infinite; }
 .forecast-num     { font-size: 11px; color: var(--text-dim); text-align:right; white-space:nowrap; min-width: 80px; }
 .forecast-num strong { color: var(--green); font-family:'Press Start 2P', monospace; font-size: 12px; }
 .forecast-note    { font-size: 11px; color: var(--green); margin-top: var(--s-3); padding: var(--s-3); border: 1px solid var(--border-dim); border-radius: var(--radius); background: rgba(0,255,65,.04); letter-spacing: var(--ls-tight); line-height: 1.9; }
+.forecast-table   { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: var(--s-3); }
+.forecast-table th{ font-size: 10px; color: var(--text-dim); letter-spacing: var(--ls-tight); padding: 9px 6px; border-bottom: 1px solid var(--border-dim); text-align: left; font-weight: normal; }
+.forecast-table th.num { text-align: right; }
+.forecast-table td{ padding: 11px 6px; border-bottom: 1px solid #001a00; vertical-align: middle; font-size: 12px; }
+.forecast-table tr:last-child td { border-bottom: none; }
+.forecast-table td.op { display: flex; align-items: center; gap: 6px; }
+.forecast-table td.num { text-align: right; }
+.forecast-table td.tempo { color: var(--text-dim); font-family: 'Press Start 2P', monospace; font-size: 10px; background: rgba(0,255,65,.05); }
+.forecast-table td.forecast strong { color: var(--green); font-family: 'Press Start 2P', monospace; font-size: 12px; }
+.forecast-table td.forecast .unit { font-size: 10px; color: var(--text-dim); }
+@media (max-width: 480px) {
+  .forecast-table th { font-size: 9px; padding: 7px var(--s-1); }
+  .forecast-table td { padding: 9px var(--s-1); font-size: 11px; }
+  .forecast-table td.tempo { font-size: 9px; }
+  .forecast-table td.forecast strong { font-size: 11px; }
+}
+
 
 /* ============================================================
    СТРАНИЦА СТАНЦИЙ — оставлено для совместимости HTML
