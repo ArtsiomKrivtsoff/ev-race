@@ -1160,6 +1160,16 @@ html[data-theme="tesla-dark"]  .fx-toggle { display: none !important; }
   letter-spacing: var(--ls-tight);
   display: block;
 }
+.op-total-x {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4em;
+  color: var(--text-dim);
+  text-shadow: none;
+  letter-spacing: var(--ls-tight);
+  vertical-align: 0.7em;
+  opacity: 0.55;
+  margin-left: 2px;
+}
 .op-total-label {
   font-family: 'Press Start 2P', monospace;
   font-size: 9px;
@@ -1260,12 +1270,16 @@ html[data-theme="tesla-dark"]  .fx-toggle { display: none !important; }
   filter: grayscale(.6);
 }
 
-/* Сетка карточек: 1 кол. mobile / 2 кол. tablet+ */
+/* Подиум-лейаут: на десктопе/планшете топ-3 на всю ширину, 4-5 половинками */
 @media (min-width: 720px) {
   .operators-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--s-3);
+  }
+  /* первые три карточки (топ-3 в текущей сортировке) — на всю ширину */
+  .operators-grid .op-card:nth-child(-n+3) {
+    grid-column: 1 / -1;
   }
 }
 @media (min-width: 1100px) {
