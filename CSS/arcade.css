@@ -1382,6 +1382,68 @@ html[data-theme="tesla-dark"]  .fx-toggle { display: none !important; }
 }
 
 /* ============================================================
+   STANDINGS — подсветка ОЧКИ + цветная колонка метрики
+   ============================================================ */
+.standings th.th-pts        { color: var(--yellow) !important; }
+.standings td.td-pts        { background: rgba(255,215,0,.05); }
+.standings td.td-pts .pts   { color: var(--yellow); text-shadow: 0 0 6px rgba(255,215,0,.5); }
+
+.standings th.th-metric.stations { color: var(--green) !important; }
+.standings td.td-metric.stations { color: var(--green); font-family: 'Press Start 2P', monospace; font-size: 11px; }
+
+.standings th.th-metric.power    { color: var(--dc) !important; }
+.standings td.td-metric.power    { color: var(--dc); font-family: 'Press Start 2P', monospace; font-size: 10px; }
+.standings td.td-metric .unit    { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); margin-left: 2px; }
+
+/* ============================================================
+   ПОДЗАГОЛОВОК В SECTION-HEAD (для рейтингов)
+   ============================================================ */
+.section-head .section-sub {
+  color: var(--border-dim);
+  letter-spacing: var(--ls-tight);
+  font-size: 10px;
+  margin-left: 6px;
+  text-transform: none;
+}
+@media (max-width: 480px) {
+  .section-head .section-sub { display: block; margin-left: 0; margin-top: 3px; font-size: 9px; }
+}
+
+/* ============================================================
+   ЛЕГЕНДА ПОБЕДИТЕЛЕЙ КРУГОВ + улучшения сетки
+   ============================================================ */
+.rounds-legend {
+  display: flex; align-items: center; gap: var(--s-2);
+  flex-wrap: wrap;
+  font-size: 10px; color: var(--text-dim);
+  letter-spacing: var(--ls-tight);
+  margin: -8px 0 var(--s-3);
+}
+.rounds-legend .lg-item b {
+  color: var(--yellow); font-size: 12px; margin-right: 4px; font-weight: normal;
+}
+.rounds-legend .lg-item:nth-child(3) b { color: var(--cyan); }
+.rounds-legend .lg-sep { color: var(--border-dim); }
+
+/* Live-индикатор в активном круге сетки */
+.round-cell .r-live {
+  font-size: 9px; line-height: 1.5;
+}
+.round-cell .r-idet {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--green);
+  text-shadow: 0 0 6px var(--green);
+  letter-spacing: var(--ls-tight);
+  animation: blink calc(2s / var(--anim-blink)) infinite;
+  margin-top: 2px;
+}
+:root[data-anim-blink="0"] .round-cell .r-idet { animation: none; }
+.round-cell .r-empty {
+  color: var(--border-dim); font-size: 9px; opacity: .7;
+}
+
+/* ============================================================
    READABILITY — дополнения для новых элементов V2
    ============================================================ */
 body.reduced-fx .op-total-num   { text-shadow: 0 0 6px var(--green); }
