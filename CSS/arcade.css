@@ -230,6 +230,16 @@ body { animation: flicker calc(8s / var(--anim-flicker)) infinite; }
 .upd-sign  { margin-top: var(--s-3); font-size: 11px; color: var(--text-dim); letter-spacing: var(--ls-tight); border-top: 1px solid var(--border-dim); padding-top: var(--s-3); text-align:left; }
 .upd-sign span { color: var(--green); font-family:'Press Start 2P', monospace; font-size: 9px; }
 
+/* UPD2 — более жёсткий тон: жёлтый акцент + лёгкий glow */
+.upd-block.upd2 {
+  border-left-color: var(--yellow);
+  background: rgba(255,215,0,0.05);
+  box-shadow: inset 2px 0 12px rgba(255,215,0,.08);
+}
+.upd-block.upd2 .upd-label { color: var(--yellow); text-shadow: 0 0 6px rgba(255,215,0,.5); }
+.upd-block.upd2 .upd-text  { color: var(--yellow); }
+.upd-block.upd2 .upd-sign span { color: var(--yellow); }
+
 /* ============================================================
    COUNTDOWN
    ============================================================ */
@@ -1098,8 +1108,271 @@ body.reduced-fx .big-phrase              { text-shadow: 0 0 6px var(--yellow); }
 }
 .fx-seg.active { background: rgba(255,215,0,.12); color: var(--yellow); text-shadow: 0 0 6px var(--yellow); }
 .fx-toggle:hover .fx-seg:not(.active) { color: rgba(255,215,0,.7); }
-@media (min-width: 1024px) {
-  .fx-toggle { display: inline-flex; }
+/* Видим на всех размерах — на мобиле слегка ужимаем */
+.fx-toggle { display: inline-flex; }
+@media (max-width: 599px) {
+  .fx-seg { font-size: 8px; padding: 4px 6px; letter-spacing: 0; }
 }
 html[data-theme="tesla-light"] .fx-toggle,
 html[data-theme="tesla-dark"]  .fx-toggle { display: none !important; }
+
+/* ============================================================
+   ОПЕРАТОРЫ — V2 (DC/AC split, debut state)
+   Используется на index.html — главная страница
+   ============================================================ */
+
+.op-card.v2 {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: 16px var(--s-4) 14px;
+}
+.op-card.v2 .op-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding-right: 40px; /* место под медаль .op-rank */
+}
+.op-card.v2 .op-logo {
+  width: 64px; height: 30px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.op-card.v2 .op-name {
+  font-size: 13px;
+  color: var(--text);
+  letter-spacing: var(--ls-tight);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Total — крупная аркадная цифра */
+.op-total {
+  text-align: center;
+  padding: var(--s-2) 0 var(--s-1);
+}
+.op-total-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(34px, 9vw, 52px);
+  color: var(--green);
+  text-shadow: 0 0 16px var(--green), 0 0 32px rgba(0,255,65,.35);
+  line-height: 1;
+  letter-spacing: var(--ls-tight);
+  display: block;
+}
+.op-total-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: var(--ls-wide);
+  margin-top: 10px;
+  display: block;
+}
+
+/* Stacked-бар: DC + AC */
+.op-bar-v2 {
+  background: #001a00;
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius);
+  height: 8px;
+  display: flex;
+  overflow: hidden;
+}
+.op-bar-v2 .seg-dc,
+.op-bar-v2 .seg-ac {
+  height: 100%;
+  transition: width 1.5s ease;
+}
+.op-bar-v2 .seg-dc {
+  /* цвет задаётся inline через background = op.color */
+  filter: drop-shadow(0 0 4px currentColor);
+}
+.op-bar-v2 .seg-ac {
+  /* тот же цвет inline + полупрозрачно */
+  opacity: 0.4;
+}
+
+/* Чипсы DC X · AC Y под баром */
+.op-split {
+  display: flex;
+  gap: var(--s-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.op-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: var(--ls-tight);
+  white-space: nowrap;
+}
+.op-chip.chip-dc {
+  background: rgba(255,215,0,.08);
+  color: var(--dc);
+  border: 1px solid rgba(255,215,0,.3);
+}
+.op-chip.chip-ac {
+  background: rgba(0,207,255,.08);
+  color: var(--ac);
+  border: 1px solid rgba(0,207,255,.3);
+}
+.op-chip b {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+}
+
+/* Debut state — для операторов с total=0 */
+.op-card.v2.debut {
+  border-style: dashed;
+  border-color: var(--border-dim);
+}
+.op-card.v2.debut .op-logo,
+.op-card.v2.debut .op-name {
+  filter: grayscale(1) brightness(.75);
+  opacity: .75;
+}
+.op-card.v2.debut .op-meta { opacity: .6; }
+.op-debut {
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(11px, 2.4vw, 14px);
+  color: var(--cyan);
+  letter-spacing: var(--ls-wide);
+  line-height: 1.9;
+  padding: 22px 6px;
+  text-shadow: 0 0 8px rgba(0,255,255,.4);
+  opacity: .85;
+}
+.op-debut .zzz {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 6px;
+  opacity: .8;
+  animation: blink calc(2.5s / var(--anim-blink)) infinite;
+}
+:root[data-anim-blink="0"] .op-debut .zzz { animation: none; }
+.op-chip.dim {
+  opacity: .45;
+  filter: grayscale(.6);
+}
+
+/* Сетка карточек: 1 кол. mobile / 2 кол. tablet+ */
+@media (min-width: 720px) {
+  .operators-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-3);
+  }
+}
+@media (min-width: 1100px) {
+  .op-total-num { font-size: clamp(40px, 4.5vw, 60px); }
+}
+
+/* ============================================================
+   STREAK-БЭЙДЖИ (tour.html — таблица очков)
+   ============================================================ */
+.streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: var(--ls-tight);
+  padding: 2px 7px;
+  border-radius: var(--radius);
+  margin-left: var(--s-2);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.streak-badge.hot {
+  color: #ffaa55;
+  background: rgba(245,130,31,.08);
+  border: 1px solid rgba(245,130,31,.35);
+  text-shadow: 0 0 6px rgba(245,130,31,.5);
+}
+.streak-badge.cold {
+  color: #66ddff;
+  background: rgba(0,207,255,.06);
+  border: 1px solid rgba(0,207,255,.3);
+}
+.streak-badge.sleep {
+  color: var(--cyan);
+  background: rgba(0,255,255,.05);
+  border: 1px dashed rgba(0,255,255,.35);
+}
+.streak-badge .n {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+}
+@media (max-width: 480px) {
+  .streak-badge {
+    font-size: 9px;
+    padding: 2px 5px;
+    margin-left: 5px;
+  }
+  .streak-badge .n { font-size: 8px; }
+}
+
+/* ============================================================
+   ТЕКУЩИЙ КРУГ — мини-таймер до конца + DC/AC сплит в таблице
+   ============================================================ */
+.cur-round-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: var(--ls-tight);
+  margin-top: 4px;
+}
+.cur-round-timer .tmr-val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--yellow);
+  text-shadow: 0 0 6px var(--yellow);
+}
+.cur-round-timer .tmr-lbl { color: var(--border-dim); font-size: 9px; }
+
+/* DC/AC сплит под цифрой станций в текущем круге */
+.cr-split {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.cr-split .cr-pill {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 1px 4px;
+  border-radius: var(--radius);
+  letter-spacing: 0;
+}
+.cr-split .cr-pill.dc {
+  color: var(--dc);
+  background: rgba(255,215,0,.08);
+  border: 1px solid rgba(255,215,0,.3);
+}
+.cr-split .cr-pill.ac {
+  color: var(--ac);
+  background: rgba(0,207,255,.08);
+  border: 1px solid rgba(0,207,255,.3);
+}
+@media (max-width: 480px) {
+  .cr-split { display: flex; margin-left: 0; margin-top: 3px; }
+}
+
+/* ============================================================
+   READABILITY — дополнения для новых элементов V2
+   ============================================================ */
+body.reduced-fx .op-total-num   { text-shadow: 0 0 6px var(--green); }
+body.reduced-fx .op-debut       { text-shadow: none; }
+body.reduced-fx .op-bar-v2 .seg-dc { box-shadow: none; }
+body.reduced-fx .streak-badge.hot  { text-shadow: none; }
+body.reduced-fx .cur-round-timer .tmr-val { text-shadow: 0 0 3px var(--yellow); }
+body.reduced-fx .op-debut .zzz  { animation: none; }
