@@ -755,7 +755,40 @@ body { animation: flicker calc(8s / var(--anim-flicker)) infinite; }
 .badge-acdc { background: rgba(180,79,255,.1); color: #cc88ff;   border: 1px solid rgba(180,79,255,.25); }
 
 /* op-badge — единая декларация, без !important и без width:auto-дубля */
+/* op-badge — единая декларация */
 .op-badge   { display: inline-block; padding: 3px 7px; flex-shrink: 0; align-self: flex-start; }
+
+/* ============================================================
+   OP-BADGE — стиль для мелких/неизвестных операторов (op-other)
+   + блок ".op-cell" с под-строкой "в <агрегатор>"
+   ============================================================ */
+.op-other {
+  background: rgba(0,255,65,.04);
+  color: var(--green-dim);
+  border: 1px solid var(--green-dark);
+}
+
+/* контейнер: верхняя строка = .op-badge, под ней — .op-via */
+.op-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  line-height: 1.1;
+  vertical-align: top;
+}
+.op-via {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--green-dim);
+  letter-spacing: var(--ls-tight);
+  opacity: .85;
+  white-space: nowrap;
+  padding-left: 1px;
+}
+@media (max-width: 480px) {
+  .op-via { font-size: 9px; }
+}
 .op-bf      { background: rgba(0,94,235,.15);   color: #4d8fff; border: 1px solid rgba(0,94,235,.25); }
 .op-fo      { background: rgba(180,79,255,.15); color: #cc88ff; border: 1px solid rgba(180,79,255,.25); }
 .op-za      { background: rgba(0,207,255,.15);  color: #66ddff; border: 1px solid rgba(0,207,255,.25); }
