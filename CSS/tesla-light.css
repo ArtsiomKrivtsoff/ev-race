@@ -539,7 +539,7 @@
   .standings tbody tr:nth-child(even){background:#f9f9f9;}
   .standings tbody tr:nth-child(odd){background:#fff;}
   .standings tr:last-child td{border-bottom:none;}
-  .standings-wrap{background:#fff;border-radius:12px;padding:0;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden;}
+  .standings-wrap{background:#fff;border-radius:12px;padding:0;margin:0 clamp(16px,4vw,24px) 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow-x:auto;}
   .rank{font-family:'Roboto',sans-serif;font-size:13px;color:#ccc;font-weight:400;}
   .r1{color:#B8860B;font-weight:500;}.r2{color:#888;font-weight:500;}.r3{color:#8B4513;font-weight:500;}
   .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;flex-shrink:0;}
@@ -1025,3 +1025,16 @@ table.reg td.right, table.reg th.right { text-align: right; }
 .round-cell .r-idet  { font-family: 'Roboto', sans-serif; font-size: 9px; font-weight: 700; color: #22aa44; letter-spacing: 1px; margin-top: 2px; }
 .round-cell .r-empty { color: #ddd; font-size: 9px; }
 
+
+/* ── FORECAST TABLE (fix: стили отсутствовали) ── */
+.forecast-table { width:100%; border-collapse:collapse; font-size:13px; margin-bottom:12px; }
+.forecast-table th { font-size:10px; color:#aaa; letter-spacing:1px; padding:9px 8px; border-bottom:1px solid #f0f0f0; text-align:left; font-weight:500; text-transform:uppercase; }
+.forecast-table th.num { text-align:right; }
+.forecast-table td { padding:11px 8px; border-bottom:1px solid #f5f5f5; vertical-align:middle; font-size:12px; color:#333; }
+.forecast-table tr:last-child td { border-bottom:none; }
+.forecast-table td.op { display:flex; align-items:center; gap:6px; }
+.forecast-table td.num { text-align:right; }
+.forecast-table td.tempo { color:#888; font-size:12px; font-weight:500; background:rgba(0,0,0,.02); text-align:right; }
+.forecast-table td.forecast { text-align:right; }
+.forecast-table td.forecast strong { color:#111; font-weight:600; font-size:14px; }
+.forecast-table td.forecast .unit { font-size:10px; color:#aaa; margin-left:2px; }
