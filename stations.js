@@ -486,7 +486,8 @@ function renderGroupRows(group) {
 
   let html = '<tr data-loc-id="' + group.key + '" class="' + flash.trim() + '" style="background:rgba(0,255,65,.03)">'
     + '<td>' + opBadges + '</td>'
-    + '<td colspan="2" style="color:var(--cyan);font-family:\'Press Start 2P\',monospace;font-size:9px">📍 ' + totalStCount + ' СТ.</td>'
+    + '<td style="color:var(--cyan);font-family:\'Press Start 2P\',monospace;font-size:9px">📍 ' + totalStCount + ' СТ.</td>'
+    + '<td class="city">' + (first.city || '—') + '</td>'
     + '<td class="addr">' + locHtml + '</td>'
     + '<td colspan="3" class="center" style="color:var(--text-dim);font-size:10px">' + totalGuns + ' пист. всего</td>'
     + '<td class="power right">' + (totalPower ? totalPower.toLocaleString('ru') + ' кВт' : '—') + '</td>'
