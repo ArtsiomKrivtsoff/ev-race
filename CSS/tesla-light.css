@@ -1061,3 +1061,19 @@ table.reg td.right, table.reg th.right { text-align: right; }
 .tag-filter-btn:hover { border-color:rgba(160,110,0,.45); color:#886600; }
 .tag-filter-btn.on { font-weight:600; border-color:#886600; color:#664400; background:rgba(160,110,0,.08); }
 .tag-filter-btn.on::before { background:#886600; }
+
+/* ── LETTER BADGES — tesla-light ── */
+.let-op-badge,
+.let-tag,
+.letter-want-reply,
+.let-responded {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 20px;
+  line-height: 1;
+}
+.let-tag { border-color: rgba(160,110,0,.3); color: #886600; background: rgba(160,110,0,.05); }
+.letter-want-reply { border-color: rgba(204,102,0,.3); color: #cc6600; background: transparent; }
+.let-responded { border-color: rgba(0,102,170,.3); color: #0066aa; background: rgba(0,102,170,.06); }

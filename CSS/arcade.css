@@ -797,6 +797,42 @@ body { animation: flicker calc(8s / var(--anim-flicker)) infinite; }
 /* op-badge — единая декларация */
 .op-badge   { display: inline-block; padding: 3px 7px; flex-shrink: 0; align-self: flex-start; }
 
+/* ── LETTER BADGES — единая система высоты ── */
+/* Базовые метрики: все бейджи карточки письма одной высоты */
+.let-op-badge,
+.let-tag,
+.letter-want-reply,
+.let-responded {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  padding: 3px 7px;
+  border-radius: var(--radius);
+  white-space: nowrap;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.let-op-badge {
+  /* цвет берётся от .op-bf/.op-fo и т.д. */
+  margin-right: 2px;
+}
+.let-tag {
+  border: 1px solid rgba(255,215,0,.3);
+  color: rgba(255,215,0,.65);
+  background: rgba(255,215,0,.04);
+}
+.letter-want-reply {
+  border: 1px solid rgba(255,136,0,.3);
+  color: #ff8800;
+  background: transparent;
+}
+.let-responded {
+  border: 1px solid rgba(0,207,255,.4);
+  color: #00cfff;
+  background: rgba(0,207,255,.06);
+}
+
 /* ============================================================
    OP-BADGE — стиль для мелких/неизвестных операторов (op-other)
    + блок ".op-cell" с под-строкой "в <агрегатор>"
