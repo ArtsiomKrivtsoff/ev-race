@@ -9,8 +9,8 @@ function updateFilterCounters() {
   const wc = document.getElementById('waiting-count');
   const rc = document.getElementById('reply-count');
 
-  if (wc) wc.textContentt = waiting;
-  if (rc) rc.textContentt = replied;
+  if (wc) wc.textContent = waiting;
+  if (rc) rc.textContent = replied;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -108,7 +108,7 @@ async function loadLetters() {
 }
 
 function updateStats() {
-  document.getElementById('stat-total').textContentt = allLetters.length || '0';
+  document.getElementById('stat-total').textContent = allLetters.length || '0';
 
   var waiting = allLetters.filter(function(l){
     if (!l.want_reply) return false;
@@ -120,20 +120,20 @@ function updateStats() {
     return !l.op_reply;
   }).length;
 
-  document.getElementById('stat-waiting').textContentt = waiting || '0';
+  document.getElementById('stat-waiting').textContent = waiting || '0';
 
-  document.getElementById('stat-replies').textContentt =
+  document.getElementById('stat-replies').textContent =
     allLetters.filter(function(l){ return l.op_reply; }).length || '0';
 
   var waitingBtn = document.getElementById('filterWaitingCount');
   var replyBtn = document.getElementById('filterAnsweredCount');
 
-  if (waitingBtn) waitingBtn.textContentt = waiting || '0';
+  if (waitingBtn) waitingBtn.textContent = waiting || '0';
 
   var repliesCount =
     allLetters.filter(function(l){ return l.op_reply; }).length || 0;
 
-  if (replyBtn) replyBtn.textContentt = repliesCount;
+  if (replyBtn) replyBtn.textContent = repliesCount;
 }
 
 // ── РЕЙТИНГ ОПЕРАТОРОВ ──
@@ -223,6 +223,15 @@ function sortedTagsByFreq() {
 function buildTagFilterRow() {
   var row = document.getElementById('filterRowTag');
   var tags = sortedTagsByFreq();
+
+  var freq = {};
+  allLetters.forEach(function(l){
+    if (Array.isArray(l.tags)) {
+      l.tags.forEach(function(t){
+        freq[t] = (freq[t] || 0) + 1;
+      });
+    }
+  });
   if (tags.length === 0) {
     row.innerHTML = '<div class="let-rating-none" style="font-size:8px;">// ТЕГОВ ПОКА НЕТ</div>';
     return;
@@ -259,7 +268,7 @@ function updateResetBtn() {
   var btn = document.getElementById('filterResetBtn');
   var cnt = document.getElementById('filterCount');
   btn.classList.toggle('visible', n > 0);
-  if(cnt) cnt.textContentt = n;
+  if(cnt) cnt.textContent = n;
 }
 
 function setOpFilter(btn, val) {
@@ -394,7 +403,7 @@ function renderLetters() {
 
   if (filtered.length > visibleCount) {
     btn.style.display = 'block';
-    btn.textContentt = '▼ ПОКАЗАТЬ ЕЩЁ (' + (filtered.length - visibleCount) + ')';
+    btn.textContent = '▼ ПОКАЗАТЬ ЕЩЁ (' + (filtered.length - visibleCount) + ')';
   } else {
     btn.style.display = 'none';
   }
@@ -421,7 +430,7 @@ function toggleCollapse(id) {
   var btn = document.querySelector('.let-read-more[data-id="' + id + '"]');
   if (!wrap || !btn) return;
   var isCollapsed = wrap.classList.toggle('collapsed');
-  btn.textContentt = isCollapsed ? 'ЧИТАТЬ ПОЛНОСТЬЮ ↓' : 'СВЕРНУТЬ ↑';
+  btn.textContent = isCollapsed ? 'ЧИТАТЬ ПОЛНОСТЬЮ ↓' : 'СВЕРНУТЬ ↑';
 }
 
 function showMore() { visibleCount += PAGE_SIZE; renderLetters(); }
@@ -460,12 +469,12 @@ function openModal() {
   document.getElementById('fieldName').value = '';
   document.getElementById('fieldBody').value = '';
   document.getElementById('fieldWantReply').checked = false;
-  document.getElementById('bodyCounter').textContentt = '0 / 2000';
+  document.getElementById('bodyCounter').textContent = '0 / 2000';
   document.getElementById('bodyCounter').className = 'form-counter';
   document.getElementById('tagWarn').style.display = 'none';
   document.getElementById('submitBtn').disabled = true;
   document.getElementById('submitBtn').style.display = 'block';
-  document.getElementById('submitBtn').textContentt = 'ОТПРАВИТЬ ПИСЬМО →';
+  document.getElementById('submitBtn').textContent = 'ОТПРАВИТЬ ПИСЬМО →';
   document.getElementById('formError').style.display = 'none';
   document.getElementById('formSuccess').style.display = 'none';
   if (window.turnstile) { try { window.turnstile.reset(); } catch(e) {} }
@@ -488,7 +497,7 @@ function selectOp(btn) {
 function updateCounter() {
   var val = document.getElementById('fieldBody').value.length;
   var el = document.getElementById('bodyCounter');
-  el.textContentt = val + ' / 2000';
+  el.textContent = val + ' / 2000';
   el.className = 'form-counter' + (val > 1800 ? ' warn' : '') + (val >= 2000 ? ' over' : '');
   checkFormReady();
 }
@@ -510,7 +519,7 @@ async function submitLetter() {
   if (!body) { showErr('Напиши текст письма'); return; }
   if (body.length > 2000) { showErr('Слишком длинный текст'); return; }
   if (!cfToken) { showErr('Пройди проверку'); return; }
-  btn.disabled = true; btn.textContentt = 'ОТПРАВКА...'; errEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'ОТПРАВКА...'; errEl.style.display = 'none';
   try {
     var res = await fetch(FN_URL, {
       method: 'POST',
@@ -525,14 +534,14 @@ async function submitLetter() {
       })
     });
     var data = await res.json();
-    if (!res.ok) { showErr(data.error || 'Ошибка отправки'); btn.disabled = false; btn.textContentt = 'ОТПРАВИТЬ ПИСЬМО →'; return; }
+    if (!res.ok) { showErr(data.error || 'Ошибка отправки'); btn.disabled = false; btn.textContent = 'ОТПРАВИТЬ ПИСЬМО →'; return; }
     btn.style.display = 'none'; okEl.style.display = 'block';
     setTimeout(closeModal, 3000);
   } catch(e) {
-    showErr('Ошибка соединения'); btn.disabled = false; btn.textContentt = 'ОТПРАВИТЬ ПИСЬМО →';
+    showErr('Ошибка соединения'); btn.disabled = false; btn.textContent = 'ОТПРАВИТЬ ПИСЬМО →';
   }
 }
 
-function showErr(msg) { var el = document.getElementById('formError'); el.textContentt = msg; el.style.display = 'block'; }
+function showErr(msg) { var el = document.getElementById('formError'); el.textContent = msg; el.style.display = 'block'; }
 
 loadLetters();
