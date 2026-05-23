@@ -106,11 +106,16 @@ function hasReply(l) {
 }
 
 function updateStats() {
-  document.getElementById('stat-total').textContent = allLetters.length || '0';
-  document.getElementById('stat-ops').textContent =
-    new Set(allLetters.map(function(l){ return l.operator; })).size || '0';
-  var withReply = allLetters.filter(hasReply).length;
-  document.getElementById('stat-replies').textContent = withReply || '0';
+  var el;
+  el = document.getElementById('stat-total');
+  if (el) el.textContent = allLetters.length || '0';
+  el = document.getElementById('stat-waiting');
+  if (el) el.textContent = allLetters.filter(function(l){ return l.want_reply && !hasReply(l); }).length || '0';
+  el = document.getElementById('stat-replies');
+  if (el) el.textContent = allLetters.filter(hasReply).length || '0';
+  // legacy stat-ops support
+  el = document.getElementById('stat-ops');
+  if (el) el.textContent = new Set(allLetters.map(function(l){ return l.operator; })).size || '0';
 }
 
 // ── РЕЙТИНГ ──
