@@ -130,7 +130,8 @@ function updateStats() {
 
   if (waitingBtn) waitingBtn.textContent = waiting || '0';
 
-  var repliesCount = allLetters.filter(function(l){ return l.op_reply; }).length || 0;
+  var repliesCount =
+    allLetters.filter(function(l){ return l.op_reply; }).length || 0;
 
   if (replyBtn) replyBtn.textContent = repliesCount;
 }
@@ -229,7 +230,7 @@ function buildTagFilterRow() {
   var html = '';
   tags.forEach(function(tag) {
     var isOn = activeTag === tag ? ' on' : '';
-    html += '<button class="tag-filter-btn' + isOn + '" data-tag="' + escHtml(tag) + '" onclick="setTagFilter(this,\'' + tag + '\')">#' + escHtml(tag.replace(/_/g,' ')) + ' <span class="filter-count">' + freq[tag] + '</span></button>';
+    html += '<button class="tag-filter-btn' + isOn + '" data-tag="' + escHtml(tag) + '" onclick="setTagFilter(this,\\'' + tag + '\\')">#' + escHtml(tag.replace(/_/g,' ')) + ' <span class="filter-count">' + freq[tag] + '</span></button>';
   });
   row.innerHTML = html;
 }
