@@ -141,15 +141,15 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 
 /* Body + collapse */
 .let-body-wrap { position:relative; }
-.let-body-inner { font-size:clamp(12px,2vw,14px); color:var(--text-dim,#00aa2b); line-height:1.9; border-left:2px solid var(--green-dark,#003d0f); padding-left:10px; word-break:break-word; }
+.let-body-inner { font-size:clamp(13px,2vw,16px); color:var(--text-dim,#00aa2b); line-height:2; border-left:2px solid var(--green-dark,#003d0f); padding-left:10px; word-break:break-word; }
 .let-body-wrap.collapsed .let-body-inner { max-height:9em; overflow:hidden; }
 .let-body-wrap.collapsed::after { content:''; position:absolute; bottom:0; left:0; right:0; height:44px; background:linear-gradient(to bottom, transparent, var(--card-bg,#0d1f0d)); pointer-events:none; }
 .let-read-more { display:none; background:transparent; border:none; color:var(--green-dim,#00aa2b); font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:1px; padding:6px 0; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:color .2s; }
 .let-read-more:hover { color:var(--green,#00ff41); }
 
 /* Footer */
-.letter-footer { display:flex; align-items:center; gap:12px; font-size:9px; color:#005d15; flex-wrap:wrap; margin-top:8px; }
-.letter-author { color:var(--green-dim,#00aa2b); }
+.letter-footer { display:flex; align-items:center; gap:14px; font-size:11px; color:#336633; flex-wrap:wrap; margin-top:10px; letter-spacing:1px; }
+.letter-author { color:var(--green,#00ff41); }
 
 /* Reply block */
 .let-reply-block { margin-top:12px; border:1px solid var(--green-dark,#003d0f); border-left:2px solid var(--yellow,#ffd700); background:rgba(0,26,0,.5); }
@@ -518,10 +518,10 @@ body.theme-tesla-dark #scroll-top { border-color:#444; background:rgba(255,255,2
         <button class="form-tag-btn" type="button" data-tag="благодарность"    onclick="selectTag(this)">#благодарность</button>
         <button class="form-tag-btn" type="button" data-tag="другое"            onclick="selectTag(this)">#другое</button>
         <button class="form-tag-btn" type="button" data-tag="зарядная_сессия"   onclick="selectTag(this)">#зарядная сессия</button>
-        <button class="form-tag-btn" type="button" data-tag="неисправность"    onclick="selectTag(this)">#неисправность</button>
+        <button class="form-tag-btn" type="button" data-tag="инфраструктура"    onclick="selectTag(this)">#инфраструктура</button>
         <button class="form-tag-btn" type="button" data-tag="карты_и_навигация" onclick="selectTag(this)">#карты и навигация</button>
         <button class="form-tag-btn" type="button" data-tag="новая_локация"     onclick="selectTag(this)">#новая локация</button>
-        <button class="form-tag-btn" type="button" data-tag="парковка"       onclick="selectTag(this)">#парковка</button>
+        <button class="form-tag-btn" type="button" data-tag="предложение"       onclick="selectTag(this)">#предложение</button>
         <button class="form-tag-btn" type="button" data-tag="приложение"        onclick="selectTag(this)">#приложение</button>
         <button class="form-tag-btn" type="button" data-tag="роуминг"           onclick="selectTag(this)">#роуминг</button>
         <button class="form-tag-btn" type="button" data-tag="станция"           onclick="selectTag(this)">#станция</button>
@@ -576,8 +576,8 @@ const OP_COLORS = {
   united:'#F5821F', zaryadka:'#00cfff'
 };
 const ALL_TAGS = [
-  'благодарность','другое','зарядная_сессия','неисправность',
-  'карты_и_навигация','новая_локация','парковка','приложение',
+  'благодарность','другое','зарядная_сессия','инфраструктура',
+  'карты_и_навигация','новая_локация','предложение','приложение',
   'роуминг','станция','цены_и_тарифы'
 ];
 
