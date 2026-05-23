@@ -132,24 +132,21 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 .let-head1 { display:flex; align-items:center; flex-wrap:wrap; gap:4px; margin-bottom:6px; }
 .let-head2 { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; min-height:22px; }
 .let-status { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-.let-op-badge { display:inline-block; font-family:'Press Start 2P',monospace; font-size:7px; padding:3px 7px; white-space:nowrap; margin-right:4px; }
-.let-tag { display:inline-block; font-family:'Press Start 2P',monospace; font-size:7px; padding:2px 6px; border:1px solid rgba(255,215,0,.3); color:rgba(255,215,0,.65); background:rgba(255,215,0,.04); white-space:nowrap; }
-.letter-want-reply { font-size:7px; color:#ff8800; border:1px solid rgba(255,136,0,.3); padding:2px 6px; }
-.let-responded { display:inline-block; font-family:'Press Start 2P',monospace; font-size:7px; padding:2px 6px; border:1px solid rgba(0,207,255,.4); color:#00cfff; background:rgba(0,207,255,.06); }
+/* .let-op-badge, .let-tag, .letter-want-reply, .let-responded — см. arcade.css */
 .let-share-btn { background:transparent; border:1px solid var(--green-dark,#003d0f); color:var(--green-dark,#003d0f); font-size:12px; padding:2px 7px; cursor:pointer; transition:all .2s; -webkit-tap-highlight-color:transparent; flex-shrink:0; line-height:1.4; }
 .let-share-btn:hover { border-color:var(--green-dim,#00aa2b); color:var(--green-dim,#00aa2b); }
 
 /* Body + collapse */
 .let-body-wrap { position:relative; }
-.let-body-inner { font-size:clamp(12px,2vw,14px); color:var(--text-dim,#00aa2b); line-height:1.9; border-left:2px solid var(--green-dark,#003d0f); padding-left:10px; word-break:break-word; }
+.let-body-inner { font-size:clamp(13px,2vw,16px); color:var(--text-dim,#00aa2b); line-height:2; border-left:2px solid var(--green-dark,#003d0f); padding-left:10px; word-break:break-word; }
 .let-body-wrap.collapsed .let-body-inner { max-height:9em; overflow:hidden; }
 .let-body-wrap.collapsed::after { content:''; position:absolute; bottom:0; left:0; right:0; height:44px; background:linear-gradient(to bottom, transparent, var(--card-bg,#0d1f0d)); pointer-events:none; }
 .let-read-more { display:none; background:transparent; border:none; color:var(--green-dim,#00aa2b); font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:1px; padding:6px 0; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:color .2s; }
 .let-read-more:hover { color:var(--green,#00ff41); }
 
 /* Footer */
-.letter-footer { display:flex; align-items:center; gap:12px; font-size:9px; color:#005d15; flex-wrap:wrap; margin-top:8px; }
-.letter-author { color:var(--green-dim,#00aa2b); }
+.letter-footer { display:flex; align-items:center; gap:14px; font-size:11px; color:#336633; flex-wrap:wrap; margin-top:10px; letter-spacing:1px; }
+.letter-author { color:var(--green,#00ff41); }
 
 /* Reply block */
 .let-reply-block { margin-top:12px; border:1px solid var(--green-dark,#003d0f); border-left:2px solid var(--yellow,#ffd700); background:rgba(0,26,0,.5); }
@@ -236,14 +233,13 @@ body.theme-tesla-light .letter-card { background:#fff; border-color:#e4e6e8; bor
 body.theme-tesla-light .let-body-inner { color:#333; border-left-color:#d0d2d4; }
 body.theme-tesla-light .letter-footer { color:#bbb; }
 body.theme-tesla-light .letter-author { color:#555; }
-body.theme-tesla-light .letter-want-reply { color:#cc6600; border-color:rgba(204,102,0,.3); font-family:'Roboto',sans-serif; font-size:11px; padding:2px 8px; }
-body.theme-tesla-light .let-responded { font-family:'Roboto',sans-serif; font-size:11px; font-weight:500; border-color:rgba(0,102,170,.3); color:#0066aa; background:rgba(0,102,170,.06); }
+/* tesla badge overrides — см. tesla-light.css / tesla-dark.css */
 body.theme-tesla-light .let-share-btn { border-color:#d0d2d4; color:#bbb; font-size:14px; }
 body.theme-tesla-light .let-share-btn:hover { border-color:#888; color:#555; }
 body.theme-tesla-light .let-read-more { color:#888; font-family:'Roboto',sans-serif; font-size:13px; }
 body.theme-tesla-light .let-read-more:hover { color:#111; }
 body.theme-tesla-light .let-body-wrap.collapsed::after { background:linear-gradient(to bottom, transparent, #fff); }
-body.theme-tesla-light .let-tag { font-family:'Roboto',sans-serif; font-size:11px; font-weight:500; padding:2px 8px; border-color:rgba(160,110,0,.3); color:#886600; background:rgba(160,110,0,.05); }
+/* .let-tag tesla-light — см. tesla-light.css */
 body.theme-tesla-light .let-reply-block { background:#f5f7f9; border-color:#d0d2d4; border-left-color:#0066aa; }
 body.theme-tesla-light .let-reply-hdr { border-bottom-color:#d0d2d4; }
 body.theme-tesla-light .let-reply-hdr-label { color:#aaa; }
@@ -296,14 +292,13 @@ body.theme-tesla-dark .letter-card { background:#1e1e1e; border-color:#2a2a2a; b
 body.theme-tesla-dark .let-body-inner { color:#ccc; border-left-color:#2a2a2a; }
 body.theme-tesla-dark .letter-footer { color:#3a3a3a; }
 body.theme-tesla-dark .letter-author { color:#666; }
-body.theme-tesla-dark .letter-want-reply { color:#cc7700; border-color:rgba(204,119,0,.3); font-family:'Roboto',sans-serif; font-size:11px; padding:2px 8px; }
-body.theme-tesla-dark .let-responded { font-family:'Roboto',sans-serif; font-size:11px; font-weight:500; border-color:rgba(0,85,136,.3); color:#0088cc; background:rgba(0,85,136,.06); }
+/* tesla-dark badge overrides — см. tesla-dark.css */
 body.theme-tesla-dark .let-share-btn { border-color:#2a2a2a; color:#3a3a3a; font-size:14px; }
 body.theme-tesla-dark .let-share-btn:hover { border-color:#555; color:#888; }
 body.theme-tesla-dark .let-read-more { color:#555; font-family:'Roboto',sans-serif; font-size:13px; }
 body.theme-tesla-dark .let-read-more:hover { color:#aaa; }
 body.theme-tesla-dark .let-body-wrap.collapsed::after { background:linear-gradient(to bottom, transparent, #1e1e1e); }
-body.theme-tesla-dark .let-tag { font-family:'Roboto',sans-serif; font-size:11px; font-weight:500; padding:2px 8px; border-color:rgba(255,215,0,.2); color:#887700; background:rgba(255,215,0,.04); }
+/* .let-tag tesla-dark — см. tesla-dark.css */
 body.theme-tesla-dark .let-reply-block { background:#1a1a1a; border-color:#2a2a2a; border-left-color:#005588; }
 body.theme-tesla-dark .let-reply-hdr { border-bottom-color:#2a2a2a; }
 body.theme-tesla-dark .let-reply-hdr-label { color:#3a3a3a; }
@@ -397,7 +392,7 @@ body.theme-tesla-dark #scroll-top { border-color:#444; background:rgba(255,255,2
 
     <div class="let-stats">
       <div class="stat-card"><div class="stat-label">ОПУБЛИКОВАНО</div><div class="stat-val" id="stat-total">...</div></div>
-      <div class="stat-card"><div class="stat-label">ОПЕРАТОРОВ</div><div class="stat-val" id="stat-ops">...</div></div>
+      <div class="stat-card"><div class="stat-label">ЖДУТ ОТВЕТА</div><div class="stat-val" id="stat-waiting" style="color:#ff8800;">...</div></div>
       <div class="stat-card"><div class="stat-label">ОТВЕТОВ ОП.</div><div class="stat-val" id="stat-replies" style="color:#00cfff;">...</div></div>
     </div>
 
@@ -406,7 +401,7 @@ body.theme-tesla-dark #scroll-top { border-color:#444; background:rgba(255,255,2
     <!-- РЕЙТИНГ ОПЕРАТОРОВ -->
     <div class="section-head">▶ ОТЗЫВЧИВОСТЬ ОПЕРАТОРОВ</div>
     <div class="let-rating-block" id="ratingBlock">
-      <div class="let-rating-none">// ДАННЫЕ ЗАГРУЖАЮТСЯ...</div>
+      <div class="let-rating-none">// ОПЕРАТОРЫ ПОКА НЕ ОТВЕТИЛИ НИ НА ОДНО ОБРАЩЕНИЕ<br><br>Первые публичные ответы появятся здесь.</div>
     </div>
 
     <div class="section-head">▶ ОПУБЛИКОВАННЫЕ ПИСЬМА</div>
@@ -433,8 +428,8 @@ body.theme-tesla-dark #scroll-top { border-color:#444; background:rgba(255,255,2
       <div class="filter-row">
         <span class="filter-label">СТАТУС:</span>
         <div id="filterRowStatus" style="display:flex;flex-wrap:wrap;gap:5px;">
-          <button class="op-filter-btn op-filter-warn"    data-val="wants_reply" onclick="setStatusFilter(this,'wants_reply')">📬 ЖДУТ ОТВЕТА</button>
-          <button class="op-filter-btn op-filter-replied" data-val="has_reply"   onclick="setStatusFilter(this,'has_reply')">✓ ЕСТЬ ОТВЕТ</button>
+          <button class="op-filter-btn op-filter-warn"    data-val="wants_reply" onclick="setStatusFilter(this,'wants_reply')">ЖДУТ ОТВЕТА | <span id="waiting-count">0</span></button>
+          <button class="op-filter-btn op-filter-replied" data-val="has_reply"   onclick="setStatusFilter(this,'has_reply')">ЕСТЬ ОТВЕТ | <span id="reply-count">0</span></button>
         </div>
       </div>
       <!-- Строка 3: Тег (динамическая) -->
@@ -522,8 +517,8 @@ body.theme-tesla-dark #scroll-top { border-color:#444; background:rgba(255,255,2
         <button class="form-tag-btn" type="button" data-tag="карты_и_навигация" onclick="selectTag(this)">#карты и навигация</button>
         <button class="form-tag-btn" type="button" data-tag="новая_локация"     onclick="selectTag(this)">#новая локация</button>
         <button class="form-tag-btn" type="button" data-tag="предложение"       onclick="selectTag(this)">#предложение</button>
-        <button class="form-tag-btn" type="button" data-tag="приложение"        onclick="selectTag(this)">#приложение</button>
-        <button class="form-tag-btn" type="button" data-tag="роуминг"           onclick="selectTag(this)">#роуминг</button>
+        <button class="form-tag-btn" type="button" data-tag="приложение"        onclick="selectTag(this)">#приложение | <span class="tag-count">0</span></button>
+        <button class="form-tag-btn" type="button" data-tag="роуминг"           onclick="selectTag(this)">#роуминг | <span class="tag-count">0</span></button>
         <button class="form-tag-btn" type="button" data-tag="станция"           onclick="selectTag(this)">#станция</button>
         <button class="form-tag-btn" type="button" data-tag="цены_и_тарифы"     onclick="selectTag(this)">#цены и тарифы</button>
       </div>
@@ -555,452 +550,7 @@ body.theme-tesla-dark #scroll-top { border-color:#444; background:rgba(255,255,2
   </div>
 </div>
 
-<script>
-const SURL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
-const SKEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
-const FN_URL = SURL + '/functions/v1/submit-letter';
 
-const OP_NAMES = {
-  batteryfly:'BatteryFly', evika:'Evika', forevo:'forEVo',
-  malanka:'Malanka', orange:'Orange', prizma:'Prizma',
-  united:'United Co.', zaryadka:'Zaryadka', all:'ВСЕМ ОПЕРАТОРАМ'
-};
-const OP_CLASS = {
-  batteryfly:'op-bf', evika:'op-ev', forevo:'op-fo',
-  malanka:'op-ma', orange:'op-or', prizma:'op-pr',
-  united:'op-uc', zaryadka:'op-za', all:''
-};
-const OP_COLORS = {
-  batteryfly:'#005EEB', evika:'#832af5', forevo:'#b44fff',
-  malanka:'#76d275', orange:'#FF6B00', prizma:'#24c3d3',
-  united:'#F5821F', zaryadka:'#00cfff'
-};
-const ALL_TAGS = [
-  'благодарность','другое','зарядная_сессия','инфраструктура',
-  'карты_и_навигация','новая_локация','предложение','приложение',
-  'роуминг','станция','цены_и_тарифы'
-];
-
-// ── ТЕМА ──
-const THEMES = ['arcade','tesla-light','tesla-dark'];
-function setTheme(theme) {
-  document.getElementById('theme-css').href = 'CSS/' + theme + '.css?v=2';
-  localStorage.setItem('ev_race_theme', theme);
-  THEMES.forEach(function(t) {
-    var b = document.getElementById('btn-' + t); if(b) b.classList.toggle('active', t===theme);
-    var f = document.getElementById('foot-' + t); if(f) f.classList.toggle('active', t===theme);
-  });
-  document.body.className = theme !== 'arcade' ? 'theme-' + theme : '';
-}
-(function(){ var s = localStorage.getItem('ev_race_theme'); if(s && THEMES.includes(s)) setTheme(s); })();
-
-// ── БУРГЕР ──
-function toggleBurger() {
-  var btn = document.getElementById('burgerBtn');
-  var menu = document.getElementById('mobileMenu');
-  var open = menu.classList.toggle('open');
-  btn.classList.toggle('open', open);
-}
-function closeBurger() {
-  document.getElementById('mobileMenu').classList.remove('open');
-  document.getElementById('burgerBtn').classList.remove('open');
-}
-document.addEventListener('click', function(e) {
-  var menu = document.getElementById('mobileMenu');
-  var btn = document.getElementById('burgerBtn');
-  if(menu && menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
-    menu.classList.remove('open'); btn.classList.remove('open');
-  }
-});
-
-// ── SCROLL ──
-window.addEventListener('scroll', function() {
-  var b = document.getElementById('scroll-top');
-  if(b) b.classList.toggle('visible', window.scrollY > 300);
-});
-
-// ── ДАННЫЕ ──
-var allLetters = [];
-var activeOp = 'all';
-var activeStatus = null;
-var activeTag = null;
-const PAGE_SIZE = 10;
-var visibleCount = PAGE_SIZE;
-
-async function loadLetters() {
-  try {
-    var res = await fetch(
-      SURL + '/rest/v1/letters?select=*&status=eq.approved&order=published_at.desc&limit=200',
-      { headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY } }
-    );
-    allLetters = await res.json();
-    if (!Array.isArray(allLetters)) allLetters = [];
-    updateStats();
-    buildTagFilterRow();
-    renderRating();
-    renderLetters();
-  } catch(e) {
-    document.getElementById('lettersWrap').innerHTML = '<div class="loading">ОШИБКА ЗАГРУЗКИ</div>';
-  }
-}
-
-function updateStats() {
-  document.getElementById('stat-total').textContent = allLetters.length || '0';
-  document.getElementById('stat-ops').textContent = new Set(allLetters.map(function(l){ return l.operator; })).size || '0';
-  document.getElementById('stat-replies').textContent = allLetters.filter(function(l){ return l.op_reply; }).length || '0';
-}
-
-// ── РЕЙТИНГ ОПЕРАТОРОВ ──
-function renderRating() {
-  var block = document.getElementById('ratingBlock');
-  // Считаем только прямые письма операторам (не 'all')
-  var opKeys = Object.keys(OP_COLORS);
-  var rows = [];
-  opKeys.forEach(function(op) {
-    var direct = allLetters.filter(function(l){ return l.operator === op; });
-    if (direct.length === 0) return;
-    var replied = direct.filter(function(l){ return l.op_reply; }).length;
-    var pct = Math.round(replied / direct.length * 100);
-    rows.push({ op: op, total: direct.length, replied: replied, pct: pct });
-  });
-  if (rows.length === 0) {
-    block.innerHTML = '<div class="let-rating-none">// ДАННЫХ ПОКА НЕДОСТАТОЧНО</div>';
-    return;
-  }
-  // Сортируем по % ответов desc, при равенстве по total desc
-  rows.sort(function(a,b){ return b.pct - a.pct || b.total - a.total; });
-  var html = '<div class="let-rating-title">// ПРОЦЕНТ ОТВЕТОВ НА ПРЯМЫЕ ОБРАЩЕНИЯ</div>';
-  rows.forEach(function(r) {
-    var color = OP_COLORS[r.op] || '#00ff41';
-    var name = OP_NAMES[r.op] || r.op;
-    var barW = r.pct > 0 ? Math.max(r.pct, 3) : 0;
-    html += '<div class="let-rating-row">'
-      + '<div class="let-rating-op" style="color:' + color + ';">' + escHtml(name) + '</div>'
-      + '<div class="let-rating-bar-wrap"><div class="let-rating-bar-fill" style="width:' + barW + '%;background:' + color + ';"></div></div>'
-      + '<div class="let-rating-pct">' + r.pct + '%</div>'
-      + '<div class="let-rating-count">(' + r.replied + '/' + r.total + ')</div>'
-      + '</div>';
-  });
-  block.innerHTML = html;
-}
-
-// ── ТЕГИ ФИЛЬТР (динамическая сортировка) ──
-function sortedTagsByFreq() {
-  var freq = {};
-  ALL_TAGS.forEach(function(t){ freq[t] = 0; });
-  allLetters.forEach(function(l){
-    if (Array.isArray(l.tags)) l.tags.forEach(function(t){ if(freq[t] !== undefined) freq[t]++; });
-  });
-  return ALL_TAGS.slice().sort(function(a,b){
-    var diff = freq[b] - freq[a];
-    return diff !== 0 ? diff : a.localeCompare(b, 'ru');
-  }).filter(function(t){ return freq[t] > 0; });
-}
-
-function buildTagFilterRow() {
-  var row = document.getElementById('filterRowTag');
-  var tags = sortedTagsByFreq();
-  if (tags.length === 0) {
-    row.innerHTML = '<div class="let-rating-none" style="font-size:8px;">// ТЕГОВ ПОКА НЕТ</div>';
-    return;
-  }
-  var html = '';
-  tags.forEach(function(tag) {
-    var isOn = activeTag === tag ? ' on' : '';
-    html += '<button class="tag-filter-btn' + isOn + '" data-tag="' + escHtml(tag) + '" onclick="setTagFilter(this,\'' + tag + '\')">#' + escHtml(tag.replace(/_/g,' ')) + '</button>';
-  });
-  row.innerHTML = html;
-}
-
-// ── ФИЛЬТРЫ ──
-function getFiltered() {
-  var result = allLetters;
-  if (activeOp === 'all_op') result = result.filter(function(l){ return l.operator === 'all'; });
-  else if (activeOp !== 'all') result = result.filter(function(l){ return l.operator === activeOp; });
-  if (activeStatus === 'wants_reply') result = result.filter(function(l){ return l.want_reply && !l.op_reply; });
-  else if (activeStatus === 'has_reply') result = result.filter(function(l){ return l.op_reply; });
-  if (activeTag) result = result.filter(function(l){ return Array.isArray(l.tags) && l.tags.includes(activeTag); });
-  return result;
-}
-
-function activeFilterCount() {
-  var n = 0;
-  if (activeOp !== 'all') n++;
-  if (activeStatus) n++;
-  if (activeTag) n++;
-  return n;
-}
-
-function updateResetBtn() {
-  var n = activeFilterCount();
-  var btn = document.getElementById('filterResetBtn');
-  var cnt = document.getElementById('filterCount');
-  btn.classList.toggle('visible', n > 0);
-  if(cnt) cnt.textContent = n;
-}
-
-function setOpFilter(btn, val) {
-  activeOp = val;
-  visibleCount = PAGE_SIZE;
-  document.querySelectorAll('#filterRowOp .let-filter-btn').forEach(function(b){ b.classList.toggle('on', b.dataset.val === val); });
-  updateResetBtn(); renderLetters();
-}
-
-function setStatusFilter(btn, val) {
-  if (activeStatus === val) {
-    activeStatus = null;
-    btn.classList.remove('on');
-  } else {
-    activeStatus = val;
-    document.querySelectorAll('#filterRowStatus .let-filter-btn').forEach(function(b){ b.classList.remove('on'); });
-    btn.classList.add('on');
-  }
-  visibleCount = PAGE_SIZE;
-  updateResetBtn(); renderLetters();
-}
-
-function setTagFilter(btn, val) {
-  if (activeTag === val) {
-    activeTag = null;
-    btn.classList.remove('on');
-  } else {
-    activeTag = val;
-    document.querySelectorAll('#filterRowTag .let-filter-btn').forEach(function(b){ b.classList.remove('on'); });
-    btn.classList.add('on');
-  }
-  visibleCount = PAGE_SIZE;
-  updateResetBtn(); renderLetters();
-}
-
-function resetFilters() {
-  activeOp = 'all'; activeStatus = null; activeTag = null;
-  visibleCount = PAGE_SIZE;
-  document.querySelectorAll('#filterRowOp .let-filter-btn').forEach(function(b){ b.classList.toggle('on', b.dataset.val === 'all'); });
-  document.querySelectorAll('#filterRowStatus .let-filter-btn').forEach(function(b){ b.classList.remove('on'); });
-  document.querySelectorAll('#filterRowTag .let-filter-btn').forEach(function(b){ b.classList.remove('on'); });
-  updateResetBtn(); renderLetters();
-}
-
-// ── РЕНДЕР ──
-function isNew(dateStr) {
-  if (!dateStr) return false;
-  return (Date.now() - new Date(dateStr).getTime()) < 5 * 24 * 60 * 60 * 1000;
-}
-
-function fmtDate(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric' });
-}
-
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-
-function opBadge(op) {
-  var cls = OP_CLASS[op] || '';
-  if (op === 'all') return '<span class="let-op-badge" style="border:1px solid rgba(255,215,0,.4);color:var(--yellow,#ffd700);background:rgba(255,215,0,.08);">ВСЕМ ОПЕРАТОРАМ</span>';
-  return '<span class="let-op-badge op-badge ' + cls + '">' + (OP_NAMES[op] || op) + '</span>';
-}
-
-function tagBadge(tag) {
-  return '<span class="let-tag">#' + escHtml(tag.replace(/_/g,' ')) + '</span>';
-}
-
-function statusBadge(l) {
-  if (l.op_reply) return '<span class="let-responded">✓ ОТВЕТИЛ 1 ОПЕРАТОР</span>';
-  if (l.want_reply) return '<span class="letter-want-reply">📬 ЖДЁТ ОТВЕТА</span>';
-  return '';
-}
-
-function replyBlock(l) {
-  if (!l.op_reply) return '';
-  var opBadgeHtml = l.operator === 'all'
-    ? '<span class="let-op-badge" style="border:1px solid rgba(255,215,0,.4);color:var(--yellow,#ffd700);background:rgba(255,215,0,.08);font-size:7px;padding:2px 6px;">ВСЕМ</span>'
-    : '<span class="let-op-badge op-badge ' + (OP_CLASS[l.operator]||'') + '" style="font-size:7px;padding:2px 6px;">' + escHtml(OP_NAMES[l.operator]||l.operator) + '</span>';
-  return '<div class="let-reply-block">'
-    + '<div class="let-reply-hdr"><span class="let-reply-hdr-label">ОТВЕТ ОПЕРАТОРА</span><span class="let-reply-hdr-sep"> ── </span>' + opBadgeHtml + '</div>'
-    + '<div class="let-reply-body">' + escHtml(l.op_reply).replace(/\n/g,'<br>') + '</div>'
-    + '<div class="let-reply-date">' + fmtDate(l.published_at) + '</div>'
-    + '</div>';
-}
-
-function renderLetters() {
-  var filtered = getFiltered();
-  var wrap = document.getElementById('lettersWrap');
-  var btn = document.getElementById('showMoreBtn');
-
-  if (filtered.length === 0) {
-    wrap.innerHTML = '<div class="empty-state">// ПИСЕМ ПО ЭТОМУ ФИЛЬТРУ ПОКА НЕТ<br>БУДЬ ПЕРВЫМ ↑</div>';
-    btn.style.display = 'none';
-    return;
-  }
-
-  var html = '';
-  filtered.slice(0, visibleCount).forEach(function(l) {
-    var newBadge = isNew(l.published_at) ? '<span class="new-badge" style="margin-left:2px;">NEW</span>' : '';
-    var tags = Array.isArray(l.tags) && l.tags.length > 0 ? l.tags.map(tagBadge).join('') : '';
-    var status = statusBadge(l);
-    var lid = l.id;
-    html += '<div class="letter-card" id="letter-' + lid + '">'
-      + '<div class="let-head1">' + opBadge(l.operator) + newBadge + tags + '</div>'
-      + '<div class="let-head2"><div class="let-status">' + status + '</div>'
-      + '<button class="let-share-btn" title="Поделиться" aria-label="Поделиться">↗</button></div>'
-      + '<div class="let-body-wrap" data-id="' + lid + '">'
-      + '<div class="let-body-inner">&laquo;' + escHtml(l.body).replace(/\n/g,'<br>') + '&raquo;</div>'
-      + '</div>'
-      + '<button class="let-read-more" data-id="' + lid + '" onclick="toggleCollapse(' + lid + ')">ЧИТАТЬ ПОЛНОСТЬЮ ↓</button>'
-      + '<div class="letter-footer"><span class="letter-author">' + escHtml(l.author_name||'Аноним') + '</span><span>' + fmtDate(l.published_at) + '</span></div>'
-      + replyBlock(l)
-      + '</div>';
-  });
-
-  wrap.innerHTML = html;
-  requestAnimationFrame(initCollapse);
-
-  if (filtered.length > visibleCount) {
-    btn.style.display = 'block';
-    btn.textContent = '▼ ПОКАЗАТЬ ЕЩЁ (' + (filtered.length - visibleCount) + ')';
-  } else {
-    btn.style.display = 'none';
-  }
-}
-
-// ── COLLAPSE ──
-function initCollapse() {
-  if (window.innerWidth >= 600) return;
-  var THRESHOLD = 22 * 6;
-  document.querySelectorAll('.let-body-wrap').forEach(function(wrap) {
-    var inner = wrap.querySelector('.let-body-inner');
-    var id = wrap.dataset.id;
-    var btn = document.querySelector('.let-read-more[data-id="' + id + '"]');
-    if (!inner || !btn) return;
-    if (inner.scrollHeight > THRESHOLD) {
-      wrap.classList.add('collapsed');
-      btn.style.display = 'block';
-    }
-  });
-}
-
-function toggleCollapse(id) {
-  var wrap = document.querySelector('.let-body-wrap[data-id="' + id + '"]');
-  var btn = document.querySelector('.let-read-more[data-id="' + id + '"]');
-  if (!wrap || !btn) return;
-  var isCollapsed = wrap.classList.toggle('collapsed');
-  btn.textContent = isCollapsed ? 'ЧИТАТЬ ПОЛНОСТЬЮ ↓' : 'СВЕРНУТЬ ↑';
-}
-
-function showMore() { visibleCount += PAGE_SIZE; renderLetters(); }
-
-// ── ТЕГИ ФОРМА ──
-var selectedTags = [];
-
-function selectTag(btn) {
-  var tag = btn.dataset.tag;
-  var idx = selectedTags.indexOf(tag);
-  if (idx !== -1) {
-    selectedTags.splice(idx, 1);
-    btn.classList.remove('sel');
-  } else {
-    if (selectedTags.length >= 2) {
-      var warn = document.getElementById('tagWarn');
-      warn.style.display = 'block';
-      setTimeout(function(){ warn.style.display = 'none'; }, 2000);
-      return;
-    }
-    selectedTags.push(tag);
-    btn.classList.add('sel');
-  }
-}
-
-// ── МОДАЛКА ──
-var selectedOp = null;
-var cfToken = null;
-
-function openModal() {
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  selectedOp = null; cfToken = null; selectedTags = [];
-  document.querySelectorAll('.modal-op-btn').forEach(function(b){ b.classList.remove('sel'); });
-  document.querySelectorAll('.form-tag-btn').forEach(function(b){ b.classList.remove('sel'); });
-  document.getElementById('fieldName').value = '';
-  document.getElementById('fieldBody').value = '';
-  document.getElementById('fieldWantReply').checked = false;
-  document.getElementById('bodyCounter').textContent = '0 / 2000';
-  document.getElementById('bodyCounter').className = 'form-counter';
-  document.getElementById('tagWarn').style.display = 'none';
-  document.getElementById('submitBtn').disabled = true;
-  document.getElementById('submitBtn').style.display = 'block';
-  document.getElementById('submitBtn').textContent = 'ОТПРАВИТЬ ПИСЬМО →';
-  document.getElementById('formError').style.display = 'none';
-  document.getElementById('formSuccess').style.display = 'none';
-  if (window.turnstile) { try { window.turnstile.reset(); } catch(e) {} }
-}
-
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function onOverlayClick(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
-
-function selectOp(btn) {
-  document.querySelectorAll('.modal-op-btn').forEach(function(b){ b.classList.remove('sel'); });
-  btn.classList.add('sel');
-  selectedOp = btn.dataset.val;
-  checkFormReady();
-}
-
-function updateCounter() {
-  var val = document.getElementById('fieldBody').value.length;
-  var el = document.getElementById('bodyCounter');
-  el.textContent = val + ' / 2000';
-  el.className = 'form-counter' + (val > 1800 ? ' warn' : '') + (val >= 2000 ? ' over' : '');
-  checkFormReady();
-}
-
-function checkFormReady() {
-  var body = document.getElementById('fieldBody').value.trim();
-  document.getElementById('submitBtn').disabled = !(selectedOp && body.length > 0 && body.length <= 2000 && cfToken);
-}
-
-window.onTurnstileSuccess = function(token) { cfToken = token; checkFormReady(); };
-window.onTurnstileExpired = function() { cfToken = null; checkFormReady(); };
-
-async function submitLetter() {
-  var btn = document.getElementById('submitBtn');
-  var errEl = document.getElementById('formError');
-  var okEl = document.getElementById('formSuccess');
-  if (!selectedOp) { showErr('Выбери оператора'); return; }
-  var body = document.getElementById('fieldBody').value.trim();
-  if (!body) { showErr('Напиши текст письма'); return; }
-  if (body.length > 2000) { showErr('Слишком длинный текст'); return; }
-  if (!cfToken) { showErr('Пройди проверку'); return; }
-  btn.disabled = true; btn.textContent = 'ОТПРАВКА...'; errEl.style.display = 'none';
-  try {
-    var res = await fetch(FN_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        operator: selectedOp,
-        author_name: document.getElementById('fieldName').value.trim() || null,
-        body: body,
-        cf_token: cfToken,
-        want_reply: document.getElementById('fieldWantReply').checked,
-        tags: selectedTags
-      })
-    });
-    var data = await res.json();
-    if (!res.ok) { showErr(data.error || 'Ошибка отправки'); btn.disabled = false; btn.textContent = 'ОТПРАВИТЬ ПИСЬМО →'; return; }
-    btn.style.display = 'none'; okEl.style.display = 'block';
-    setTimeout(closeModal, 3000);
-  } catch(e) {
-    showErr('Ошибка соединения'); btn.disabled = false; btn.textContent = 'ОТПРАВИТЬ ПИСЬМО →';
-  }
-}
-
-function showErr(msg) { var el = document.getElementById('formError'); el.textContent = msg; el.style.display = 'block'; }
-
-loadLetters();
-</script>
+<script src="letters.js"></script>
 </body>
 </html>
