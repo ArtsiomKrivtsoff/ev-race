@@ -107,15 +107,23 @@ function hasReply(l) {
 
 function updateStats() {
   var el;
+  var waitingCount = allLetters.filter(function(l){ return l.want_reply && !hasReply(l); }).length;
+  var repliesCount = allLetters.filter(hasReply).length;
+
   el = document.getElementById('stat-total');
   if (el) el.textContent = allLetters.length || '0';
   el = document.getElementById('stat-waiting');
-  if (el) el.textContent = allLetters.filter(function(l){ return l.want_reply && !hasReply(l); }).length || '0';
+  if (el) el.textContent = waitingCount || '0';
   el = document.getElementById('stat-replies');
-  if (el) el.textContent = allLetters.filter(hasReply).length || '0';
-  // legacy stat-ops support
+  if (el) el.textContent = repliesCount || '0';
   el = document.getElementById('stat-ops');
   if (el) el.textContent = new Set(allLetters.map(function(l){ return l.operator; })).size || '0';
+
+  // счётчики в кнопках фильтра
+  el = document.getElementById('waiting-count');
+  if (el) el.textContent = waitingCount;
+  el = document.getElementById('reply-count');
+  if (el) el.textContent = repliesCount;
 }
 
 // ── РЕЙТИНГ ──
