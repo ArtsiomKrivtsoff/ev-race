@@ -347,6 +347,126 @@ body.theme-tesla-dark .form-tag-btn { font-family:'Roboto',sans-serif; font-size
 body.theme-tesla-dark .form-tag-btn:hover { border-color:rgba(255,215,0,.3); color:#998800; }
 body.theme-tesla-dark .form-tag-btn.sel { border-color:#998800; color:#998800; background:rgba(255,215,0,.06); }
 body.theme-tesla-dark #scroll-top { border-color:#444; background:rgba(255,255,255,.1); color:#ccc; }
+
+/* ===== FILTER MATRIX REBUILD ===== */
+
+.filter-row {
+  display:flex;
+  align-items:flex-start;
+  gap:18px;
+  margin-bottom:18px;
+}
+
+.filter-label {
+  width:160px;
+  flex-shrink:0;
+  padding-top:10px;
+}
+
+.filter-buttons {
+  flex:1;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  min-width:0;
+}
+
+@media (max-width: 768px) {
+
+  .filter-row {
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:22px;
+  }
+
+  .filter-label {
+    width:100%;
+    padding-top:0;
+  }
+
+  .filter-buttons {
+    width:100%;
+    gap:8px;
+  }
+}
+
+/* unified filter button sizing */
+
+.operator-btn,
+.status-btn,
+.tag-btn {
+  min-height:44px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 16px !important;
+  line-height:1 !important;
+}
+
+/* unified badge sizing inside cards */
+
+.let-op-badge,
+.let-tag,
+.letter-want-reply,
+.let-responded,
+.let-new-badge {
+  min-height:34px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 12px;
+  line-height:1;
+}
+
+/* card header cleanup */
+
+.let-head1 {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:8px;
+}
+
+.let-head2 {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+/* better mobile typography */
+
+.letter-body {
+  font-size:clamp(13px,2vw,16px) !important;
+  line-height:2 !important;
+}
+
+.letter-footer {
+  font-size:11px !important;
+  letter-spacing:1px;
+  gap:14px !important;
+}
+
+.letter-author {
+  color:var(--green,#00ff41) !important;
+}
+
+/* mobile spacing */
+
+@media (max-width:768px){
+
+  .letters-filters {
+    gap:0;
+  }
+
+  .letters-filters .filter-group {
+    margin-bottom:0;
+  }
+
+}
+
 </style>
 </head>
 <body>
