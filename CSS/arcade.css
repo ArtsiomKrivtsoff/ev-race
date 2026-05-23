@@ -759,6 +759,28 @@ body { animation: flicker calc(8s / var(--anim-flicker)) infinite; }
 .reset-btn.visible { display: inline-block; }
 .reset-btn:hover{ background: rgba(255,68,68,.25); }
 
+/* ── SHARED FILTER EXTRAS (letters + future pages) ── */
+/* "ВСЕ" — зелёная нейтральная кнопка */
+.op-filter-all { background: rgba(0,255,65,.06); color: var(--green-dim); border: 1px solid rgba(0,255,65,.2); }
+.op-filter-all.on { background: rgba(0,255,65,.12); color: var(--green); border-color: var(--green); opacity:1; box-shadow:none; }
+
+/* "ВСЕМ" — жёлтая кнопка */
+.op-filter-yellow { background: rgba(255,215,0,.06); color: var(--yellow); border: 1px solid rgba(255,215,0,.25); }
+.op-filter-yellow.on { background: rgba(255,215,0,.15); border-color: var(--yellow); opacity:1; box-shadow:none; }
+
+/* Статус: ждёт ответа */
+.op-filter-warn { background: rgba(255,136,0,.08); color: #ffaa44; border: 1px solid rgba(255,136,0,.28); }
+.op-filter-warn.on { background: rgba(255,136,0,.18); border-color: #ff8800; color: #ffcc66; opacity:1; box-shadow:none; }
+
+/* Статус: есть ответ */
+.op-filter-replied { background: rgba(0,207,255,.08); color: #66ddff; border: 1px solid rgba(0,207,255,.28); }
+.op-filter-replied.on { background: rgba(0,207,255,.18); border-color: #00cfff; opacity:1; box-shadow:none; }
+
+/* Тег-фильтр */
+.tag-filter-btn { font-family:'Press Start 2P', monospace; font-size: 9px; padding: 5px 9px; cursor: pointer; transition: all .2s; border: 1px solid rgba(255,215,0,.2); border-radius: var(--radius); background: rgba(255,215,0,.04); color: rgba(255,215,0,.5); opacity: .6; -webkit-tap-highlight-color: transparent; }
+.tag-filter-btn:hover { opacity: .85; }
+.tag-filter-btn.on { opacity: 1; border-color: var(--yellow); color: var(--yellow); background: rgba(255,215,0,.1); box-shadow: 0 0 6px rgba(0,0,0,.4); }
+
 /* BADGES — все 7px подняты до 9px */
 .badge-dc, .badge-ac, .badge-acdc, .op-badge {
   font-family:'Press Start 2P', monospace;

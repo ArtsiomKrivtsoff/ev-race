@@ -1038,3 +1038,26 @@ table.reg td.right, table.reg th.right { text-align: right; }
 .forecast-table td.forecast { text-align:right; }
 .forecast-table td.forecast strong { color:#111; font-weight:600; font-size:14px; }
 .forecast-table td.forecast .unit { font-size:10px; color:#aaa; margin-left:2px; }
+
+/* ── SHARED FILTER EXTRAS — tesla-light ── */
+.op-filter-all { background:#f0f0f0; color:#555; border:1.5px solid #ccc; }
+.op-filter-all::before { background:#888; }
+.op-filter-all.on { background:rgba(0,0,0,.05); color:#111; border-color:#888; }
+.op-filter-all.on::before { background:#111; }
+.op-filter-yellow { background:rgba(160,110,0,.06); color:#886600; border:1.5px solid rgba(160,110,0,.25); }
+.op-filter-yellow::before { background:#aa8800; }
+.op-filter-yellow.on { background:rgba(160,110,0,.1); border-color:#886600; color:#664400; }
+.op-filter-yellow.on::before { background:#886600; }
+.op-filter-warn { background:rgba(180,80,0,.06); color:#cc6600; border:1.5px solid rgba(180,80,0,.25); }
+.op-filter-warn::before { background:#cc6600; }
+.op-filter-warn.on { background:rgba(180,80,0,.1); border-color:#aa5500; color:#884400; }
+.op-filter-warn.on::before { background:#aa5500; }
+.op-filter-replied { background:rgba(0,100,160,.06); color:#0066aa; border:1.5px solid rgba(0,100,160,.25); }
+.op-filter-replied::before { background:#0066aa; }
+.op-filter-replied.on { background:rgba(0,100,160,.1); border-color:#004488; color:#003366; }
+.op-filter-replied.on::before { background:#004488; }
+.tag-filter-btn { font-family:'Roboto',sans-serif; font-size:12px; font-weight:500; padding:6px 12px; border-radius:20px; border:1.5px solid rgba(160,110,0,.25); background:rgba(160,110,0,.04); color:#aa8800; cursor:pointer; transition:all .15s; display:inline-flex; align-items:center; -webkit-tap-highlight-color:transparent; }
+.tag-filter-btn::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#ccaa44; transition:background .15s; flex-shrink:0; margin-right:5px; }
+.tag-filter-btn:hover { border-color:rgba(160,110,0,.45); color:#886600; }
+.tag-filter-btn.on { font-weight:600; border-color:#886600; color:#664400; background:rgba(160,110,0,.08); }
+.tag-filter-btn.on::before { background:#886600; }
