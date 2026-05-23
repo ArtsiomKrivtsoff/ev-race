@@ -288,7 +288,9 @@ function setStatusFilter(btn, val) {
     btn.classList.add('on');
   }
   visibleCount = PAGE_SIZE;
-  updateResetBtn(); renderLetters();
+  updateResetBtn();
+  buildTagFilterRow();
+  renderLetters();
 }
 
 function setTagFilter(btn, val) {
@@ -297,7 +299,7 @@ function setTagFilter(btn, val) {
     btn.classList.remove('on');
   } else {
     activeTag = val;
-    document.querySelectorAll('#filterRowTag .let-filter-btn').forEach(function(b){ b.classList.remove('on'); });
+    document.querySelectorAll('#filterRowTag .tag-filter-btn').forEach(function(b){ b.classList.remove('on'); });
     btn.classList.add('on');
   }
   visibleCount = PAGE_SIZE;
@@ -309,7 +311,7 @@ function resetFilters() {
   visibleCount = PAGE_SIZE;
   document.querySelectorAll('#filterRowOp .let-filter-btn').forEach(function(b){ b.classList.toggle('on', b.dataset.val === 'all'); });
   document.querySelectorAll('#filterRowStatus .let-filter-btn').forEach(function(b){ b.classList.remove('on'); });
-  document.querySelectorAll('#filterRowTag .let-filter-btn').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('#filterRowTag .tag-filter-btn').forEach(function(b){ b.classList.remove('on'); });
   updateResetBtn(); renderLetters();
 }
 
