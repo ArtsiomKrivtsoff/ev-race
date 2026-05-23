@@ -397,7 +397,7 @@ body.theme-tesla-dark #scroll-top { border-color:#444; background:rgba(255,255,2
 
     <div class="let-stats">
       <div class="stat-card"><div class="stat-label">ОПУБЛИКОВАНО</div><div class="stat-val" id="stat-total">...</div></div>
-      <div class="stat-card"><div class="stat-label">ОПЕРАТОРОВ</div><div class="stat-val" id="stat-ops">...</div></div>
+      <div class="stat-card"><div class="stat-label">ЖДУТ ОТВЕТА</div><div class="stat-val" id="stat-waiting" style="color:#ff8800;">...</div></div>
       <div class="stat-card"><div class="stat-label">ОТВЕТОВ ОП.</div><div class="stat-val" id="stat-replies" style="color:#00cfff;">...</div></div>
     </div>
 
@@ -406,7 +406,7 @@ body.theme-tesla-dark #scroll-top { border-color:#444; background:rgba(255,255,2
     <!-- РЕЙТИНГ ОПЕРАТОРОВ -->
     <div class="section-head">▶ ОТЗЫВЧИВОСТЬ ОПЕРАТОРОВ</div>
     <div class="let-rating-block" id="ratingBlock">
-      <div class="let-rating-none">// ДАННЫЕ ЗАГРУЖАЮТСЯ...</div>
+      <div class="let-rating-none">// ОПЕРАТОРЫ ПОКА НЕ ОТВЕТИЛИ НИ НА ОДНО ОБРАЩЕНИЕ<br><br>Первые публичные ответы появятся здесь.</div>
     </div>
 
     <div class="section-head">▶ ОПУБЛИКОВАННЫЕ ПИСЬМА</div>
@@ -646,41 +646,91 @@ async function loadLetters() {
 
 function updateStats() {
   document.getElementById('stat-total').textContent = allLetters.length || '0';
-  document.getElementById('stat-ops').textContent = new Set(allLetters.map(function(l){ return l.operator; })).size || '0';
-  document.getElementById('stat-replies').textContent = allLetters.filter(function(l){ return l.op_reply; }).length || '0';
+
+  var waiting = allLetters.filter(function(l){
+    if (!l.want_reply) return false;
+
+    if (l.operator === 'all') {
+      return !l.op_reply;
+    }
+
+    return !l.op_reply;
+  }).length;
+
+  document.getElementById('stat-waiting').textContent = waiting || '0';
+
+  document.getElementById('stat-replies').textContent =
+    allLetters.filter(function(l){ return l.op_reply; }).length || '0';
 }
 
 // ── РЕЙТИНГ ОПЕРАТОРОВ ──
 function renderRating() {
   var block = document.getElementById('ratingBlock');
-  // Считаем только прямые письма операторам (не 'all')
-  var opKeys = Object.keys(OP_COLORS);
-  var rows = [];
-  opKeys.forEach(function(op) {
-    var direct = allLetters.filter(function(l){ return l.operator === op; });
-    if (direct.length === 0) return;
-    var replied = direct.filter(function(l){ return l.op_reply; }).length;
-    var pct = Math.round(replied / direct.length * 100);
-    rows.push({ op: op, total: direct.length, replied: replied, pct: pct });
-  });
-  if (rows.length === 0) {
-    block.innerHTML = '<div class="let-rating-none">// ДАННЫХ ПОКА НЕДОСТАТОЧНО</div>';
+
+  var totalReplies = allLetters.filter(function(l){
+    return !!l.op_reply;
+  }).length;
+
+  if (totalReplies === 0) {
+    block.innerHTML =
+      '<div class="let-rating-none">// ОПЕРАТОРЫ ПОКА НЕ ОТВЕТИЛИ НИ НА ОДНО ОБРАЩЕНИЕ<br><br>Первые публичные ответы появятся здесь.</div>';
     return;
   }
-  // Сортируем по % ответов desc, при равенстве по total desc
-  rows.sort(function(a,b){ return b.pct - a.pct || b.total - a.total; });
-  var html = '<div class="let-rating-title">// ПРОЦЕНТ ОТВЕТОВ НА ПРЯМЫЕ ОБРАЩЕНИЯ</div>';
+
+  var opKeys = Object.keys(OP_COLORS);
+  var rows = [];
+
+  opKeys.forEach(function(op) {
+
+    var received = allLetters.filter(function(l){
+      return l.operator === op || l.operator === 'all';
+    });
+
+    var replied = received.filter(function(l){
+      return !!l.op_reply;
+    }).length;
+
+    var pct = received.length > 0
+      ? Math.round((replied / received.length) * 100)
+      : 0;
+
+    rows.push({
+      op: op,
+      total: received.length,
+      replied: replied,
+      pct: pct
+    });
+  });
+
+  rows.sort(function(a,b){
+    return b.pct - a.pct || b.replied - a.replied;
+  });
+
+  var html = '<div class="let-rating-title">// ОТЗЫВЧИВОСТЬ ОПЕРАТОРОВ</div>';
+
   rows.forEach(function(r) {
+
     var color = OP_COLORS[r.op] || '#00ff41';
     var name = OP_NAMES[r.op] || r.op;
     var barW = r.pct > 0 ? Math.max(r.pct, 3) : 0;
-    html += '<div class="let-rating-row">'
-      + '<div class="let-rating-op" style="color:' + color + ';">' + escHtml(name) + '</div>'
-      + '<div class="let-rating-bar-wrap"><div class="let-rating-bar-fill" style="width:' + barW + '%;background:' + color + ';"></div></div>'
-      + '<div class="let-rating-pct">' + r.pct + '%</div>'
-      + '<div class="let-rating-count">(' + r.replied + '/' + r.total + ')</div>'
-      + '</div>';
+
+    html +=
+      '<div class="let-rating-row">' +
+        '<div class="let-rating-top">' +
+          '<div class="let-rating-op" style="color:' + color + ';">' + escHtml(name) + '</div>' +
+          '<div class="let-rating-pct">' + r.pct + '%</div>' +
+        '</div>' +
+
+        '<div class="let-rating-bar-wrap">' +
+          '<div class="let-rating-bar-fill" style="width:' + barW + '%;background:' + color + ';"></div>' +
+        '</div>' +
+
+        '<div class="let-rating-meta">' +
+          'ОТВЕТИЛИ НА ' + r.replied + ' ИЗ ' + r.total + ' ОБРАЩЕНИЙ' +
+        '</div>' +
+      '</div>';
   });
+
   block.innerHTML = html;
 }
 
@@ -807,8 +857,20 @@ function tagBadge(tag) {
 }
 
 function statusBadge(l) {
-  if (l.op_reply) return '<span class="let-responded">✓ ОТВЕТИЛ 1 ОПЕРАТОР</span>';
-  if (l.want_reply) return '<span class="letter-want-reply">📬 ЖДЁТ ОТВЕТА</span>';
+
+  if (l.op_reply) {
+
+    if (l.operator === 'all') {
+      return '<span class="let-responded">✓ ОТВЕТИЛ ' + escHtml(OP_NAMES[l.operator_reply_by] || 'ОПЕРАТОР') + '</span>';
+    }
+
+    return '<span class="let-responded">✓ ЕСТЬ ОТВЕТ</span>';
+  }
+
+  if (l.want_reply) {
+    return '<span class="letter-want-reply">📬 ЖДЁТ ОТВЕТА</span>';
+  }
+
   return '';
 }
 
