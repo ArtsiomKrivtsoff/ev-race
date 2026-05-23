@@ -48,28 +48,73 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 
 /* ── RATING BLOCK ── */
 .let-rating-block {
-  margin-bottom:20px; padding:14px;
-  background:var(--card-bg,#0d1f0d); border:1px solid var(--green-dark,#003d0f);
+  margin-bottom:20px;
+  padding:14px;
+  background:var(--card-bg,#0d1f0d);
+  border:1px solid var(--green-dark,#003d0f);
 }
+
 .let-rating-title {
-  font-size:8px; letter-spacing:2px; color:var(--green-dark,#003d0f);
-  margin-bottom:12px; font-family:'Share Tech Mono',monospace;
+  font-size:8px;
+  letter-spacing:2px;
+  color:var(--green-dark,#003d0f);
+  margin-bottom:14px;
+  font-family:'Share Tech Mono',monospace;
 }
-.let-rating-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
-.let-rating-row:last-child { margin-bottom:0; }
+
+.let-rating-row {
+  margin-bottom:14px;
+}
+
+.let-rating-row:last-child {
+  margin-bottom:0;
+}
+
+.let-rating-top {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:6px;
+}
+
 .let-rating-op {
-  font-family:'Press Start 2P',monospace; font-size:7px;
-  width:82px; flex-shrink:0; white-space:nowrap; overflow:hidden;
-  text-overflow:clip;
+  font-family:'Press Start 2P',monospace;
+  font-size:7px;
+  white-space:nowrap;
 }
-.let-rating-bar-wrap { flex:1; height:4px; background:var(--green-dark,#003d0f); }
-.let-rating-bar-fill { height:100%; transition:width .6s ease; }
+
 .let-rating-pct {
-  font-size:8px; color:var(--green-dim,#00aa2b);
-  width:30px; text-align:right; flex-shrink:0;
+  font-family:'Press Start 2P',monospace;
+  font-size:8px;
+  color:var(--yellow,#ffd700);
 }
-.let-rating-count { font-size:8px; color:var(--green-dark,#003d0f); flex-shrink:0; }
-.let-rating-none { font-size:9px; color:var(--green-dark,#003d0f); letter-spacing:2px; }
+
+.let-rating-bar-wrap {
+  width:100%;
+  height:5px;
+  background:rgba(0,255,65,.08);
+  overflow:hidden;
+  margin-bottom:5px;
+}
+
+.let-rating-bar-fill {
+  height:100%;
+  transition:width .6s ease;
+}
+
+.let-rating-meta {
+  font-size:8px;
+  color:var(--green-dark,#003d0f);
+  letter-spacing:1px;
+  line-height:1.7;
+}
+
+.let-rating-none {
+  font-size:9px;
+  color:var(--green-dark,#003d0f);
+  letter-spacing:2px;
+}
 
 /* ── HERO ── */
 .let-hero-terminal {
