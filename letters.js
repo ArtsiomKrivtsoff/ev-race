@@ -514,8 +514,13 @@ function shareTG(url) {
   if (menu) menu.remove();
 }
 
-// ── ТЕГИ ФОРМА ──
-var selectedTags = [];
+function toggleTagsCollapse() {
+  var section = document.getElementById('tagSelector');
+  var toggle = document.getElementById('tagsToggle');
+  if (!section || !toggle) return;
+  var isOpen = section.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
+}
 
 function selectTag(btn) {
   var tag = btn.dataset.tag;
@@ -556,6 +561,11 @@ function openModal() {
   if (fb) fb.value = '';
   if (fw) fw.checked = false;
   if (bc) { bc.textContent = '0 / 2000'; bc.className = 'form-counter'; }
+  // Сбросить состояние тегов
+  var tagSection = document.getElementById('tagSelector');
+  var tagToggle = document.getElementById('tagsToggle');
+  if (tagSection) tagSection.classList.remove('open');
+  if (tagToggle) tagToggle.classList.remove('open');
   if (tw) tw.style.display = 'none';
   if (sb) { sb.disabled = true; sb.style.display = 'block'; sb.textContent = 'ОТПРАВИТЬ ПИСЬМО →'; }
   if (fe) fe.style.display = 'none';
