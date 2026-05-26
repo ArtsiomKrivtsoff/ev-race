@@ -74,6 +74,15 @@ var activeTag = null;
 var PAGE_SIZE = 10;
 var visibleCount = PAGE_SIZE;
 
+// Якорная ссылка — определяем при загрузке
+var targetLetterId = null;
+(function() {
+  if (window.location.hash && window.location.hash.indexOf('#letter-') === 0) {
+    var n = parseInt(window.location.hash.replace('#letter-', ''));
+    if (!isNaN(n)) { targetLetterId = n; visibleCount = 9999; }
+  }
+})();
+
 async function loadLetters() {
   try {
     var results = await Promise.all([
@@ -327,16 +336,28 @@ function replyBlock(l) {
     var cls = OP_CLASS[r.operator] || '';
     var name = OP_NAMES[r.operator] || r.operator;
     var badge = '<span class="let-op-badge op-badge ' + cls + '" style="font-size:7px;padding:2px 6px;">' + escHtml(name) + '</span>';
+    var respTime = fmtResponseTime(r.replied_at, l.published_at);
     return '<div class="let-reply-block">'
       + '<div class="let-reply-hdr">'
       + '<span class="let-reply-hdr-label">ОТВЕТ ОПЕРАТОРА</span>'
       + '<span class="let-reply-hdr-sep"> ── </span>'
       + badge
+      + (respTime ? '<span class="let-reply-response-time">' + respTime + '</span>' : '')
       + '</div>'
       + '<div class="let-reply-body">' + escHtml(r.body).replace(/\n/g,'<br>') + '</div>'
       + '<div class="let-reply-date">' + (r.replied_at ? fmtDate(r.replied_at) : '') + '</div>'
       + '</div>';
   }).join('');
+}
+
+// Время ответа в днях
+function fmtResponseTime(repliedAt, publishedAt) {
+  if (!repliedAt || !publishedAt) return '';
+  var diff = Math.round((new Date(repliedAt) - new Date(publishedAt)) / 86400000);
+  if (diff <= 0) return '// ответ в тот же день';
+  if (diff === 1) return '// ответ через 1 день';
+  if (diff < 5) return '// ответ через ' + diff + ' дня';
+  return '// ответ через ' + diff + ' дней';
 }
 
 function renderLetters() {
@@ -363,7 +384,7 @@ function renderLetters() {
       + '<div class="let-head1">' + opBadge(l.operator) + tags + newBadge + '</div>'
       + '<div class="let-head2">'
       + '<div class="let-status">' + status + '</div>'
-      + '<button class="let-share-btn" title="Поделиться" aria-label="Поделиться">↗</button>'
+      + '<button class="let-share-btn" title="Поделиться" aria-label="Поделиться" onclick="shareMenu(this,' + lid + ')">↗</button>'
       + '</div>'
       + '<div class="let-body-wrap" data-id="' + lid + '">'
       + '<div class="let-body-inner">&laquo;' + escHtml(l.body).replace(/\n/g,'<br>') + '&raquo;</div>'
@@ -379,6 +400,11 @@ function renderLetters() {
 
   wrap.innerHTML = html;
   requestAnimationFrame(initCollapse);
+
+  // Якорный скролл
+  if (targetLetterId) {
+    requestAnimationFrame(function() { scrollToLetter(targetLetterId); });
+  }
 
   if (btn) {
     if (filtered.length > visibleCount) {
@@ -415,6 +441,78 @@ function toggleCollapse(id) {
 }
 
 function showMore() { visibleCount += PAGE_SIZE; renderLetters(); }
+
+// ── ЯКОРНЫЙ СКРОЛЛ ──
+function scrollToLetter(id) {
+  var el = document.getElementById('letter-' + id);
+  if (!el) return;
+  var wrap = el.querySelector('.let-body-wrap');
+  if (wrap && wrap.classList.contains('collapsed')) {
+    wrap.classList.remove('collapsed');
+    var rm = el.querySelector('.let-read-more');
+    if (rm) rm.textContent = 'СВЕРНУТЬ ↑';
+  }
+  setTimeout(function() {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.add('letter-highlight');
+    setTimeout(function() { el.classList.remove('letter-highlight'); }, 2500);
+  }, 150);
+}
+
+// ── SHARE ──
+function shareMenu(btn, letterId) {
+  var existing = document.querySelector('.let-share-menu');
+  if (existing) {
+    var same = existing.dataset.lid === String(letterId);
+    existing.remove();
+    if (same) return;
+  }
+  var url = location.origin + location.pathname + '#letter-' + letterId;
+  var menu = document.createElement('div');
+  menu.className = 'let-share-menu';
+  menu.dataset.lid = String(letterId);
+  menu.innerHTML =
+    '<button class="let-share-menu-item" onclick="copyLink(\'' + url.replace(/'/g,'%27') + '\',this)">// СКОПИРОВАТЬ ССЫЛКУ</button>' +
+    '<button class="let-share-menu-item" onclick="shareTG(\'' + url.replace(/'/g,'%27') + '\')">// ПОДЕЛИТЬСЯ В TELEGRAM</button>';
+  var head2 = btn.closest('.let-head2');
+  if (head2) { head2.style.position = 'relative'; head2.appendChild(menu); }
+  setTimeout(function() {
+    document.addEventListener('click', function close(e) {
+      if (!menu.contains(e.target) && e.target !== btn) {
+        menu.remove();
+        document.removeEventListener('click', close);
+      }
+    });
+  }, 10);
+}
+
+function copyLink(url, btn) {
+  url = decodeURIComponent(url);
+  function done() {
+    var orig = btn.textContent;
+    btn.textContent = '✓ СКОПИРОВАНО';
+    setTimeout(function() { btn.textContent = orig; }, 2000);
+  }
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(done).catch(function() { fallbackCopy(url); done(); });
+  } else { fallbackCopy(url); done(); }
+}
+
+function fallbackCopy(url) {
+  var ta = document.createElement('textarea');
+  ta.value = url; ta.style.cssText = 'position:fixed;opacity:0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+function shareTG(url) {
+  url = decodeURIComponent(url);
+  var text = 'Письмо операторам зарядных станций Беларуси — evrace.by';
+  window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text), '_blank');
+  var menu = document.querySelector('.let-share-menu');
+  if (menu) menu.remove();
+}
 
 // ── ТЕГИ ФОРМА ──
 var selectedTags = [];

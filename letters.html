@@ -148,13 +148,24 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 .letter-footer { display:flex; align-items:center; gap:14px; font-size:11px; color:#336633; flex-wrap:wrap; margin-top:10px; letter-spacing:1px; }
 .letter-author { color:var(--green,#00ff41); }
 
-/* Reply block */
-.let-reply-block { margin-top:12px; border:1px solid var(--green-dark,#003d0f); border-left:2px solid var(--yellow,#ffd700); background:rgba(0,26,0,.5); }
-.let-reply-hdr { display:flex; align-items:center; flex-wrap:wrap; gap:4px; padding:8px 12px 6px; border-bottom:1px solid var(--green-dark,#003d0f); }
-.let-reply-hdr-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:#556600; }
-.let-reply-hdr-sep { font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--green-dark,#003d0f); }
-.let-reply-body { padding:10px 12px 6px; font-size:clamp(11px,2vw,13px); color:var(--yellow,#ffd700); line-height:1.8; word-break:break-word; }
-.let-reply-date { padding:0 12px 8px; font-size:8px; color:var(--green-dark,#003d0f); letter-spacing:1px; }
+/* Reply block — визуально тяжелее */
+.let-reply-block { margin-top:16px; border:1px solid rgba(255,215,0,.2); border-left:3px solid var(--yellow,#ffd700); background:rgba(255,215,0,.025); }
+.let-reply-hdr { display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:10px 14px 8px; border-bottom:1px solid rgba(255,215,0,.12); }
+.let-reply-hdr-label { font-family:'Press Start 2P',monospace; font-size:8px; letter-spacing:3px; color:var(--yellow,#ffd700); }
+.let-reply-hdr-sep { font-family:'Share Tech Mono',monospace; font-size:9px; color:rgba(255,215,0,.25); }
+.let-reply-response-time { font-family:'Share Tech Mono',monospace; font-size:8px; color:rgba(255,215,0,.4); letter-spacing:1px; }
+.let-reply-body { padding:12px 14px 8px; font-size:clamp(12px,2vw,14px); color:var(--yellow,#ffd700); line-height:1.9; word-break:break-word; }
+.let-reply-date { padding:0 14px 10px; font-size:8px; color:rgba(255,215,0,.3); letter-spacing:1px; }
+
+/* Highlight — якорный скролл */
+@keyframes letter-pulse { 0%{box-shadow:0 0 0 2px var(--green,#00ff41);} 40%{box-shadow:0 0 24px 6px var(--green,#00ff41);} 100%{box-shadow:none;} }
+.letter-highlight { animation:letter-pulse 2.5s ease-out forwards; }
+
+/* Share меню */
+.let-share-menu { position:absolute; right:0; top:calc(100% + 4px); z-index:200; background:var(--card-bg,#0d1f0d); border:1px solid var(--green-dim,#00aa2b); min-width:210px; }
+.let-share-menu-item { display:block; width:100%; padding:9px 14px; font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:1px; color:var(--green-dim,#00aa2b); background:transparent; border:none; border-bottom:1px solid var(--green-dark,#003d0f); text-align:left; cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; }
+.let-share-menu-item:last-child { border-bottom:none; }
+.let-share-menu-item:hover { background:rgba(0,255,65,.06); color:var(--green,#00ff41); }
 
 /* How block */
 .how-block { border:1px solid var(--green-dark,#003d0f); background:var(--card-bg,#0d1f0d); padding:16px; margin-bottom:24px; }
@@ -242,6 +253,17 @@ body.theme-tesla-light .let-body-wrap.collapsed::after { background:linear-gradi
 /* .let-tag tesla-light — см. tesla-light.css */
 body.theme-tesla-light .let-reply-block { background:#f5f7f9; border-color:#d0d2d4; border-left-color:#0066aa; }
 body.theme-tesla-light .let-reply-hdr { border-bottom-color:#d0d2d4; }
+body.theme-tesla-light .let-reply-hdr-label { color:#0066aa; font-family:'Roboto',sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; }
+body.theme-tesla-light .let-reply-hdr-sep { color:#d0d2d4; }
+body.theme-tesla-light .let-reply-response-time { color:#bbb; font-family:'Roboto',sans-serif; font-size:11px; }
+body.theme-tesla-light .let-reply-body { color:#111; font-size:14px; font-family:'Roboto',sans-serif; }
+body.theme-tesla-light .let-reply-date { color:#bbb; font-size:11px; font-family:'Roboto',sans-serif; }
+body.theme-tesla-light .letter-highlight { animation:letter-pulse-light 2.5s ease-out forwards; }
+@keyframes letter-pulse-light { 0%{box-shadow:0 0 0 2px #0066aa;} 40%{box-shadow:0 0 20px 4px #0066aa;} 100%{box-shadow:none;} }
+body.theme-tesla-light .let-share-menu { background:#fff; border-color:#d0d2d4; }
+body.theme-tesla-light .let-share-menu-item { color:#555; border-bottom-color:#f0f0f0; font-family:'Roboto',sans-serif; font-size:13px; letter-spacing:0; }
+body.theme-tesla-light .let-share-menu-item:hover { background:rgba(0,0,0,.04); color:#111; }
+body.theme-tesla-light .let-reply-hdr { border-bottom-color:#d0d2d4; }
 body.theme-tesla-light .let-reply-hdr-label { color:#aaa; }
 body.theme-tesla-light .let-reply-hdr-sep { color:#d0d2d4; }
 body.theme-tesla-light .let-reply-body { color:#111; font-size:14px; }
@@ -300,6 +322,17 @@ body.theme-tesla-dark .let-read-more:hover { color:#aaa; }
 body.theme-tesla-dark .let-body-wrap.collapsed::after { background:linear-gradient(to bottom, transparent, #1e1e1e); }
 /* .let-tag tesla-dark — см. tesla-dark.css */
 body.theme-tesla-dark .let-reply-block { background:#1a1a1a; border-color:#2a2a2a; border-left-color:#005588; }
+body.theme-tesla-dark .let-reply-hdr { border-bottom-color:#2a2a2a; }
+body.theme-tesla-dark .let-reply-hdr-label { color:#0088cc; font-family:'Roboto',sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; }
+body.theme-tesla-dark .let-reply-hdr-sep { color:#2a2a2a; }
+body.theme-tesla-dark .let-reply-response-time { color:#333; font-family:'Roboto',sans-serif; font-size:11px; }
+body.theme-tesla-dark .let-reply-body { color:#aaa; font-size:14px; font-family:'Roboto',sans-serif; }
+body.theme-tesla-dark .let-reply-date { color:#3a3a3a; font-size:11px; font-family:'Roboto',sans-serif; }
+body.theme-tesla-dark .letter-highlight { animation:letter-pulse-dark 2.5s ease-out forwards; }
+@keyframes letter-pulse-dark { 0%{box-shadow:0 0 0 2px #005588;} 40%{box-shadow:0 0 20px 4px #005588;} 100%{box-shadow:none;} }
+body.theme-tesla-dark .let-share-menu { background:#1e1e1e; border-color:#444; }
+body.theme-tesla-dark .let-share-menu-item { color:#666; border-bottom-color:#2a2a2a; font-family:'Roboto',sans-serif; font-size:13px; letter-spacing:0; }
+body.theme-tesla-dark .let-share-menu-item:hover { background:rgba(255,255,255,.04); color:#ccc; }
 body.theme-tesla-dark .let-reply-hdr { border-bottom-color:#2a2a2a; }
 body.theme-tesla-dark .let-reply-hdr-label { color:#3a3a3a; }
 body.theme-tesla-dark .let-reply-hdr-sep { color:#2a2a2a; }
