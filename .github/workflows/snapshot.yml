@@ -1,0 +1,26 @@
+name: EV RACE Nightly Snapshot
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 00:00 UTC = 03:00 Минск
+  workflow_dispatch:       # ручной запуск для тестирования
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger snapshot Edge Function
+        run: |
+          response=$(curl -s -o response.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.SNAPSHOT_CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "${{ secrets.SUPABASE_URL }}/functions/v1/create-snapshot")
+
+          echo "HTTP status: $response"
+          cat response.json
+
+          if [ "$response" != "200" ]; then
+            echo "Snapshot failed with status $response"
+            exit 1
+          fi
