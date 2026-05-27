@@ -431,11 +431,11 @@ function startRoundTimer(){
   _roundTimerInterval=setInterval(tick,1000);
 }
 function calcTempo(data){
-  // темп = totalSt[op] / кол-во раундов где оператор был активен
-  const active={};ALL_OPS.forEach(op=>active[op]=0);
-  Object.values(data.byRound).forEach(rd=>{Object.keys(rd).forEach(op=>{if(rd[op].stations>0)active[op]++;});});
+  const completedRounds=data.curRound-1;
   const tempo={};
-  ALL_OPS.forEach(op=>{tempo[op]=active[op]>0?(data.totalSt[op]/active[op]):0;});
+  ALL_OPS.forEach(op=>{
+    tempo[op]=completedRounds>0?(data.totalSt[op]/completedRounds):0;
+  });
   return tempo;
 }
 function renderStandings(data){
