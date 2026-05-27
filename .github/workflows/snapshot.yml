@@ -13,7 +13,6 @@ jobs:
         run: |
           response=$(curl -s -o response.json -w "%{http_code}" \
             -X POST \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "x-cron-secret: ${{ secrets.SNAPSHOT_CRON_SECRET }}" \
             -H "Content-Type: application/json" \
             "${{ secrets.SUPABASE_URL }}/functions/v1/create-snapshot")
