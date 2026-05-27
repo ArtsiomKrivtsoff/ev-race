@@ -14,12 +14,8 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://evrace.by/operators/forevo.html">
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"forEVo","url":"https://evrace.by/operators/forevo.html","description":"Оператор зарядных станций для электромобилей в Беларуси"}</script>
 
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization","name":"forEVo","url":"https://evrace.by/operators/forevo.html","description":"Оператор зарядных станций для электромобилей в Беларуси"}
-</script>
-
-<!-- Yandex.Metrika -->
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
 ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
@@ -27,126 +23,28 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 
 <link id="theme-css" rel="stylesheet" href="../CSS/arcade.css?v=2">
+<link rel="stylesheet" href="../CSS/operator.css?v=1">
 <link rel="prefetch" href="../CSS/tesla-light.css">
 <link rel="prefetch" href="../CSS/tesla-dark.css">
-
 <style>
+:root { --op-color: #b44fff; }
 #scroll-top{position:fixed;bottom:20px;right:16px;z-index:500;width:44px;height:44px;border:1px solid var(--green,#00ff41);background:rgba(0,255,65,.12);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:20px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;}
 #scroll-top.visible{display:flex;}
 #scroll-top:hover{background:rgba(0,255,65,.25);}
-body.theme-tesla-light #scroll-top{border-color:#aaa;background:rgba(0,0,0,.08);color:#333;}
-body.theme-tesla-dark #scroll-top{border-color:#444;background:rgba(255,255,255,.1);color:#ccc;}
-
-/* ── DROPDOWN ── */
-.nav-dropdown-wrap{position:relative;display:inline-flex;align-items:stretch;}
-.nav-dropdown-wrap .nav-link{cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px;}
-.nav-dropdown-wrap .nav-link::after{content:'▾';font-size:8px;opacity:.7;}
-.dropdown-menu{display:none;position:absolute;top:100%;left:0;background:#000;border:1px solid var(--green,#00ff41);border-top:none;z-index:300;min-width:200px;}
-.dropdown-menu.open{display:block;}
-.dropdown-item{display:flex;align-items:center;gap:9px;padding:9px 14px;color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:9px;text-decoration:none;border-bottom:1px solid rgba(0,255,65,.12);white-space:nowrap;}
-.dropdown-item:last-child{border-bottom:none;}
-.dropdown-item:hover{background:rgba(0,255,65,.08);}
-.dropdown-item.op-active{color:#fff;}
-.dropdown-item .d-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-
-/* ── MOBILE ACCORDION ── */
-.mob-acc-toggle{cursor:pointer;display:flex;align-items:center;justify-content:space-between;width:100%;}
-.mob-acc-arrow{transition:transform .2s;display:inline-block;}
-.mob-acc-toggle.open .mob-acc-arrow{transform:rotate(180deg);}
-.mob-acc-list{display:none;padding-left:12px;border-left:2px solid rgba(0,255,65,.25);margin:4px 0;}
-.mob-acc-list.open{display:block;}
-.mob-acc-list a{display:flex;align-items:center;gap:8px;padding:8px 0;color:rgba(0,255,65,.7);font-family:'Share Tech Mono',monospace;font-size:9px;text-decoration:none;border-bottom:1px solid rgba(0,255,65,.08);}
-.mob-acc-list a:last-child{border-bottom:none;}
-.mob-acc-list a:hover{color:var(--green,#00ff41);}
-.mob-acc-list a.op-active{color:#fff;}
-.mob-acc-list a .d-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-
-/* ── BREADCRUMB ── */
-.breadcrumb{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,65,.45);padding:6px 0 14px;}
-.breadcrumb a{color:rgba(0,255,65,.45);text-decoration:none;}
-.breadcrumb a:hover{color:var(--green,#00ff41);}
-.breadcrumb .bc-sep{color:rgba(0,255,65,.25);}
-.breadcrumb .bc-cur{color:var(--green,#00ff41);}
-
-/* ── OPERATOR HERO ── */
-.op-hero{display:flex;align-items:center;gap:12px;margin-bottom:8px;padding-top:4px;}
-.op-hero-dot{width:16px;height:16px;border-radius:50%;background:#b44fff;flex-shrink:0;}
-.op-hero-name{font-family:'Press Start 2P',monospace;font-size:18px;color:#fff;letter-spacing:2px;}
-
-/* ── PLACE BADGE ── */
-.place-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(180,79,255,.12);border:1px solid rgba(180,79,255,.4);color:#d98eff;font-family:'Share Tech Mono',monospace;font-size:9px;padding:4px 12px;border-radius:2px;margin-bottom:18px;}
-
-/* ── SECTION HEAD ── */
-.op-sec{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,65,.55);border-bottom:1px solid rgba(0,255,65,.15);padding-bottom:6px;margin:22px 0 14px;letter-spacing:2px;}
-
-/* ── STAT CARDS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:4px;}
-.stat-card{background:rgba(0,255,65,.04);border:1px solid rgba(0,255,65,.2);border-radius:3px;padding:12px 14px;}
-.stat-card .sc-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;color:rgba(0,255,65,.5);margin-bottom:7px;letter-spacing:1px;}
-.stat-card .sc-val{font-family:'Press Start 2P',monospace;font-size:22px;color:var(--green,#00ff41);}
-.stat-card .sc-sub{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(0,255,65,.45);margin-top:5px;}
-.sc-bar{height:4px;background:rgba(0,255,65,.12);border-radius:0;margin-top:8px;overflow:hidden;}
-.sc-bar-fill{height:100%;background:#b44fff;}
-
-/* ── MOMENTUM ── */
-.mom-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;}
-.mom-card{background:rgba(0,255,65,.04);border:1px solid rgba(0,255,65,.18);border-radius:3px;padding:10px 12px;}
-.mom-card .mc-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;color:rgba(0,255,65,.45);margin-bottom:5px;}
-.mom-card .mc-val{font-family:'Press Start 2P',monospace;font-size:18px;color:var(--green,#00ff41);}
-.mom-card .mc-sub{font-family:'Share Tech Mono',monospace;font-size:7px;margin-top:4px;}
-.t-up{color:#00ff41;}
-.t-dn{color:#ff4141;}
-.t-dim{color:rgba(0,255,65,.45);}
-
-/* ── FORECAST ── */
-.forecast-box{background:rgba(0,255,65,.04);border:1px solid rgba(0,255,65,.18);border-radius:3px;padding:14px 16px;}
-.forecast-box .fb-hint{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(0,255,65,.45);margin-bottom:6px;letter-spacing:1px;}
-.forecast-box .fb-date{font-family:'Press Start 2P',monospace;font-size:13px;color:var(--green,#00ff41);margin:6px 0 6px;word-break:break-word;line-height:1.6;}
-.fb-ok{font-family:'Share Tech Mono',monospace;font-size:9px;color:#00ff41;}
-.fb-fail{font-family:'Share Tech Mono',monospace;font-size:9px;color:#ff4141;}
-.fb-pace{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(0,255,65,.5);margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,255,65,.12);}
-
-/* ── CHARTS ── */
-.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:4px;}
-.chart-box{background:rgba(0,255,65,.03);border:1px solid rgba(0,255,65,.18);border-radius:3px;padding:12px;}
-.chart-box .cb-ttl{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(0,255,65,.45);margin-bottom:10px;letter-spacing:1px;}
-.ch-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
-.ch-legend span{display:flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:7px;color:rgba(0,255,65,.65);}
-.ch-legend .cl-sq{width:8px;height:8px;border-radius:1px;flex-shrink:0;}
-
-/* ── TOP TABLE ── */
-.top-tbl{width:100%;border-collapse:collapse;font-family:'Share Tech Mono',monospace;font-size:8px;}
-.top-tbl th{color:rgba(0,255,65,.45);text-align:left;padding:6px 8px;border-bottom:1px solid rgba(0,255,65,.15);white-space:nowrap;}
-.top-tbl td{color:var(--green,#00ff41);padding:7px 8px;border-bottom:1px solid rgba(0,255,65,.07);vertical-align:middle;}
-.top-tbl tr:hover td{background:rgba(0,255,65,.04);}
-.pw-pill{background:rgba(180,79,255,.18);border:1px solid rgba(180,79,255,.45);color:#d98eff;padding:2px 7px;border-radius:2px;font-size:8px;white-space:nowrap;}
-
-/* ── FEED ── */
-.feed-search{background:rgba(0,255,65,.04);border:1px solid rgba(0,255,65,.25);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:10px;padding:7px 10px;border-radius:3px;width:100%;outline:none;margin-bottom:10px;box-sizing:border-box;}
-.feed-search::placeholder{color:rgba(0,255,65,.28);}
-.feed-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(0,255,65,.07);font-family:'Share Tech Mono',monospace;font-size:8px;}
-.feed-row .fr-city{color:var(--green,#00ff41);flex:0 0 72px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.feed-row .fr-loc{color:rgba(0,255,65,.55);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
-.feed-row .fr-date{color:rgba(0,255,65,.35);flex:0 0 62px;text-align:right;white-space:nowrap;}
-.feed-row .fr-new{background:rgba(0,255,65,.12);border:1px solid rgba(0,255,65,.35);color:var(--green,#00ff41);font-size:7px;padding:1px 5px;border-radius:2px;flex-shrink:0;}
-.show-all-btn{background:transparent;border:1px solid var(--green,#00ff41);color:var(--green,#00ff41);font-family:'Press Start 2P',monospace;font-size:7px;padding:9px 16px;cursor:pointer;border-radius:3px;display:block;margin:14px auto 0;width:100%;}
-.show-all-btn:hover{background:rgba(0,255,65,.08);}
-.op-loading{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(0,255,65,.4);padding:12px 0;}
 </style>
 </head>
 <body>
-
 <div class="container">
 
-  <!-- ═══ СТАТУС-БАР ═══ -->
   <div class="statusbar" id="statusbar">
     <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
       <span></span><span></span><span></span>
     </button>
     <div class="nav-desktop">
       <a class="nav-link" href="/">ГЛАВНАЯ</a>
-      <div class="nav-dropdown-wrap" id="dropWrap">
-        <span class="nav-link active" onclick="toggleDrop(event)">ТУРНИРНАЯ ТАБЛИЦА</span>
+      <div class="nav-dropdown-wrap">
+        <a class="nav-link active" href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+        <button class="nav-drop-btn" onclick="toggleDrop(event)" aria-label="Операторы">▾</button>
         <div class="dropdown-menu" id="dropMenu">
           <a class="dropdown-item" href="/operators/batteryfly.html"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
           <a class="dropdown-item op-active" href="/operators/forevo.html"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
@@ -164,18 +62,17 @@ body.theme-tesla-dark #scroll-top{border-color:#444;background:rgba(255,255,255,
       <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
       <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
     </div>
-    <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Отключает сканлайны и свечение текста — для лучшей читаемости">
+    <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Отключает сканлайны и свечение текста">
       <span class="fx-seg fx-on active" data-state="on">ЭФФЕКТЫ</span>
       <span class="fx-seg fx-off"       data-state="off">ЧЁТКО</span>
     </button>
   </div>
 
-  <!-- ═══ МОБИЛЬНОЕ МЕНЮ ═══ -->
   <div class="nav-mobile-drop" id="mobileMenu">
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
-    <div class="nav-mobile-link mob-acc-toggle" id="mobToggle" onclick="toggleMobAcc()">
-      <span>ТУРНИРНАЯ ТАБЛИЦА</span>
-      <span class="mob-acc-arrow">▾</span>
+    <div class="mob-nav-row">
+      <a class="nav-mobile-link" href="/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <button class="mob-acc-btn" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Список операторов">▾</button>
     </div>
     <div class="mob-acc-list" id="mobAccList">
       <a href="/operators/batteryfly.html" onclick="closeBurger()"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
@@ -191,19 +88,15 @@ body.theme-tesla-dark #scroll-top{border-color:#444;background:rgba(255,255,255,
 
   <div class="page-wrap">
 
-    <!-- ═══ HERO ═══ -->
     <div class="hero">
       <div class="header-subtitle">#ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
       <div class="hero-title">EV RACE<span class="cursor">_</span></div>
       <div class="header-year">БЕЛАРУСЬ 2026</div>
     </div>
 
-    <!-- ═══ ОПЕРАТОР ═══ -->
     <div class="breadcrumb">
-      <a href="/">ГЛАВНАЯ</a>
-      <span class="bc-sep">/</span>
-      <a href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
-      <span class="bc-sep">/</span>
+      <a href="/">ГЛАВНАЯ</a><span class="bc-sep">/</span>
+      <a href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a><span class="bc-sep">/</span>
       <span class="bc-cur">FOREVO</span>
     </div>
 
@@ -212,54 +105,47 @@ body.theme-tesla-dark #scroll-top{border-color:#444;background:rgba(255,255,255,
       <span class="op-hero-name">FOREVO</span>
     </div>
 
-    <div id="place-wrap"><div class="op-loading">ЗАГРУЗКА...</div></div>
+    <div class="op-badges" id="op-badges"><span class="op-loading">ЗАГРУЗКА...</span></div>
 
-    <!-- СТАТИСТИКА -->
-    <div class="op-sec">▶ СТАТИСТИКА</div>
-    <div id="stats-wrap"><div class="op-loading">ЗАГРУЗКА...</div></div>
+    <div class="section-head">▶ СТАТИСТИКА</div>
+    <div class="op-stats-grid" id="stats-wrap"><div class="op-loading">ЗАГРУЗКА...</div></div>
 
-    <!-- MOMENTUM -->
-    <div class="op-sec">▶ MOMENTUM — ДИНАМИКА</div>
-    <div id="mom-wrap"><div class="op-loading">ЗАГРУЗКА...</div></div>
+    <div class="section-head">▶ MOMENTUM — ДИНАМИКА</div>
+    <div class="op-mom-grid" id="mom-wrap"><div class="op-loading">ЗАГРУЗКА...</div></div>
 
-    <!-- ПРОГНОЗ -->
-    <div class="op-sec">▶ ПРОГНОЗ ДОСТИЖЕНИЯ ЦЕЛИ</div>
+    <div class="section-head">▶ ПРОГНОЗ ДОСТИЖЕНИЯ ЦЕЛИ</div>
     <div id="fc-wrap"><div class="op-loading">ЗАГРУЗКА...</div></div>
 
-    <!-- РАСПРЕДЕЛЕНИЕ -->
-    <div class="op-sec">▶ РАСПРЕДЕЛЕНИЕ СТАНЦИЙ</div>
-    <div class="charts-grid">
-      <div class="chart-box">
-        <div class="cb-ttl">ТИП СТАНЦИЙ</div>
-        <div style="position:relative;height:150px"><canvas id="ch-type" role="img" aria-label="Типы станций forEVo">Данные загружаются</canvas></div>
-        <div class="ch-legend" id="leg-type"></div>
+    <div class="section-head">▶ РАСПРЕДЕЛЕНИЕ СТАНЦИЙ</div>
+    <div class="op-charts-grid">
+      <div class="op-chart-box">
+        <div class="op-chart-title">ТИП СТАНЦИЙ</div>
+        <div style="position:relative;height:180px"><canvas id="ch-type" role="img" aria-label="Типы станций forEVo">Данные загружаются</canvas></div>
+        <div class="op-chart-legend" id="leg-type"></div>
       </div>
-      <div class="chart-box">
-        <div class="cb-ttl">ТОП ГОРОДОВ</div>
-        <div id="ch-cities-wrap" style="position:relative;min-height:150px"><canvas id="ch-cities" role="img" aria-label="Топ городов по числу станций forEVo">Данные загружаются</canvas></div>
+      <div class="op-chart-box">
+        <div class="op-chart-title">ТОП-3 ГОРОДА</div>
+        <div style="position:relative;height:180px"><canvas id="ch-cities" role="img" aria-label="Топ-3 города по числу станций forEVo">Данные загружаются</canvas></div>
       </div>
-      <div class="chart-box">
-        <div class="cb-ttl">МОЩНОСТЬ (КВТ)</div>
-        <div style="position:relative;height:150px"><canvas id="ch-power" role="img" aria-label="Распределение по мощности станций forEVo">Данные загружаются</canvas></div>
+      <div class="op-chart-box">
+        <div class="op-chart-title">МОЩНОСТЬ (КВТ)</div>
+        <div style="position:relative;height:180px"><canvas id="ch-power" role="img" aria-label="Распределение станций forEVo по мощности">Данные загружаются</canvas></div>
       </div>
     </div>
 
-    <!-- ТОП-5 -->
-    <div class="op-sec">▶ ТОП-5 САМЫХ МОЩНЫХ СТАНЦИЙ</div>
-    <div style="overflow-x:auto">
-      <table class="top-tbl">
+    <div class="section-head">▶ ТОП-5 САМЫХ МОЩНЫХ СТАНЦИЙ</div>
+    <div style="overflow-x:auto;margin-bottom:var(--s-5)">
+      <table class="op-top-table">
         <thead><tr><th>#</th><th>НАЗВАНИЕ / АДРЕС</th><th>ГОРОД</th><th>МОЩНОСТЬ</th><th>РАЗЪЁМЫ</th></tr></thead>
         <tbody id="top-tbody"><tr><td colspan="5" class="op-loading">ЗАГРУЗКА...</td></tr></tbody>
       </table>
     </div>
 
-    <!-- ЛЕНТА -->
-    <div class="op-sec">▶ ЛЕНТА СТАНЦИЙ</div>
-    <input class="feed-search" id="feed-search" placeholder="ПОИСК ПО ГОРОДУ / АДРЕСУ / НАЗВАНИЮ..." oninput="filterFeed()">
+    <div class="section-head">▶ ЛЕНТА СТАНЦИЙ</div>
+    <input class="op-feed-search" id="feed-search" placeholder="ПОИСК ПО ГОРОДУ / АДРЕСУ / НАЗВАНИЮ..." oninput="filterFeed()">
     <div id="feed-list"></div>
-    <button class="show-all-btn" id="show-all-btn" onclick="showAll()" style="display:none">▼ ПОКАЗАТЬ ВСЕ</button>
+    <button class="op-show-all" id="show-all-btn" onclick="showAll()" style="display:none">▼ ПОКАЗАТЬ ВСЕ</button>
 
-    <!-- ═══ ФУТЕР (идентичен на всех страницах) ═══ -->
     <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
 
     <div class="author-section">
@@ -300,26 +186,21 @@ body.theme-tesla-dark #scroll-top{border-color:#444;background:rgba(255,255,255,
 
   </div>
 </div>
-
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-/* ═══ CONFIG ═══ */
 const SURL='https://uvrboxrddqlasgrnnnne.supabase.co';
 const SKEY='sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
 const OP='forevo';
 const OP_COLOR='#b44fff';
 const PAGE_KEY='operator_forevo';
 const ALL_OPS=['batteryfly','forevo','zaryadka','united','csms'];
-const OP_COLORS={batteryfly:'#005EEB',forevo:'#b44fff',zaryadka:'#00cfff',united:'#F5821F',csms:'#FF6B6B'};
-const OP_NAMES={batteryfly:'BatteryFly',forevo:'forEVo',zaryadka:'Zaryadka',united:'United Company',csms:'ЦСМС'};
 const PTS=[5,4,3,2,1];
 const TOTAL_ROUNDS=53;
 const FINAL=new Date('2026-12-31T23:59:59');
-
-/* ═══ THEME ═══ */
 const THEMES=['arcade','tesla-light','tesla-dark'];
+
 function setTheme(t){
   document.getElementById('theme-css').href='../CSS/'+t+'.css?v=2';
   localStorage.setItem('ev_race_theme',t);
@@ -348,365 +229,269 @@ function toggleFx(){
       document.querySelector('.fx-seg.fx-off')?.classList.add('active');
     });
   }
+  const sb=document.getElementById('statusbar');
+  if(sb)document.documentElement.style.setProperty('--statusbar-h',sb.offsetHeight+'px');
 })();
 
-/* ═══ NAV ═══ */
 function toggleBurger(){
-  const btn=document.getElementById('burgerBtn');
-  const menu=document.getElementById('mobileMenu');
-  const open=menu.classList.toggle('open');
-  btn.classList.toggle('open',open);
+  const btn=document.getElementById('burgerBtn'),menu=document.getElementById('mobileMenu');
+  const open=menu.classList.toggle('open');btn.classList.toggle('open',open);
 }
 function closeBurger(){
   document.getElementById('mobileMenu').classList.remove('open');
   document.getElementById('burgerBtn').classList.remove('open');
 }
 function toggleDrop(e){
-  e.stopPropagation();
+  e.preventDefault();e.stopPropagation();
   document.getElementById('dropMenu').classList.toggle('open');
 }
 function toggleMobAcc(){
-  document.getElementById('mobToggle').classList.toggle('open');
+  document.getElementById('mobAccBtn').classList.toggle('open');
   document.getElementById('mobAccList').classList.toggle('open');
 }
-document.addEventListener('click',function(e){
-  const menu=document.getElementById('mobileMenu');
-  const btn=document.getElementById('burgerBtn');
-  if(menu&&menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target)){
-    menu.classList.remove('open');btn.classList.remove('open');
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('mobileMenu'),bbtn=document.getElementById('burgerBtn');
+  if(menu?.classList.contains('open')&&!menu.contains(e.target)&&!bbtn.contains(e.target)){
+    menu.classList.remove('open');bbtn.classList.remove('open');
   }
-  const dw=document.getElementById('dropWrap');
   const dm=document.getElementById('dropMenu');
-  if(dm&&dm.classList.contains('open')&&!dw.contains(e.target))dm.classList.remove('open');
+  if(dm?.classList.contains('open')&&!dm.closest('.nav-dropdown-wrap').contains(e.target))dm.classList.remove('open');
 });
-window.addEventListener('scroll',()=>{
-  const b=document.getElementById('scroll-top');
-  if(b)b.classList.toggle('visible',window.scrollY>300);
-});
+window.addEventListener('scroll',()=>document.getElementById('scroll-top')?.classList.toggle('visible',window.scrollY>300));
 
-/* ═══ DATES ═══ */
-const MONTHS_SHORT=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
-const MONTHS_LONG=['ЯНВАРЯ','ФЕВРАЛЯ','МАРТА','АПРЕЛЯ','МАЯ','ИЮНЯ','ИЮЛЯ','АВГУСТА','СЕНТЯБРЯ','ОКТЯБРЯ','НОЯБРЯ','ДЕКАБРЯ'];
-function fmtDate(d){
-  if(!d)return'—';
-  return d.getDate()+' '+MONTHS_LONG[d.getMonth()]+' '+d.getFullYear();
-}
-function weeksFromJan1(){
-  return(Date.now()-new Date('2026-01-01T00:00:00').getTime())/(7*24*3600*1000);
-}
+const ML=['ЯНВАРЯ','ФЕВРАЛЯ','МАРТА','АПРЕЛЯ','МАЯ','ИЮНЯ','ИЮЛЯ','АВГУСТА','СЕНТЯБРЯ','ОКТЯБРЯ','НОЯБРЯ','ДЕКАБРЯ'];
+function fmtDate(d){return d.getDate()+' '+ML[d.getMonth()]+' '+d.getFullYear();}
+function weeksFromJan1(){return(Date.now()-new Date('2026-01-01').getTime())/(7*24*3600*1000);}
 function getRoundForDate(ds){
   const d=new Date(ds+'T12:00:00');
-  if(d<new Date('2026-01-01T00:00:00'))return 0;
+  if(d<new Date('2026-01-01'))return 0;
   if(d<=new Date('2026-01-02T23:59:59'))return 1;
-  const r2=new Date('2026-01-03T00:00:00');
-  const diff=Math.floor((d-r2)/(24*3600*1000));
-  const rn=Math.floor(diff/7)+2;
-  return Math.max(1,Math.min(rn,TOTAL_ROUNDS));
+  const diff=Math.floor((d-new Date('2026-01-03'))/(24*3600*1000));
+  return Math.max(1,Math.min(Math.floor(diff/7)+2,TOTAL_ROUNDS));
 }
-function getCurrentRound(){
-  return getRoundForDate(new Date().toISOString().split('T')[0]);
-}
+function getCurrentRound(){return getRoundForDate(new Date().toISOString().split('T')[0]);}
 
-/* ═══ FETCH ═══ */
 async function fetchAllStations(){
-  const url=SURL+'/rest/v1/stations?select=*&operator=in.(batteryfly,forevo,zaryadka,united,csms)&order=station_date.asc,station_time.asc.nullslast';
-  const r=await fetch(url,{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
+  const r=await fetch(SURL+'/rest/v1/stations?select=*&operator=in.(batteryfly,forevo,zaryadka,united,csms)&order=station_date.asc,station_time.asc.nullslast',
+    {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
   return r.json();
 }
 async function fetchGoal(){
   try{
-    const r=await fetch(SURL+'/rest/v1/rpc/get_stations_summary',{
-      method:'POST',
-      headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json'},
-      body:JSON.stringify({})
-    });
-    const data=await r.json();
-    if(Array.isArray(data)){
-      const row=data.find(d=>d.operator===OP);
-      return row?.goal||null;
-    }
-    return null;
-  }catch(e){return null;}
+    const r=await fetch(SURL+'/rest/v1/rpc/get_stations_summary',
+      {method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json'},body:JSON.stringify({})});
+    const d=await r.json();
+    return Array.isArray(d)?d.find(x=>x.operator===OP)?.goal||null:null;
+  }catch{return null;}
 }
 
-/* ═══ TOURNAMENT STANDINGS ═══ */
-function calcStandings(allStations){
-  const curRound=getCurrentRound();
-  const byRound={};
-  allStations.forEach(s=>{
+function calcStandings(all){
+  const cur=getCurrentRound(),byR={};
+  all.forEach(s=>{
     const rn=getRoundForDate(s.station_date);if(rn<1)return;
-    const cnt=s.count||1;
-    const pw=((s.dc_power||0)+(s.ac_power||0))*cnt;
-    if(!byRound[rn])byRound[rn]={};
-    if(!byRound[rn][s.operator])byRound[rn][s.operator]={stations:0,power:0,lastTime:s.station_time||null};
-    byRound[rn][s.operator].stations+=cnt;
-    byRound[rn][s.operator].power+=pw;
-    if(s.station_time&&(!byRound[rn][s.operator].lastTime||s.station_time>byRound[rn][s.operator].lastTime))
-      byRound[rn][s.operator].lastTime=s.station_time;
+    const cnt=s.count||1,pw=((s.dc_power||0)+(s.ac_power||0))*cnt;
+    if(!byR[rn])byR[rn]={};
+    if(!byR[rn][s.operator])byR[rn][s.operator]={st:0,pw:0,lt:s.station_time||null};
+    byR[rn][s.operator].st+=cnt;byR[rn][s.operator].pw+=pw;
+    if(s.station_time&&(!byR[rn][s.operator].lt||s.station_time>byR[rn][s.operator].lt))byR[rn][s.operator].lt=s.station_time;
   });
-  const stPts={};ALL_OPS.forEach(op=>stPts[op]=0);
-  for(let rn=1;rn<curRound;rn++){
-    const rd=byRound[rn]||{};
-    const sorted=Object.entries(rd).sort((a,b)=>{
-      if(b[1].stations!==a[1].stations)return b[1].stations-a[1].stations;
-      if(a[1].lastTime&&b[1].lastTime)return a[1].lastTime<b[1].lastTime?-1:1;
-      if(a[1].lastTime)return -1;if(b[1].lastTime)return 1;return 0;
+  const stP={},pwP={},stW={},pwW={};
+  ALL_OPS.forEach(op=>{stP[op]=0;pwP[op]=0;stW[op]=0;pwW[op]=0;});
+  for(let rn=1;rn<cur;rn++){
+    const rd=byR[rn]||{};
+    const bySt=Object.entries(rd).sort((a,b)=>{
+      if(b[1].st!==a[1].st)return b[1].st-a[1].st;
+      if(a[1].lt&&b[1].lt)return a[1].lt<b[1].lt?-1:1;
+      return a[1].lt?-1:b[1].lt?1:0;
     });
-    sorted.forEach(([op],i)=>{stPts[op]+=(PTS[i]||0);});
+    const byPw=Object.entries(rd).sort((a,b)=>b[1].pw-a[1].pw);
+    bySt.forEach(([op,d],i)=>{stP[op]+=(PTS[i]||0);if(i===0&&d.st>0)stW[op]++;});
+    byPw.forEach(([op,d],i)=>{pwP[op]+=(PTS[i]||0);if(i===0&&d.pw>0)pwW[op]++;});
   }
-  const ranked=[...ALL_OPS].sort((a,b)=>stPts[b]-stPts[a]);
-  return{place:ranked.indexOf(OP)+1,pts:stPts[OP]};
+  const ranked=[...ALL_OPS].sort((a,b)=>stP[b]-stP[a]);
+  return{place:ranked.indexOf(OP)+1,pts:stP[OP],stW:stW[OP],pwW:pwW[OP]};
 }
 
-/* ═══ METRICS ═══ */
-function stationsInDays(stations,days){
-  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-days);
-  return stations.reduce((s,st)=>new Date(st.station_date)>=cutoff?s+(st.count||1):s,0);
+function totalCount(st){return st.reduce((s,x)=>s+(x.count||1),0);}
+function stationsInDays(st,days){
+  const cut=new Date();cut.setDate(cut.getDate()-days);
+  return st.reduce((s,x)=>new Date(x.station_date)>=cut?s+(x.count||1):s,0);
 }
-function totalCount(stations){
-  return stations.reduce((s,st)=>s+(st.count||1),0);
-}
-function calcPace(stations){
-  const w=weeksFromJan1();
-  return w>0?totalCount(stations)/w:0;
-}
-function goalForecast(stations,goal){
-  const total=totalCount(stations);
-  if(total>=goal)return{done:true};
-  const pace=calcPace(stations);
-  if(pace<=0)return{done:false,date:null,onTrack:false};
-  const weeksNeeded=(goal-total)/pace;
-  const d=new Date();d.setDate(d.getDate()+Math.round(weeksNeeded*7));
+function calcPace(st){const w=weeksFromJan1();return w>0?totalCount(st)/w:0;}
+function goalForecast(st,goal){
+  const tot=totalCount(st);if(tot>=goal)return{done:true};
+  const pace=calcPace(st);if(pace<=0)return{done:false,date:null,onTrack:false};
+  const d=new Date();d.setDate(d.getDate()+Math.round((goal-tot)/pace*7));
   return{done:false,date:d,onTrack:d<=FINAL};
 }
-function minPaceNeeded(stations,goal){
-  const remaining=goal-totalCount(stations);
-  if(remaining<=0)return 0;
-  const weeksLeft=Math.max(0,(FINAL-Date.now())/(7*24*3600*1000));
-  return weeksLeft>0?remaining/weeksLeft:Infinity;
+
+function renderBadges(s){
+  const lbl=['','★ ','▲ ','▲ ','',''];
+  document.getElementById('op-badges').innerHTML=
+    `<span class="op-badge-place">${lbl[s.place]||''}${s.place}-Е МЕСТО · ${s.pts} ОЧКОВ</span>`+
+    `<span class="op-badge-wins stations">★ ${s.stW} ПОБЕД ПО СТАНЦИЯМ</span>`+
+    `<span class="op-badge-wins power">⚡ ${s.pwW} ПОБЕД ПО МОЩНОСТИ</span>`;
 }
 
-/* ═══ RENDER ═══ */
-function renderPlace(place,pts){
-  const icons=['','★ ','▲ ','▲ ','  ','  '];
-  document.getElementById('place-wrap').innerHTML=
-    `<div class="place-badge">${icons[place]||''}${place}-Е МЕСТО · ${pts} ОЧКОВ</div>`;
-}
-
-function renderStats(stations,goal){
-  const total=totalCount(stations);
-  const pct=goal?Math.round(total/goal*100):0;
-  const dcCount=stations.filter(s=>s.station_type==='DC'||s.station_type==='ACDC').reduce((s,st)=>s+(st.count||1),0);
-  const mw=stations.reduce((s,st)=>s+((st.dc_power||0)+(st.ac_power||0))*(st.count||1),0)/1000;
+function renderStats(st,goal){
+  const tot=totalCount(st);
+  const pct=goal?Math.round(tot/goal*100):0;
+  const mw=st.reduce((s,x)=>s+((x.dc_power||0)+(x.ac_power||0))*(x.count||1),0)/1000;
+  const sim=st.reduce((s,x)=>s+(x.simultaneous_charge||0)*(x.count||1),0);
   document.getElementById('stats-wrap').innerHTML=`
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="sc-lbl">ВСЕГО СТАНЦИЙ</div>
-        <div class="sc-val">${total}</div>
-        ${goal?`<div class="sc-bar"><div class="sc-bar-fill" style="width:${Math.min(pct,100)}%"></div></div><div class="sc-sub">${pct}% к цели</div>`:''}
-      </div>
-      <div class="stat-card">
-        <div class="sc-lbl">С БЫСТРОЙ ЗАРЯДКОЙ</div>
-        <div class="sc-val">${dcCount}</div>
-        <div class="sc-sub">DC и AC/DC станций</div>
-      </div>
-      <div class="stat-card">
-        <div class="sc-lbl">СУММАРНАЯ МОЩНОСТЬ</div>
-        <div class="sc-val" style="font-size:${mw>=100?'16px':'22px'}">${mw.toFixed(1)}</div>
-        <div class="sc-sub">МВт установлено</div>
-      </div>
+    <div class="op-stat-card">
+      <div class="op-stat-label">ВСЕГО СТАНЦИЙ</div>
+      <div class="op-stat-val">${tot}</div>
+      ${goal?`<div class="op-stat-bar-wrap"><div class="op-stat-bar-fill" style="width:${Math.min(pct,100)}%"></div></div>`:''}
+    </div>
+    <div class="op-stat-card">
+      <div class="op-stat-label">СУММАРНАЯ МОЩНОСТЬ</div>
+      <div class="op-stat-val">${mw.toFixed(1)}</div>
+      <div class="op-stat-sub">МВт установлено</div>
+    </div>
+    <div class="op-stat-card">
+      <div class="op-stat-label">ЗАРЯЖАЮТ ОДНОВРЕМЕННО</div>
+      <div class="op-stat-val">${sim}</div>
+      <div class="op-stat-sub">авто</div>
     </div>`;
 }
 
-function renderMomentum(stations){
-  const d30=stationsInDays(stations,30);
-  const d60=stationsInDays(stations,60);
-  const d90=stationsInDays(stations,90);
-  const prev30=d60-d30;
-  const diff=d30-prev30;
-  const trend=diff>=0
-    ?`<span class="t-up">↑ +${diff} к пред.</span>`
-    :`<span class="t-dn">↓ ${diff} к пред.</span>`;
-  const pace=calcPace(stations);
+function renderMomentum(st){
+  const d30=stationsInDays(st,30),d60=stationsInDays(st,60),d90=stationsInDays(st,90);
+  const diff=d30-(d60-d30);
+  const trend=diff>=0?`<div class="op-mom-trend op-trend-up">↑ +${diff} к пред.</div>`:`<div class="op-mom-trend op-trend-dn">↓ ${diff} к пред.</div>`;
+  const pace=calcPace(st);
   document.getElementById('mom-wrap').innerHTML=`
-    <div class="mom-grid">
-      <div class="mom-card"><div class="mc-lbl">ЗА 30 ДНЕЙ</div><div class="mc-val">${d30}</div><div class="mc-sub">${trend}</div></div>
-      <div class="mom-card"><div class="mc-lbl">ЗА 60 ДНЕЙ</div><div class="mc-val">${d60}</div></div>
-      <div class="mom-card"><div class="mc-lbl">ЗА 90 ДНЕЙ</div><div class="mc-val">${d90}</div></div>
-      <div class="mom-card"><div class="mc-lbl">ТЕМП / НЕД.</div><div class="mc-val" style="font-size:16px">${pace.toFixed(1)}</div><div class="mc-sub"><span class="t-dim">с 01.01.2026</span></div></div>
-    </div>`;
+    <div class="op-mom-card"><div class="op-mom-val">${d30}</div><div class="op-mom-label">ЗА 30 ДНЕЙ</div>${trend}</div>
+    <div class="op-mom-card"><div class="op-mom-val">${d60}</div><div class="op-mom-label">ЗА 60 ДНЕЙ</div></div>
+    <div class="op-mom-card"><div class="op-mom-val">${d90}</div><div class="op-mom-label">ЗА 90 ДНЕЙ</div></div>
+    <div class="op-mom-card"><div class="op-mom-val">${pace.toFixed(1)}</div><div class="op-mom-label">СТ. / НЕД.</div><div class="op-mom-trend" style="color:var(--text-dim)">с 01.01.2026</div></div>`;
 }
 
-function renderForecast(stations,goal){
+function renderForecast(st,goal){
   if(!goal){document.getElementById('fc-wrap').innerHTML='<div class="op-loading">ДАННЫЕ О ЦЕЛИ НЕДОСТУПНЫ</div>';return;}
-  const fc=goalForecast(stations,goal);
-  const minP=minPaceNeeded(stations,goal);
-  const curP=calcPace(stations);
-  let html='<div class="forecast-box">';
-  if(fc.done){
-    html+=`<div class="fb-hint">СТАТУС ЦЕЛИ</div><div class="fb-ok">✓ ЦЕЛЬ ДОСТИГНУТА</div>`;
-  } else {
-    html+=`<div class="fb-hint">ПРИ ТЕКУЩЕМ ТЕМПЕ ЦЕЛЬ БУДЕТ ДОСТИГНУТА</div>`;
-    html+=`<div class="fb-date">${fc.date?fmtDate(fc.date):'ДАННЫХ НЕДОСТАТОЧНО'}</div>`;
-    if(fc.date){
-      html+=fc.onTrack
-        ?`<div class="fb-ok">✓ УСПЕВАЕТ К 31.12.2026</div>`
-        :`<div class="fb-fail">✗ НЕ УСПЕВАЕТ К 31.12.2026</div>`;
-    }
-    html+=`<div class="fb-pace">МИН. ТЕМП ДЛЯ ЦЕЛИ: ${minP.toFixed(1)} СТ./НЕД. &nbsp;·&nbsp; ТЕКУЩИЙ: ${curP.toFixed(1)} СТ./НЕД.</div>`;
+  const fc=goalForecast(st,goal);
+  let h='<div class="op-forecast-box">';
+  if(fc.done){h+=`<div class="op-fc-hint">СТАТУС ЦЕЛИ</div><div class="op-fc-status op-fc-ok">✓ ЦЕЛЬ ДОСТИГНУТА</div>`;}
+  else{
+    h+=`<div class="op-fc-hint">ПРИ ТЕКУЩЕМ ТЕМПЕ ЦЕЛЬ БУДЕТ ДОСТИГНУТА</div><div class="op-fc-date">${fc.date?fmtDate(fc.date):'ДАННЫХ НЕДОСТАТОЧНО'}</div>`;
+    if(fc.date)h+=fc.onTrack?`<div class="op-fc-status op-fc-ok">✓ УСПЕВАЕТ К 31.12.2026</div>`:`<div class="op-fc-status op-fc-fail">✗ НЕ УСПЕВАЕТ К 31.12.2026</div>`;
   }
-  html+='</div>';
-  document.getElementById('fc-wrap').innerHTML=html;
+  document.getElementById('fc-wrap').innerHTML=h+'</div>';
 }
 
-let chType,chCities,chPower;
-function renderCharts(stations){
-  const dc=stations.filter(s=>s.station_type==='DC').reduce((s,st)=>s+(st.count||1),0);
-  const ac=stations.filter(s=>s.station_type==='AC').reduce((s,st)=>s+(st.count||1),0);
-  const acdc=stations.filter(s=>s.station_type==='ACDC').reduce((s,st)=>s+(st.count||1),0);
+const valPlugin={id:'vl',afterDatasetsDraw(c){
+  const{ctx,data}=c;ctx.save();
+  ctx.font='11px "Share Tech Mono"';ctx.fillStyle='#00ff41';ctx.textAlign='center';ctx.textBaseline='bottom';
+  c.getDatasetMeta(0).data.forEach((b,i)=>{const v=data.datasets[0].data[i];if(v>0)ctx.fillText(v,b.x,b.y-4);});
+  ctx.restore();
+}};
 
-  const cityMap={};
-  stations.forEach(s=>{if(s.city)cityMap[s.city]=(cityMap[s.city]||0)+(s.count||1);});
-  const cities=Object.entries(cityMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+let chT,chC,chP;
+function renderCharts(st){
+  const dc=st.filter(x=>x.station_type==='DC').reduce((s,x)=>s+(x.count||1),0);
+  const ac=st.filter(x=>x.station_type==='AC').reduce((s,x)=>s+(x.count||1),0);
+  const acdc=st.filter(x=>x.station_type==='ACDC').reduce((s,x)=>s+(x.count||1),0);
 
-  const bins={'<50':0,'50-100':0,'100-150':0,'150+':0};
-  stations.forEach(s=>{
-    const p=(s.dc_power||0)+(s.ac_power||0);
-    const cnt=s.count||1;
-    if(p===0)return;
-    if(p<50)bins['<50']+=cnt;
-    else if(p<100)bins['50-100']+=cnt;
-    else if(p<150)bins['100-150']+=cnt;
-    else bins['150+']+=cnt;
+  const cm={};st.forEach(x=>{if(x.city)cm[x.city]=(cm[x.city]||0)+(x.count||1);});
+  const top3=Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,3);
+
+  const bins={'<50':0,'50–100':0,'100–150':0,'150+':0};
+  st.forEach(x=>{
+    const p=(x.dc_power||0)+(x.ac_power||0),cnt=x.count||1;if(!p)return;
+    if(p<50)bins['<50']+=cnt;else if(p<100)bins['50–100']+=cnt;else if(p<150)bins['100–150']+=cnt;else bins['150+']+=cnt;
   });
 
-  const baseCfg={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};
+  const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};
+  const gc='rgba(0,170,43,0.2)',tc='#00aa2b';
 
-  if(chType)chType.destroy();
-  chType=new Chart(document.getElementById('ch-type'),{
-    type:'doughnut',
-    data:{labels:['DC','AC','ACDC'],datasets:[{data:[dc,ac,acdc],backgroundColor:['#b44fff','#00cfff','#00ff41'],borderWidth:0}]},
-    options:{...baseCfg,cutout:'65%'}
-  });
+  if(chT)chT.destroy();
+  chT=new Chart(document.getElementById('ch-type'),{type:'doughnut',
+    data:{labels:['DC','AC','ACDC'],datasets:[{data:[dc,ac,acdc],backgroundColor:[OP_COLOR,'#00cfff','#00ff41'],borderWidth:0}]},
+    options:{...base,cutout:'60%'}});
   document.getElementById('leg-type').innerHTML=
-    `<span><span class="cl-sq" style="background:#b44fff"></span>DC ${dc}</span>`+
+    `<span><span class="cl-sq" style="background:${OP_COLOR}"></span>DC ${dc}</span>`+
     `<span><span class="cl-sq" style="background:#00cfff"></span>AC ${ac}</span>`+
     `<span><span class="cl-sq" style="background:#00ff41"></span>ACDC ${acdc}</span>`;
 
-  const citiesH=Math.max(cities.length*38+60,150);
-  document.getElementById('ch-cities-wrap').style.height=citiesH+'px';
-  if(chCities)chCities.destroy();
-  chCities=new Chart(document.getElementById('ch-cities'),{
-    type:'bar',
-    data:{labels:cities.map(c=>c[0]),datasets:[{data:cities.map(c=>c[1]),backgroundColor:'#b44fff',borderWidth:0}]},
-    options:{...baseCfg,indexAxis:'y',scales:{
-      x:{ticks:{color:'rgba(0,255,65,.55)',font:{size:8}},grid:{color:'rgba(0,255,65,.08)'}},
-      y:{ticks:{color:'#00ff41',font:{size:8}},grid:{display:false}}
-    }}
-  });
+  if(chC)chC.destroy();
+  chC=new Chart(document.getElementById('ch-cities'),{type:'bar',
+    data:{labels:top3.map(c=>c[0]),datasets:[{data:top3.map(c=>c[1]),backgroundColor:OP_COLOR,borderWidth:0}]},
+    options:{...base,scales:{
+      x:{ticks:{color:'#00ff41',font:{family:'Share Tech Mono',size:11}},grid:{display:false}},
+      y:{ticks:{color:tc,font:{size:10}},grid:{color:gc},beginAtZero:true}
+    }},plugins:[valPlugin]});
 
-  if(chPower)chPower.destroy();
-  chPower=new Chart(document.getElementById('ch-power'),{
-    type:'bar',
+  if(chP)chP.destroy();
+  chP=new Chart(document.getElementById('ch-power'),{type:'bar',
     data:{labels:Object.keys(bins),datasets:[{data:Object.values(bins),
-      backgroundColor:['rgba(0,255,65,.25)','rgba(0,207,255,.6)','#b44fff','rgba(180,79,255,.5)'],borderWidth:0}]},
-    options:{...baseCfg,scales:{
-      x:{ticks:{color:'#00ff41',font:{size:8}},grid:{display:false}},
-      y:{ticks:{color:'rgba(0,255,65,.55)',font:{size:8}},grid:{color:'rgba(0,255,65,.08)'}}
-    }}
-  });
+      backgroundColor:['rgba(0,170,43,0.5)','rgba(0,207,255,0.7)',OP_COLOR,'rgba(180,79,255,0.5)'],borderWidth:0}]},
+    options:{...base,scales:{
+      x:{ticks:{color:'#00ff41',font:{family:'Share Tech Mono',size:10}},grid:{display:false}},
+      y:{ticks:{color:tc,font:{size:10}},grid:{color:gc},beginAtZero:true}
+    }}});
 }
 
-function renderTop5(stations){
-  const sorted=[...stations].sort((a,b)=>{
-    const pa=(a.dc_power||0)+(a.ac_power||0);
-    const pb=(b.dc_power||0)+(b.ac_power||0);
-    return pb-pa;
-  }).slice(0,5);
-  document.getElementById('top-tbody').innerHTML=sorted.map((s,i)=>{
-    const pw=(s.dc_power||0)+(s.ac_power||0);
-    const name=s.location_name||s.address||s.city||'—';
-    const guns=[s.gun1_type,s.gun2_type,s.gun3_type].filter(Boolean).join(' · ')||'—';
-    return`<tr>
-      <td>${i+1}</td>
-      <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</td>
-      <td>${s.city||'—'}</td>
-      <td>${pw?`<span class="pw-pill">${pw} кВт</span>`:'—'}</td>
-      <td style="max-width:110px;word-break:break-word">${guns}</td>
-    </tr>`;
+function renderTop5(st){
+  const sorted=[...st].sort((a,b)=>((b.dc_power||0)+(b.ac_power||0))-((a.dc_power||0)+(a.ac_power||0))).slice(0,5);
+  document.getElementById('top-tbody').innerHTML=sorted.map((x,i)=>{
+    const pw=(x.dc_power||0)+(x.ac_power||0);
+    const nm=x.location_name||x.address||'—';
+    const gn=[x.gun1_type,x.gun2_type,x.gun3_type].filter(Boolean).join(' · ')||'—';
+    return`<tr><td>${i+1}</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${nm}</td><td>${x.city||'—'}</td><td>${pw?`<span class="op-pw-pill">${pw} кВт</span>`:'—'}</td><td>${gn}</td></tr>`;
   }).join('')||'<tr><td colspan="5" class="op-loading">НЕТ ДАННЫХ</td></tr>';
 }
 
-/* ═══ FEED ═══ */
 let allSt=[],filtered=[],feedLimit=20;
-function renderFeedRows(list,limit){
+function renderFeedRows(list,lim){
   const now=new Date();
-  document.getElementById('feed-list').innerHTML=list.slice(0,limit).map(s=>{
-    const isNew=(now-new Date(s.station_date))<7*24*3600*1000;
-    const dateStr=s.station_date?s.station_date.slice(2).replace(/-/g,'.'):'—';
-    return`<div class="feed-row">
-      <span class="fr-city">${s.city||'—'}</span>
-      <span class="fr-loc">${s.location_name||s.address||''}</span>
-      ${isNew?'<span class="fr-new">NEW</span>':''}
-      <span class="fr-date">${dateStr}</span>
-    </div>`;
+  document.getElementById('feed-list').innerHTML=list.slice(0,lim).map(x=>{
+    const isNew=(now-new Date(x.station_date))<7*24*3600*1000;
+    const dt=x.station_date?x.station_date.slice(2).replace(/-/g,'.'):'—';
+    return`<div class="op-feed-row"><span class="op-feed-city">${x.city||'—'}</span><span class="op-feed-loc">${x.location_name||x.address||''}</span>${isNew?'<span class="op-feed-new">NEW</span>':''}<span class="op-feed-date">${dt}</span></div>`;
   }).join('');
   const btn=document.getElementById('show-all-btn');
-  if(list.length>limit){btn.style.display='block';btn.textContent=`▼ ПОКАЗАТЬ ВСЕ (${list.length})`;}
+  if(list.length>lim){btn.style.display='block';btn.textContent=`▼ ПОКАЗАТЬ ВСЕ (${list.length})`;}
   else btn.style.display='none';
 }
 function filterFeed(){
   const q=document.getElementById('feed-search').value.toLowerCase();
-  filtered=q?allSt.filter(s=>(s.city||'').toLowerCase().includes(q)||(s.location_name||'').toLowerCase().includes(q)||(s.address||'').toLowerCase().includes(q)):allSt;
+  filtered=q?allSt.filter(x=>(x.city||'').toLowerCase().includes(q)||(x.location_name||'').toLowerCase().includes(q)||(x.address||'').toLowerCase().includes(q)):allSt;
   feedLimit=20;renderFeedRows(filtered,feedLimit);
 }
 function showAll(){feedLimit=filtered.length;renderFeedRows(filtered,feedLimit);}
 
-/* ═══ VISITS ═══ */
 async function trackVisit(){
   try{
-    await fetch(SURL+'/rest/v1/visits',{
-      method:'POST',
+    await fetch(SURL+'/rest/v1/visits',{method:'POST',
       headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},
-      body:JSON.stringify({visited_at:new Date().toISOString(),page:PAGE_KEY})
-    });
-    const res=await fetch(SURL+'/rest/v1/visits?select=id&page=eq.'+PAGE_KEY,{
-      headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Prefer':'count=exact','Range':'0-0'}
-    });
-    const c=res.headers.get('content-range')?.split('/')[1]||'...';
+      body:JSON.stringify({visited_at:new Date().toISOString(),page:PAGE_KEY})});
+    const r=await fetch(SURL+'/rest/v1/visits?select=id&page=eq.'+PAGE_KEY,
+      {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Prefer':'count=exact','Range':'0-0'}});
+    const c=r.headers.get('content-range')?.split('/')[1]||'...';
     document.getElementById('visit-count').textContent=Number(c).toLocaleString('ru');
-  }catch(e){document.getElementById('visit-count').textContent='...';}
+  }catch{document.getElementById('visit-count').textContent='...';}
 }
 
-/* ═══ INIT ═══ */
 async function init(){
   try{
-    const [allStations,goal]=await Promise.all([fetchAllStations(),fetchGoal()]);
-    if(!Array.isArray(allStations))throw new Error('Bad data');
-
-    const opStations=allStations
-      .filter(s=>s.operator===OP)
-      .sort((a,b)=>{
-        if(b.station_date!==a.station_date)return b.station_date<a.station_date?-1:1;
-        if(a.station_time&&b.station_time)return b.station_time<a.station_time?-1:1;
-        if(b.station_time)return 1;if(a.station_time)return -1;return 0;
-      });
-
-    allSt=opStations;filtered=[...allSt];
-
-    const{place,pts}=calcStandings(allStations);
-    renderPlace(place,pts);
-    renderStats(opStations,goal);
-    renderMomentum(opStations);
-    renderForecast(opStations,goal);
-    renderCharts(opStations);
-    renderTop5(opStations);
+    const[all,goal]=await Promise.all([fetchAllStations(),fetchGoal()]);
+    if(!Array.isArray(all))throw new Error();
+    const opSt=all.filter(x=>x.operator===OP).sort((a,b)=>{
+      if(a.station_date!==b.station_date)return b.station_date<a.station_date?-1:1;
+      if(a.station_time&&b.station_time)return b.station_time<a.station_time?-1:1;
+      return b.station_time?1:a.station_time?-1:0;
+    });
+    allSt=opSt;filtered=[...allSt];
+    const s=calcStandings(all);
+    renderBadges(s);renderStats(opSt,goal);renderMomentum(opSt);
+    renderForecast(opSt,goal);renderCharts(opSt);renderTop5(opSt);
     renderFeedRows(filtered,feedLimit);
   }catch(e){
     console.error(e);
-    ['place-wrap','stats-wrap','mom-wrap','fc-wrap'].forEach(id=>{
+    ['op-badges','stats-wrap','mom-wrap','fc-wrap'].forEach(id=>{
       const el=document.getElementById(id);
-      if(el)el.innerHTML='<div class="op-loading" style="color:#ff4141">ОШИБКА ЗАГРУЗКИ</div>';
+      if(el)el.innerHTML='<div class="op-loading" style="color:var(--red)">ОШИБКА ЗАГРУЗКИ</div>';
     });
   }
   trackVisit();
