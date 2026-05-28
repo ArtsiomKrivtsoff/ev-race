@@ -31,6 +31,13 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 #scroll-top{position:fixed;bottom:20px;right:16px;z-index:500;width:44px;height:44px;border:1px solid var(--green,#00ff41);background:rgba(0,255,65,.12);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:20px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;}
 #scroll-top.visible{display:flex;}
 #scroll-top:hover{background:rgba(0,255,65,.25);}
+/* Breadcrumbs — приглушены, secondary nav */
+.breadcrumb{opacity:.4;}
+/* Slogan — сухая системная фраза */
+#op-slogan{letter-spacing:.8px!important;}
+/* Section-head — telemetry line с fade-out вправо */
+.section-head{position:relative;overflow:hidden;}
+.section-head::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,var(--border,#1a3a1a) 40%,transparent 100%);pointer-events:none;}
 </style>
 </head>
 <body>
@@ -502,17 +509,17 @@ async function loadNarratives(){
     if(n.status_line) rows.push(
       `<div style="font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:0.5px;line-height:1.8">` +
       `<span style="color:#d14dff">СТАТУС/</span>` +
-      `<span style="color:#00ff41"> ${n.status_line}</span></div>`
+      `<span style="color:#00e535"> ${n.status_line}</span></div>`
     );
     if(n.rivalry_line) rows.push(
       `<div style="font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:0.5px;line-height:1.8">` +
       `<span style="color:#ff6b35">СОПЕРНИК/</span>` +
-      `<span style="color:#00ff41"> ${n.rivalry_line}</span></div>`
+      `<span style="color:#00e535"> ${n.rivalry_line}</span></div>`
     );
     if(n.commentary_line) rows.push(
       `<div style="font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:0.5px;line-height:1.8">` +
       `<span style="color:#00e5ff">ЭФИР/</span>` +
-      `<span style="color:#00ff41"> ${n.commentary_line}</span></div>`
+      `<span style="color:#00e535"> ${n.commentary_line}</span></div>`
     );
 
     document.getElementById('ai-narrative').innerHTML=
