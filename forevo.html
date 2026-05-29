@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>forEVo — зарядные станции 2026 | EV RACE</title>
-<meta name="description" content="Статистика зарядных станций forEVo в Беларуси 2026: динамика роста, прогноз, распределение по городам и мощности.">
-<meta name="keywords" content="forEVo зарядные станции, forEVo Беларусь 2026, зарядки forEVo, EV RACE forEVo">
-<meta property="og:title" content="forEVo — зарядные станции 2026 | EV RACE">
-<meta property="og:description" content="Статистика зарядных станций forEVo в Беларуси. Динамика роста, прогноз, топ станций.">
+<meta name="description" content="Сезонное досье forEVo: telemetry, trajectory, динамика сезона EV RACE Беларусь 2026.">
+<meta name="keywords" content="forEVo зарядные станции, forEVo Беларусь 2026, EV RACE forEVo">
+<meta property="og:title" content="forEVo — EV RACE 2026">
+<meta property="og:description" content="Сезонное досье forEVo. Trajectory, telemetry, динамика гонки.">
 <meta property="og:image" content="https://evrace.by/og.png">
 <meta property="og:url" content="https://evrace.by/operators/forevo.html">
 <meta property="og:type" content="website">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://evrace.by/operators/forevo.html">
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"forEVo","url":"https://evrace.by/operators/forevo.html","description":"Оператор зарядных станций для электромобилей в Беларуси"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"forEVo","url":"https://evrace.by/operators/forevo.html","description":"Оператор DC зарядных станций в Беларуси"}</script>
 
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
@@ -23,21 +23,11 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 
 <link id="theme-css" rel="stylesheet" href="../CSS/arcade.css?v=2">
-<link rel="stylesheet" href="../CSS/operator.css?v=1">
+<link rel="stylesheet" href="../CSS/operator.css?v=2">
 <link rel="prefetch" href="../CSS/tesla-light.css">
 <link rel="prefetch" href="../CSS/tesla-dark.css">
 <style>
-:root { --op-color: #b44fff; }
-#scroll-top{position:fixed;bottom:20px;right:16px;z-index:500;width:44px;height:44px;border:1px solid var(--green,#00ff41);background:rgba(0,255,65,.12);color:var(--green,#00ff41);font-family:'Share Tech Mono',monospace;font-size:20px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;}
-#scroll-top.visible{display:flex;}
-#scroll-top:hover{background:rgba(0,255,65,.25);}
-/* Breadcrumbs — приглушены, secondary nav */
-.breadcrumb{opacity:.4;}
-/* Slogan — сухая системная фраза */
-#op-slogan{letter-spacing:.8px!important;}
-/* Section-head — telemetry line с fade-out вправо */
-.section-head{position:relative;overflow:hidden;}
-.section-head::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,var(--border,#1a3a1a) 40%,transparent 100%);pointer-events:none;}
+:root{--op-color:#b44fff;}
 </style>
 </head>
 <body>
@@ -69,7 +59,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
       <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
       <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
     </div>
-    <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Отключает сканлайны и свечение текста">
+    <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Сканлайны и свечение">
       <span class="fx-seg fx-on active" data-state="on">ЭФФЕКТЫ</span>
       <span class="fx-seg fx-off"       data-state="off">ЧЁТКО</span>
     </button>
@@ -79,7 +69,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
     <div class="mob-nav-row">
       <a class="nav-mobile-link" href="/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
-      <button class="mob-acc-btn" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Список операторов">▾</button>
+      <button class="mob-acc-btn" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Операторы">▾</button>
     </div>
     <div class="mob-acc-list" id="mobAccList">
       <a href="/operators/batteryfly.html" onclick="closeBurger()"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
@@ -112,53 +102,34 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
       <span class="op-hero-name">FOREVO</span>
     </div>
 
-    <div id="op-slogan" style="font-family:'Share Tech Mono',monospace;font-size:12px;color:#a0b4c8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:var(--s-5);min-height:1em"></div>
+    <div class="op-slogan" id="op-slogan"></div>
 
-    <div class="op-badges" id="op-badges"><span class="op-loading">ЗАГРУЗКА...</span></div>
+    <div class="op-badges" id="op-badges"><span class="op-loading">...</span></div>
 
     <div class="section-head">▶ AI СТАТУС</div>
-    <div id="ai-narrative" style="margin-bottom:var(--s-5)">
-      <div class="op-loading">ЗАГРУЗКА...</div>
-    </div>
+    <div class="op-narrative" id="ai-narrative"><div class="op-loading">...</div></div>
+
+    <div class="section-head">▶ ТЕКУЩАЯ ТРАЕКТОРИЯ</div>
+    <div class="op-traj" id="traj-wrap"><div class="op-loading">...</div></div>
 
     <div class="section-head">▶ СТАТИСТИКА</div>
-    <div class="op-stats-grid" id="stats-wrap"><div class="op-loading">ЗАГРУЗКА...</div></div>
+    <div class="op-stats-grid" id="stats-wrap"><div class="op-loading">...</div></div>
 
-    <div class="section-head">▶ MOMENTUM — ДИНАМИКА</div>
-    <div class="op-mom-grid" id="mom-wrap"><div class="op-loading">ЗАГРУЗКА...</div></div>
+    <div class="section-head">▶ ДИНАМИКА СЕЗОНА</div>
+    <div class="op-momentum" id="mom-wrap"><div class="op-loading">...</div></div>
 
-    <div class="section-head">▶ ПРОГНОЗ ДОСТИЖЕНИЯ ЦЕЛИ</div>
-    <div id="fc-wrap"><div class="op-loading">ЗАГРУЗКА...</div></div>
-
-    <div class="section-head">▶ РАСПРЕДЕЛЕНИЕ СТАНЦИЙ</div>
-    <div class="op-charts-grid">
-      <div class="op-chart-box">
-        <div class="op-chart-title">ТИП СТАНЦИЙ</div>
-        <div style="position:relative;height:180px"><canvas id="ch-type" role="img" aria-label="Типы станций forEVo">Данные загружаются</canvas></div>
-        <div class="op-chart-legend" id="leg-type"></div>
-      </div>
-      <div class="op-chart-box">
-        <div class="op-chart-title">ТОП-3 ГОРОДА</div>
-        <div style="position:relative;height:180px"><canvas id="ch-cities" role="img" aria-label="Топ-3 города по числу станций forEVo">Данные загружаются</canvas></div>
-      </div>
-      <div class="op-chart-box">
-        <div class="op-chart-title">МОЩНОСТЬ (КВТ)</div>
-        <div style="position:relative;height:180px"><canvas id="ch-power" role="img" aria-label="Распределение станций forEVo по мощности">Данные загружаются</canvas></div>
-      </div>
-    </div>
+    <div class="section-head">▶ СЕТЬ</div>
+    <div id="bars-wrap"><div class="op-loading">...</div></div>
 
     <div class="section-head">▶ ТОП-5 САМЫХ МОЩНЫХ СТАНЦИЙ</div>
     <div style="overflow-x:auto;margin-bottom:var(--s-5)">
       <table class="op-top-table">
         <thead><tr><th>#</th><th>НАЗВАНИЕ / АДРЕС</th><th>ГОРОД</th><th>МОЩНОСТЬ</th><th>РАЗЪЁМЫ</th></tr></thead>
-        <tbody id="top-tbody"><tr><td colspan="5" class="op-loading">ЗАГРУЗКА...</td></tr></tbody>
+        <tbody id="top-tbody"><tr><td colspan="5" class="op-loading">...</td></tr></tbody>
       </table>
     </div>
 
-    <div class="section-head">▶ ЛЕНТА СТАНЦИЙ</div>
-    <input class="op-feed-search" id="feed-search" placeholder="ПОИСК ПО ГОРОДУ / АДРЕСУ / НАЗВАНИЮ..." oninput="filterFeed()">
-    <div id="feed-list"></div>
-    <button class="op-show-all" id="show-all-btn" onclick="showAll()" style="display:none">▼ ПОКАЗАТЬ ВСЕ</button>
+    <div class="op-footer-note">ЭФИР ФОРМИРУЕТСЯ ИЗ СЕЗОННЫХ ДАННЫХ</div>
 
     <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
 
@@ -188,13 +159,13 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 
     <div class="theme-footer-switch">
       <span class="theme-foot-lbl">СТИЛЬ</span>
-      <button class="theme-foot-btn active" id="foot-arcade"      title="Arcade"      onclick="setTheme('arcade')">⬡</button>
-      <button class="theme-foot-btn"        id="foot-tesla-light" title="Tesla Light" onclick="setTheme('tesla-light')">☀</button>
-      <button class="theme-foot-btn"        id="foot-tesla-dark"  title="Tesla Dark"  onclick="setTheme('tesla-dark')">◑</button>
+      <button class="theme-foot-btn active" id="foot-arcade"      onclick="setTheme('arcade')">⬡</button>
+      <button class="theme-foot-btn"        id="foot-tesla-light" onclick="setTheme('tesla-light')">☀</button>
+      <button class="theme-foot-btn"        id="foot-tesla-dark"  onclick="setTheme('tesla-dark')">◑</button>
     </div>
 
     <div class="footer">
-      <div class="footer-disclaimer">Эта страница создана исключительно в развлекательных целях.<br>Все данные об установленных станциях носят информационный характер и не являются официальной статистикой.<br>Прогнозы пользователей — это игра, а не инвестиционная рекомендация. 🎮<br>Страница не запрашивает и не хранит ваши личные данные.</div>
+      <div class="footer-disclaimer">Эта страница создана исключительно в развлекательных целях.<br>Все данные об установленных станциях носят информационный характер и не являются официальной статистикой.<br>Прогнозы — это игра, а не инвестиционная рекомендация. 🎮<br>Страница не запрашивает и не хранит ваши личные данные.</div>
       <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
     </div>
 
@@ -202,11 +173,12 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 </div>
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
+/* ═══ CONFIG ═══ */
 const SURL='https://uvrboxrddqlasgrnnnne.supabase.co';
 const SKEY='sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
 const OP='forevo';
+const OP_DISPLAY='FOREVO';
 const OP_COLOR='#b44fff';
 const PAGE_KEY='operator_forevo';
 const ALL_OPS=['batteryfly','forevo','zaryadka','united','csms'];
@@ -215,6 +187,7 @@ const TOTAL_ROUNDS=53;
 const FINAL=new Date('2026-12-31T23:59:59');
 const THEMES=['arcade','tesla-light','tesla-dark'];
 
+/* ═══ THEME ═══ */
 function setTheme(t){
   document.getElementById('theme-css').href='../CSS/'+t+'.css?v=2';
   localStorage.setItem('ev_race_theme',t);
@@ -247,6 +220,7 @@ function toggleFx(){
   if(sb)document.documentElement.style.setProperty('--statusbar-h',sb.offsetHeight+'px');
 })();
 
+/* ═══ NAV ═══ */
 function toggleBurger(){
   const btn=document.getElementById('burgerBtn'),menu=document.getElementById('mobileMenu');
   const open=menu.classList.toggle('open');btn.classList.toggle('open',open);
@@ -273,6 +247,7 @@ document.addEventListener('click',e=>{
 });
 window.addEventListener('scroll',()=>document.getElementById('scroll-top')?.classList.toggle('visible',window.scrollY>300));
 
+/* ═══ DATES ═══ */
 const ML=['ЯНВАРЯ','ФЕВРАЛЯ','МАРТА','АПРЕЛЯ','МАЯ','ИЮНЯ','ИЮЛЯ','АВГУСТА','СЕНТЯБРЯ','ОКТЯБРЯ','НОЯБРЯ','ДЕКАБРЯ'];
 function fmtDate(d){return d.getDate()+' '+ML[d.getMonth()]+' '+d.getFullYear();}
 function weeksFromJan1(){return(Date.now()-new Date('2026-01-01').getTime())/(7*24*3600*1000);}
@@ -285,6 +260,7 @@ function getRoundForDate(ds){
 }
 function getCurrentRound(){return getRoundForDate(new Date().toISOString().split('T')[0]);}
 
+/* ═══ FETCH ═══ */
 async function fetchAllStations(){
   const r=await fetch(SURL+'/rest/v1/stations?select=*&operator=in.(batteryfly,forevo,zaryadka,united,csms)&order=station_date.asc,station_time.asc.nullslast',
     {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
@@ -298,7 +274,35 @@ async function fetchGoal(){
     return Array.isArray(d)?d.find(x=>x.operator===OP)?.goal||null:null;
   }catch{return null;}
 }
+async function fetchSnapshots(){
+  try{
+    const r=await fetch(SURL+'/rest/v1/ai_snapshots?operator=eq.'+OP+'&select=payload,snapshot_date&order=snapshot_date.desc&limit=2',
+      {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
+    return r.json();
+  }catch{return[];}
+}
+async function loadNarratives(){
+  try{
+    const r=await fetch(SURL+'/rest/v1/ai_operator_narratives?operator=eq.'+OP+'&is_active=eq.true&select=narrative_type,content',
+      {headers:{'apikey':SKEY}});
+    const data=await r.json();
+    if(!data?.length){
+      document.getElementById('ai-narrative').innerHTML='';
+      return;
+    }
+    const n={};data.forEach(x=>n[x.narrative_type]=x.content);
+    if(n.slogan_month)document.getElementById('op-slogan').textContent=n.slogan_month;
+    const rows=[];
+    if(n.status_line)rows.push(`<div class="op-narrative-row"><span class="op-nar-st">СТАТУС/</span><span class="op-nar-txt"> ${n.status_line}</span></div>`);
+    if(n.rivalry_line)rows.push(`<div class="op-narrative-row"><span class="op-nar-rv">СОПЕРНИК/</span><span class="op-nar-txt"> ${n.rivalry_line}</span></div>`);
+    if(n.commentary_line)rows.push(`<div class="op-narrative-row"><span class="op-nar-cm">ЭФИР/</span><span class="op-nar-txt"> ${n.commentary_line}</span></div>`);
+    document.getElementById('ai-narrative').innerHTML=rows.length?rows.join(''):'';
+  }catch{
+    document.getElementById('ai-narrative').innerHTML='';
+  }
+}
 
+/* ═══ STANDINGS ═══ */
 function calcStandings(all){
   const cur=getCurrentRound(),byR={};
   all.forEach(s=>{
@@ -326,6 +330,7 @@ function calcStandings(all){
   return{place:ranked.indexOf(OP)+1,pts:stP[OP],stW:stW[OP],pwW:pwW[OP]};
 }
 
+/* ═══ METRICS ═══ */
 function totalCount(st){return st.reduce((s,x)=>s+(x.count||1),0);}
 function stationsInDays(st,days){
   const cut=new Date();cut.setDate(cut.getDate()-days);
@@ -339,6 +344,40 @@ function goalForecast(st,goal){
   return{done:false,date:d,onTrack:d<=FINAL};
 }
 
+/* ═══ MOMENTUM STATE ═══ */
+function calcMomentumStates(snapshots){
+  const labels=[];
+  if(!snapshots?.length)return labels;
+  const cur=snapshots[0]?.payload;
+  const prev=snapshots[1]?.payload;
+  if(!cur)return labels;
+  const mMap={accelerating:'ТЕМП: РАСТЁТ',stable:'ТЕМП: СТАБИЛЕН',slowing:'ТЕМП: ЗАМЕДЛЯЕТСЯ'};
+  if(mMap[cur.momentum_state])labels.push(mMap[cur.momentum_state]);
+  if(prev){
+    const gc=cur.gap_to_leader??null,gp=prev.gap_to_leader??null;
+    if(gc!==null&&gp!==null&&gc<gp)labels.push('ДАВЛЕНИЕ ↑');
+    const rc=cur.rank??null,rp=prev.rank??null;
+    if(rc!==null&&rp!==null&&rc===rp)labels.push('ПОЗИЦИЯ СТАБИЛЬНА');
+  }
+  return labels.slice(0,3);
+}
+
+/* ═══ PULSE STRIP ═══ */
+function buildPulseStrip(){
+  const ticks=[4,7,3,9,5,11,6,13,7,14,8,15,9,14,11,15,10,14,12,16];
+  const max=16,w=300,h=18;
+  const step=w/ticks.length;
+  let lines='';
+  ticks.forEach((v,i)=>{
+    const x=Math.round(i*step+step/2);
+    const y1=h-v;
+    const op=(0.2+(v/max)*0.6).toFixed(2);
+    lines+=`<line x1="${x}" y1="${h}" x2="${x}" y2="${y1}" stroke="var(--op-color)" stroke-width="1.2" opacity="${op}"/>`;
+  });
+  return`<svg class="op-mom-strip" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">${lines}</svg>`;
+}
+
+/* ═══ RENDER ═══ */
 function renderBadges(s){
   const lbl=['','★ ','▲ ','▲ ','',''];
   document.getElementById('op-badges').innerHTML=
@@ -347,103 +386,100 @@ function renderBadges(s){
     `<span class="op-badge-wins power">⚡ ${s.pwW} ПОБЕД ПО МОЩНОСТИ</span>`;
 }
 
+function renderTrajectory(st,goal){
+  const el=document.getElementById('traj-wrap');
+  if(!goal){el.innerHTML='';return;}
+  const fc=goalForecast(st,goal);
+  if(fc.done){
+    el.innerHTML=`<div class="op-traj-hint">ЦЕЛЬ ДОСТИГНУТА</div>`;
+    return;
+  }
+  const dateStr=fc.date?fmtDate(fc.date):'ДАННЫХ НЕДОСТАТОЧНО';
+  const statusHtml=fc.date
+    ?(fc.onTrack
+      ?`<div class="op-traj-ok">✓ УСПЕВАЕТ К 31.12.2026</div>`
+      :`<div class="op-traj-fail">✗ НЕ УСПЕВАЕТ К 31.12.2026</div>`)
+    :'';
+  el.innerHTML=`
+    <div class="op-traj-hint">ЕСЛИ ТЕМП СОХРАНИТСЯ</div>
+    <div class="op-traj-date">${dateStr}</div>
+    <div class="op-traj-label">${OP_DISPLAY} ВЫХОДИТ НА ЦЕЛЬ</div>
+    <svg class="op-traj-line" viewBox="0 0 300 14" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="9" x2="270" y2="9" stroke="var(--border-dim)" stroke-width=".8"/>
+      <line x1="270" y1="9" x2="282" y2="5" stroke="var(--border-dim)" stroke-width=".8"/>
+      <line x1="282" y1="5" x2="292" y2="5" stroke="var(--border-dim)" stroke-width=".8"/>
+      <polygon points="292,3 299,5 292,7" fill="var(--border-dim)"/>
+    </svg>
+    ${statusHtml}`;
+}
+
 function renderStats(st,goal){
   const tot=totalCount(st);
   const pct=goal?Math.round(tot/goal*100):0;
   const mw=st.reduce((s,x)=>s+((x.dc_power||0)+(x.ac_power||0))*(x.count||1),0)/1000;
-  const sim=st.reduce((s,x)=>s+(x.simultaneous_charge||0)*(x.count||1),0);
+  const cities=new Set(st.map(x=>x.city).filter(Boolean)).size;
   document.getElementById('stats-wrap').innerHTML=`
     <div class="op-stat-card">
-      <div class="op-stat-label">ВСЕГО СТАНЦИЙ</div>
+      <div class="op-stat-label">ТОЧЕК В СЕТИ</div>
       <div class="op-stat-val">${tot}</div>
       ${goal?`<div class="op-stat-bar-wrap"><div class="op-stat-bar-fill" style="width:${Math.min(pct,100)}%"></div></div>`:''}
     </div>
     <div class="op-stat-card">
       <div class="op-stat-label">СУММАРНАЯ МОЩНОСТЬ</div>
       <div class="op-stat-val">${mw.toFixed(1)}</div>
-      <div class="op-stat-sub">МВт установлено</div>
+      <div class="op-stat-sub">МВт</div>
     </div>
     <div class="op-stat-card">
-      <div class="op-stat-label">ЗАРЯЖАЮТ ОДНОВРЕМЕННО</div>
-      <div class="op-stat-val">${sim}</div>
-      <div class="op-stat-sub">авто</div>
+      <div class="op-stat-label">ГОРОДОВ В СЕТИ 2026</div>
+      <div class="op-stat-val">${cities}</div>
     </div>`;
 }
 
-function renderMomentum(st){
-  const d30=stationsInDays(st,30),d60=stationsInDays(st,60),d90=stationsInDays(st,90);
-  const diff=d30-(d60-d30);
-  const trend=diff>=0?`<div class="op-mom-trend op-trend-up">↑ +${diff} к пред.</div>`:`<div class="op-mom-trend op-trend-dn">↓ ${diff} к пред.</div>`;
-  const pace=calcPace(st);
-  document.getElementById('mom-wrap').innerHTML=`
-    <div class="op-mom-card"><div class="op-mom-val">${d30}</div><div class="op-mom-label">ЗА 30 ДНЕЙ</div>${trend}</div>
-    <div class="op-mom-card"><div class="op-mom-val">${d60}</div><div class="op-mom-label">ЗА 60 ДНЕЙ</div></div>
-    <div class="op-mom-card"><div class="op-mom-val">${d90}</div><div class="op-mom-label">ЗА 90 ДНЕЙ</div></div>
-    <div class="op-mom-card"><div class="op-mom-val">${pace.toFixed(1)}</div><div class="op-mom-label">СТ. / НЕД.</div><div class="op-mom-trend" style="color:var(--text-dim)">с 01.01.2026</div></div>`;
+function renderMomentum(states){
+  const el=document.getElementById('mom-wrap');
+  if(!states.length){el.innerHTML='';return;}
+  const primary=states[0];
+  const secondary=states.slice(1);
+  const tagsHtml=secondary.map(t=>`<span class="op-mom-tag">${t}</span>`).join('');
+  el.innerHTML=`
+    <div class="op-mom-primary">${primary}</div>
+    ${secondary.length?`<div class="op-mom-secondary">${tagsHtml}</div>`:''}
+    ${buildPulseStrip()}`;
 }
 
-function renderForecast(st,goal){
-  if(!goal){document.getElementById('fc-wrap').innerHTML='<div class="op-loading">ДАННЫЕ О ЦЕЛИ НЕДОСТУПНЫ</div>';return;}
-  const fc=goalForecast(st,goal);
-  let h='<div class="op-forecast-box">';
-  if(fc.done){h+=`<div class="op-fc-hint">СТАТУС ЦЕЛИ</div><div class="op-fc-status op-fc-ok">✓ ЦЕЛЬ ДОСТИГНУТА</div>`;}
-  else{
-    h+=`<div class="op-fc-hint">ПРИ ТЕКУЩЕМ ТЕМПЕ ЦЕЛЬ БУДЕТ ДОСТИГНУТА</div><div class="op-fc-date">${fc.date?fmtDate(fc.date):'ДАННЫХ НЕДОСТАТОЧНО'}</div>`;
-    if(fc.date)h+=fc.onTrack?`<div class="op-fc-status op-fc-ok">✓ УСПЕВАЕТ К 31.12.2026</div>`:`<div class="op-fc-status op-fc-fail">✗ НЕ УСПЕВАЕТ К 31.12.2026</div>`;
-  }
-  document.getElementById('fc-wrap').innerHTML=h+'</div>';
-}
-
-const valPlugin={id:'vl',afterDatasetsDraw(c){
-  const{ctx,data}=c;ctx.save();
-  ctx.font='11px "Share Tech Mono"';ctx.fillStyle='#00ff41';ctx.textAlign='center';ctx.textBaseline='bottom';
-  c.getDatasetMeta(0).data.forEach((b,i)=>{const v=data.datasets[0].data[i];if(v>0)ctx.fillText(v,b.x,b.y-4);});
-  ctx.restore();
-}};
-
-let chT,chC,chP;
-function renderCharts(st){
-  const dc=st.filter(x=>x.station_type==='DC').reduce((s,x)=>s+(x.count||1),0);
-  const ac=st.filter(x=>x.station_type==='AC').reduce((s,x)=>s+(x.count||1),0);
-  const acdc=st.filter(x=>x.station_type==='ACDC').reduce((s,x)=>s+(x.count||1),0);
-
-  const cm={};st.forEach(x=>{if(x.city)cm[x.city]=(cm[x.city]||0)+(x.count||1);});
+function renderTerminalBars(st){
+  const cm={};
+  st.forEach(x=>{if(x.city)cm[x.city]=(cm[x.city]||0)+(x.count||1);});
   const top3=Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,3);
-
-  const bins={'<50':0,'50–100':0,'100–150':0,'150+':0};
+  const maxC=top3[0]?.[1]||1;
+  const bins={'<50 кВт':0,'50–100':0,'100–150':0,'150+ кВт':0};
   st.forEach(x=>{
     const p=(x.dc_power||0)+(x.ac_power||0),cnt=x.count||1;if(!p)return;
-    if(p<50)bins['<50']+=cnt;else if(p<100)bins['50–100']+=cnt;else if(p<150)bins['100–150']+=cnt;else bins['150+']+=cnt;
+    if(p<50)bins['<50 кВт']+=cnt;
+    else if(p<100)bins['50–100']+=cnt;
+    else if(p<150)bins['100–150']+=cnt;
+    else bins['150+ кВт']+=cnt;
   });
-
-  const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};
-  const gc='rgba(0,170,43,0.2)',tc='#00aa2b';
-
-  if(chT)chT.destroy();
-  chT=new Chart(document.getElementById('ch-type'),{type:'doughnut',
-    data:{labels:['DC','AC','ACDC'],datasets:[{data:[dc,ac,acdc],backgroundColor:[OP_COLOR,'#00cfff','#00ff41'],borderWidth:0}]},
-    options:{...base,cutout:'60%'}});
-  document.getElementById('leg-type').innerHTML=
-    `<span><span class="cl-sq" style="background:${OP_COLOR}"></span>DC ${dc}</span>`+
-    `<span><span class="cl-sq" style="background:#00cfff"></span>AC ${ac}</span>`+
-    `<span><span class="cl-sq" style="background:#00ff41"></span>ACDC ${acdc}</span>`;
-
-  if(chC)chC.destroy();
-  chC=new Chart(document.getElementById('ch-cities'),{type:'bar',
-    data:{labels:top3.map(c=>c[0]),datasets:[{data:top3.map(c=>c[1]),backgroundColor:OP_COLOR,borderWidth:0}]},
-    options:{...base,scales:{
-      x:{ticks:{color:'#00ff41',font:{family:'Share Tech Mono',size:11}},grid:{display:false}},
-      y:{ticks:{color:tc,font:{size:10}},grid:{color:gc},beginAtZero:true}
-    }},plugins:[valPlugin]});
-
-  if(chP)chP.destroy();
-  chP=new Chart(document.getElementById('ch-power'),{type:'bar',
-    data:{labels:Object.keys(bins),datasets:[{data:Object.values(bins),
-      backgroundColor:['rgba(0,170,43,0.5)','rgba(0,207,255,0.7)',OP_COLOR,'rgba(180,79,255,0.5)'],borderWidth:0}]},
-    options:{...base,scales:{
-      x:{ticks:{color:'#00ff41',font:{family:'Share Tech Mono',size:10}},grid:{display:false}},
-      y:{ticks:{color:tc,font:{size:10}},grid:{color:gc},beginAtZero:true}
-    }}});
+  const maxB=Math.max(...Object.values(bins),1);
+  const cityRows=top3.map(([city,count])=>`
+    <div class="op-bar-row">
+      <span class="op-bar-label">${city}</span>
+      <div class="op-bar-track"><div class="op-bar-fill" style="width:${Math.round(count/maxC*100)}%"></div></div>
+      <span class="op-bar-val">${count}</span>
+    </div>`).join('');
+  const powerRows=Object.entries(bins).map(([label,count])=>`
+    <div class="op-bar-row">
+      <span class="op-bar-label">${label}</span>
+      <div class="op-bar-track"><div class="op-bar-fill" style="width:${Math.round(count/maxB*100)}%"></div></div>
+      <span class="op-bar-val">${count||'—'}</span>
+    </div>`).join('');
+  document.getElementById('bars-wrap').innerHTML=`
+    <div class="op-terminal-section">
+      <div class="op-terminal-title">ГОРОДА</div>${cityRows}
+    </div>
+    <div class="op-terminal-section">
+      <div class="op-terminal-title">КЛАССЫ МОЩНОСТИ</div>${powerRows}
+    </div>`;
 }
 
 function renderTop5(st){
@@ -452,29 +488,11 @@ function renderTop5(st){
     const pw=(x.dc_power||0)+(x.ac_power||0);
     const nm=x.location_name||x.address||'—';
     const gn=[x.gun1_type,x.gun2_type,x.gun3_type].filter(Boolean).join(' · ')||'—';
-    return`<tr><td>${i+1}</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${nm}</td><td>${x.city||'—'}</td><td>${pw?`<span class="op-pw-pill">${pw} кВт</span>`:'—'}</td><td>${gn}</td></tr>`;
+    return`<tr><td>${i+1}</td><td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${nm}</td><td>${x.city||'—'}</td><td>${pw?`<span class="op-pw-pill">${pw} кВт</span>`:'—'}</td><td>${gn}</td></tr>`;
   }).join('')||'<tr><td colspan="5" class="op-loading">НЕТ ДАННЫХ</td></tr>';
 }
 
-let allSt=[],filtered=[],feedLimit=20;
-function renderFeedRows(list,lim){
-  const now=new Date();
-  document.getElementById('feed-list').innerHTML=list.slice(0,lim).map(x=>{
-    const isNew=(now-new Date(x.station_date))<7*24*3600*1000;
-    const dt=x.station_date?x.station_date.slice(2).replace(/-/g,'.'):'—';
-    return`<div class="op-feed-row"><span class="op-feed-city">${x.city||'—'}</span><span class="op-feed-loc">${x.location_name||x.address||''}</span>${isNew?'<span class="op-feed-new">NEW</span>':''}<span class="op-feed-date">${dt}</span></div>`;
-  }).join('');
-  const btn=document.getElementById('show-all-btn');
-  if(list.length>lim){btn.style.display='block';btn.textContent=`▼ ПОКАЗАТЬ ВСЕ (${list.length})`;}
-  else btn.style.display='none';
-}
-function filterFeed(){
-  const q=document.getElementById('feed-search').value.toLowerCase();
-  filtered=q?allSt.filter(x=>(x.city||'').toLowerCase().includes(q)||(x.location_name||'').toLowerCase().includes(q)||(x.address||'').toLowerCase().includes(q)):allSt;
-  feedLimit=20;renderFeedRows(filtered,feedLimit);
-}
-function showAll(){feedLimit=filtered.length;renderFeedRows(filtered,feedLimit);}
-
+/* ═══ VISITS ═══ */
 async function trackVisit(){
   try{
     await fetch(SURL+'/rest/v1/visits',{method:'POST',
@@ -487,71 +505,33 @@ async function trackVisit(){
   }catch{document.getElementById('visit-count').textContent='...';}
 }
 
-async function loadNarratives(){
-  try{
-    const r=await fetch(SURL+'/rest/v1/ai_operator_narratives?operator=eq.'+OP+'&is_active=eq.true&select=narrative_type,content',
-      {headers:{'apikey':SKEY}});
-    const data=await r.json();
-    if(!data||!data.length){
-      document.getElementById('ai-narrative').innerHTML='';
-      return;
-    }
-    const n={};
-    data.forEach(x=>n[x.narrative_type]=x.content);
-
-    // Слоган месяца — над badges, atmospheric layer
-    if(n.slogan_month){
-      document.getElementById('op-slogan').textContent=n.slogan_month;
-    }
-
-    // Telemetry feed — три строки с цветными маркерами
-    const rows=[];
-    if(n.status_line) rows.push(
-      `<div style="font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:0.5px;line-height:1.8">` +
-      `<span style="color:#d14dff">СТАТУС/</span>` +
-      `<span style="color:#00e535"> ${n.status_line}</span></div>`
-    );
-    if(n.rivalry_line) rows.push(
-      `<div style="font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:0.5px;line-height:1.8">` +
-      `<span style="color:#ff6b35">СОПЕРНИК/</span>` +
-      `<span style="color:#00e535"> ${n.rivalry_line}</span></div>`
-    );
-    if(n.commentary_line) rows.push(
-      `<div style="font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:0.5px;line-height:1.8">` +
-      `<span style="color:#00e5ff">ЭФИР/</span>` +
-      `<span style="color:#00e535"> ${n.commentary_line}</span></div>`
-    );
-
-    document.getElementById('ai-narrative').innerHTML=
-      `<div style="display:flex;flex-direction:column;gap:4px">${rows.join('')}</div>`;
-
-  }catch(e){
-    document.getElementById('ai-narrative').innerHTML='';
-  }
-}
-
+/* ═══ INIT ═══ */
 async function init(){
   try{
-    const[all,goal]=await Promise.all([fetchAllStations(),fetchGoal()]);
+    const[all,goal,snapshots]=await Promise.all([fetchAllStations(),fetchGoal(),fetchSnapshots()]);
     if(!Array.isArray(all))throw new Error();
     const opSt=all.filter(x=>x.operator===OP).sort((a,b)=>{
       if(a.station_date!==b.station_date)return b.station_date<a.station_date?-1:1;
       if(a.station_time&&b.station_time)return b.station_time<a.station_time?-1:1;
       return b.station_time?1:a.station_time?-1:0;
     });
-    allSt=opSt;filtered=[...allSt];
     const s=calcStandings(all);
-    renderBadges(s);renderStats(opSt,goal);renderMomentum(opSt);
-    renderForecast(opSt,goal);renderCharts(opSt);renderTop5(opSt);
-    renderFeedRows(filtered,feedLimit);
+    const states=calcMomentumStates(Array.isArray(snapshots)?snapshots:[]);
+    renderBadges(s);
+    renderTrajectory(opSt,goal);
+    renderStats(opSt,goal);
+    renderMomentum(states);
+    renderTerminalBars(opSt);
+    renderTop5(opSt);
   }catch(e){
     console.error(e);
-    ['op-badges','stats-wrap','mom-wrap','fc-wrap'].forEach(id=>{
+    ['op-badges','traj-wrap','stats-wrap','mom-wrap','bars-wrap'].forEach(id=>{
       const el=document.getElementById(id);
-      if(el)el.innerHTML='<div class="op-loading" style="color:var(--red)">ОШИБКА ЗАГРУЗКИ</div>';
+      if(el)el.innerHTML='<div class="op-loading" style="color:var(--red)">ОШИБКА</div>';
     });
   }
- loadNarratives(); trackVisit();
+  loadNarratives();
+  trackVisit();
 }
 init();
 </script>
