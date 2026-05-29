@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>United Company — EV RACE 2026 | Ждём дебюта</title>
+<meta name="description" content="United Company в гонке EV RACE 2026. Дебют ожидается., trajectory, динамика сезона EV RACE Беларусь 2026.">
+<meta name="keywords" content="forEVo зарядные станции, forEVo Беларусь 2026, EV RACE forEVo">
+<meta property="og:title" content="United Company — EV RACE 2026">
+<meta property="og:description" content="United Company — оператор зарядных станций Беларусь 2026. Дебют в гонке EV RACE., telemetry, динамика гонки.">
+<meta property="og:image" content="https://evrace.by/og.png">
+<meta property="og:url" content="https://evrace.by/operators/united.html">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://evrace.by/operators/united.html">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"United Company","url":"https://evrace.by/operators/united.html","description":"Оператор DC зарядных станций в Беларуси"}</script>
+
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
+ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+
+<link id="theme-css" rel="stylesheet" href="../CSS/arcade.css?v=2">
+<link rel="stylesheet" href="../CSS/operator.css?v=2">
+<link rel="prefetch" href="../CSS/tesla-light.css">
+<link rel="prefetch" href="../CSS/tesla-dark.css">
+<style>
+:root{--op-color:#F5821F;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="statusbar" id="statusbar">
+    <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-desktop">
+      <a class="nav-link" href="/">ГЛАВНАЯ</a>
+      <div class="nav-dropdown-wrap">
+        <a class="nav-link active" href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+        <button class="nav-drop-btn" onclick="toggleDrop(event)" aria-label="Операторы">▾</button>
+        <div class="dropdown-menu" id="dropMenu">
+          <a class="dropdown-item" href="/operators/batteryfly.html"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
+          <a class="dropdown-item" href="/operators/forevo.html"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
+          <a class="dropdown-item op-active" href="/operators/united.html"><span class="d-dot" style="background:#F5821F"></span>United Company</a>
+          <a class="dropdown-item" href="/operators/zaryadka.html"><span class="d-dot" style="background:#00cfff"></span>Zaryadka</a>
+          <a class="dropdown-item" href="/operators/csms.html"><span class="d-dot" style="background:#FF6B6B"></span>ЦСМС</a>
+        </div>
+      </div>
+      <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+      <a class="nav-link" href="https://evrace.by/letters.html">ПИСЬМА</a>
+      <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
+    </div>
+    <div class="theme-seg">
+      <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
+      <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
+      <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
+    </div>
+    <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Сканлайны и свечение">
+      <span class="fx-seg fx-on active" data-state="on">ЭФФЕКТЫ</span>
+      <span class="fx-seg fx-off"       data-state="off">ЧЁТКО</span>
+    </button>
+  </div>
+
+  <div class="nav-mobile-drop" id="mobileMenu">
+    <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
+    <div class="mob-nav-row">
+      <a class="nav-mobile-link" href="/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <button class="mob-acc-btn" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Операторы">▾</button>
+    </div>
+    <div class="mob-acc-list" id="mobAccList">
+      <a href="/operators/batteryfly.html" onclick="closeBurger()"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
+      <a href="/operators/forevo.html" onclick="closeBurger()"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
+      <a class="op-active" href="/operators/united.html" onclick="closeBurger()"><span class="d-dot" style="background:#F5821F"></span>United Company</a>
+      <a href="/operators/zaryadka.html" onclick="closeBurger()"><span class="d-dot" style="background:#00cfff"></span>Zaryadka</a>
+      <a href="/operators/csms.html" onclick="closeBurger()"><span class="d-dot" style="background:#FF6B6B"></span>ЦСМС</a>
+    </div>
+    <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
+    <a class="nav-mobile-link" href="https://evrace.by/letters.html" onclick="closeBurger()">ПИСЬМА</a>
+    <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
+  </div>
+
+  <div class="page-wrap">
+
+    <div class="hero">
+      <div class="header-subtitle">#ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
+      <div class="hero-title">EV RACE<span class="cursor">_</span></div>
+      <div class="header-year">БЕЛАРУСЬ 2026</div>
+    </div>
+
+    <div class="breadcrumb">
+      <a href="/">ГЛАВНАЯ</a><span class="bc-sep">/</span>
+      <a href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a><span class="bc-sep">/</span>
+      <span class="bc-cur">UNITED COMPANY</span>
+    </div>
+
+    <div class="op-hero">
+      <div class="op-hero-dot"></div>
+      <span class="op-hero-name">UNITED COMPANY</span>
+    </div>
+
+    <div class="op-slogan" id="op-slogan"></div>
+
+    <div class="op-badges" id="op-badges"><span class="op-loading">...</span></div>
+
+    <div class="section-head">▶ AI СТАТУС</div>
+    <div class="op-narrative" id="ai-narrative"><div class="op-loading">...</div></div>
+
+    <div id="debut-screen" style="padding:var(--s-7) 0 var(--s-8);text-align:center">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--border-dim);letter-spacing:3px;margin-bottom:var(--s-6)">ДАННЫЕ НЕ ПОСТУПАЮТ</div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:clamp(14px,4vw,24px);color:var(--text-dim);letter-spacing:var(--ls);line-height:1.8;margin-bottom:var(--s-6)">ОЖИДАЕМ<br>ДЕБЮТ</div>
+      <div id="debut-strip" style="width:100%;max-width:300px;margin:0 auto var(--s-6)"></div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--border-dim);letter-spacing:2px">СИСТЕМА СЛЕДИТ ЗА ЭФИРОМ</div>
+    </div>
+
+    <div class="op-footer-note">ЭФИР ФОРМИРУЕТСЯ ИЗ СЕЗОННЫХ ДАННЫХ</div>
+
+    <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
+
+    <div class="author-section">
+      <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank">▶ ОБ АВТОРЕ ◀</a>
+      <a class="author-chat-btn" href="https://t.me/evclubb" target="_blank">▶ ЗЕЛЁНЫЙ ЧАТ ◀<span class="chat-sub">крупнейшее электромобильное сообщество в Беларуси</span></a>
+      <div class="section-label">▼ TG-КАНАЛЫ #ИМЕЮСКАЗАТЬ ▼</div>
+      <div class="author-links">
+        <a class="author-link-btn" href="https://t.me/imeyuskazat" target="_blank">EV ОПЫТ</a>
+        <a class="author-link-btn" href="https://t.me/imeyuskazat_lifestyle" target="_blank">EV LIFE</a>
+        <a class="author-link-btn" href="https://t.me/imeyuskazat_evnews" target="_blank">EV WORLD NEWS</a>
+      </div>
+      <div class="section-label">▼ ИНОЕ #НЕТЕЛЕГА ▼</div>
+      <div class="author-links">
+        <a class="author-link-btn" href="https://www.instagram.com/artsiomkrivtsoff/" target="_blank">Instagram</a>
+        <a class="author-link-btn" href="https://tiktok.com/@artsiomkrivtsoff" target="_blank">TikTok</a>
+        <a class="author-link-btn" href="https://www.youtube.com/@imeyuskazat" target="_blank">YouTube</a>
+      </div>
+      <div class="section-label">▼ СВЯЗАТЬСЯ | УСТАНОВИТЬ ЗАРЯДНУЮ СТАНЦИЮ | ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ ▼</div>
+      <div class="author-contacts">
+        <a class="author-contact-btn" href="tel:+375295170067">📞 +375 29 517-00-67</a>
+        <a class="author-contact-btn" href="https://t.me/Krivtsoffag" target="_blank">✈ TELEGRAM</a>
+      </div>
+    </div>
+
+    <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">...</span> РАЗ</div>
+
+    <div class="theme-footer-switch">
+      <span class="theme-foot-lbl">СТИЛЬ</span>
+      <button class="theme-foot-btn active" id="foot-arcade"      onclick="setTheme('arcade')">⬡</button>
+      <button class="theme-foot-btn"        id="foot-tesla-light" onclick="setTheme('tesla-light')">☀</button>
+      <button class="theme-foot-btn"        id="foot-tesla-dark"  onclick="setTheme('tesla-dark')">◑</button>
+    </div>
+
+    <div class="footer">
+      <div class="footer-disclaimer">Эта страница создана исключительно в развлекательных целях.<br>Все данные об установленных станциях носят информационный характер и не являются официальной статистикой.<br>Прогнозы — это игра, а не инвестиционная рекомендация. 🎮<br>Страница не запрашивает и не хранит ваши личные данные.</div>
+      <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
+    </div>
+
+  </div>
+</div>
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
+
+<script>
+/* ═══ CONFIG ═══ */
+const SURL='https://uvrboxrddqlasgrnnnne.supabase.co';
+const SKEY='sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
+const OP='united';
+const OP_DISPLAY='UNITED COMPANY';
+const OP_COLOR='#F5821F';
+const PAGE_KEY='operator_united';
+const ALL_OPS=['batteryfly','forevo','zaryadka','united','csms'];
+const PTS=[5,4,3,2,1];
+const TOTAL_ROUNDS=53;
+const FINAL=new Date('2026-12-31T23:59:59');
+const THEMES=['arcade','tesla-light','tesla-dark'];
+
+/* ═══ THEME ═══ */
+function setTheme(t){
+  document.getElementById('theme-css').href='../CSS/'+t+'.css?v=2';
+  localStorage.setItem('ev_race_theme',t);
+  document.documentElement.setAttribute('data-theme',t);
+  THEMES.forEach(x=>{
+    const b=document.getElementById('btn-'+x);if(b)b.classList.toggle('active',x===t);
+    const f=document.getElementById('foot-'+x);if(f)f.classList.toggle('active',x===t);
+  });
+}
+function toggleFx(){
+  const on=document.body.classList.toggle('reduced-fx');
+  localStorage.setItem('ev_race_reduced_fx',on?'1':'0');
+  ['flicker','blink','shine'].forEach(k=>document.documentElement.setAttribute('data-anim-'+k,on?'0':'1'));
+  document.querySelector('.fx-seg.fx-on')?.classList.toggle('active',!on);
+  document.querySelector('.fx-seg.fx-off')?.classList.toggle('active',on);
+}
+(function(){
+  const s=localStorage.getItem('ev_race_theme');
+  if(s&&THEMES.includes(s))setTheme(s);
+  else document.documentElement.setAttribute('data-theme','arcade');
+  if(localStorage.getItem('ev_race_reduced_fx')==='1'){
+    document.body.classList.add('reduced-fx');
+    ['flicker','blink','shine'].forEach(k=>document.documentElement.setAttribute('data-anim-'+k,'0'));
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.querySelector('.fx-seg.fx-on')?.classList.remove('active');
+      document.querySelector('.fx-seg.fx-off')?.classList.add('active');
+    });
+  }
+  const sb=document.getElementById('statusbar');
+  if(sb)document.documentElement.style.setProperty('--statusbar-h',sb.offsetHeight+'px');
+})();
+
+/* ═══ NAV ═══ */
+function toggleBurger(){
+  const btn=document.getElementById('burgerBtn'),menu=document.getElementById('mobileMenu');
+  const open=menu.classList.toggle('open');btn.classList.toggle('open',open);
+}
+function closeBurger(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('burgerBtn').classList.remove('open');
+}
+function toggleDrop(e){
+  e.preventDefault();e.stopPropagation();
+  document.getElementById('dropMenu').classList.toggle('open');
+}
+function toggleMobAcc(){
+  document.getElementById('mobAccBtn').classList.toggle('open');
+  document.getElementById('mobAccList').classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('mobileMenu'),bbtn=document.getElementById('burgerBtn');
+  if(menu?.classList.contains('open')&&!menu.contains(e.target)&&!bbtn.contains(e.target)){
+    menu.classList.remove('open');bbtn.classList.remove('open');
+  }
+  const dm=document.getElementById('dropMenu');
+  if(dm?.classList.contains('open')&&!dm.closest('.nav-dropdown-wrap').contains(e.target))dm.classList.remove('open');
+});
+window.addEventListener('scroll',()=>document.getElementById('scroll-top')?.classList.toggle('visible',window.scrollY>300));
+
+/* ═══ DATES ═══ */
+const ML=['ЯНВАРЯ','ФЕВРАЛЯ','МАРТА','АПРЕЛЯ','МАЯ','ИЮНЯ','ИЮЛЯ','АВГУСТА','СЕНТЯБРЯ','ОКТЯБРЯ','НОЯБРЯ','ДЕКАБРЯ'];
+function fmtDate(d){return d.getDate()+' '+ML[d.getMonth()]+' '+d.getFullYear();}
+function weeksFromJan1(){return(Date.now()-new Date('2026-01-01').getTime())/(7*24*3600*1000);}
+function getRoundForDate(ds){
+  const d=new Date(ds+'T12:00:00');
+  if(d<new Date('2026-01-01'))return 0;
+  if(d<=new Date('2026-01-02T23:59:59'))return 1;
+  const diff=Math.floor((d-new Date('2026-01-03'))/(24*3600*1000));
+  return Math.max(1,Math.min(Math.floor(diff/7)+2,TOTAL_ROUNDS));
+}
+function getCurrentRound(){return getRoundForDate(new Date().toISOString().split('T')[0]);}
+
+/* ═══ FETCH ═══ */
+async function fetchAllStations(){
+  const r=await fetch(SURL+'/rest/v1/stations?select=*&operator=in.(batteryfly,forevo,zaryadka,united,csms)&order=station_date.asc,station_time.asc.nullslast',
+    {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
+  return r.json();
+}
+async function fetchGoal(){
+  try{
+    const r=await fetch(SURL+'/rest/v1/rpc/get_stations_summary',
+      {method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json'},body:JSON.stringify({})});
+    const d=await r.json();
+    return Array.isArray(d)?d.find(x=>x.operator===OP)?.goal||null:null;
+  }catch{return null;}
+}
+async function fetchSnapshots(){
+  try{
+    const r=await fetch(SURL+'/rest/v1/ai_snapshots?operator=eq.'+OP+'&select=payload,snapshot_date&order=snapshot_date.desc&limit=2',
+      {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
+    return r.json();
+  }catch{return[];}
+}
+async function loadNarratives(){
+  try{
+    const r=await fetch(SURL+'/rest/v1/ai_operator_narratives?operator=eq.'+OP+'&is_active=eq.true&select=narrative_type,content',
+      {headers:{'apikey':SKEY}});
+    const data=await r.json();
+    if(!data?.length){
+      document.getElementById('ai-narrative').innerHTML='';
+      return;
+    }
+    const n={};data.forEach(x=>n[x.narrative_type]=x.content);
+    if(n.slogan_month)document.getElementById('op-slogan').textContent=n.slogan_month;
+    const rows=[];
+    if(n.status_line)rows.push(`<div class="op-narrative-row"><span class="op-nar-st">СТАТУС/</span><span class="op-nar-txt"> ${n.status_line}</span></div>`);
+    if(n.rivalry_line)rows.push(`<div class="op-narrative-row"><span class="op-nar-rv">СОПЕРНИК/</span><span class="op-nar-txt"> ${n.rivalry_line}</span></div>`);
+    if(n.commentary_line)rows.push(`<div class="op-narrative-row"><span class="op-nar-cm">ЭФИР/</span><span class="op-nar-txt"> ${n.commentary_line}</span></div>`);
+    document.getElementById('ai-narrative').innerHTML=rows.length?rows.join(''):'';
+  }catch{
+    document.getElementById('ai-narrative').innerHTML='';
+  }
+}
+
+/* ═══ STANDINGS ═══ */
+function calcStandings(all){
+  const cur=getCurrentRound(),byR={};
+  all.forEach(s=>{
+    const rn=getRoundForDate(s.station_date);if(rn<1)return;
+    const cnt=s.count||1,pw=((s.dc_power||0)+(s.ac_power||0))*cnt;
+    if(!byR[rn])byR[rn]={};
+    if(!byR[rn][s.operator])byR[rn][s.operator]={st:0,pw:0,lt:s.station_time||null};
+    byR[rn][s.operator].st+=cnt;byR[rn][s.operator].pw+=pw;
+    if(s.station_time&&(!byR[rn][s.operator].lt||s.station_time>byR[rn][s.operator].lt))byR[rn][s.operator].lt=s.station_time;
+  });
+  const stP={},pwP={},stW={},pwW={};
+  ALL_OPS.forEach(op=>{stP[op]=0;pwP[op]=0;stW[op]=0;pwW[op]=0;});
+  for(let rn=1;rn<cur;rn++){
+    const rd=byR[rn]||{};
+    const bySt=Object.entries(rd).sort((a,b)=>{
+      if(b[1].st!==a[1].st)return b[1].st-a[1].st;
+      if(a[1].lt&&b[1].lt)return a[1].lt<b[1].lt?-1:1;
+      return a[1].lt?-1:b[1].lt?1:0;
+    });
+    const byPw=Object.entries(rd).sort((a,b)=>b[1].pw-a[1].pw);
+    bySt.forEach(([op,d],i)=>{stP[op]+=(PTS[i]||0);if(i===0&&d.st>0)stW[op]++;});
+    byPw.forEach(([op,d],i)=>{pwP[op]+=(PTS[i]||0);if(i===0&&d.pw>0)pwW[op]++;});
+  }
+  const ranked=[...ALL_OPS].sort((a,b)=>stP[b]-stP[a]);
+  return{place:ranked.indexOf(OP)+1,pts:stP[OP],stW:stW[OP],pwW:pwW[OP]};
+}
+
+/* ═══ METRICS ═══ */
+function totalCount(st){return st.reduce((s,x)=>s+(x.count||1),0);}
+function stationsInDays(st,days){
+  const cut=new Date();cut.setDate(cut.getDate()-days);
+  return st.reduce((s,x)=>new Date(x.station_date)>=cut?s+(x.count||1):s,0);
+}
+function calcPace(st){const w=weeksFromJan1();return w>0?totalCount(st)/w:0;}
+function goalForecast(st,goal){
+  const tot=totalCount(st);if(tot>=goal)return{done:true};
+  const pace=calcPace(st);if(pace<=0)return{done:false,date:null,onTrack:false};
+  const d=new Date();d.setDate(d.getDate()+Math.round((goal-tot)/pace*7));
+  return{done:false,date:d,onTrack:d<=FINAL};
+}
+
+/* ═══ MOMENTUM STATE ═══ */
+function calcMomentumStates(snapshots){
+  const labels=[];
+  if(!snapshots?.length)return labels;
+  const cur=snapshots[0]?.payload;
+  const prev=snapshots[1]?.payload;
+  if(!cur)return labels;
+  const mMap={accelerating:'ТЕМП: РАСТЁТ',stable:'ТЕМП: СТАБИЛЕН',slowing:'ТЕМП: ЗАМЕДЛЯЕТСЯ'};
+  if(mMap[cur.momentum_state])labels.push(mMap[cur.momentum_state]);
+  if(prev){
+    const gc=cur.gap_to_leader??null,gp=prev.gap_to_leader??null;
+    if(gc!==null&&gp!==null&&gc<gp)labels.push('ДАВЛЕНИЕ ↑');
+    const rc=cur.rank??null,rp=prev.rank??null;
+    if(rc!==null&&rp!==null&&rc===rp)labels.push('ПОЗИЦИЯ СТАБИЛЬНА');
+  }
+  return labels.slice(0,3);
+}
+
+/* ═══ PULSE STRIP ═══ */
+function buildPulseStrip(){
+  const ticks=[4,7,3,9,5,11,6,13,7,14,8,15,9,14,11,15,10,14,12,16];
+  const max=16,w=300,h=18;
+  const step=w/ticks.length;
+  let lines='';
+  ticks.forEach((v,i)=>{
+    const x=Math.round(i*step+step/2);
+    const y1=h-v;
+    const op=(0.2+(v/max)*0.6).toFixed(2);
+    lines+=`<line x1="${x}" y1="${h}" x2="${x}" y2="${y1}" stroke="var(--op-color)" stroke-width="1.2" opacity="${op}"/>`;
+  });
+  return`<svg class="op-mom-strip" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">${lines}</svg>`;
+}
+
+/* ═══ RENDER ═══ */
+function renderBadges(s){
+  const lbl=['','★ ','▲ ','▲ ','',''];
+  document.getElementById('op-badges').innerHTML=
+    `<span class="op-badge-place">${lbl[s.place]||''}${s.place}-Е МЕСТО · ${s.pts} ОЧКОВ</span>`+
+    `<span class="op-badge-wins stations">★ ${s.stW} ПОБЕД ПО СТАНЦИЯМ</span>`+
+    `<span class="op-badge-wins power">⚡ ${s.pwW} ПОБЕД ПО МОЩНОСТИ</span>`;
+}
+
+function renderTrajectory(st,goal){
+  const el=document.getElementById('traj-wrap');
+  if(!goal){el.innerHTML='';return;}
+  const fc=goalForecast(st,goal);
+  if(fc.done){
+    el.innerHTML=`<div class="op-traj-hint">ЦЕЛЬ ДОСТИГНУТА</div>`;
+    return;
+  }
+  const dateStr=fc.date?fmtDate(fc.date):'ДАННЫХ НЕДОСТАТОЧНО';
+  const statusHtml=fc.date
+    ?(fc.onTrack
+      ?`<div class="op-traj-ok">✓ УСПЕВАЕТ К 31.12.2026</div>`
+      :`<div class="op-traj-fail">✗ НЕ УСПЕВАЕТ К 31.12.2026</div>`)
+    :'';
+  el.innerHTML=`
+    <div class="op-traj-hint">ЕСЛИ ТЕМП СОХРАНИТСЯ</div>
+    <div class="op-traj-date">${dateStr}</div>
+    <div class="op-traj-label">${OP_DISPLAY} ВЫХОДИТ НА ЦЕЛЬ</div>
+    <svg class="op-traj-line" viewBox="0 0 300 14" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="9" x2="270" y2="9" stroke="var(--border-dim)" stroke-width=".8"/>
+      <line x1="270" y1="9" x2="282" y2="5" stroke="var(--border-dim)" stroke-width=".8"/>
+      <line x1="282" y1="5" x2="292" y2="5" stroke="var(--border-dim)" stroke-width=".8"/>
+      <polygon points="292,3 299,5 292,7" fill="var(--border-dim)"/>
+    </svg>
+    ${statusHtml}`;
+}
+
+function renderStats(st,goal){
+  const tot=totalCount(st);
+  const pct=goal?Math.round(tot/goal*100):0;
+  const mw=st.reduce((s,x)=>s+((x.dc_power||0)+(x.ac_power||0))*(x.count||1),0)/1000;
+  const cities=new Set(st.map(x=>x.city).filter(Boolean)).size;
+  document.getElementById('stats-wrap').innerHTML=`
+    <div class="op-stat-card">
+      <div class="op-stat-label">ТОЧЕК В СЕТИ</div>
+      <div class="op-stat-val">${tot}</div>
+      ${goal?`<div class="op-stat-bar-wrap"><div class="op-stat-bar-fill" style="width:${Math.min(pct,100)}%"></div></div>`:''}
+    </div>
+    <div class="op-stat-card">
+      <div class="op-stat-label">СУММАРНАЯ МОЩНОСТЬ</div>
+      <div class="op-stat-val">${mw.toFixed(1)}</div>
+      <div class="op-stat-sub">МВт</div>
+    </div>
+    <div class="op-stat-card">
+      <div class="op-stat-label">ГОРОДОВ В СЕТИ 2026</div>
+      <div class="op-stat-val">${cities}</div>
+    </div>`;
+}
+
+function renderMomentum(states){
+  const el=document.getElementById('mom-wrap');
+  if(!states.length){el.innerHTML='';return;}
+  const primary=states[0];
+  const secondary=states.slice(1);
+  const tagsHtml=secondary.map(t=>`<span class="op-mom-tag">${t}</span>`).join('');
+  el.innerHTML=`
+    <div class="op-mom-primary">${primary}</div>
+    ${secondary.length?`<div class="op-mom-secondary">${tagsHtml}</div>`:''}
+    ${buildPulseStrip()}`;
+}
+
+function startPulseAnimation(){
+  if(document.body.classList.contains('reduced-fx'))return;
+  const strip=document.querySelector('.op-mom-strip svg');
+  if(!strip)return;
+  const lines=strip.querySelectorAll('line');
+  if(!lines.length)return;
+  function tick(){
+    if(document.body.classList.contains('reduced-fx'))return;
+    const s=document.querySelector('.op-mom-strip svg');
+    if(!s)return;
+    const ls=s.querySelectorAll('line');
+    if(!ls.length)return;
+    const line=ls[Math.floor(Math.random()*ls.length)];
+    const base=parseFloat(line.getAttribute('opacity'))||0.5;
+    const shift=0.02+Math.random()*0.01;
+    const next=Math.min(1,Math.max(0,base+(Math.random()>.5?shift:-shift)));
+    const dur=150+Math.random()*100;
+    line.style.transition=`opacity ${dur}ms ease`;
+    line.style.opacity=next;
+    setTimeout(()=>{line.style.transition=`opacity ${dur}ms ease`;line.style.opacity=base;},dur);
+    setTimeout(tick,6000+Math.random()*6000);
+  }
+  setTimeout(tick,3000+Math.random()*3000);
+}
+
+function renderTerminalBars(st){
+  const cm={};
+  st.forEach(x=>{if(x.city)cm[x.city]=(cm[x.city]||0)+(x.count||1);});
+  const top3=Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const maxC=top3[0]?.[1]||1;
+  const bins={'<50 кВт':0,'50–100':0,'100–150':0,'150+ кВт':0};
+  st.forEach(x=>{
+    const p=(x.dc_power||0)+(x.ac_power||0),cnt=x.count||1;if(!p)return;
+    if(p<50)bins['<50 кВт']+=cnt;
+    else if(p<100)bins['50–100']+=cnt;
+    else if(p<150)bins['100–150']+=cnt;
+    else bins['150+ кВт']+=cnt;
+  });
+  const maxB=Math.max(...Object.values(bins),1);
+  const cityRows=top3.map(([city,count])=>`
+    <div class="op-bar-row">
+      <span class="op-bar-label">${city}</span>
+      <div class="op-bar-track"><div class="op-bar-fill" style="width:${Math.round(count/maxC*100)}%"></div></div>
+      <span class="op-bar-val">${count}</span>
+    </div>`).join('');
+  const powerRows=Object.entries(bins).map(([label,count])=>`
+    <div class="op-bar-row">
+      <span class="op-bar-label">${label}</span>
+      <div class="op-bar-track"><div class="op-bar-fill" style="width:${Math.round(count/maxB*100)}%"></div></div>
+      <span class="op-bar-val">${count||'—'}</span>
+    </div>`).join('');
+  document.getElementById('bars-wrap').innerHTML=`
+    <div class="op-terminal-section">
+      <div class="op-terminal-title">ГОРОДА</div>${cityRows}
+    </div>
+    <div class="op-terminal-section">
+      <div class="op-terminal-title">КЛАССЫ МОЩНОСТИ</div>${powerRows}
+    </div>`;
+}
+
+function renderTop5(st){
+  const sorted=[...st].sort((a,b)=>((b.dc_power||0)+(b.ac_power||0))-((a.dc_power||0)+(a.ac_power||0))).slice(0,5);
+  document.getElementById('top-tbody').innerHTML=sorted.map((x,i)=>{
+    const pw=(x.dc_power||0)+(x.ac_power||0);
+    const nm=x.location_name||x.address||'—';
+    const gn=[x.gun1_type,x.gun2_type,x.gun3_type].filter(Boolean).join(' · ')||'—';
+    return`<tr><td>${i+1}</td><td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${nm}</td><td>${x.city||'—'}</td><td>${pw?`<span class="op-pw-pill">${pw} кВт</span>`:'—'}</td><td>${gn}</td></tr>`;
+  }).join('')||'<tr><td colspan="5" class="op-loading">НЕТ ДАННЫХ</td></tr>';
+}
+
+/* ═══ VISITS ═══ */
+async function trackVisit(){
+  try{
+    await fetch(SURL+'/rest/v1/visits',{method:'POST',
+      headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({visited_at:new Date().toISOString(),page:PAGE_KEY})});
+    const r=await fetch(SURL+'/rest/v1/visits?select=id&page=eq.'+PAGE_KEY,
+      {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Prefer':'count=exact','Range':'0-0'}});
+    const c=r.headers.get('content-range')?.split('/')[1]||'...';
+    document.getElementById('visit-count').textContent=Number(c).toLocaleString('ru');
+  }catch{document.getElementById('visit-count').textContent='...';}
+}
+
+/* ═══ DEBUT STRIP ═══ */
+function renderDebutStrip(){
+  const wrap=document.getElementById('debut-strip');
+  if(!wrap)return;
+  const ticks=[3,5,2,6,3,7,4,8,3,7,4,6,3,5,4,6,3,7,4,5];
+  const max=8,w=300,h=16;
+  const step=w/ticks.length;
+  let lines='';
+  ticks.forEach((v,i)=>{
+    const x=Math.round(i*step+step/2);
+    const op=(0.15+(v/max)*0.3).toFixed(2);
+    lines+=`<line x1="${x}" y1="${h}" x2="${x}" y2="${h-v}" stroke="var(--op-color)" stroke-width="1.2" opacity="${op}"/>`;
+  });
+  wrap.innerHTML=`<svg class="op-mom-strip" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">${lines}</svg>`;
+  if(!document.body.classList.contains('reduced-fx'))startDebutPulse();
+}
+
+function startDebutPulse(){
+  function tick(){
+    if(document.body.classList.contains('reduced-fx'))return;
+    const s=document.querySelector('#debut-strip svg');
+    if(!s)return;
+    const ls=s.querySelectorAll('line');
+    if(!ls.length)return;
+    const line=ls[Math.floor(Math.random()*ls.length)];
+    const base=parseFloat(line.getAttribute('opacity'))||0.3;
+    const shift=0.02+Math.random()*0.01;
+    const next=Math.min(0.6,Math.max(0.1,base+(Math.random()>.5?shift:-shift)));
+    const dur=150+Math.random()*100;
+    line.style.transition=`opacity ${dur}ms ease`;
+    line.style.opacity=next;
+    setTimeout(()=>{line.style.transition=`opacity ${dur}ms ease`;line.style.opacity=base;},dur);
+    setTimeout(tick,6000+Math.random()*6000);
+  }
+  setTimeout(tick,4000+Math.random()*4000);
+}
+
+/* ═══ INIT ═══ */
+async function init(){
+  try{
+    const[all,snapshots]=await Promise.all([fetchAllStations(),fetchSnapshots()]);
+    if(!Array.isArray(all))throw new Error();
+    const s=calcStandings(all);
+    renderBadges(s);
+    renderDebutStrip();
+  }catch(e){
+    console.error(e);
+    const el=document.getElementById('op-badges');
+    if(el)el.innerHTML='<div class="op-loading" style="color:var(--red)">ОШИБКА</div>';
+  }
+  loadNarratives();
+  trackVisit();
+}
+init();
+</script>
+</body>
+</html>
