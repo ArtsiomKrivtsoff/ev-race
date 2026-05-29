@@ -76,7 +76,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-body { padding-bottom: 60px; }
+body { padding-bottom: 60px; overflow-x: hidden; }
 a  { color: var(--accent); text-decoration: none; }
 a:hover { color: var(--accent-hov); }
 img { max-width: 100%; display: block; }
@@ -717,14 +717,14 @@ td, th, .cur-round-num, .tmr-val, .new-badge,
 }
 .meta-val {
   font-family: var(--font-num);
-  font-size: 22px; font-weight: 300;
+  font-size: clamp(15px, 3.4vw, 22px); font-weight: 300;
   color: var(--fg);
   letter-spacing: -.02em;
-  line-height: 1.1;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 @media (max-width: 560px) {
   .meta-row { grid-template-columns: repeat(2, 1fr); }
-  .meta-val { font-size: 18px; }
 }
 
 .section-head {
@@ -803,16 +803,19 @@ td, th, .cur-round-num, .tmr-val, .new-badge,
   color: var(--fg-3);
   letter-spacing: 1px; text-transform: uppercase;
   text-align: left;
-  padding: 8px 10px;
+  padding: 8px 6px;
   border-bottom: 1px solid var(--hairline);
+  white-space: nowrap;
 }
 .cur-round-table td {
-  padding: 10px;
+  padding: 10px 6px;
   border-bottom: 1px solid var(--hairline-2);
   color: var(--fg);
-  font-family: var(--font) !important;  /* перебиваем inline Press Start 2P */
+  font-family: var(--font) !important;
   font-size: 13px !important;
+  vertical-align: middle;
 }
+.cur-round-table td:nth-child(2) { white-space: nowrap; }
 .cur-round-table tr:last-child td { border-bottom: 0; }
 
 .cur-no-data {
@@ -826,6 +829,7 @@ td, th, .cur-round-num, .tmr-val, .new-badge,
   border-radius: 999px;
   margin-right: 8px;
   vertical-align: 1px;
+  flex-shrink: 0;
 }
 
 .cr-split {
@@ -893,7 +897,7 @@ td, th, .cur-round-num, .tmr-val, .new-badge,
 }
 
 /* ===== Standings ===== */
-.standings-wrap { overflow-x: auto; }
+.standings-wrap { /* без горизонтального скролла — таблица ужимается */ }
 .standings {
   width: 100%;
   background: var(--surface);
@@ -1182,21 +1186,15 @@ td, th, .cur-round-num, .tmr-val, .new-badge,
 }
 .stat-val--compound { font-size: 18px; }
 
-/* ===== Sticky filters ===== */
+/* ===== Фильтры (НЕ sticky — прокручиваются вместе со страницей, как в аркаде) ===== */
 .filters-sticky {
-  position: sticky;
-  top: var(--statusbar-h, 49px);
-  z-index: 50;
-  background: rgba(244,244,246,.92);
-  backdrop-filter: saturate(180%) blur(14px);
-  -webkit-backdrop-filter: saturate(180%) blur(14px);
-  border-top: 1px solid var(--hairline);
+  background: var(--bg);
   border-bottom: 1px solid var(--hairline);
-  margin: 0 calc(-1 * var(--s-5));
+  margin: 0 calc(-1 * var(--s-5)) var(--s-4);
   padding: var(--s-3) var(--s-5);
 }
 @media (max-width: 640px) {
-  .filters-sticky { margin: 0 calc(-1 * var(--s-3)); padding: var(--s-3); }
+  .filters-sticky { margin: 0 calc(-1 * var(--s-3)) var(--s-4); padding: var(--s-3); }
 }
 .filters-wrap { display: flex; flex-direction: column; gap: var(--s-2); }
 .filter-row {
@@ -1597,7 +1595,7 @@ td, th, .cur-round-num, .tmr-val, .new-badge,
   color: var(--fg-3);
 }
 .loc-date { color: var(--fg-2); font-weight: 500; }
-.loc-card .loc-rating { position: absolute; top: var(--s-3); right: var(--s-3); }
+.loc-card .loc-rating { align-self: flex-start; margin-top: var(--s-2); }
 
 /* ===== Load more ===== */
 .load-more-btn, .show-all-btn {
@@ -2049,3 +2047,36 @@ td, th, .cur-round-num, .tmr-val, .new-badge,
   box-shadow: var(--shadow-2);
 }
 #scroll-top:hover { background: var(--surface-3) !important; }
+
+/* ============================================================
+   МОБИЛЬНОЕ УЖАТИЕ ТАБЛИЦ TOUR — без горизонтального скролла
+   (как в arcade: шрифт меньше + узкие отступы, всё влезает)
+   ============================================================ */
+@media (max-width: 560px) {
+  .standings { font-size: 12px; }
+  .standings th { font-size: 9px; padding: 9px 6px; letter-spacing: .4px; }
+  .standings td { padding: 10px 6px; }
+  .standings .td-pts .pts { font-size: 15px; }
+  .standings .rank { font-size: 12px; }
+  /* streak-бэйдж компактнее, переносится под имя */
+  .standings .streak-badge {
+    margin-left: 0; margin-top: 3px;
+    padding: 1px 6px; font-size: 10px;
+  }
+  .standings td .dot { margin-right: 5px; }
+
+  .cur-round-table { font-size: 12px; }
+  .cur-round-table th { font-size: 9px !important; padding: 6px 5px; }
+  .cur-round-table td { padding: 8px 5px; font-size: 12px !important; }
+  .cr-split { margin-left: 6px; }
+  .cr-pill { padding: 1px 5px; font-size: 9px; }
+
+  .forecast-table { font-size: 12px; }
+  .forecast-table th { font-size: 9px; padding: 6px 5px; }
+  .forecast-table td { padding: 8px 5px; }
+  .forecast-table td.forecast strong { font-size: 15px; }
+}
+@media (max-width: 380px) {
+  .standings th { padding: 8px 4px; }
+  .standings td { padding: 9px 4px; }
+}
