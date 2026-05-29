@@ -447,6 +447,31 @@ function renderMomentum(states){
     ${buildPulseStrip()}`;
 }
 
+function startPulseAnimation(){
+  if(document.body.classList.contains('reduced-fx'))return;
+  const strip=document.querySelector('.op-mom-strip svg');
+  if(!strip)return;
+  const lines=strip.querySelectorAll('line');
+  if(!lines.length)return;
+  function tick(){
+    if(document.body.classList.contains('reduced-fx'))return;
+    const s=document.querySelector('.op-mom-strip svg');
+    if(!s)return;
+    const ls=s.querySelectorAll('line');
+    if(!ls.length)return;
+    const line=ls[Math.floor(Math.random()*ls.length)];
+    const base=parseFloat(line.getAttribute('opacity'))||0.5;
+    const shift=0.02+Math.random()*0.01;
+    const next=Math.min(1,Math.max(0,base+(Math.random()>.5?shift:-shift)));
+    const dur=150+Math.random()*100;
+    line.style.transition=`opacity ${dur}ms ease`;
+    line.style.opacity=next;
+    setTimeout(()=>{line.style.transition=`opacity ${dur}ms ease`;line.style.opacity=base;},dur);
+    setTimeout(tick,6000+Math.random()*6000);
+  }
+  setTimeout(tick,3000+Math.random()*3000);
+}
+
 function renderTerminalBars(st){
   const cm={};
   st.forEach(x=>{if(x.city)cm[x.city]=(cm[x.city]||0)+(x.count||1);});
@@ -521,6 +546,7 @@ async function init(){
     renderTrajectory(opSt,goal);
     renderStats(opSt,goal);
     renderMomentum(states);
+    startPulseAnimation();
     renderTerminalBars(opSt);
     renderTop5(opSt);
   }catch(e){
