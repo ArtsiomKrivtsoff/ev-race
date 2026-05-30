@@ -3,226 +3,1009 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>EV RACE 2026 V2 — гонка за 1010 зарядных станций</title>
+<title>EV RACE 2026 — гонка за 1010 зарядных станций Беларуси</title>
+<meta name="description" content="Публичный трекер гонки операторов DC зарядных станций Беларуси 2026. BatteryFly, forEVo, Zaryadka, United Company, ЦСМС — кто установит больше к 31 декабря?">
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
-<link id="theme-css" rel="stylesheet" href="style_arcade_v2.css">
+<link rel="canonical" href="https://evrace.by/">
+
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
+ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<link id="theme-css" rel="stylesheet" href="../CSS/arcade.css?v=2">
+<link rel="prefetch" href="../CSS/tesla-light.css?v=2">
+<link rel="prefetch" href="../CSS/tesla-dark.css?v=2">
+
+<style>
+/* ============================================================
+   EV RACE V2 — встроенные стили поверх arcade.css
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --v2-bg:        #060a06;
+  --v2-card:      #090e09;
+  --v2-border:    #1c2e1c;
+  --v2-green:     #00ff41;
+  --v2-green-dim: #00aa2b;
+  --v2-green-glow:rgba(0,255,65,0.12);
+  --v2-yellow:    #ffd700;
+  --v2-cyan:      #00e5ff;
+  --v2-text:      #c8e6c8;
+  --v2-text-dim:  #3d5c3d;
+  --v2-text-mid:  #6a946a;
+  --bf: #005EEB;
+  --fo: #b44fff;
+  --za: #00cfff;
+  --uc: #F5821F;
+  --cs: #FF6B6B;
+}
+
+/* базовый сброс для v2-блоков */
+.v2-wrap * { box-sizing: border-box; }
+.v2-wrap { padding-bottom: 0; }
+
+/* ---- КАРТОЧКА-БЛОК ---- */
+.v2-block {
+  background: var(--v2-card);
+  border: 1px solid var(--v2-border);
+  border-radius: 5px;
+  margin: 10px 0;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0,0,0,0.6), inset 0 0 0 0px transparent;
+}
+.v2-block-glow {
+  box-shadow: 0 0 0 1px var(--v2-green-dim), 0 0 18px rgba(0,255,65,0.08);
+}
+
+/* ---- HERO МОБИЛЕ — один блок ---- */
+.hero-countdown-block {
+  background: var(--v2-card);
+  border: 1px solid var(--v2-border);
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 16px 14px 12px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-countdown-block::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: radial-gradient(ellipse at 60% 0%, rgba(0,255,65,0.04) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hcb-top {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--v2-text-dim);
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.hcb-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.hcb-days-wrap {}
+.hcb-days {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(52px, 17vw, 90px);
+  color: var(--v2-green);
+  text-shadow: 0 0 20px var(--v2-green), 0 0 50px rgba(0,255,65,0.35);
+  line-height: 1;
+  display: block;
+}
+.hcb-days-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--v2-green-dim);
+  margin-top: 4px;
+}
+.hcb-map {
+  flex-shrink: 0;
+  width: 100px;
+  opacity: 0.45;
+  margin-top: 4px;
+}
+@media(min-width:400px){ .hcb-map { width:120px; } }
+.hcb-map svg path {
+  fill: none;
+  stroke: var(--v2-green);
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 5px var(--v2-green));
+}
+.hcb-hms {
+  display: flex;
+  gap: 20px;
+  padding-top: 6px;
+  border-top: 1px solid var(--v2-border);
+}
+.hcb-hms-item { text-align: center; }
+.hcb-hms-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: var(--v2-text);
+  display: block;
+}
+.hcb-hms-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5px;
+  color: var(--v2-text-dim);
+  margin-top: 3px;
+}
+
+/* ---- О СЕЗОНЕ ---- */
+.season-info-block {
+  background: var(--v2-card);
+  border: 1px solid var(--v2-border);
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.season-info-block .si-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--v2-text-mid);
+  white-space: nowrap;
+}
+.season-info-block .si-item strong { color: var(--v2-yellow); }
+.season-info-block .si-sep {
+  color: var(--v2-border);
+  font-size: 16px;
+  margin: 0 2px;
+}
+
+/* ---- NARRATIVE ---- */
+.narrative-block {
+  background: var(--v2-card);
+  border: 1px solid var(--v2-green-dim);
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 0 14px rgba(0,255,65,0.07);
+}
+.narrative-block .nb-ico {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.narrative-block .nb-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--v2-green);
+  line-height: 1.8;
+  text-shadow: 0 0 8px rgba(0,255,65,0.4);
+}
+.narrative-block .nb-soon {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--v2-text-dim);
+  font-style: italic;
+}
+
+/* ---- СОСТОЯНИЕ СЕЗОНА ---- */
+.season-state-block {
+  background: var(--v2-card);
+  border: 1px solid var(--v2-border);
+  border-radius: 5px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+.ssb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--v2-border);
+}
+.ssb-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--v2-text-mid);
+  letter-spacing: 2px;
+}
+.ssb-live {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--v2-green);
+}
+.ssb-dot {
+  width: 6px; height: 6px;
+  background: var(--v2-green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--v2-green);
+  animation: ssb-blink 1.4s infinite;
+}
+@keyframes ssb-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+.ssb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.ssb-cell {
+  padding: 14px 10px;
+  border-right: 1px solid var(--v2-border);
+}
+.ssb-cell:last-child { border-right: none; }
+.ssb-cell-ico { font-size: 16px; margin-bottom: 6px; }
+.ssb-cell-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5.5px;
+  color: var(--v2-text-dim);
+  line-height: 1.9;
+}
+
+/* ---- ПРОГРЕСС ---- */
+.progress-block {
+  background: var(--v2-card);
+  border: 1px solid var(--v2-border);
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 14px;
+}
+.pb-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--v2-text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.pb-nums {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.pb-current {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 28px;
+  color: var(--v2-green);
+  text-shadow: 0 0 14px var(--v2-green);
+  line-height: 1;
+}
+.pb-sep { font-family: 'Press Start 2P', monospace; font-size: 14px; color: var(--v2-text-dim); }
+.pb-goal { font-family: 'Press Start 2P', monospace; font-size: 14px; color: var(--v2-text-mid); }
+.pb-pct {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: var(--v2-yellow);
+  text-align: right;
+  margin-bottom: 5px;
+}
+.pb-bar {
+  height: 10px;
+  background: #050d05;
+  border: 1px solid var(--v2-border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  display: flex;
+}
+.pb-bar-seg {
+  height: 100%;
+  transition: width 1.2s ease;
+}
+.pb-updated {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--v2-text-dim);
+  text-align: right;
+}
+
+/* ---- БЛОК ОПЕРАТОРОВ ---- */
+.ops-block {
+  background: var(--v2-card);
+  border: 1px solid var(--v2-border);
+  border-radius: 5px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+.ops-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--v2-border);
+}
+.ops-block-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--v2-text-mid);
+  letter-spacing: 2px;
+}
+.ops-block-link {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--v2-green-dim);
+  text-decoration: none;
+}
+.ops-block-link:hover { color: var(--v2-green); }
+
+/* строка оператора */
+.op-row-v2 {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  gap: 10px;
+  align-items: stretch;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--v2-border);
+  position: relative;
+}
+.op-row-v2:last-child { border-bottom: none; }
+.op-row-v2::before {
+  content:'';
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:2px;
+  background: var(--op-clr, transparent);
+  box-shadow: 0 0 8px var(--op-clr, transparent);
+}
+
+/* номер */
+.op-rank-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--op-clr, #1c2e1c);
+  border-radius: 3px;
+  background: rgba(0,0,0,0.3);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--op-clr, transparent) 30%, transparent);
+}
+.op-rank-box span {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: var(--op-clr, #3d5c3d);
+  text-shadow: 0 0 8px var(--op-clr, transparent);
+}
+
+/* середина */
+.op-mid-v2 { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.op-name-row-v2 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.op-logo-v2 {
+  width: 20px; height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.op-logo-v2.dark-bg { background: #111; padding: 2px; border-radius: 2px; }
+.op-name-v2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: var(--v2-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.op-status-v2 {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--v2-text-dim);
+}
+.op-badges-v2 {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.op-badge-v2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5.5px;
+  padding: 2px 5px;
+  border-radius: 2px;
+  border: 1px solid;
+  line-height: 1.4;
+}
+.op-badge-dc { color: var(--v2-yellow); border-color: var(--v2-yellow); background: rgba(255,215,0,0.06); }
+.op-badge-ac { color: var(--v2-cyan);   border-color: var(--v2-cyan);   background: rgba(0,229,255,0.06); }
+
+/* пиксельный прогресс-бар блоками */
+.op-pixbar {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+  margin-top: 2px;
+}
+.op-pixbar-seg {
+  height: 100%;
+  flex: 0 0 6px;
+  border-radius: 1px;
+}
+
+/* правый блок */
+.op-right-v2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4px;
+  min-width: 70px;
+}
+.op-total-v2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--op-clr);
+  text-shadow: 0 0 12px var(--op-clr);
+}
+.op-total-lbl-v2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5px;
+  color: var(--v2-text-dim);
+}
+.op-week-box {
+  border: 1px solid var(--op-clr, #1c2e1c);
+  border-radius: 3px;
+  padding: 4px 7px;
+  text-align: center;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--op-clr, transparent) 20%, transparent);
+}
+.op-week-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--op-clr);
+  text-shadow: 0 0 6px var(--op-clr);
+  display: block;
+}
+.op-week-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 4.5px;
+  color: var(--v2-text-dim);
+}
+
+.dc-ac-legend-v2 {
+  padding: 8px 14px;
+  border-top: 1px solid var(--v2-border);
+  display: flex;
+  gap: 16px;
+}
+.dcac-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5.5px;
+  color: var(--v2-text-dim);
+}
+.dcac-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* ---- ГРАФИК ---- */
+.chart-block {
+  background: var(--v2-card);
+  border: 1px solid var(--v2-border);
+  border-radius: 5px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+.chart-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--v2-border);
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chart-block-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--v2-text-mid);
+  letter-spacing: 1px;
+}
+.chart-meta {
+  display: flex;
+  gap: 14px;
+}
+.chart-meta span {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5.5px;
+  color: var(--v2-text-dim);
+}
+.chart-meta span b { color: var(--v2-green-dim); font-weight: normal; }
+.chart-body {
+  padding: 12px 10px 6px;
+  position: relative;
+}
+.chart-canvas-wrap {
+  position: relative;
+}
+canvas#race-chart-v2 {
+  width: 100%;
+  display: block;
+}
+.chart-legend-v2 {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cl-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: flex-end;
+}
+.cl-val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+}
+.cl-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.chart-xaxis {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0 2px;
+}
+.chart-xaxis span {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5.5px;
+  color: var(--v2-text-dim);
+}
+
+/* ---- СТАТЫ ---- */
+.stats-grid-v2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin: 10px 0;
+}
+.stat-card-v2 {
+  background: var(--v2-card);
+  border: 1px solid var(--v2-border);
+  border-radius: 5px;
+  padding: 10px 8px;
+  text-align: center;
+}
+.sc-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5px;
+  color: var(--v2-text-dim);
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+  margin-bottom: 5px;
+}
+.sc-val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(13px, 3.5vw, 20px);
+  color: var(--v2-green);
+  text-shadow: 0 0 10px rgba(0,255,65,0.5);
+  line-height: 1;
+}
+.sc-val.yel { color: var(--v2-yellow); text-shadow: 0 0 10px rgba(255,215,0,0.4); }
+.sc-val.cyn { color: var(--v2-cyan);   text-shadow: 0 0 10px rgba(0,229,255,0.35); }
+.sc-unit {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 4.5px;
+  color: var(--v2-text-dim);
+  margin-top: 3px;
+}
+
+/* ---- ДЕСКТОП HERO ---- */
+@media(min-width: 640px) {
+  .hero-desktop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 10px 0;
+  }
+  .hero-desktop-left {
+    background: var(--v2-card);
+    border: 1px solid var(--v2-border);
+    border-radius: 5px;
+    padding: 20px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-desktop-left::after {
+    content:'';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 20%, rgba(0,255,65,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-desktop-right {
+    background: var(--v2-card);
+    border: 1px solid var(--v2-border);
+    border-radius: 5px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  /* на десктопе скрываем мобильные блоки */
+  .mobile-only { display: none !important; }
+  .desktop-only { display: block !important; }
+  /* прогресс в правой колонке десктопа */
+  .desktop-progress { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+}
+@media(max-width: 639px) {
+  .desktop-only { display: none !important; }
+  .hero-desktop-grid { display: block; }
+}
+
+.hdl-tag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5.5px;
+  color: var(--v2-text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.hdl-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(32px, 7vw, 56px);
+  color: var(--v2-green);
+  text-shadow: 0 0 20px var(--v2-green), 0 0 50px rgba(0,255,65,0.3);
+  line-height: 1.05;
+  position: relative;
+  z-index: 1;
+}
+.hdl-subtitle {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 2.5vw, 14px);
+  color: var(--v2-yellow);
+  text-shadow: 0 0 8px rgba(255,215,0,0.5);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.hdl-map {
+  position: absolute;
+  right: 12px;
+  top: 16px;
+  width: 130px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+.hdl-map svg path {
+  fill: none;
+  stroke: var(--v2-green);
+  stroke-width: 1.5;
+}
+.hdl-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.hdl-meta-item {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--v2-text-mid);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hdl-meta-item strong { color: var(--v2-yellow); }
+.hdl-scroll-hint {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--v2-text-dim);
+  text-align: center;
+  margin-top: 12px;
+  letter-spacing: 1px;
+}
+
+/* десктоп счётчик */
+.hdr-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--v2-text-dim);
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.hdr-days {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(56px, 12vw, 88px);
+  color: var(--v2-green);
+  text-shadow: 0 0 24px var(--v2-green), 0 0 60px rgba(0,255,65,0.4);
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.hdr-days-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--v2-green-dim);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.hdr-hms {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--v2-border);
+  margin-bottom: 14px;
+}
+.hdr-hms-block { text-align: center; }
+.hdr-hms-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  color: var(--v2-text);
+  display: block;
+}
+.hdr-hms-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5px;
+  color: var(--v2-text-dim);
+  margin-top: 2px;
+}
+</style>
 </head>
 <body>
-
-<div class="cookie-banner" id="cookieBanner">
-  <div class="cookie-text">Страница использует localStorage для запоминания голоса.</div>
-  <button class="cookie-btn" onclick="acceptCookies()">ПОНЯТНО ✓</button>
-</div>
-
 <div class="container">
 
-  <!-- STATUSBAR -->
+  <!-- ═══ СТАТУСБАР ═══ -->
   <div class="statusbar" id="statusbar">
     <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
       <span></span><span></span><span></span>
     </button>
-    <div class="nav-logo">EV RACE <span>БЕЛАРУСЬ 2026</span></div>
     <div class="nav-desktop">
-      <a class="nav-link active" href="#">ГЛАВНАЯ</a>
-      <a class="nav-link" href="../tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
-      <a class="nav-link" href="../stations.html">СТАНЦИИ 2026</a>
+      <a class="nav-link active" href="/">ГЛАВНАЯ</a>
+      <div class="nav-dropdown-wrap">
+        <a class="nav-link" href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+        <button class="nav-drop-btn" onclick="toggleDrop(event)" aria-label="Операторы">▾</button>
+        <div class="dropdown-menu" id="dropMenu">
+          <a class="dropdown-item" href="/operators/batteryfly.html"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
+          <a class="dropdown-item" href="/operators/forevo.html"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
+          <a class="dropdown-item" href="/operators/united.html"><span class="d-dot" style="background:#F5821F"></span>United Company</a>
+          <a class="dropdown-item" href="/operators/zaryadka.html"><span class="d-dot" style="background:#00cfff"></span>Zaryadka</a>
+          <a class="dropdown-item" href="/operators/csms.html"><span class="d-dot" style="background:#FF6B6B"></span>ЦСМС</a>
+        </div>
+      </div>
+      <a class="nav-link" href="/stations.html">СТАНЦИИ 2026</a>
+      <a class="nav-link" href="/letters.html">ПИСЬМА</a>
+      <a class="nav-link" href="/map.html">КАРТА</a>
     </div>
     <div class="theme-seg">
       <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
       <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
       <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
     </div>
+    <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Сканлайны и свечение">
+      <span class="fx-seg fx-on active" data-state="on">ЭФФЕКТЫ</span>
+      <span class="fx-seg fx-off"       data-state="off">ЧЁТКО</span>
+    </button>
   </div>
 
+  <!-- ═══ МОБИЛЬНОЕ МЕНЮ ═══ -->
   <div class="nav-mobile-drop" id="mobileMenu">
-    <a class="nav-mobile-link active" href="#" onclick="closeBurger()">ГЛАВНАЯ</a>
-    <a class="nav-mobile-link" href="../tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
-    <a class="nav-mobile-link" href="../stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
+    <a class="nav-mobile-link active" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
+    <div class="mob-nav-row">
+      <a class="nav-mobile-link" href="/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <button class="mob-acc-btn" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Операторы">▾</button>
+    </div>
+    <div class="mob-acc-list" id="mobAccList">
+      <a href="/operators/batteryfly.html" onclick="closeBurger()"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
+      <a href="/operators/forevo.html"     onclick="closeBurger()"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
+      <a href="/operators/united.html"     onclick="closeBurger()"><span class="d-dot" style="background:#F5821F"></span>United Company</a>
+      <a href="/operators/zaryadka.html"   onclick="closeBurger()"><span class="d-dot" style="background:#00cfff"></span>Zaryadka</a>
+      <a href="/operators/csms.html"       onclick="closeBurger()"><span class="d-dot" style="background:#FF6B6B"></span>ЦСМС</a>
+    </div>
+    <a class="nav-mobile-link" href="/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
+    <a class="nav-mobile-link" href="/letters.html"  onclick="closeBurger()">ПИСЬМА</a>
+    <a class="nav-mobile-link" href="/map.html"       onclick="closeBurger()">КАРТА</a>
   </div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-grid">
+  <div class="page-wrap v2-wrap">
 
-      <!-- левая: title + карта + мета + narrative -->
-      <div class="hero-left">
-        <div class="hero-tag">[ СЕЗОН 2025–2026 ]</div>
-        <div class="hero-title">EV RACE</div>
-        <div class="hero-subtitle">БЕЛАРУСЬ 2026</div>
+  <!-- ═══ ДЕСКТОП HERO (≥640px) ═══ -->
+  <div class="hero-desktop-grid desktop-only">
+    <div class="hero-desktop-left">
+      <div class="hdl-tag">[ СЕЗОН 2025–2026 ]</div>
+      <div class="hdl-title">EV RACE</div>
+      <div class="hdl-subtitle">БЕЛАРУСЬ 2026</div>
+      <div class="hdl-map">
+        <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 104.8,0.0 L 127.0,7.2 L 130.0,14.4 L 141.1,11.0 L 161.7,17.8 L 163.7,31.4 L 159.2,39.2 L 172.4,58.1 L 181.0,63.4 L 179.7,68.6 L 193.9,73.6 L 200.0,81.3 L 191.8,87.7 L 174.8,86.7 L 170.8,89.4 L 175.7,98.9 L 180.9,117.4 L 162.8,119.1 L 156.3,125.5 L 155.0,140.0 L 146.6,137.2 L 127.6,138.6 L 122.0,131.8 L 114.1,136.9 L 106.2,132.7 L 89.6,132.1 L 66.1,125.2 L 44.8,122.9 L 28.5,123.6 L 17.0,131.4 L 6.9,132.5 L 6.5,119.7 L 0.0,106.3 L 12.6,100.4 L 12.8,88.9 L 6.9,77.9 L 6.0,65.1 L 26.4,65.3 L 49.2,54.5 L 54.1,38.2 L 71.4,28.9 L 69.4,16.0 L 82.2,11.1 Z"/>
+        </svg>
+      </div>
+      <div class="hdl-meta">
+        <div class="hdl-meta-item">🏁 <strong>5</strong> ОПЕРАТОРОВ</div>
+        <div class="hdl-meta-item">⚡ <strong>1010</strong> СТАНЦИЙ</div>
+        <div class="hdl-meta-item">📅 ФИНАЛ: <strong>31 ДЕКАБРЯ</strong></div>
+      </div>
+      <div class="narrative-block" style="margin:0">
+        <span class="nb-ico">↗</span>
+        <span class="nb-soon">⏳ AI NARRATIVE — СКОРО</span>
+      </div>
+      <div class="hdl-scroll-hint">ПРОКРУТИТЕ ВНИЗ ⌄</div>
+    </div>
+    <div class="hero-desktop-right">
+      <div class="hdr-label">▸ ДО ФИНАЛА ОСТАЛОСЬ ◂</div>
+      <div class="hdr-days" id="cd-days-d">—</div>
+      <div class="hdr-days-lbl">ДНЕЙ</div>
+      <div class="hdr-hms">
+        <div class="hdr-hms-block"><span class="hdr-hms-num" id="cd-h-d">--</span><div class="hdr-hms-lbl">ЧАСОВ</div></div>
+        <div class="hdr-hms-block"><span class="hdr-hms-num" id="cd-m-d">--</span><div class="hdr-hms-lbl">МИНУТ</div></div>
+        <div class="hdr-hms-block"><span class="hdr-hms-num" id="cd-s-d">--</span><div class="hdr-hms-lbl">СЕКУНД</div></div>
+      </div>
+      <div class="desktop-progress">
+        <div class="pb-label">ОБЩИЙ ПРОГРЕСС К ЦЕЛИ</div>
+        <div class="pb-nums">
+          <span class="pb-current" id="prog-cur-d">—</span>
+          <span class="pb-sep">/</span>
+          <span class="pb-goal">1010</span>
+        </div>
+        <div class="pb-pct" id="prog-pct-d">—%</div>
+        <div class="pb-bar" id="pb-bar-d"></div>
+        <div class="pb-updated" id="prog-upd-d">ОБНОВЛЕНО: —</div>
+      </div>
+    </div>
+  </div>
 
-        <!-- карта Беларуси — точный контур Natural Earth -->
-        <div class="hero-map-wrap">
+  <!-- ═══ МОБИЛЬНЫЙ HERO (< 640px) ═══ -->
+  <div class="mobile-only">
+    <!-- блок: дни + карта -->
+    <div class="hero-countdown-block">
+      <div class="hcb-top">▸ ДО ФИНАЛА ОСТАЛОСЬ ◂</div>
+      <div class="hcb-main">
+        <div class="hcb-days-wrap">
+          <span class="hcb-days" id="cd-days-m">—</span>
+          <div class="hcb-days-lbl">ДНЕЙ</div>
+        </div>
+        <div class="hcb-map">
           <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
             <path d="M 104.8,0.0 L 127.0,7.2 L 130.0,14.4 L 141.1,11.0 L 161.7,17.8 L 163.7,31.4 L 159.2,39.2 L 172.4,58.1 L 181.0,63.4 L 179.7,68.6 L 193.9,73.6 L 200.0,81.3 L 191.8,87.7 L 174.8,86.7 L 170.8,89.4 L 175.7,98.9 L 180.9,117.4 L 162.8,119.1 L 156.3,125.5 L 155.0,140.0 L 146.6,137.2 L 127.6,138.6 L 122.0,131.8 L 114.1,136.9 L 106.2,132.7 L 89.6,132.1 L 66.1,125.2 L 44.8,122.9 L 28.5,123.6 L 17.0,131.4 L 6.9,132.5 L 6.5,119.7 L 0.0,106.3 L 12.6,100.4 L 12.8,88.9 L 6.9,77.9 L 6.0,65.1 L 26.4,65.3 L 49.2,54.5 L 54.1,38.2 L 71.4,28.9 L 69.4,16.0 L 82.2,11.1 Z"/>
           </svg>
         </div>
-
-        <div class="hero-meta">
-          <div class="hero-meta-item"><span class="ico">🏁</span> <strong>5</strong> ОПЕРАТОРОВ</div>
-          <div class="hero-meta-item"><span class="ico">⚡</span> <strong>1010</strong> СТАНЦИЙ</div>
-          <div class="hero-meta-item"><span class="ico">📅</span> ФИНАЛ: <strong>31 ДЕКАБРЯ</strong></div>
-        </div>
-
-        <div class="narrative-box">
-          <span class="narrative-arrow">↗</span>
-          <div>
-            <div class="narrative-text" id="narrative-text">—</div>
-            <div class="narrative-soon" id="narrative-soon" style="display:none">⏳ AI NARRATIVE — СКОРО</div>
-          </div>
-        </div>
       </div>
-
-      <!-- правая: счётчик + прогресс -->
-      <div class="hero-right">
-        <div class="countdown-label-top">▸ ДО ФИНАЛА ОСТАЛОСЬ ◂</div>
-        <div class="countdown-days" id="cd-days">—</div>
-        <div class="countdown-days-label">ДНЕЙ</div>
-        <div class="countdown-hms">
-          <div class="countdown-hms-block">
-            <span class="countdown-hms-num" id="cd-hours">--</span>
-            <div class="countdown-hms-lbl">ЧАСОВ</div>
-          </div>
-          <div class="countdown-hms-block">
-            <span class="countdown-hms-num" id="cd-min">--</span>
-            <div class="countdown-hms-lbl">МИНУТ</div>
-          </div>
-          <div class="countdown-hms-block">
-            <span class="countdown-hms-num" id="cd-sec">--</span>
-            <div class="countdown-hms-lbl">СЕКУНД</div>
-          </div>
-        </div>
-        <div class="hero-progress">
-          <div class="hero-progress-label">ОБЩИЙ ПРОГРЕСС К ЦЕЛИ</div>
-          <div class="hero-progress-nums">
-            <span class="hero-progress-current" id="prog-current">—</span>
-            <span class="hero-progress-sep">/</span>
-            <span class="hero-progress-goal">1010</span>
-          </div>
-          <div class="hero-progress-pct" id="prog-pct">—%</div>
-          <div class="progress-bar-wrap">
-            <div class="progress-bar-stacked" id="total-bar-stacked"></div>
-          </div>
-          <div class="hero-updated" id="hero-updated">ОБНОВЛЕНО: —</div>
-        </div>
+      <div class="hcb-hms">
+        <div class="hcb-hms-item"><span class="hcb-hms-num" id="cd-h-m">--</span><div class="hcb-hms-lbl">ЧАСОВ</div></div>
+        <div class="hcb-hms-item"><span class="hcb-hms-num" id="cd-m-m">--</span><div class="hcb-hms-lbl">МИНУТ</div></div>
+        <div class="hcb-hms-item"><span class="hcb-hms-num" id="cd-s-m">--</span><div class="hcb-hms-lbl">СЕКУНД</div></div>
       </div>
-
-    </div><!-- /hero-grid -->
-  </div><!-- /hero -->
-
-  <!-- СОСТОЯНИЕ СЕЗОНА -->
-  <div class="section-block">
-    <div class="section-header">
-      <span class="section-title">◈ СОСТОЯНИЕ СЕЗОНА</span>
-      <span class="live-badge"><span class="live-dot"></span> LIVE</span>
     </div>
-    <div class="season-state-grid">
-      <div class="season-state-item">
-        <div class="state-ico">🏆</div>
-        <div class="state-soon">⏳ В РАЗРАБОТКЕ</div>
+
+    <!-- О СЕЗОНЕ -->
+    <div class="season-info-block">
+      <div class="si-item">🏁 <strong>5</strong> ОПЕРАТОРОВ</div>
+      <div class="si-sep">·</div>
+      <div class="si-item">⚡ <strong>1010</strong> СТАНЦИЙ</div>
+      <div class="si-sep">·</div>
+      <div class="si-item">📅 ФИНАЛ <strong>31 ДЕК</strong></div>
+    </div>
+
+    <!-- NARRATIVE -->
+    <div class="narrative-block">
+      <span class="nb-ico">↗</span>
+      <span class="nb-soon">⏳ AI NARRATIVE — СКОРО</span>
+    </div>
+
+    <!-- ПРОГРЕСС -->
+    <div class="progress-block">
+      <div class="pb-label">ОБЩИЙ ПРОГРЕСС К ЦЕЛИ</div>
+      <div class="pb-nums">
+        <span class="pb-current" id="prog-cur-m">—</span>
+        <span class="pb-sep">/</span>
+        <span class="pb-goal">1010</span>
       </div>
-      <div class="season-state-item">
-        <div class="state-ico">📍</div>
-        <div class="state-soon">⏳ В РАЗРАБОТКЕ</div>
+      <div class="pb-pct" id="prog-pct-m">—%</div>
+      <div class="pb-bar" id="pb-bar-m"></div>
+      <div class="pb-updated" id="prog-upd-m">ОБНОВЛЕНО: —</div>
+    </div>
+  </div>
+
+  <!-- ═══ СОСТОЯНИЕ СЕЗОНА ═══ -->
+  <div class="season-state-block">
+    <div class="ssb-header">
+      <span class="ssb-title">◈ СОСТОЯНИЕ СЕЗОНА</span>
+      <span class="ssb-live"><span class="ssb-dot"></span>LIVE</span>
+    </div>
+    <div class="ssb-grid">
+      <div class="ssb-cell">
+        <div class="ssb-cell-ico">🏆</div>
+        <div class="ssb-cell-text">⏳ В РАЗРАБОТКЕ</div>
       </div>
-      <div class="season-state-item">
-        <div class="state-ico">⚡</div>
-        <div class="state-soon">⏳ В РАЗРАБОТКЕ</div>
+      <div class="ssb-cell">
+        <div class="ssb-cell-ico">📍</div>
+        <div class="ssb-cell-text">⏳ В РАЗРАБОТКЕ</div>
+      </div>
+      <div class="ssb-cell">
+        <div class="ssb-cell-ico">⚡</div>
+        <div class="ssb-cell-text">⏳ В РАЗРАБОТКЕ</div>
       </div>
     </div>
   </div>
 
-  <!-- ОПЕРАТОРЫ -->
-  <div class="section-block">
-    <div class="ops-header">
-      <span class="section-title">◈ ОПЕРАТОРЫ</span>
-      <div class="ops-nav">
-        <span class="ops-nav-btn">◂</span>
-        <a class="ops-nav-link" href="../tour.html">ТОП-5 →</a>
-      </div>
+  <!-- ═══ ОПЕРАТОРЫ ═══ -->
+  <div class="ops-block">
+    <div class="ops-block-header">
+      <span class="ops-block-title">◈ ОПЕРАТОРЫ</span>
+      <a class="ops-block-link" href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА →</a>
     </div>
-    <div id="operators-list">
-      <div style="padding:20px;text-align:center" class="loading-pulse">ЗАГРУЗКА...</div>
+    <div id="ops-list">
+      <div style="padding:20px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:12px;color:#3d5c3d">ЗАГРУЗКА...</div>
     </div>
-    <div class="dc-ac-legend">
-      <div class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span> DC — БЫСТРЫЕ СТАНЦИИ</div>
-      <div class="legend-item"><span class="legend-dot" style="background:var(--cyan)"></span> AC — МЕДЛЕННЫЕ СТАНЦИИ</div>
+    <div class="dc-ac-legend-v2">
+      <div class="dcac-item"><span class="dcac-dot" style="background:var(--v2-yellow)"></span>DC — БЫСТРЫЕ СТАНЦИИ</div>
+      <div class="dcac-item"><span class="dcac-dot" style="background:var(--v2-cyan)"></span>AC — МЕДЛЕННЫЕ СТАНЦИИ</div>
     </div>
   </div>
 
-  <!-- СЕЗОННАЯ ГОНКА — ГРАФИК -->
-  <div class="race-chart-section">
-    <div class="race-chart-header">
-      <span class="section-title">↗ СЕЗОННАЯ ГОНКА</span>
-      <div class="race-chart-meta">
-        <div class="race-chart-meta-item">СТАРТ <span>01.01.2026</span></div>
-        <div class="race-chart-meta-item">ФИНАЛ <span>31.12.2026</span></div>
+  <!-- ═══ ГРАФИК ═══ -->
+  <div class="chart-block">
+    <div class="chart-block-header">
+      <span class="chart-block-title">↗ СЕЗОННАЯ ГОНКА</span>
+      <div class="chart-meta">
+        <span>СТАРТ <b>01.01.2026</b></span>
+        <span>ФИНАЛ <b>31.12.2026</b></span>
       </div>
     </div>
-    <div class="race-chart-body">
-      <div class="race-canvas-wrap">
-        <canvas id="race-chart" height="200"></canvas>
-        <div class="race-chart-legend" id="chart-legend"></div>
+    <div class="chart-body">
+      <div class="chart-canvas-wrap">
+        <canvas id="race-chart-v2" height="200"></canvas>
+        <div class="chart-legend-v2" id="chart-legend-v2"></div>
       </div>
-      <div class="race-chart-xaxis">
+      <div class="chart-xaxis">
         <span>НЕД. 1</span>
-        <span id="chart-mid-week">НЕД. —</span>
+        <span id="chart-mid-lbl">НЕД. —</span>
         <span>НЕД. 53</span>
       </div>
     </div>
   </div>
 
-  <!-- СТАТИСТИКА СНИЗУ -->
-  <div class="stats-grid" id="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">ИДЁТ<br>НЕДЕЛЯ</div>
-      <div class="stat-value" id="stat-week">—</div>
-      <div class="stat-unit">СЕЗОНА</div>
+  <!-- ═══ СТАТЫ ═══ -->
+  <div class="stats-grid-v2">
+    <div class="stat-card-v2"><div class="sc-label">ИДЁТ<br>НЕДЕЛЯ</div><div class="sc-val" id="sv-week">—</div><div class="sc-unit">СЕЗОНА</div></div>
+    <div class="stat-card-v2"><div class="sc-label">НОВЫХ<br>ЗА НЕДЕЛЮ</div><div class="sc-val yel" id="sv-new">—</div><div class="sc-unit">СТАНЦИЙ</div></div>
+    <div class="stat-card-v2"><div class="sc-label">ВСЕГО<br>УСТАНОВЛЕНО</div><div class="sc-val" id="sv-total">—</div><div class="sc-unit">СТАНЦИЙ</div></div>
+    <div class="stat-card-v2"><div class="sc-label">СРЕДНИЙ<br>ТЕМП</div><div class="sc-val cyn" id="sv-tempo">—</div><div class="sc-unit">СТ / НЕДЕЛЮ</div></div>
+    <div class="stat-card-v2"><div class="sc-label">СЛЕД.<br>ОБНОВЛЕНИЕ</div><div class="sc-val" id="sv-next" style="font-size:12px">—</div><div class="sc-unit">СЕГОДНЯ</div></div>
+    <div class="stat-card-v2"><div class="sc-label">ФИНАЛ<br>СЕЗОНА</div><div class="sc-val" style="font-size:11px">31.12</div><div class="sc-unit">2026</div></div>
+  </div>
+
+  <!-- ═══ НИЖНИЙ БЛОК (идентичен всем страницам) ═══ -->
+  <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
+
+  <div class="author-section">
+    <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank">▶ ОБ АВТОРЕ ◀</a>
+    <a class="author-chat-btn" href="https://t.me/evclubb" target="_blank">▶ ЗЕЛЁНЫЙ ЧАТ ◀<span class="chat-sub">крупнейшее электромобильное сообщество в Беларуси</span></a>
+    <div class="section-label">▼ TG-КАНАЛЫ #ИМЕЮСКАЗАТЬ ▼</div>
+    <div class="author-links">
+      <a class="author-link-btn" href="https://t.me/imeyuskazat" target="_blank">EV ОПЫТ</a>
+      <a class="author-link-btn" href="https://t.me/imeyuskazat_lifestyle" target="_blank">EV LIFE</a>
+      <a class="author-link-btn" href="https://t.me/imeyuskazat_evnews" target="_blank">EV WORLD NEWS</a>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">НОВЫХ<br>ЗА НЕДЕЛЮ</div>
-      <div class="stat-value yellow" id="stat-new-week">—</div>
-      <div class="stat-unit">СТАНЦИЙ</div>
+    <div class="section-label">▼ ИНОЕ #НЕТЕЛЕГА ▼</div>
+    <div class="author-links">
+      <a class="author-link-btn" href="https://www.instagram.com/artsiomkrivtsoff/" target="_blank">Instagram</a>
+      <a class="author-link-btn" href="https://tiktok.com/@artsiomkrivtsoff" target="_blank">TikTok</a>
+      <a class="author-link-btn" href="https://www.youtube.com/@imeyuskazat" target="_blank">YouTube</a>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">ВСЕГО<br>УСТАНОВЛЕНО</div>
-      <div class="stat-value" id="stat-total">—</div>
-      <div class="stat-unit">СТАНЦИЙ</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">СРЕДНИЙ<br>ТЕМП</div>
-      <div class="stat-value cyan" id="stat-tempo">—</div>
-      <div class="stat-unit">СТ / НЕДЕЛЮ</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">СЛЕД.<br>ОБНОВЛЕНИЕ</div>
-      <div class="stat-value" id="stat-next" style="font-size:14px">—</div>
-      <div class="stat-unit">СЕГОДНЯ</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">ФИНАЛ<br>СЕЗОНА</div>
-      <div class="stat-value" style="font-size:10px">31.12</div>
-      <div class="stat-unit">2026</div>
+    <div class="section-label">▼ СВЯЗАТЬСЯ | УСТАНОВИТЬ ЗАРЯДНУЮ СТАНЦИЮ | ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ ▼</div>
+    <div class="author-contacts">
+      <a class="author-contact-btn" href="tel:+375295170067">📞 +375 29 517-00-67</a>
+      <a class="author-contact-btn" href="https://t.me/Krivtsoffag" target="_blank">✈ TELEGRAM</a>
     </div>
   </div>
 
-  <!-- ГОЛОСОВАНИЕ -->
-  <div class="vote-section">
-    <div class="vote-title">◈ СДЕЛАЙ СТАВКУ</div>
-    <div class="vote-question">КТО УСТАНОВИТ БОЛЬШЕ ВСЕХ СТАНЦИЙ К 31.12.2026?<br>ОДИН ИГРОК — ОДИН ГОЛОС:</div>
-    <div class="vote-options" id="vote-options"></div>
-    <div class="cf-turnstile" id="vote-turnstile" data-sitekey="0x4AAAAAACtvG988gnpS7YBa" data-theme="dark" data-size="flexible" style="margin-bottom:10px"></div>
-    <button class="vote-submit" id="vote-submit" onclick="submitVote()" disabled>▶ ПОСТАВИТЬ ◀</button>
-    <div class="vote-results" id="vote-results">
-      <div class="vote-message" id="vote-message"></div>
-      <div id="vote-bars"></div>
-      <div class="vote-total-players" id="vote-total"></div>
-    </div>
-  </div>
-
-  <!-- ПОСЕЩЕНИЯ -->
   <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">...</span> РАЗ</div>
 
-  <!-- ПЕРЕКЛЮЧАТЕЛЬ ВНИЗУ -->
   <div class="theme-footer-switch">
     <span class="theme-foot-lbl">СТИЛЬ</span>
     <button class="theme-foot-btn active" id="foot-arcade"      onclick="setTheme('arcade')">⬡</button>
@@ -231,571 +1014,430 @@
   </div>
 
   <div class="footer">
-    <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF · EV RACE 2026 · БЕЛАРУСЬ<br>#ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
+    <div class="footer-disclaimer">Эта страница создана исключительно в развлекательных целях.<br>Все данные об установленных станциях носят информационный характер и не являются официальной статистикой.<br>Прогнозы — это игра, а не инвестиционная рекомендация. 🎮<br>Страница не запрашивает и не хранит ваши личные данные.</div>
+    <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
   </div>
 
+  </div><!-- /page-wrap -->
 </div><!-- /container -->
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-<script>
-// ============================================================
-// КОНФИГУРАЦИЯ
-// ============================================================
-const SUPABASE_URL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
-const TOTAL_GOAL   = 1010;
-const RACE_START   = new Date('2026-01-01');
-const RACE_END     = new Date('2026-12-31T18:00:00');
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
 
-const OPERATORS_META = [
+<script>
+// ════════════════════════════════════════════════
+// КОНФИГ
+// ════════════════════════════════════════════════
+const SURL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
+const SKEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
+const TOTAL_GOAL  = 1010;
+const RACE_START  = new Date('2026-01-01');
+const RACE_END    = new Date('2026-12-31T18:00:00');
+const THEMES      = ['arcade','tesla-light','tesla-dark'];
+
+const OPS_META = [
   { id:'batteryfly', name:'BatteryFly',    color:'#005EEB', logo:'../logos/batteryfly.png', darkBg:true  },
   { id:'forevo',     name:'forEVo',         color:'#b44fff', logo:'../logos/forevo.png',     darkBg:true  },
   { id:'zaryadka',   name:'Zaryadka',       color:'#00cfff', logo:'../logos/zaryadka.svg',   darkBg:false },
   { id:'united',     name:'United Company', color:'#F5821F', logo:'../logos/united.png',     darkBg:true  },
   { id:'csms',       name:'ЦСМС',           color:'#FF6B6B', logo:'../logos/csms.png',       darkBg:false },
 ];
-
-// статусы-заглушки пока нет AI layer
 const OP_STATUS = {
-  batteryfly: 'ЛИДЕР СЕЗОНА',
-  forevo:     'НАСТУПАЕТ',
-  zaryadka:   'СТАБИЛЬНОСТЬ',
-  united:     'РОСТ ПРОДОЛЖАЕТСЯ',
-  csms:       'РАСШИРЕНИЕ СЕТИ',
+  batteryfly:'ЛИДЕР СЕЗОНА', forevo:'НАСТУПАЕТ',
+  zaryadka:'СТАБИЛЬНОСТЬ',   united:'РОСТ ПРОДОЛЖАЕТСЯ', csms:'РАСШИРЕНИЕ СЕТИ',
 };
 
-const VOTE_MESSAGES = {
-  batteryfly:['МОЩНЫЙ ВЫБОР!','СТАВКА НА ЛИДЕРА!'],
-  forevo:    ['СМЕЛАЯ СТАВКА!','ВЕРИШЬ В forEVo!'],
-  zaryadka:  ['ОРИГИНАЛЬНЫЙ ВЫБОР!','ВЕРИШЬ В ZARYADKA!'],
-  united:    ['ТЁМНАЯ ЛОШАДКА!','ПРОТИВ ТЕЧЕНИЯ!'],
-  csms:      ['ОЧЕНЬ СМЕЛАЯ СТАВКА!','ВЕРИШЬ В РЕГИОНЫ!'],
-};
+let OPS = OPS_META.map(o=>({...o, total:0, dc_count:0, ac_count:0, new_7d:0, goal:0, last_date:'—'}));
+let chartData = {};
 
-let OPERATORS = OPERATORS_META.map(o=>({...o, total:0, dc_count:0, ac_count:0, new_7d:0, new_30d:0, goal:0, last_date:'—'}));
-let selectedOperator = null;
-let chartWeeklyData  = {}; // { operator: [w1,w2,...w53] }
-
-// ============================================================
+// ════════════════════════════════════════════════
 // ТЕМА
-// ============================================================
-const THEMES = ['arcade','tesla-light','tesla-dark'];
+// ════════════════════════════════════════════════
 function setTheme(t) {
-  document.getElementById('theme-css').href = 'style_arcade_v2.css'; // V2 пока только arcade
+  document.getElementById('theme-css').href = '../CSS/'+t+'.css?v=2';
   localStorage.setItem('ev_race_theme', t);
-  THEMES.forEach(th => {
-    const b1 = document.getElementById('btn-'+th);
-    const b2 = document.getElementById('foot-'+th);
-    if(b1) b1.classList.toggle('active', th===t);
-    if(b2) b2.classList.toggle('active', th===t);
+  document.documentElement.setAttribute('data-theme', t);
+  THEMES.forEach(x => {
+    const b = document.getElementById('btn-'+x);  if(b) b.classList.toggle('active', x===t);
+    const f = document.getElementById('foot-'+x); if(f) f.classList.toggle('active', x===t);
   });
-  const ts = document.getElementById('vote-turnstile');
-  if(ts) ts.setAttribute('data-theme', t==='tesla-light'?'light':'dark');
+}
+function toggleFx() {
+  const on = document.body.classList.toggle('reduced-fx');
+  localStorage.setItem('ev_race_reduced_fx', on?'1':'0');
+  document.querySelector('.fx-seg.fx-on')?.classList.toggle('active', !on);
+  document.querySelector('.fx-seg.fx-off')?.classList.toggle('active', on);
 }
 (function(){
-  const saved = localStorage.getItem('ev_race_theme');
-  if(saved && THEMES.includes(saved)) setTheme(saved);
+  const s = localStorage.getItem('ev_race_theme');
+  if(s && THEMES.includes(s)) setTheme(s);
+  else document.documentElement.setAttribute('data-theme','arcade');
+  if(localStorage.getItem('ev_race_reduced_fx')==='1'){
+    document.body.classList.add('reduced-fx');
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.querySelector('.fx-seg.fx-on')?.classList.remove('active');
+      document.querySelector('.fx-seg.fx-off')?.classList.add('active');
+    });
+  }
+  const sb = document.getElementById('statusbar');
+  if(sb) document.documentElement.style.setProperty('--statusbar-h', sb.offsetHeight+'px');
 })();
 
-// ============================================================
-// БУРГЕР
-// ============================================================
-function toggleBurger() {
-  const btn  = document.getElementById('burgerBtn');
-  const menu = document.getElementById('mobileMenu');
-  const open = menu.classList.toggle('open');
-  btn.classList.toggle('open', open);
+// ════════════════════════════════════════════════
+// NAV
+// ════════════════════════════════════════════════
+function toggleBurger(){
+  const btn=document.getElementById('burgerBtn'), menu=document.getElementById('mobileMenu');
+  const open=menu.classList.toggle('open'); btn.classList.toggle('open',open);
 }
-function closeBurger() {
+function closeBurger(){
   document.getElementById('mobileMenu').classList.remove('open');
   document.getElementById('burgerBtn').classList.remove('open');
 }
-document.addEventListener('click', e => {
-  const menu = document.getElementById('mobileMenu');
-  const btn  = document.getElementById('burgerBtn');
-  if(menu?.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) closeBurger();
-});
-
-// ============================================================
-// ОБРАТНЫЙ ОТСЧЁТ
-// ============================================================
-function updateCountdown() {
-  const diff = RACE_END - new Date();
-  if(diff <= 0) return;
-  const days  = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins  = Math.floor((diff % 3600000) / 60000);
-  const secs  = Math.floor((diff % 60000) / 1000);
-  document.getElementById('cd-days').textContent  = String(days).padStart(3,'0');
-  document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
-  document.getElementById('cd-min').textContent   = String(mins).padStart(2,'0');
-  document.getElementById('cd-sec').textContent   = String(secs).padStart(2,'0');
+function toggleDrop(e){
+  e.preventDefault(); e.stopPropagation();
+  document.getElementById('dropMenu').classList.toggle('open');
 }
-setInterval(updateCountdown, 1000);
+function toggleMobAcc(){
+  document.getElementById('mobAccBtn').classList.toggle('open');
+  document.getElementById('mobAccList').classList.toggle('open');
+}
+document.addEventListener('click', e=>{
+  const menu=document.getElementById('mobileMenu'), bbtn=document.getElementById('burgerBtn');
+  if(menu?.classList.contains('open')&&!menu.contains(e.target)&&!bbtn.contains(e.target)){
+    menu.classList.remove('open'); bbtn.classList.remove('open');
+  }
+  const dm=document.getElementById('dropMenu');
+  if(dm?.classList.contains('open')&&!dm.closest('.nav-dropdown-wrap').contains(e.target)) dm.classList.remove('open');
+});
+window.addEventListener('scroll',()=>document.getElementById('scroll-top')?.classList.toggle('visible',window.scrollY>300));
+
+// ════════════════════════════════════════════════
+// СЧЁТЧИК
+// ════════════════════════════════════════════════
+function updateCountdown(){
+  const diff = RACE_END - new Date();
+  if(diff<=0) return;
+  const d = Math.floor(diff/86400000);
+  const h = Math.floor((diff%86400000)/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  const s = Math.floor((diff%60000)/1000);
+  const ds = String(d).padStart(3,'0');
+  const hs = String(h).padStart(2,'0');
+  const ms = String(m).padStart(2,'0');
+  const ss = String(s).padStart(2,'0');
+  // мобиле
+  const dm=document.getElementById('cd-days-m'); if(dm) dm.textContent=ds;
+  const hm=document.getElementById('cd-h-m');    if(hm) hm.textContent=hs;
+  const mm=document.getElementById('cd-m-m');    if(mm) mm.textContent=ms;
+  const sm=document.getElementById('cd-s-m');    if(sm) sm.textContent=ss;
+  // десктоп
+  const dd=document.getElementById('cd-days-d'); if(dd) dd.textContent=ds;
+  const hd=document.getElementById('cd-h-d');    if(hd) hd.textContent=hs;
+  const md=document.getElementById('cd-m-d');    if(md) md.textContent=ms;
+  const sd=document.getElementById('cd-s-d');    if(sd) sd.textContent=ss;
+}
+setInterval(updateCountdown,1000);
 updateCountdown();
 
-// ============================================================
-// ТЕКУЩАЯ НЕДЕЛЯ СЕЗОНА
-// ============================================================
-function currentSeasonWeek() {
-  const ms  = new Date() - RACE_START;
-  const days = Math.floor(ms / 86400000);
-  return Math.min(Math.ceil((days + 1) / 7), 53);
+// ════════════════════════════════════════════════
+// НЕДЕЛЯ СЕЗОНА
+// ════════════════════════════════════════════════
+function currentWeek(){
+  const days = Math.floor((new Date()-RACE_START)/86400000);
+  return Math.min(Math.ceil((days+1)/7), 53);
 }
 
-// ============================================================
-// ЗАГРУЗКА ДАННЫХ — get_stations_summary
-// ============================================================
-async function loadSummary() {
-  const res  = await fetch(SUPABASE_URL+'/rest/v1/rpc/get_stations_summary', {
+// ════════════════════════════════════════════════
+// ДАННЫЕ
+// ════════════════════════════════════════════════
+async function loadSummary(){
+  const r = await fetch(SURL+'/rest/v1/rpc/get_stations_summary',{
     method:'POST',
-    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'},
+    headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json'},
     body:'{}'
   });
-  return await res.json();
+  return r.json();
 }
 
-// загрузка исторических данных по неделям из station_date
-async function loadWeeklyData() {
-  const res = await fetch(
-    SUPABASE_URL+'/rest/v1/stations?select=operator,station_date,count,station_type'+
-    '&operator=in.(batteryfly,forevo,zaryadka,united,csms)'+
-    '&order=station_date.asc',
-    { headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY} }
+async function loadWeekly(){
+  const r = await fetch(
+    SURL+'/rest/v1/stations?select=operator,station_date,count,station_type'+
+    '&operator=in.(batteryfly,forevo,zaryadka,united,csms)&order=station_date.asc',
+    {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}}
   );
-  const rows = await res.json();
+  const rows = await r.json();
   if(!Array.isArray(rows)) return;
 
-  // инициализируем массивы 53 недели нулями
-  const weekly = {};
-  OPERATORS_META.forEach(op => { weekly[op.id] = new Array(53).fill(0); });
-
-  rows.forEach(r => {
-    if(!weekly[r.operator]) return;
-    const d    = new Date(r.station_date);
-    const ms   = d - RACE_START;
-    if(ms < 0) return;
-    const week = Math.min(Math.ceil((ms/86400000 + 1)/7), 53) - 1;
-    weekly[r.operator][week] += (r.count||0);
+  const w = {};
+  OPS_META.forEach(op=>{ w[op.id]=new Array(53).fill(0); });
+  rows.forEach(r=>{
+    if(!w[r.operator]) return;
+    const ms = new Date(r.station_date) - RACE_START;
+    if(ms<0) return;
+    const wk = Math.min(Math.ceil((ms/86400000+1)/7),53)-1;
+    w[r.operator][wk]+=(r.count||0);
   });
-
-  // накопительные суммы
-  OPERATORS_META.forEach(op => {
-    let cum = 0;
-    weekly[op.id] = weekly[op.id].map(v => { cum += v; return cum; });
+  OPS_META.forEach(op=>{
+    let cum=0;
+    w[op.id]=w[op.id].map(v=>{cum+=v;return cum;});
   });
-
-  chartWeeklyData = weekly;
+  chartData=w;
 }
 
-// ============================================================
-// MAIN INIT
-// ============================================================
-async function init() {
+async function init(){
   try {
-    const [summaryData] = await Promise.all([
-      loadSummary(),
-      loadWeeklyData(),
-    ]);
-
-    if(Array.isArray(summaryData)) {
-      summaryData.forEach(row => {
-        const op = OPERATORS.find(o => o.id === row.operator);
-        if(op) {
-          op.total    = row.total    || 0;
-          op.dc_count = row.dc_count || 0;
-          op.ac_count = row.ac_count || 0;
-          op.new_7d   = row.new_7d   || 0;
-          op.new_30d  = row.new_30d  || 0;
-          op.goal     = row.goal     || 0;
-          op.last_date = row.last_date ? row.last_date.slice(0,10).split('-').reverse().join('.') : '—';
+    const [summary] = await Promise.all([loadSummary(), loadWeekly()]);
+    if(Array.isArray(summary)){
+      summary.forEach(row=>{
+        const op=OPS.find(o=>o.id===row.operator);
+        if(op){
+          op.total    = row.total    ||0;
+          op.dc_count = row.dc_count ||0;
+          op.ac_count = row.ac_count ||0;
+          op.new_7d   = row.new_7d   ||0;
+          op.goal     = row.goal     ||0;
+          op.last_date= row.last_date?row.last_date.slice(0,10).split('-').reverse().join('.'):'—';
         }
       });
     }
-
-    // сортировка по total desc
-    OPERATORS.sort((a,b) => b.total - a.total);
-
-    renderHeroProgress();
-    renderNarrative();
-    renderOperators();
+    OPS.sort((a,b)=>b.total-a.total);
+    renderProgress();
+    renderOps();
     renderStats();
     renderChart();
-
-  } catch(e) {
-    console.error('Init error', e);
-  }
+  } catch(e){ console.error(e); }
 }
 
-// ============================================================
-// HERO ПРОГРЕСС
-// ============================================================
-function renderHeroProgress() {
-  const total = OPERATORS.reduce((s,o) => s+o.total, 0);
+// ════════════════════════════════════════════════
+// ПРОГРЕСС
+// ════════════════════════════════════════════════
+function renderProgress(){
+  const total = OPS.reduce((s,o)=>s+o.total,0);
   const pct   = +(total/TOTAL_GOAL*100).toFixed(1);
-  const lastDate = OPERATORS.map(o=>o.last_date).filter(d=>d!=='—').sort().reverse()[0] || '—';
+  const upd   = OPS.map(o=>o.last_date).filter(d=>d!=='—').sort().reverse()[0]||'—';
 
-  document.getElementById('prog-current').textContent = total;
-  document.getElementById('prog-pct').textContent     = pct+'%';
-  document.getElementById('hero-updated').textContent = 'ОБНОВЛЕНО: '+lastDate;
-
-  const bar = document.getElementById('total-bar-stacked');
-  bar.innerHTML = '';
-  OPERATORS.forEach(op => {
-    if(op.total <= 0) return;
-    const seg = document.createElement('div');
-    seg.className = 'stack-seg';
-    seg.style.cssText = `width:0%;background:${op.color}`;
-    seg.title = `${op.name}: ${op.total}`;
-    bar.appendChild(seg);
-    setTimeout(() => { seg.style.width = (op.total/TOTAL_GOAL*100)+'%'; }, 150);
+  ['m','d'].forEach(sfx=>{
+    const c=document.getElementById('prog-cur-'+sfx); if(c) c.textContent=total;
+    const p=document.getElementById('prog-pct-'+sfx); if(p) p.textContent=pct+'%';
+    const u=document.getElementById('prog-upd-'+sfx); if(u) u.textContent='ОБНОВЛЕНО: '+upd;
+    const b=document.getElementById('pb-bar-'+sfx);
+    if(b){
+      b.innerHTML='';
+      OPS.forEach(op=>{
+        if(op.total<=0) return;
+        const seg=document.createElement('div');
+        seg.className='pb-bar-seg';
+        seg.style.cssText=`width:0%;background:${op.color}`;
+        seg.title=`${op.name}: ${op.total}`;
+        b.appendChild(seg);
+        setTimeout(()=>{ seg.style.width=(op.total/TOTAL_GOAL*100)+'%'; },150);
+      });
+    }
   });
 }
 
-// ============================================================
-// NARRATIVE (заглушка)
-// ============================================================
-function renderNarrative() {
-  // пока нет ai_operator_narratives — показываем заглушку
-  document.getElementById('narrative-text').style.display  = 'none';
-  document.getElementById('narrative-soon').style.display  = 'block';
+// ════════════════════════════════════════════════
+// ПИКСЕЛЬНЫЙ ПРОГРЕСС-БАР ОПЕРАТОРА
+// ════════════════════════════════════════════════
+function pixBar(dcCount, acCount, goal){
+  const total = dcCount + acCount;
+  const maxSegs = 28;
+  const filled  = goal>0 ? Math.round((total/goal)*maxSegs) : 0;
+  const dcSegs  = total>0 ? Math.round((dcCount/total)*filled) : 0;
+  const acSegs  = filled - dcSegs;
+  let html = '<div class="op-pixbar">';
+  for(let i=0;i<maxSegs;i++){
+    const bg = i < dcSegs ? '#ffd700' : i < dcSegs+acSegs ? '#00e5ff' : '#0d1a0d';
+    html += `<div class="op-pixbar-seg" style="background:${bg}"></div>`;
+  }
+  html += '</div>';
+  return html;
 }
 
-// ============================================================
+// ════════════════════════════════════════════════
 // ОПЕРАТОРЫ
-// ============================================================
-function renderOperators() {
-  const container = document.getElementById('operators-list');
-  container.innerHTML = '';
-
-  OPERATORS.forEach((op, i) => {
-    const rank  = i + 1;
-    const barPct = op.goal ? Math.min(op.total / op.goal * 100, 100) : 0;
-    const rankClass = rank <= 3 ? 'r'+rank : '';
-
-    const row = document.createElement('div');
-    row.className = 'op-row';
-    row.innerHTML = `
-      <div class="op-rank-num ${rankClass}">${rank}</div>
-      <div class="op-mid">
-        <div class="op-name-row">
-          <img class="op-logo-sm${op.darkBg?' dark-bg':''}" src="${op.logo}" alt="${op.name}">
-          <span class="op-name-text">${op.name}</span>
+// ════════════════════════════════════════════════
+function renderOps(){
+  const list = document.getElementById('ops-list');
+  list.innerHTML='';
+  OPS.forEach((op,i)=>{
+    const row=document.createElement('div');
+    row.className='op-row-v2';
+    row.style.setProperty('--op-clr', op.color);
+    row.innerHTML=`
+      <div class="op-rank-box"><span>${i+1}</span></div>
+      <div class="op-mid-v2">
+        <div class="op-name-row-v2">
+          <img class="op-logo-v2${op.darkBg?' dark-bg':''}" src="${op.logo}" alt="${op.name}" onerror="this.style.display='none'">
+          <span class="op-name-v2">${op.name}</span>
         </div>
-        <div class="op-status">${OP_STATUS[op.id]||'—'}</div>
-        <div class="op-badges">
-          ${op.dc_count > 0 ? `<span class="badge badge-dc">DC ${op.dc_count}</span>` : ''}
-          ${op.ac_count > 0 ? `<span class="badge badge-ac">AC ${op.ac_count}</span>` : ''}
+        <div class="op-status-v2">${OP_STATUS[op.id]||'—'}</div>
+        <div class="op-badges-v2">
+          ${op.dc_count>0?`<span class="op-badge-v2 op-badge-dc">DC ${op.dc_count}</span>`:''}
+          ${op.ac_count>0?`<span class="op-badge-v2 op-badge-ac">AC ${op.ac_count}</span>`:''}
         </div>
-        <div class="op-bar-track">
-          <div class="op-bar-fill" id="bar-${op.id}" style="width:0%;background:${op.color}"></div>
-        </div>
+        ${pixBar(op.dc_count, op.ac_count, op.goal)}
       </div>
-      <div class="op-right">
-        <div class="op-total" style="color:${op.color};text-shadow:0 0 10px ${op.color}66">${op.total}</div>
-        <div class="op-total-lbl">СТАНЦИЙ</div>
-        <div class="op-week ${op.new_7d===0?'zero':''}">+${op.new_7d}</div>
-        <div class="op-week-lbl">ЗА НЕДЕЛЮ</div>
+      <div class="op-right-v2">
+        <div>
+          <div class="op-total-v2">${op.total}</div>
+          <div class="op-total-lbl-v2">СТАНЦИЙ</div>
+        </div>
+        <div class="op-week-box">
+          <span class="op-week-num">+${op.new_7d}</span>
+          <div class="op-week-lbl">ЗА НЕДЕЛЮ</div>
+        </div>
       </div>`;
-    container.appendChild(row);
-    setTimeout(() => {
-      const fill = document.getElementById('bar-'+op.id);
-      if(fill) fill.style.width = barPct+'%';
-    }, 200 + i*80);
+    list.appendChild(row);
   });
 }
 
-// ============================================================
-// СТАТИСТИКА ВНИЗУ
-// ============================================================
-function renderStats() {
-  const total   = OPERATORS.reduce((s,o) => s+o.total, 0);
-  const newWeek = OPERATORS.reduce((s,o) => s+o.new_7d, 0);
-  const week    = currentSeasonWeek();
+// ════════════════════════════════════════════════
+// СТАТИСТИКА
+// ════════════════════════════════════════════════
+function renderStats(){
+  const total   = OPS.reduce((s,o)=>s+o.total,0);
+  const newWeek = OPS.reduce((s,o)=>s+o.new_7d,0);
+  const week    = currentWeek();
+  const tempo   = week>0 ? (total/week).toFixed(1) : '—';
 
-  // темп: total / недели прошедшие
-  const tempo   = week > 0 ? (total / week).toFixed(1) : '—';
+  document.getElementById('sv-week').textContent  = week;
+  document.getElementById('sv-new').textContent   = '+'+newWeek;
+  document.getElementById('sv-total').textContent = total;
+  document.getElementById('sv-tempo').textContent = tempo;
 
-  // следующее обновление — ближайшая полночь Минска (+3)
-  const nowMsk    = new Date(Date.now() + 3*3600000);
-  const nextMidnight = new Date(Date.UTC(nowMsk.getUTCFullYear(), nowMsk.getUTCMonth(), nowMsk.getUTCDate()+1, 0,0,0));
-  const diffNext  = nextMidnight - (Date.now() + 3*3600000);
-  const nh = String(Math.floor(diffNext/3600000)).padStart(2,'0');
-  const nm = String(Math.floor((diffNext%3600000)/60000)).padStart(2,'0');
-  const ns = String(Math.floor((diffNext%60000)/1000)).padStart(2,'0');
-
-  document.getElementById('stat-week').textContent     = week;
-  document.getElementById('stat-new-week').textContent = '+'+newWeek;
-  document.getElementById('stat-total').textContent    = total;
-  document.getElementById('stat-tempo').textContent    = tempo;
-  document.getElementById('stat-next').textContent     = nh+':'+nm+':'+ns;
-
-  // обновляем таймер "след обновление" каждую секунду
-  setInterval(() => {
-    const d2  = nextMidnight - (Date.now() + 3*3600000);
-    if(d2 <= 0) return;
-    const h2 = String(Math.floor(d2/3600000)).padStart(2,'0');
-    const m2 = String(Math.floor((d2%3600000)/60000)).padStart(2,'0');
-    const s2 = String(Math.floor((d2%60000)/1000)).padStart(2,'0');
-    document.getElementById('stat-next').textContent = h2+':'+m2+':'+s2;
-  }, 1000);
+  function updateNext(){
+    const nowMsk     = new Date(Date.now()+3*3600000);
+    const nextMid    = new Date(Date.UTC(nowMsk.getUTCFullYear(),nowMsk.getUTCMonth(),nowMsk.getUTCDate()+1));
+    const diff       = nextMid-(Date.now()+3*3600000);
+    if(diff<=0) return;
+    const h=String(Math.floor(diff/3600000)).padStart(2,'0');
+    const m=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    const s=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+    const el=document.getElementById('sv-next'); if(el) el.textContent=h+':'+m+':'+s;
+  }
+  updateNext();
+  setInterval(updateNext,1000);
 }
 
-// ============================================================
-// ГРАФИК СЕЗОННАЯ ГОНКА
-// ============================================================
-function renderChart() {
-  const canvas = document.getElementById('race-chart');
+// ════════════════════════════════════════════════
+// ГРАФИК
+// ════════════════════════════════════════════════
+function renderChart(){
+  const canvas = document.getElementById('race-chart-v2');
   if(!canvas) return;
-  const ctx    = canvas.getContext('2d');
-  const W      = canvas.offsetWidth || 600;
-  const H      = 200;
-  canvas.width  = W * (window.devicePixelRatio||1);
-  canvas.height = H * (window.devicePixelRatio||1);
-  ctx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
+  const ctx = canvas.getContext('2d');
+  const W   = canvas.offsetWidth || 500;
+  const H   = 200;
+  const dpr = window.devicePixelRatio||1;
+  canvas.width  = W*dpr;
+  canvas.height = H*dpr;
+  ctx.scale(dpr,dpr);
 
-  const curWeek = currentSeasonWeek();
-  document.getElementById('chart-mid-week').textContent = 'НЕД. '+Math.round(curWeek/2);
+  const curW  = currentWeek();
+  const mid   = Math.round(curW/2);
+  const el    = document.getElementById('chart-mid-lbl'); if(el) el.textContent='НЕД. '+mid;
+
+  const padL=8, padR=52, padT=10, padB=22;
+  const cW=W-padL-padR, cH=H-padT-padB;
+
+  const allV = Object.values(chartData).flat();
+  const maxV = Math.max(...allV,10);
 
   // сетка
-  const padL = 10, padR = 60, padT = 10, padB = 20;
-  const chartW = W - padL - padR;
-  const chartH = H - padT - padB;
-
-  // max value
-  const allVals = Object.values(chartWeeklyData).flat();
-  const maxVal  = Math.max(...allVals, 10);
-
-  // сетка фон
-  ctx.strokeStyle = 'rgba(26,46,26,0.8)';
-  ctx.lineWidth   = 1;
-  for(let i=0; i<=4; i++) {
-    const y = padT + chartH - (chartH * i / 4);
-    ctx.beginPath();
-    ctx.moveTo(padL, y);
-    ctx.lineTo(padL+chartW, y);
-    ctx.stroke();
+  ctx.strokeStyle='rgba(28,46,28,0.9)'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=padT+cH-(cH*i/4);
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(padL+cW,y); ctx.stroke();
   }
 
-  // линии операторов
-  OPERATORS.forEach(op => {
-    const data = chartWeeklyData[op.id];
-    if(!data) return;
-
-    ctx.strokeStyle = op.color;
-    ctx.lineWidth   = 2;
-    ctx.shadowColor = op.color;
-    ctx.shadowBlur  = 4;
+  // линии
+  OPS.forEach(op=>{
+    const data=chartData[op.id]; if(!data) return;
+    ctx.strokeStyle=op.color; ctx.lineWidth=2;
+    ctx.shadowColor=op.color; ctx.shadowBlur=5;
     ctx.setLineDash([]);
-
-    // пунктир после текущей недели
     ctx.beginPath();
-    let started = false;
-    for(let w=0; w<53; w++) {
-      const x = padL + (w / 52) * chartW;
-      const v = data[w] || 0;
-      const y = padT + chartH - (v / maxVal) * chartH;
-      if(w === curWeek) {
+    let dashed=false;
+    for(let w=0;w<=52;w++){
+      const x=padL+(w/52)*cW;
+      const v=data[w]||0;
+      const y=padT+cH-(v/maxV)*cH;
+      if(w===curW && !dashed){
         ctx.stroke();
-        ctx.setLineDash([4,6]);
-        ctx.strokeStyle = op.color+'66';
-        ctx.shadowBlur  = 0;
+        ctx.setLineDash([4,7]);
+        ctx.strokeStyle=op.color+'55';
+        ctx.shadowBlur=0;
         ctx.beginPath();
-        ctx.moveTo(x, y);
-        started = true;
+        ctx.moveTo(x,y);
+        dashed=true;
       }
-      if(!started) {
-        w===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-      } else {
-        ctx.lineTo(x,y);
-      }
+      w===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
     }
     ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.shadowBlur = 0;
+    ctx.setLineDash([]); ctx.shadowBlur=0;
 
-    // пиксельная машинка на текущей позиции
-    if(curWeek < 53) {
-      const wx  = padL + (curWeek / 52) * chartW;
-      const val = data[Math.min(curWeek, 52)] || 0;
-      const wy  = padT + chartH - (val / maxVal) * chartH;
-      drawPixelCar(ctx, wx-14, wy-6, op.color);
+    // машинка
+    if(curW<=52){
+      const cx=padL+(curW/52)*cW;
+      const cv=data[Math.min(curW,52)]||0;
+      const cy=padT+cH-(cv/maxV)*cH;
+      drawCar(ctx,cx-12,cy-5,op.color);
     }
   });
 
-  // легенда справа
-  const legend = document.getElementById('chart-legend');
-  legend.innerHTML = '';
-  [...OPERATORS].sort((a,b)=>{
-    const av = (chartWeeklyData[a.id]||[])[Math.min(curWeek,52)]||0;
-    const bv = (chartWeeklyData[b.id]||[])[Math.min(curWeek,52)]||0;
-    return bv - av;
-  }).forEach(op => {
-    const val = (chartWeeklyData[op.id]||[])[Math.min(curWeek,52)]||op.total;
-    const item = document.createElement('div');
-    item.className = 'chart-legend-item';
-    item.innerHTML = `
-      <span class="chart-legend-val" style="color:${op.color};text-shadow:0 0 6px ${op.color}66">${val}</span>
-      <span class="chart-legend-dot" style="background:${op.color}"></span>`;
+  // легенда
+  const legend=document.getElementById('chart-legend-v2');
+  legend.innerHTML='';
+  [...OPS].sort((a,b)=>{
+    const av=(chartData[a.id]||[])[Math.min(curW,52)]||a.total;
+    const bv=(chartData[b.id]||[])[Math.min(curW,52)]||b.total;
+    return bv-av;
+  }).forEach(op=>{
+    const val=(chartData[op.id]||[])[Math.min(curW,52)]||op.total;
+    const item=document.createElement('div');
+    item.className='cl-item';
+    item.innerHTML=`<span class="cl-val" style="color:${op.color};text-shadow:0 0 6px ${op.color}55">${val}</span><span class="cl-dot" style="background:${op.color}"></span>`;
     legend.appendChild(item);
   });
 }
 
-function drawPixelCar(ctx, x, y, color) {
-  const p = 1.5;
-  ctx.fillStyle = color;
+function drawCar(ctx,x,y,color){
+  const p=1.4;
+  ctx.fillStyle=color;
   [[0,4],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[10,4],
    [0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],
    [1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[9,3],
    [3,2],[4,2],[5,2],[6,2],[7,2],
-  ].forEach(([px,py]) => ctx.fillRect(x+px*p, y+py*p, p, p));
-  ctx.fillStyle = '#fffaaa';
-  ctx.fillRect(x+10*p, y+4*p, p, p*2);
+  ].forEach(([px,py])=>ctx.fillRect(x+px*p,y+py*p,p,p));
+  ctx.fillStyle='#fffaaa';
+  ctx.fillRect(x+10*p,y+4*p,p,p*2);
 }
 
-// ============================================================
-// ГОЛОСОВАНИЕ
-// ============================================================
-function renderVoteOptions() {
-  const c = document.getElementById('vote-options');
-  c.innerHTML = '';
-  OPERATORS_META.forEach(op => {
-    const btn = document.createElement('button');
-    btn.className  = 'vote-btn';
-    btn.dataset.id = op.id;
-    btn.innerHTML  = `<img src="${op.logo}" alt="${op.name}"><span>${op.name}</span>`;
-    btn.onclick    = () => selectVote(op.id);
-    c.appendChild(btn);
-  });
-}
-
-function selectVote(id) {
-  selectedOperator = id;
-  document.querySelectorAll('.vote-btn').forEach(b => b.classList.toggle('selected', b.dataset.id===id));
-  document.getElementById('vote-submit').disabled = false;
-}
-
-async function submitVote() {
-  if(!selectedOperator) return;
-  const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
-  if(!token) { alert('Пожалуйста, подождите проверки безопасности...'); return; }
-  const btn = document.getElementById('vote-submit');
-  btn.disabled = true; btn.textContent = '... ОБРАБОТКА ...';
-  localStorage.setItem('ev_race_vote',  selectedOperator);
-  localStorage.setItem('ev_race_voted', '1');
-  try {
-    await fetch(SUPABASE_URL+'/functions/v1/submit-vote', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
-      body:JSON.stringify({operator:selectedOperator, cf_token:token})
-    });
-  } catch(e) { console.log('Vote error', e); }
-  await showResults(selectedOperator);
-}
-
-async function showResults(myVote) {
-  let votes={}, total=0;
-  try {
-    const res  = await fetch(SUPABASE_URL+'/rest/v1/rpc/get_vote_counts', {
-      method:'POST',
-      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'},
-      body:'{}'
-    });
-    const data = await res.json();
-    if(Array.isArray(data)) {
-      data.forEach(r => { votes[r.operator]=parseInt(r.count); });
-      total = data.reduce((s,r) => s+parseInt(r.count), 0);
-    }
-  } catch(e) {}
-  if(total===0) total=1;
-
-  document.getElementById('vote-options').style.display   = 'none';
-  document.getElementById('vote-submit').style.display    = 'none';
-  document.getElementById('vote-turnstile').style.display = 'none';
-  document.getElementById('vote-results').style.display   = 'block';
-
-  const myCount = votes[myVote]||1;
-  const myPct   = Math.round(myCount/total*100);
-  const msgs    = VOTE_MESSAGES[myVote]||['СТАВКА СДЕЛАНА!'];
-  const msg     = msgs[Math.floor(Math.random()*msgs.length)];
-  const opName  = OPERATORS_META.find(o=>o.id===myVote)?.name||myVote;
-  const subtext = myPct>=40 ? `${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
-                  myPct>=20 ? `ТОЛЬКО ${myPct}% ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
-                              `ЛИШЬ ${myPct}% ВЕРЯТ В ${opName.toUpperCase()}`;
-  document.getElementById('vote-message').innerHTML = `${msg}<br><span style="font-size:8px;opacity:.6">${subtext}</span>`;
-
-  const barsDiv = document.getElementById('vote-bars');
-  barsDiv.innerHTML = '';
-  [...OPERATORS_META].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0)).forEach(op => {
-    const cnt  = votes[op.id]||0;
-    const pct  = Math.round(cnt/total*100);
-    const isMe = op.id===myVote;
-    const div  = document.createElement('div');
-    div.className = 'vote-result-item';
-    div.innerHTML = `
-      <div class="vote-result-top">
-        <span class="rname" style="${isMe?'color:var(--text)':''}">${isMe?'▶ ':''}${op.name}</span>
-        <span class="rpct">${pct}%</span>
-      </div>
-      <div class="vote-result-bar-wrap"><div class="vote-result-bar${isMe?' mine':''}" style="width:0%"></div></div>`;
-    barsDiv.appendChild(div);
-    setTimeout(() => { div.querySelector('.vote-result-bar').style.width=pct+'%'; }, 200);
-  });
-  document.getElementById('vote-total').textContent = `▶ ВСЕГО СТАВОК: ${total} ◀`;
-}
-
-async function checkVoted() {
-  const voted  = localStorage.getItem('ev_race_voted');
-  const myVote = localStorage.getItem('ev_race_vote');
-  if(voted && myVote) {
-    document.getElementById('vote-submit').style.display = 'none';
-    document.querySelectorAll('.vote-btn').forEach(b => {
-      b.disabled = true;
-      if(b.dataset.id===myVote) b.classList.add('selected');
-    });
-    await showResults(myVote);
-  }
-}
-
-// ============================================================
+// ════════════════════════════════════════════════
 // ВИЗИТЫ
-// ============================================================
-async function trackVisit() {
-  try {
-    await fetch(SUPABASE_URL+'/rest/v1/visits', {
+// ════════════════════════════════════════════════
+async function trackVisit(){
+  try{
+    await fetch(SURL+'/rest/v1/visits',{
       method:'POST',
-      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
-      body:JSON.stringify({visited_at:new Date().toISOString(), page:'main'})
+      headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({visited_at:new Date().toISOString(),page:'main'})
     });
-    const res   = await fetch(SUPABASE_URL+'/rest/v1/visits?select=id&page=eq.main', {
-      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'count=exact','Range':'0-0'}
+    const r=await fetch(SURL+'/rest/v1/visits?select=id&page=eq.main',{
+      headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Prefer':'count=exact','Range':'0-0'}
     });
-    const count = res.headers.get('content-range')?.split('/')[1]||'...';
-    document.getElementById('visit-count').textContent = Number(count).toLocaleString('ru');
-  } catch(e) { document.getElementById('visit-count').textContent='...'; }
+    const cnt=r.headers.get('content-range')?.split('/')[1]||'...';
+    document.getElementById('visit-count').textContent=Number(cnt).toLocaleString('ru');
+  }catch(e){ document.getElementById('visit-count').textContent='...'; }
 }
 
-// ============================================================
-// COOKIE
-// ============================================================
-function acceptCookies() {
-  localStorage.setItem('ev_race_cookies','1');
-  document.getElementById('cookieBanner').style.display='none';
-}
-if(localStorage.getItem('ev_race_cookies')) document.getElementById('cookieBanner').style.display='none';
-
-// ============================================================
+// ════════════════════════════════════════════════
 // СТАРТ
-// ============================================================
-renderVoteOptions();
-checkVoted();
-trackVisit();
+// ════════════════════════════════════════════════
 init();
-
-// перерисовать график при ресайзе
-window.addEventListener('resize', () => {
-  if(Object.keys(chartWeeklyData).length) renderChart();
-});
+trackVisit();
+window.addEventListener('resize',()=>{ if(Object.keys(chartData).length) renderChart(); });
 </script>
 </body>
 </html>
