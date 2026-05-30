@@ -1,0 +1,26 @@
+name: EV RACE Monthly Slogans
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"  # 00:00 UTC 1-го числа каждого месяца = 03:00 Минск
+  workflow_dispatch:       # ручной запуск для тестирования
+
+jobs:
+  slogans:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger slogans Edge Function
+        run: |
+          response=$(curl -s -o response.json -w "%{http_code}" \
+            -X POST \
+            -H "x-cron-secret: ${{ secrets.SNAPSHOT_CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "${{ secrets.SUPABASE_URL }}/functions/v1/generate-slogans")
+
+          echo "HTTP status: $response"
+          cat response.json
+
+          if [ "$response" != "200" ]; then
+            echo "Slogans generation failed with status $response"
+            exit 1
+          fi
