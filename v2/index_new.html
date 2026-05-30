@@ -1,0 +1,253 @@
+# EV RACE V2 — MAIN PAGE FOUNDATION
+
+## index_new.html
+
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EV RACE 2026 — Гонка операторов зарядных станций Беларуси</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style_arcade_v2.css" />
+</head>
+<body>
+
+<div class="crt-overlay"></div>
+<div class="noise-layer"></div>
+
+<div class="page-shell">
+
+  <header class="topbar">
+
+    <button class="menu-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="logo-wrap">
+      <div class="logo-title pixel">EV RACE</div>
+      <div class="logo-sub pixel">БЕЛАРУСЬ 2026</div>
+    </div>
+
+    <button class="fx-btn pixel">
+      ЭФФЕКТЫ
+    </button>
+
+  </header>
+
+  <main>
+
+    <section class="hero-grid">
+
+      <div class="hero-main panel">
+
+        <div class="hero-left">
+
+          <div class="hero-headline pixel">
+            EV RACE
+          </div>
+
+          <div class="hero-year pixel">
+            БЕЛАРУСЬ 2026
+          </div>
+
+          <div class="hero-meta">
+
+            <div class="meta-row">
+              <span>⚑</span>
+              <span>5 операторов</span>
+            </div>
+
+            <div class="meta-row">
+              <span>⚡</span>
+              <span>1010 станций</span>
+            </div>
+
+            <div class="meta-row">
+              <span>▣</span>
+              <span>Финал: 31 декабря</span>
+            </div>
+
+          </div>
+
+          <div class="hero-status panel-soft pixel" id="hero-status">
+            Разрыв между лидерами снова сокращается
+          </div>
+
+        </div>
+
+        <div class="hero-map-wrap">
+          <img src="belarus.svg" alt="Беларусь" class="belarus-map" />
+        </div>
+
+      </div>
+
+      <aside class="hero-side panel">
+
+        <div class="countdown-label pixel">
+          ДО ФИНАЛА ОСТАЛОСЬ
+        </div>
+
+        <div class="countdown-days pixel" id="countdown-days">
+          215
+        </div>
+
+        <div class="countdown-word pixel">
+          ДНЕЙ
+        </div>
+
+        <div class="countdown-meta pixel">
+          <div>
+            <span id="count-hours">12</span>
+            <small>часов</small>
+          </div>
+
+          <div>
+            <span id="count-minutes">37</span>
+            <small>минут</small>
+          </div>
+
+          <div>
+            <span id="count-seconds">48</span>
+            <small>секунд</small>
+          </div>
+        </div>
+
+        <div class="progress-block">
+
+          <div class="progress-title pixel">
+            ОБЩИЙ ПРОГРЕСС К ЦЕЛИ
+          </div>
+
+          <div class="progress-numbers">
+            <span id="total-installed">137</span>
+            <span>/</span>
+            <span>1010</span>
+          </div>
+
+          <div class="progress-bar">
+            <div class="progress-fill" id="goal-progress"></div>
+          </div>
+
+          <div class="progress-footer">
+            <span id="goal-percent">13.6%</span>
+            <span id="updated-at">обновлено: 28.05.2026</span>
+          </div>
+
+        </div>
+
+      </aside>
+
+    </section>
+
+    <section class="season-state panel">
+
+      <div class="section-head">
+        <div class="section-title pixel">СОСТОЯНИЕ СЕЗОНА</div>
+        <div class="live-indicator pixel">
+          ● LIVE
+        </div>
+      </div>
+
+      <div class="season-grid">
+
+        <article class="season-item">
+          <div class="season-icon">↗</div>
+          <div class="season-text">
+            Лидер удерживается,
+            но давление растёт вторую неделю подряд.
+          </div>
+        </article>
+
+        <article class="season-item">
+          <div class="season-icon">⌖</div>
+          <div class="season-text">
+            Минская область — главный центр роста недели.
+          </div>
+        </article>
+
+        <article class="season-item">
+          <div class="season-icon">⚡</div>
+          <div class="season-text">
+            +18 станций установлено за последние 7 дней.
+          </div>
+        </article>
+
+      </div>
+
+    </section>
+
+    <section class="operators-section">
+
+      <div class="section-head operators-head">
+        <div class="section-title pixel">ОПЕРАТОРЫ</div>
+        <div class="pixel top5-label">ТОП-5</div>
+      </div>
+
+      <div id="operators-list"></div>
+
+      <div class="legend pixel">
+        <span class="legend-dot dc"></span>
+        DC — быстрые станции
+
+        <span class="legend-dot ac"></span>
+        AC — медленные станции
+      </div>
+
+    </section>
+
+    <section class="race-graph panel">
+
+      <div class="section-title pixel">
+        СЕЗОННАЯ ГОНКА
+      </div>
+
+      <div class="graph-wrap">
+        <canvas id="raceCanvas"></canvas>
+      </div>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card panel">
+        <div class="stat-value pixel" id="season-week">18</div>
+        <div class="stat-label">неделя сезона</div>
+      </article>
+
+      <article class="stat-card panel">
+        <div class="stat-value pixel" id="new-week">+25</div>
+        <div class="stat-label">новых за неделю</div>
+      </article>
+
+      <article class="stat-card panel">
+        <div class="stat-value pixel" id="all-total">1848</div>
+        <div class="stat-label">всего установлено</div>
+      </article>
+
+      <article class="stat-card panel">
+        <div class="stat-value pixel" id="avg-tempo">102.6</div>
+        <div class="stat-label">станций / неделю</div>
+      </article>
+
+      <article class="stat-card panel">
+        <div class="stat-value pixel" id="next-update">03:11</div>
+        <div class="stat-label">следующее обновление</div>
+      </article>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script src="app_v2.js"></script>
+</body>
+</html>
