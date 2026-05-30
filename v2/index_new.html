@@ -1,248 +1,801 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EV RACE 2026 — Гонка операторов зарядных станций Беларуси</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style_arcade_v2.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>EV RACE 2026 V2 — гонка за 1010 зарядных станций</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link id="theme-css" rel="stylesheet" href="style_arcade_v2.css">
 </head>
 <body>
 
-<div class="crt-overlay"></div>
-<div class="noise-layer"></div>
-
-<div class="page-shell">
-
-  <header class="topbar">
-
-    <button class="menu-btn">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-    <div class="logo-wrap">
-      <div class="logo-title pixel">EV RACE</div>
-      <div class="logo-sub pixel">БЕЛАРУСЬ 2026</div>
-    </div>
-
-    <button class="fx-btn pixel">
-      ЭФФЕКТЫ
-    </button>
-
-  </header>
-
-  <main>
-
-    <section class="hero-grid">
-
-      <div class="hero-main panel">
-
-        <div class="hero-left">
-
-          <div class="hero-headline pixel">
-            EV RACE
-          </div>
-
-          <div class="hero-year pixel">
-            БЕЛАРУСЬ 2026
-          </div>
-
-          <div class="hero-meta">
-
-            <div class="meta-row">
-              <span>⚑</span>
-              <span>5 операторов</span>
-            </div>
-
-            <div class="meta-row">
-              <span>⚡</span>
-              <span>1010 станций</span>
-            </div>
-
-            <div class="meta-row">
-              <span>▣</span>
-              <span>Финал: 31 декабря</span>
-            </div>
-
-          </div>
-
-          <div class="hero-status panel-soft pixel" id="hero-status">
-            Разрыв между лидерами снова сокращается
-          </div>
-
-        </div>
-
-        <div class="hero-map-wrap">
-          <img src="belarus.svg" alt="Беларусь" class="belarus-map" />
-        </div>
-
-      </div>
-
-      <aside class="hero-side panel">
-
-        <div class="countdown-label pixel">
-          ДО ФИНАЛА ОСТАЛОСЬ
-        </div>
-
-        <div class="countdown-days pixel" id="countdown-days">
-          215
-        </div>
-
-        <div class="countdown-word pixel">
-          ДНЕЙ
-        </div>
-
-        <div class="countdown-meta pixel">
-          <div>
-            <span id="count-hours">12</span>
-            <small>часов</small>
-          </div>
-
-          <div>
-            <span id="count-minutes">37</span>
-            <small>минут</small>
-          </div>
-
-          <div>
-            <span id="count-seconds">48</span>
-            <small>секунд</small>
-          </div>
-        </div>
-
-        <div class="progress-block">
-
-          <div class="progress-title pixel">
-            ОБЩИЙ ПРОГРЕСС К ЦЕЛИ
-          </div>
-
-          <div class="progress-numbers">
-            <span id="total-installed">137</span>
-            <span>/</span>
-            <span>1010</span>
-          </div>
-
-          <div class="progress-bar">
-            <div class="progress-fill" id="goal-progress"></div>
-          </div>
-
-          <div class="progress-footer">
-            <span id="goal-percent">13.6%</span>
-            <span id="updated-at">обновлено: 28.05.2026</span>
-          </div>
-
-        </div>
-
-      </aside>
-
-    </section>
-
-    <section class="season-state panel">
-
-      <div class="section-head">
-        <div class="section-title pixel">СОСТОЯНИЕ СЕЗОНА</div>
-        <div class="live-indicator pixel">
-          ● LIVE
-        </div>
-      </div>
-
-      <div class="season-grid">
-
-        <article class="season-item">
-          <div class="season-icon">↗</div>
-          <div class="season-text">
-            Лидер удерживается,
-            но давление растёт вторую неделю подряд.
-          </div>
-        </article>
-
-        <article class="season-item">
-          <div class="season-icon">⌖</div>
-          <div class="season-text">
-            Минская область — главный центр роста недели.
-          </div>
-        </article>
-
-        <article class="season-item">
-          <div class="season-icon">⚡</div>
-          <div class="season-text">
-            +18 станций установлено за последние 7 дней.
-          </div>
-        </article>
-
-      </div>
-
-    </section>
-
-    <section class="operators-section">
-
-      <div class="section-head operators-head">
-        <div class="section-title pixel">ОПЕРАТОРЫ</div>
-        <div class="pixel top5-label">ТОП-5</div>
-      </div>
-
-      <div id="operators-list"></div>
-
-      <div class="legend pixel">
-        <span class="legend-dot dc"></span>
-        DC — быстрые станции
-
-        <span class="legend-dot ac"></span>
-        AC — медленные станции
-      </div>
-
-    </section>
-
-    <section class="race-graph panel">
-
-      <div class="section-title pixel">
-        СЕЗОННАЯ ГОНКА
-      </div>
-
-      <div class="graph-wrap">
-        <canvas id="raceCanvas"></canvas>
-      </div>
-
-    </section>
-
-    <section class="stats-grid">
-
-      <article class="stat-card panel">
-        <div class="stat-value pixel" id="season-week">18</div>
-        <div class="stat-label">неделя сезона</div>
-      </article>
-
-      <article class="stat-card panel">
-        <div class="stat-value pixel" id="new-week">+25</div>
-        <div class="stat-label">новых за неделю</div>
-      </article>
-
-      <article class="stat-card panel">
-        <div class="stat-value pixel" id="all-total">1848</div>
-        <div class="stat-label">всего установлено</div>
-      </article>
-
-      <article class="stat-card panel">
-        <div class="stat-value pixel" id="avg-tempo">102.6</div>
-        <div class="stat-label">станций / неделю</div>
-      </article>
-
-      <article class="stat-card panel">
-        <div class="stat-value pixel" id="next-update">03:11</div>
-        <div class="stat-label">следующее обновление</div>
-      </article>
-
-    </section>
-
-  </main>
-
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-text">Страница использует localStorage для запоминания голоса.</div>
+  <button class="cookie-btn" onclick="acceptCookies()">ПОНЯТНО ✓</button>
 </div>
 
-<script src="app_v2.js"></script>
+<div class="container">
+
+  <!-- STATUSBAR -->
+  <div class="statusbar" id="statusbar">
+    <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-logo">EV RACE <span>БЕЛАРУСЬ 2026</span></div>
+    <div class="nav-desktop">
+      <a class="nav-link active" href="#">ГЛАВНАЯ</a>
+      <a class="nav-link" href="../tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <a class="nav-link" href="../stations.html">СТАНЦИИ 2026</a>
+    </div>
+    <div class="theme-seg">
+      <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
+      <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
+      <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
+    </div>
+  </div>
+
+  <div class="nav-mobile-drop" id="mobileMenu">
+    <a class="nav-mobile-link active" href="#" onclick="closeBurger()">ГЛАВНАЯ</a>
+    <a class="nav-mobile-link" href="../tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
+    <a class="nav-mobile-link" href="../stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid">
+
+      <!-- левая: title + карта + мета + narrative -->
+      <div class="hero-left">
+        <div class="hero-tag">[ СЕЗОН 2025–2026 ]</div>
+        <div class="hero-title">EV RACE</div>
+        <div class="hero-subtitle">БЕЛАРУСЬ 2026</div>
+
+        <!-- карта Беларуси — точный контур Natural Earth -->
+        <div class="hero-map-wrap">
+          <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 104.8,0.0 L 127.0,7.2 L 130.0,14.4 L 141.1,11.0 L 161.7,17.8 L 163.7,31.4 L 159.2,39.2 L 172.4,58.1 L 181.0,63.4 L 179.7,68.6 L 193.9,73.6 L 200.0,81.3 L 191.8,87.7 L 174.8,86.7 L 170.8,89.4 L 175.7,98.9 L 180.9,117.4 L 162.8,119.1 L 156.3,125.5 L 155.0,140.0 L 146.6,137.2 L 127.6,138.6 L 122.0,131.8 L 114.1,136.9 L 106.2,132.7 L 89.6,132.1 L 66.1,125.2 L 44.8,122.9 L 28.5,123.6 L 17.0,131.4 L 6.9,132.5 L 6.5,119.7 L 0.0,106.3 L 12.6,100.4 L 12.8,88.9 L 6.9,77.9 L 6.0,65.1 L 26.4,65.3 L 49.2,54.5 L 54.1,38.2 L 71.4,28.9 L 69.4,16.0 L 82.2,11.1 Z"/>
+          </svg>
+        </div>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item"><span class="ico">🏁</span> <strong>5</strong> ОПЕРАТОРОВ</div>
+          <div class="hero-meta-item"><span class="ico">⚡</span> <strong>1010</strong> СТАНЦИЙ</div>
+          <div class="hero-meta-item"><span class="ico">📅</span> ФИНАЛ: <strong>31 ДЕКАБРЯ</strong></div>
+        </div>
+
+        <div class="narrative-box">
+          <span class="narrative-arrow">↗</span>
+          <div>
+            <div class="narrative-text" id="narrative-text">—</div>
+            <div class="narrative-soon" id="narrative-soon" style="display:none">⏳ AI NARRATIVE — СКОРО</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- правая: счётчик + прогресс -->
+      <div class="hero-right">
+        <div class="countdown-label-top">▸ ДО ФИНАЛА ОСТАЛОСЬ ◂</div>
+        <div class="countdown-days" id="cd-days">—</div>
+        <div class="countdown-days-label">ДНЕЙ</div>
+        <div class="countdown-hms">
+          <div class="countdown-hms-block">
+            <span class="countdown-hms-num" id="cd-hours">--</span>
+            <div class="countdown-hms-lbl">ЧАСОВ</div>
+          </div>
+          <div class="countdown-hms-block">
+            <span class="countdown-hms-num" id="cd-min">--</span>
+            <div class="countdown-hms-lbl">МИНУТ</div>
+          </div>
+          <div class="countdown-hms-block">
+            <span class="countdown-hms-num" id="cd-sec">--</span>
+            <div class="countdown-hms-lbl">СЕКУНД</div>
+          </div>
+        </div>
+        <div class="hero-progress">
+          <div class="hero-progress-label">ОБЩИЙ ПРОГРЕСС К ЦЕЛИ</div>
+          <div class="hero-progress-nums">
+            <span class="hero-progress-current" id="prog-current">—</span>
+            <span class="hero-progress-sep">/</span>
+            <span class="hero-progress-goal">1010</span>
+          </div>
+          <div class="hero-progress-pct" id="prog-pct">—%</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-stacked" id="total-bar-stacked"></div>
+          </div>
+          <div class="hero-updated" id="hero-updated">ОБНОВЛЕНО: —</div>
+        </div>
+      </div>
+
+    </div><!-- /hero-grid -->
+  </div><!-- /hero -->
+
+  <!-- СОСТОЯНИЕ СЕЗОНА -->
+  <div class="section-block">
+    <div class="section-header">
+      <span class="section-title">◈ СОСТОЯНИЕ СЕЗОНА</span>
+      <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+    </div>
+    <div class="season-state-grid">
+      <div class="season-state-item">
+        <div class="state-ico">🏆</div>
+        <div class="state-soon">⏳ В РАЗРАБОТКЕ</div>
+      </div>
+      <div class="season-state-item">
+        <div class="state-ico">📍</div>
+        <div class="state-soon">⏳ В РАЗРАБОТКЕ</div>
+      </div>
+      <div class="season-state-item">
+        <div class="state-ico">⚡</div>
+        <div class="state-soon">⏳ В РАЗРАБОТКЕ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ОПЕРАТОРЫ -->
+  <div class="section-block">
+    <div class="ops-header">
+      <span class="section-title">◈ ОПЕРАТОРЫ</span>
+      <div class="ops-nav">
+        <span class="ops-nav-btn">◂</span>
+        <a class="ops-nav-link" href="../tour.html">ТОП-5 →</a>
+      </div>
+    </div>
+    <div id="operators-list">
+      <div style="padding:20px;text-align:center" class="loading-pulse">ЗАГРУЗКА...</div>
+    </div>
+    <div class="dc-ac-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span> DC — БЫСТРЫЕ СТАНЦИИ</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--cyan)"></span> AC — МЕДЛЕННЫЕ СТАНЦИИ</div>
+    </div>
+  </div>
+
+  <!-- СЕЗОННАЯ ГОНКА — ГРАФИК -->
+  <div class="race-chart-section">
+    <div class="race-chart-header">
+      <span class="section-title">↗ СЕЗОННАЯ ГОНКА</span>
+      <div class="race-chart-meta">
+        <div class="race-chart-meta-item">СТАРТ <span>01.01.2026</span></div>
+        <div class="race-chart-meta-item">ФИНАЛ <span>31.12.2026</span></div>
+      </div>
+    </div>
+    <div class="race-chart-body">
+      <div class="race-canvas-wrap">
+        <canvas id="race-chart" height="200"></canvas>
+        <div class="race-chart-legend" id="chart-legend"></div>
+      </div>
+      <div class="race-chart-xaxis">
+        <span>НЕД. 1</span>
+        <span id="chart-mid-week">НЕД. —</span>
+        <span>НЕД. 53</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- СТАТИСТИКА СНИЗУ -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">ИДЁТ<br>НЕДЕЛЯ</div>
+      <div class="stat-value" id="stat-week">—</div>
+      <div class="stat-unit">СЕЗОНА</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">НОВЫХ<br>ЗА НЕДЕЛЮ</div>
+      <div class="stat-value yellow" id="stat-new-week">—</div>
+      <div class="stat-unit">СТАНЦИЙ</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">ВСЕГО<br>УСТАНОВЛЕНО</div>
+      <div class="stat-value" id="stat-total">—</div>
+      <div class="stat-unit">СТАНЦИЙ</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">СРЕДНИЙ<br>ТЕМП</div>
+      <div class="stat-value cyan" id="stat-tempo">—</div>
+      <div class="stat-unit">СТ / НЕДЕЛЮ</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">СЛЕД.<br>ОБНОВЛЕНИЕ</div>
+      <div class="stat-value" id="stat-next" style="font-size:14px">—</div>
+      <div class="stat-unit">СЕГОДНЯ</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">ФИНАЛ<br>СЕЗОНА</div>
+      <div class="stat-value" style="font-size:10px">31.12</div>
+      <div class="stat-unit">2026</div>
+    </div>
+  </div>
+
+  <!-- ГОЛОСОВАНИЕ -->
+  <div class="vote-section">
+    <div class="vote-title">◈ СДЕЛАЙ СТАВКУ</div>
+    <div class="vote-question">КТО УСТАНОВИТ БОЛЬШЕ ВСЕХ СТАНЦИЙ К 31.12.2026?<br>ОДИН ИГРОК — ОДИН ГОЛОС:</div>
+    <div class="vote-options" id="vote-options"></div>
+    <div class="cf-turnstile" id="vote-turnstile" data-sitekey="0x4AAAAAACtvG988gnpS7YBa" data-theme="dark" data-size="flexible" style="margin-bottom:10px"></div>
+    <button class="vote-submit" id="vote-submit" onclick="submitVote()" disabled>▶ ПОСТАВИТЬ ◀</button>
+    <div class="vote-results" id="vote-results">
+      <div class="vote-message" id="vote-message"></div>
+      <div id="vote-bars"></div>
+      <div class="vote-total-players" id="vote-total"></div>
+    </div>
+  </div>
+
+  <!-- ПОСЕЩЕНИЯ -->
+  <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">...</span> РАЗ</div>
+
+  <!-- ПЕРЕКЛЮЧАТЕЛЬ ВНИЗУ -->
+  <div class="theme-footer-switch">
+    <span class="theme-foot-lbl">СТИЛЬ</span>
+    <button class="theme-foot-btn active" id="foot-arcade"      onclick="setTheme('arcade')">⬡</button>
+    <button class="theme-foot-btn"        id="foot-tesla-light" onclick="setTheme('tesla-light')">☀</button>
+    <button class="theme-foot-btn"        id="foot-tesla-dark"  onclick="setTheme('tesla-dark')">◑</button>
+  </div>
+
+  <div class="footer">
+    <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF · EV RACE 2026 · БЕЛАРУСЬ<br>#ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
+  </div>
+
+</div><!-- /container -->
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+// ============================================================
+// КОНФИГУРАЦИЯ
+// ============================================================
+const SUPABASE_URL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
+const TOTAL_GOAL   = 1010;
+const RACE_START   = new Date('2026-01-01');
+const RACE_END     = new Date('2026-12-31T18:00:00');
+
+const OPERATORS_META = [
+  { id:'batteryfly', name:'BatteryFly',    color:'#005EEB', logo:'../logos/batteryfly.png', darkBg:true  },
+  { id:'forevo',     name:'forEVo',         color:'#b44fff', logo:'../logos/forevo.png',     darkBg:true  },
+  { id:'zaryadka',   name:'Zaryadka',       color:'#00cfff', logo:'../logos/zaryadka.svg',   darkBg:false },
+  { id:'united',     name:'United Company', color:'#F5821F', logo:'../logos/united.png',     darkBg:true  },
+  { id:'csms',       name:'ЦСМС',           color:'#FF6B6B', logo:'../logos/csms.png',       darkBg:false },
+];
+
+// статусы-заглушки пока нет AI layer
+const OP_STATUS = {
+  batteryfly: 'ЛИДЕР СЕЗОНА',
+  forevo:     'НАСТУПАЕТ',
+  zaryadka:   'СТАБИЛЬНОСТЬ',
+  united:     'РОСТ ПРОДОЛЖАЕТСЯ',
+  csms:       'РАСШИРЕНИЕ СЕТИ',
+};
+
+const VOTE_MESSAGES = {
+  batteryfly:['МОЩНЫЙ ВЫБОР!','СТАВКА НА ЛИДЕРА!'],
+  forevo:    ['СМЕЛАЯ СТАВКА!','ВЕРИШЬ В forEVo!'],
+  zaryadka:  ['ОРИГИНАЛЬНЫЙ ВЫБОР!','ВЕРИШЬ В ZARYADKA!'],
+  united:    ['ТЁМНАЯ ЛОШАДКА!','ПРОТИВ ТЕЧЕНИЯ!'],
+  csms:      ['ОЧЕНЬ СМЕЛАЯ СТАВКА!','ВЕРИШЬ В РЕГИОНЫ!'],
+};
+
+let OPERATORS = OPERATORS_META.map(o=>({...o, total:0, dc_count:0, ac_count:0, new_7d:0, new_30d:0, goal:0, last_date:'—'}));
+let selectedOperator = null;
+let chartWeeklyData  = {}; // { operator: [w1,w2,...w53] }
+
+// ============================================================
+// ТЕМА
+// ============================================================
+const THEMES = ['arcade','tesla-light','tesla-dark'];
+function setTheme(t) {
+  document.getElementById('theme-css').href = 'style_arcade_v2.css'; // V2 пока только arcade
+  localStorage.setItem('ev_race_theme', t);
+  THEMES.forEach(th => {
+    const b1 = document.getElementById('btn-'+th);
+    const b2 = document.getElementById('foot-'+th);
+    if(b1) b1.classList.toggle('active', th===t);
+    if(b2) b2.classList.toggle('active', th===t);
+  });
+  const ts = document.getElementById('vote-turnstile');
+  if(ts) ts.setAttribute('data-theme', t==='tesla-light'?'light':'dark');
+}
+(function(){
+  const saved = localStorage.getItem('ev_race_theme');
+  if(saved && THEMES.includes(saved)) setTheme(saved);
+})();
+
+// ============================================================
+// БУРГЕР
+// ============================================================
+function toggleBurger() {
+  const btn  = document.getElementById('burgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  const open = menu.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+function closeBurger() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('burgerBtn').classList.remove('open');
+}
+document.addEventListener('click', e => {
+  const menu = document.getElementById('mobileMenu');
+  const btn  = document.getElementById('burgerBtn');
+  if(menu?.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) closeBurger();
+});
+
+// ============================================================
+// ОБРАТНЫЙ ОТСЧЁТ
+// ============================================================
+function updateCountdown() {
+  const diff = RACE_END - new Date();
+  if(diff <= 0) return;
+  const days  = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins  = Math.floor((diff % 3600000) / 60000);
+  const secs  = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-days').textContent  = String(days).padStart(3,'0');
+  document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cd-min').textContent   = String(mins).padStart(2,'0');
+  document.getElementById('cd-sec').textContent   = String(secs).padStart(2,'0');
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// ============================================================
+// ТЕКУЩАЯ НЕДЕЛЯ СЕЗОНА
+// ============================================================
+function currentSeasonWeek() {
+  const ms  = new Date() - RACE_START;
+  const days = Math.floor(ms / 86400000);
+  return Math.min(Math.ceil((days + 1) / 7), 53);
+}
+
+// ============================================================
+// ЗАГРУЗКА ДАННЫХ — get_stations_summary
+// ============================================================
+async function loadSummary() {
+  const res  = await fetch(SUPABASE_URL+'/rest/v1/rpc/get_stations_summary', {
+    method:'POST',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'},
+    body:'{}'
+  });
+  return await res.json();
+}
+
+// загрузка исторических данных по неделям из station_date
+async function loadWeeklyData() {
+  const res = await fetch(
+    SUPABASE_URL+'/rest/v1/stations?select=operator,station_date,count,station_type'+
+    '&operator=in.(batteryfly,forevo,zaryadka,united,csms)'+
+    '&order=station_date.asc',
+    { headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY} }
+  );
+  const rows = await res.json();
+  if(!Array.isArray(rows)) return;
+
+  // инициализируем массивы 53 недели нулями
+  const weekly = {};
+  OPERATORS_META.forEach(op => { weekly[op.id] = new Array(53).fill(0); });
+
+  rows.forEach(r => {
+    if(!weekly[r.operator]) return;
+    const d    = new Date(r.station_date);
+    const ms   = d - RACE_START;
+    if(ms < 0) return;
+    const week = Math.min(Math.ceil((ms/86400000 + 1)/7), 53) - 1;
+    weekly[r.operator][week] += (r.count||0);
+  });
+
+  // накопительные суммы
+  OPERATORS_META.forEach(op => {
+    let cum = 0;
+    weekly[op.id] = weekly[op.id].map(v => { cum += v; return cum; });
+  });
+
+  chartWeeklyData = weekly;
+}
+
+// ============================================================
+// MAIN INIT
+// ============================================================
+async function init() {
+  try {
+    const [summaryData] = await Promise.all([
+      loadSummary(),
+      loadWeeklyData(),
+    ]);
+
+    if(Array.isArray(summaryData)) {
+      summaryData.forEach(row => {
+        const op = OPERATORS.find(o => o.id === row.operator);
+        if(op) {
+          op.total    = row.total    || 0;
+          op.dc_count = row.dc_count || 0;
+          op.ac_count = row.ac_count || 0;
+          op.new_7d   = row.new_7d   || 0;
+          op.new_30d  = row.new_30d  || 0;
+          op.goal     = row.goal     || 0;
+          op.last_date = row.last_date ? row.last_date.slice(0,10).split('-').reverse().join('.') : '—';
+        }
+      });
+    }
+
+    // сортировка по total desc
+    OPERATORS.sort((a,b) => b.total - a.total);
+
+    renderHeroProgress();
+    renderNarrative();
+    renderOperators();
+    renderStats();
+    renderChart();
+
+  } catch(e) {
+    console.error('Init error', e);
+  }
+}
+
+// ============================================================
+// HERO ПРОГРЕСС
+// ============================================================
+function renderHeroProgress() {
+  const total = OPERATORS.reduce((s,o) => s+o.total, 0);
+  const pct   = +(total/TOTAL_GOAL*100).toFixed(1);
+  const lastDate = OPERATORS.map(o=>o.last_date).filter(d=>d!=='—').sort().reverse()[0] || '—';
+
+  document.getElementById('prog-current').textContent = total;
+  document.getElementById('prog-pct').textContent     = pct+'%';
+  document.getElementById('hero-updated').textContent = 'ОБНОВЛЕНО: '+lastDate;
+
+  const bar = document.getElementById('total-bar-stacked');
+  bar.innerHTML = '';
+  OPERATORS.forEach(op => {
+    if(op.total <= 0) return;
+    const seg = document.createElement('div');
+    seg.className = 'stack-seg';
+    seg.style.cssText = `width:0%;background:${op.color}`;
+    seg.title = `${op.name}: ${op.total}`;
+    bar.appendChild(seg);
+    setTimeout(() => { seg.style.width = (op.total/TOTAL_GOAL*100)+'%'; }, 150);
+  });
+}
+
+// ============================================================
+// NARRATIVE (заглушка)
+// ============================================================
+function renderNarrative() {
+  // пока нет ai_operator_narratives — показываем заглушку
+  document.getElementById('narrative-text').style.display  = 'none';
+  document.getElementById('narrative-soon').style.display  = 'block';
+}
+
+// ============================================================
+// ОПЕРАТОРЫ
+// ============================================================
+function renderOperators() {
+  const container = document.getElementById('operators-list');
+  container.innerHTML = '';
+
+  OPERATORS.forEach((op, i) => {
+    const rank  = i + 1;
+    const barPct = op.goal ? Math.min(op.total / op.goal * 100, 100) : 0;
+    const rankClass = rank <= 3 ? 'r'+rank : '';
+
+    const row = document.createElement('div');
+    row.className = 'op-row';
+    row.innerHTML = `
+      <div class="op-rank-num ${rankClass}">${rank}</div>
+      <div class="op-mid">
+        <div class="op-name-row">
+          <img class="op-logo-sm${op.darkBg?' dark-bg':''}" src="${op.logo}" alt="${op.name}">
+          <span class="op-name-text">${op.name}</span>
+        </div>
+        <div class="op-status">${OP_STATUS[op.id]||'—'}</div>
+        <div class="op-badges">
+          ${op.dc_count > 0 ? `<span class="badge badge-dc">DC ${op.dc_count}</span>` : ''}
+          ${op.ac_count > 0 ? `<span class="badge badge-ac">AC ${op.ac_count}</span>` : ''}
+        </div>
+        <div class="op-bar-track">
+          <div class="op-bar-fill" id="bar-${op.id}" style="width:0%;background:${op.color}"></div>
+        </div>
+      </div>
+      <div class="op-right">
+        <div class="op-total" style="color:${op.color};text-shadow:0 0 10px ${op.color}66">${op.total}</div>
+        <div class="op-total-lbl">СТАНЦИЙ</div>
+        <div class="op-week ${op.new_7d===0?'zero':''}">+${op.new_7d}</div>
+        <div class="op-week-lbl">ЗА НЕДЕЛЮ</div>
+      </div>`;
+    container.appendChild(row);
+    setTimeout(() => {
+      const fill = document.getElementById('bar-'+op.id);
+      if(fill) fill.style.width = barPct+'%';
+    }, 200 + i*80);
+  });
+}
+
+// ============================================================
+// СТАТИСТИКА ВНИЗУ
+// ============================================================
+function renderStats() {
+  const total   = OPERATORS.reduce((s,o) => s+o.total, 0);
+  const newWeek = OPERATORS.reduce((s,o) => s+o.new_7d, 0);
+  const week    = currentSeasonWeek();
+
+  // темп: total / недели прошедшие
+  const tempo   = week > 0 ? (total / week).toFixed(1) : '—';
+
+  // следующее обновление — ближайшая полночь Минска (+3)
+  const nowMsk    = new Date(Date.now() + 3*3600000);
+  const nextMidnight = new Date(Date.UTC(nowMsk.getUTCFullYear(), nowMsk.getUTCMonth(), nowMsk.getUTCDate()+1, 0,0,0));
+  const diffNext  = nextMidnight - (Date.now() + 3*3600000);
+  const nh = String(Math.floor(diffNext/3600000)).padStart(2,'0');
+  const nm = String(Math.floor((diffNext%3600000)/60000)).padStart(2,'0');
+  const ns = String(Math.floor((diffNext%60000)/1000)).padStart(2,'0');
+
+  document.getElementById('stat-week').textContent     = week;
+  document.getElementById('stat-new-week').textContent = '+'+newWeek;
+  document.getElementById('stat-total').textContent    = total;
+  document.getElementById('stat-tempo').textContent    = tempo;
+  document.getElementById('stat-next').textContent     = nh+':'+nm+':'+ns;
+
+  // обновляем таймер "след обновление" каждую секунду
+  setInterval(() => {
+    const d2  = nextMidnight - (Date.now() + 3*3600000);
+    if(d2 <= 0) return;
+    const h2 = String(Math.floor(d2/3600000)).padStart(2,'0');
+    const m2 = String(Math.floor((d2%3600000)/60000)).padStart(2,'0');
+    const s2 = String(Math.floor((d2%60000)/1000)).padStart(2,'0');
+    document.getElementById('stat-next').textContent = h2+':'+m2+':'+s2;
+  }, 1000);
+}
+
+// ============================================================
+// ГРАФИК СЕЗОННАЯ ГОНКА
+// ============================================================
+function renderChart() {
+  const canvas = document.getElementById('race-chart');
+  if(!canvas) return;
+  const ctx    = canvas.getContext('2d');
+  const W      = canvas.offsetWidth || 600;
+  const H      = 200;
+  canvas.width  = W * (window.devicePixelRatio||1);
+  canvas.height = H * (window.devicePixelRatio||1);
+  ctx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
+
+  const curWeek = currentSeasonWeek();
+  document.getElementById('chart-mid-week').textContent = 'НЕД. '+Math.round(curWeek/2);
+
+  // сетка
+  const padL = 10, padR = 60, padT = 10, padB = 20;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+
+  // max value
+  const allVals = Object.values(chartWeeklyData).flat();
+  const maxVal  = Math.max(...allVals, 10);
+
+  // сетка фон
+  ctx.strokeStyle = 'rgba(26,46,26,0.8)';
+  ctx.lineWidth   = 1;
+  for(let i=0; i<=4; i++) {
+    const y = padT + chartH - (chartH * i / 4);
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(padL+chartW, y);
+    ctx.stroke();
+  }
+
+  // линии операторов
+  OPERATORS.forEach(op => {
+    const data = chartWeeklyData[op.id];
+    if(!data) return;
+
+    ctx.strokeStyle = op.color;
+    ctx.lineWidth   = 2;
+    ctx.shadowColor = op.color;
+    ctx.shadowBlur  = 4;
+    ctx.setLineDash([]);
+
+    // пунктир после текущей недели
+    ctx.beginPath();
+    let started = false;
+    for(let w=0; w<53; w++) {
+      const x = padL + (w / 52) * chartW;
+      const v = data[w] || 0;
+      const y = padT + chartH - (v / maxVal) * chartH;
+      if(w === curWeek) {
+        ctx.stroke();
+        ctx.setLineDash([4,6]);
+        ctx.strokeStyle = op.color+'66';
+        ctx.shadowBlur  = 0;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        started = true;
+      }
+      if(!started) {
+        w===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      } else {
+        ctx.lineTo(x,y);
+      }
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.shadowBlur = 0;
+
+    // пиксельная машинка на текущей позиции
+    if(curWeek < 53) {
+      const wx  = padL + (curWeek / 52) * chartW;
+      const val = data[Math.min(curWeek, 52)] || 0;
+      const wy  = padT + chartH - (val / maxVal) * chartH;
+      drawPixelCar(ctx, wx-14, wy-6, op.color);
+    }
+  });
+
+  // легенда справа
+  const legend = document.getElementById('chart-legend');
+  legend.innerHTML = '';
+  [...OPERATORS].sort((a,b)=>{
+    const av = (chartWeeklyData[a.id]||[])[Math.min(curWeek,52)]||0;
+    const bv = (chartWeeklyData[b.id]||[])[Math.min(curWeek,52)]||0;
+    return bv - av;
+  }).forEach(op => {
+    const val = (chartWeeklyData[op.id]||[])[Math.min(curWeek,52)]||op.total;
+    const item = document.createElement('div');
+    item.className = 'chart-legend-item';
+    item.innerHTML = `
+      <span class="chart-legend-val" style="color:${op.color};text-shadow:0 0 6px ${op.color}66">${val}</span>
+      <span class="chart-legend-dot" style="background:${op.color}"></span>`;
+    legend.appendChild(item);
+  });
+}
+
+function drawPixelCar(ctx, x, y, color) {
+  const p = 1.5;
+  ctx.fillStyle = color;
+  [[0,4],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[10,4],
+   [0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],
+   [1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[9,3],
+   [3,2],[4,2],[5,2],[6,2],[7,2],
+  ].forEach(([px,py]) => ctx.fillRect(x+px*p, y+py*p, p, p));
+  ctx.fillStyle = '#fffaaa';
+  ctx.fillRect(x+10*p, y+4*p, p, p*2);
+}
+
+// ============================================================
+// ГОЛОСОВАНИЕ
+// ============================================================
+function renderVoteOptions() {
+  const c = document.getElementById('vote-options');
+  c.innerHTML = '';
+  OPERATORS_META.forEach(op => {
+    const btn = document.createElement('button');
+    btn.className  = 'vote-btn';
+    btn.dataset.id = op.id;
+    btn.innerHTML  = `<img src="${op.logo}" alt="${op.name}"><span>${op.name}</span>`;
+    btn.onclick    = () => selectVote(op.id);
+    c.appendChild(btn);
+  });
+}
+
+function selectVote(id) {
+  selectedOperator = id;
+  document.querySelectorAll('.vote-btn').forEach(b => b.classList.toggle('selected', b.dataset.id===id));
+  document.getElementById('vote-submit').disabled = false;
+}
+
+async function submitVote() {
+  if(!selectedOperator) return;
+  const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
+  if(!token) { alert('Пожалуйста, подождите проверки безопасности...'); return; }
+  const btn = document.getElementById('vote-submit');
+  btn.disabled = true; btn.textContent = '... ОБРАБОТКА ...';
+  localStorage.setItem('ev_race_vote',  selectedOperator);
+  localStorage.setItem('ev_race_voted', '1');
+  try {
+    await fetch(SUPABASE_URL+'/functions/v1/submit-vote', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+      body:JSON.stringify({operator:selectedOperator, cf_token:token})
+    });
+  } catch(e) { console.log('Vote error', e); }
+  await showResults(selectedOperator);
+}
+
+async function showResults(myVote) {
+  let votes={}, total=0;
+  try {
+    const res  = await fetch(SUPABASE_URL+'/rest/v1/rpc/get_vote_counts', {
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'},
+      body:'{}'
+    });
+    const data = await res.json();
+    if(Array.isArray(data)) {
+      data.forEach(r => { votes[r.operator]=parseInt(r.count); });
+      total = data.reduce((s,r) => s+parseInt(r.count), 0);
+    }
+  } catch(e) {}
+  if(total===0) total=1;
+
+  document.getElementById('vote-options').style.display   = 'none';
+  document.getElementById('vote-submit').style.display    = 'none';
+  document.getElementById('vote-turnstile').style.display = 'none';
+  document.getElementById('vote-results').style.display   = 'block';
+
+  const myCount = votes[myVote]||1;
+  const myPct   = Math.round(myCount/total*100);
+  const msgs    = VOTE_MESSAGES[myVote]||['СТАВКА СДЕЛАНА!'];
+  const msg     = msgs[Math.floor(Math.random()*msgs.length)];
+  const opName  = OPERATORS_META.find(o=>o.id===myVote)?.name||myVote;
+  const subtext = myPct>=40 ? `${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
+                  myPct>=20 ? `ТОЛЬКО ${myPct}% ПОСТАВИЛИ НА ${opName.toUpperCase()}` :
+                              `ЛИШЬ ${myPct}% ВЕРЯТ В ${opName.toUpperCase()}`;
+  document.getElementById('vote-message').innerHTML = `${msg}<br><span style="font-size:8px;opacity:.6">${subtext}</span>`;
+
+  const barsDiv = document.getElementById('vote-bars');
+  barsDiv.innerHTML = '';
+  [...OPERATORS_META].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0)).forEach(op => {
+    const cnt  = votes[op.id]||0;
+    const pct  = Math.round(cnt/total*100);
+    const isMe = op.id===myVote;
+    const div  = document.createElement('div');
+    div.className = 'vote-result-item';
+    div.innerHTML = `
+      <div class="vote-result-top">
+        <span class="rname" style="${isMe?'color:var(--text)':''}">${isMe?'▶ ':''}${op.name}</span>
+        <span class="rpct">${pct}%</span>
+      </div>
+      <div class="vote-result-bar-wrap"><div class="vote-result-bar${isMe?' mine':''}" style="width:0%"></div></div>`;
+    barsDiv.appendChild(div);
+    setTimeout(() => { div.querySelector('.vote-result-bar').style.width=pct+'%'; }, 200);
+  });
+  document.getElementById('vote-total').textContent = `▶ ВСЕГО СТАВОК: ${total} ◀`;
+}
+
+async function checkVoted() {
+  const voted  = localStorage.getItem('ev_race_voted');
+  const myVote = localStorage.getItem('ev_race_vote');
+  if(voted && myVote) {
+    document.getElementById('vote-submit').style.display = 'none';
+    document.querySelectorAll('.vote-btn').forEach(b => {
+      b.disabled = true;
+      if(b.dataset.id===myVote) b.classList.add('selected');
+    });
+    await showResults(myVote);
+  }
+}
+
+// ============================================================
+// ВИЗИТЫ
+// ============================================================
+async function trackVisit() {
+  try {
+    await fetch(SUPABASE_URL+'/rest/v1/visits', {
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({visited_at:new Date().toISOString(), page:'main'})
+    });
+    const res   = await fetch(SUPABASE_URL+'/rest/v1/visits?select=id&page=eq.main', {
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'count=exact','Range':'0-0'}
+    });
+    const count = res.headers.get('content-range')?.split('/')[1]||'...';
+    document.getElementById('visit-count').textContent = Number(count).toLocaleString('ru');
+  } catch(e) { document.getElementById('visit-count').textContent='...'; }
+}
+
+// ============================================================
+// COOKIE
+// ============================================================
+function acceptCookies() {
+  localStorage.setItem('ev_race_cookies','1');
+  document.getElementById('cookieBanner').style.display='none';
+}
+if(localStorage.getItem('ev_race_cookies')) document.getElementById('cookieBanner').style.display='none';
+
+// ============================================================
+// СТАРТ
+// ============================================================
+renderVoteOptions();
+checkVoted();
+trackVisit();
+init();
+
+// перерисовать график при ресайзе
+window.addEventListener('resize', () => {
+  if(Object.keys(chartWeeklyData).length) renderChart();
+});
+</script>
 </body>
 </html>
