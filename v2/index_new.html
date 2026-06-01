@@ -369,6 +369,8 @@ img{display:block}
 }
 .hm-cd-top{font-family:var(--px);font-size:6px;color:var(--tdim);letter-spacing:2px;text-align:center;margin-bottom:10px}
 .hm-cd-main{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
+/* ДНЕЙ inline с числом */
+.hm-cd-main>div:first-child{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
 .hm-days{
   font-family:var(--px);
   font-size:clamp(56px,18vw,88px);
@@ -376,33 +378,41 @@ img{display:block}
   text-shadow:0 0 22px var(--green),0 0 50px rgba(0,255,65,0.35);
   line-height:1;display:block;
 }
-.hm-days-lbl{font-family:var(--px);font-size:9px;color:var(--gdim);margin-top:4px}
-.hm-map{flex-shrink:0;width:100px;opacity:0.4;margin-top:4px}
-@media(min-width:380px){.hm-map{width:118px}}
+.hm-days-lbl{font-family:var(--px);font-size:clamp(14px,4vw,20px);color:var(--gdim);margin-bottom:6px}
+.hm-map{flex-shrink:0;width:100px;opacity:0.45;margin-top:0;align-self:stretch;display:flex;align-items:center}
+@media(min-width:380px){.hm-map{width:110px}}
+.hm-map svg{width:100%;height:auto}
 .hm-map svg path{fill:none;stroke:var(--green);stroke-width:1.8;filter:drop-shadow(0 0 4px var(--green))}
-.hm-hms{display:flex;gap:18px;padding-top:8px;border-top:1px solid var(--bdr)}
-.hm-hms-itm{text-align:center}
-.hm-hms-num{font-family:var(--px);font-size:16px;color:var(--txt);display:block}
-.hm-hms-lbl{font-family:var(--px);font-size:5px;color:var(--tdim);margin-top:3px}
+/* hms — горизонтально с точками, без border */
+.hm-hms{display:flex;align-items:baseline;gap:0;padding-top:10px;border-top:1px solid var(--bdr);flex-wrap:wrap}
+.hm-hms-itm{display:flex;align-items:baseline;gap:4px;white-space:nowrap}
+.hm-hms-itm:not(:last-child)::after{content:'·';color:var(--bdr);margin:0 8px;font-size:14px}
+.hm-hms-num{font-family:var(--px);font-size:16px;color:var(--txt);display:inline}
+.hm-hms-lbl{font-family:var(--px);font-size:5.5px;color:var(--tdim);display:inline}
 
 .hm-info{
-  background:var(--card);border:1px solid var(--bdr);border-radius:5px;
-  margin:8px 0;padding:10px 14px;
+  padding:11px 14px;
   display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  border-bottom:1px solid var(--bdr);
 }
 .hm-info-item{font-family:var(--px);font-size:7px;color:var(--tmid);display:flex;align-items:center;gap:5px;white-space:nowrap}
 .hm-info-item strong{color:var(--yellow)}
 .hm-info-sep{color:var(--bdr);font-size:14px;margin:0 2px}
 
 .hm-narr{
-  background:var(--card);border:1px solid var(--gdim);border-radius:5px;
-  margin:8px 0;padding:12px 14px;
+  padding:12px 14px;
   display:flex;align-items:center;gap:10px;
-  box-shadow:0 0 12px rgba(0,255,65,0.05);
 }
 .hm-narr-ico{font-size:14px;flex-shrink:0;color:var(--green)}
 .hm-narr-txt{font-family:var(--px);font-size:7px;color:var(--green);line-height:1.8;text-shadow:0 0 8px rgba(0,255,65,0.35)}
 .hm-narr-soon{font-family:var(--mo);font-size:12px;color:var(--tdim);font-style:italic}
+/* внутренняя рамка нарратива */
+.hm-season-blk .hm-narr{
+  margin:0 10px 10px;
+  border:1px solid var(--gdim);border-radius:4px;
+  background:rgba(0,255,65,0.03);
+  box-shadow:0 0 12px rgba(0,255,65,0.05);
+}
 
 .hm-prog{
   background:var(--card);border:1px solid var(--bdr);border-radius:5px;
@@ -416,14 +426,24 @@ img{display:block}
 .hm-prog-pct{font-family:var(--px);font-size:8px;color:var(--yellow);text-align:right;margin-bottom:5px}
 .hm-prog-upd{font-family:var(--mo);font-size:10px;color:var(--tdim);text-align:right;margin-top:6px}
 
-/* ═══════════════════════════════════════════════
-   СОСТОЯНИЕ СЕЗОНА
-   ═══════════════════════════════════════════════ */
+/* ═══ СОСТОЯНИЕ СЕЗОНА ═══ */
 .ss-grid{display:grid;grid-template-columns:1fr 1fr 1fr}
-.ss-cell{padding:14px 13px;border-right:1px solid var(--bdr)}
+.ss-cell{
+  padding:14px 12px;border-right:1px solid var(--bdr);
+  display:flex;align-items:flex-start;gap:10px;
+}
 .ss-cell:last-child{border-right:none}
-.ss-ico{font-size:18px;margin-bottom:7px}
-.ss-txt{font-family:var(--px);font-size:5.5px;color:var(--tdim);line-height:1.9}
+.ss-ico{font-size:22px;flex-shrink:0;margin-top:2px}
+.ss-txt{
+  font-family:var(--mo);font-size:11px;
+  color:var(--tmid);line-height:1.6;
+}
+@media(max-width:480px){
+  .ss-grid{grid-template-columns:1fr}
+  .ss-cell{border-right:none;border-bottom:1px solid var(--bdr)}
+  .ss-cell:last-child{border-bottom:none}
+  .ss-txt{font-size:12px}
+}
 /* live badge */
 .live-badge{display:flex;align-items:center;gap:6px;font-family:var(--px);font-size:6px;color:var(--green)}
 .live-dot{
@@ -433,56 +453,67 @@ img{display:block}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* ═══════════════════════════════════════════════
-   ОПЕРАТОРЫ
+   ОПЕРАТОРЫ — карточки с цветной рамкой
    ═══════════════════════════════════════════════ */
+
+#ops-list{padding:8px 10px 4px}
+
 .op-row{
   display:grid;
-  grid-template-columns:40px 1fr auto;
-  gap:12px;align-items:stretch;
-  padding:13px 14px 13px 16px;
-  border-bottom:1px solid var(--bdr);
+  grid-template-columns:58px 1fr auto;
+  gap:12px;align-items:center;
+  padding:12px 14px;
+  margin-bottom:8px;
+  border:1px solid var(--oc,var(--bdr));
+  border-radius:4px;
+  background:rgba(0,0,0,0.25);
   position:relative;
-  transition:background .15s;
+  box-shadow:0 0 18px color-mix(in srgb,var(--oc,transparent) 7%,transparent);
+  transition:box-shadow .2s;
 }
-.op-row:last-child{border-bottom:none}
-.op-row:hover{background:rgba(0,255,65,0.018)}
-/* 3px цветная полоска оператора слева */
+.op-row:last-child{margin-bottom:0}
+.op-row:hover{box-shadow:0 0 28px color-mix(in srgb,var(--oc,transparent) 18%,transparent)}
+/* 3px полоска слева */
 .op-row::before{
   content:'';position:absolute;
-  left:0;top:0;bottom:0;width:3px;
+  left:0;top:4px;bottom:4px;width:3px;
+  border-radius:0 2px 2px 0;
   background:var(--oc,transparent);
-  box-shadow:2px 0 10px color-mix(in srgb,var(--oc,transparent) 35%,transparent);
+  box-shadow:2px 0 10px color-mix(in srgb,var(--oc,transparent) 50%,transparent);
 }
 
-/* rank — рамка цветом оператора */
+/* rank — большой квадрат */
 .op-rank{
+  width:58px;height:58px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
   border:1px solid var(--oc,var(--bdr));border-radius:3px;
-  background:rgba(0,0,0,0.35);
-  box-shadow:inset 0 0 8px color-mix(in srgb,var(--oc,transparent) 10%,transparent);
+  background:rgba(0,0,0,0.4);
+  box-shadow:inset 0 0 12px color-mix(in srgb,var(--oc,transparent) 12%,transparent);
 }
 .op-rank span{
-  font-family:var(--px);font-size:13px;
+  font-family:var(--px);font-size:20px;
   color:var(--oc,var(--tdim));
-  text-shadow:0 0 10px var(--oc,transparent);
+  text-shadow:0 0 12px var(--oc,transparent);
 }
 
 /* middle */
-.op-mid{min-width:0;display:flex;flex-direction:column;gap:4px}
-.op-nameline{display:flex;align-items:center;gap:7px}
-.op-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.op-mid{min-width:0;display:flex;flex-direction:column;gap:5px}
+.op-nameline{display:flex;align-items:center;gap:8px}
+.op-logo{width:20px;height:20px;object-fit:contain;flex-shrink:0}
 .op-logo.dk{background:#111;padding:2px;border-radius:2px}
-.op-name{font-family:var(--px);font-size:8px;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.op-status{font-family:var(--mo);font-size:10px;color:var(--tdim)}
-.op-badges{display:flex;gap:4px;flex-wrap:wrap}
-.op-badge{font-family:var(--px);font-size:5.5px;padding:2px 5px;border-radius:2px;border:1px solid;line-height:1.4}
-.badge-dc{color:var(--yellow);border-color:var(--yellow);background:rgba(255,215,0,0.07)}
-.badge-ac{color:var(--cyan);border-color:var(--cyan);background:rgba(0,229,255,0.07)}
-/* pixel progress bar */
+.op-name{font-family:var(--px);font-size:9px;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* статус — цветом оператора */
+.op-status{font-family:var(--mo);font-size:11px;color:var(--oc);opacity:0.85}
+/* badges — горизонтально */
+.op-badges{display:flex;gap:5px;flex-wrap:wrap;flex-direction:row}
+.op-badge{font-family:var(--px);font-size:5.5px;padding:2px 6px;border-radius:2px;border:1px solid;line-height:1.5}
+.badge-dc{color:var(--yellow);border-color:var(--yellow);background:rgba(255,215,0,0.08)}
+.badge-ac{color:var(--cyan);border-color:var(--cyan);background:rgba(0,229,255,0.08)}
+/* pixel bar */
 .op-pixbar{display:flex;gap:2px;height:8px}
 .op-pixseg{height:100%;width:6px;flex-shrink:0;border-radius:1px}
 
-/* на десктопе: badges в правом подстолбце op-mid */
+/* десктоп — badges справа от имени/статуса */
 @media(min-width:640px){
   .op-mid{
     display:grid;
@@ -492,30 +523,36 @@ img{display:block}
   }
   .op-nameline{grid-column:1;grid-row:1}
   .op-status{grid-column:1;grid-row:2;align-self:center}
-  .op-badges{grid-column:2;grid-row:1/3;align-self:center;flex-direction:column;gap:3px}
+  .op-badges{grid-column:2;grid-row:1/3;align-self:center;flex-direction:column;gap:4px}
   .op-pixbar{grid-column:1/3;grid-row:3;margin-top:6px;height:9px}
   .op-pixseg{width:7px}
 }
 
-/* right — total + weekly */
-.op-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:4px;min-width:76px}
-.op-total{
-  font-family:var(--px);font-size:24px;line-height:1;
-  color:var(--oc);text-shadow:0 0 14px var(--oc);
+/* right — ОГРОМНОЕ число + weekly */
+.op-right{
+  display:flex;flex-direction:column;
+  align-items:flex-end;justify-content:center;
+  gap:6px;min-width:80px;
 }
-.op-total-lbl{font-family:var(--px);font-size:5px;color:var(--tdim)}
-/* +N за неделю — рамка цветом оператора */
+.op-total{
+  font-family:var(--px);
+  font-size:clamp(36px,9vw,54px);
+  line-height:1;
+  color:var(--oc);
+  text-shadow:0 0 20px var(--oc),0 0 40px color-mix(in srgb,var(--oc) 35%,transparent);
+}
+.op-total-lbl{font-family:var(--px);font-size:5px;color:var(--tdim);margin-top:-2px}
+/* +N за неделю */
 .op-wkbox{
   border:1px solid var(--oc,var(--bdr));border-radius:3px;
-  padding:4px 8px;text-align:center;
-  box-shadow:0 0 8px color-mix(in srgb,var(--oc,transparent) 15%,transparent);
-  transition:.15s;
+  padding:5px 10px;text-align:center;min-width:62px;
+  box-shadow:0 0 10px color-mix(in srgb,var(--oc,transparent) 15%,transparent);
 }
 .op-wknum{
-  font-family:var(--px);font-size:10px;
-  color:var(--oc);text-shadow:0 0 6px var(--oc);display:block;
+  font-family:var(--px);font-size:13px;
+  color:var(--oc);text-shadow:0 0 8px var(--oc);display:block;
 }
-.op-wklbl{font-family:var(--px);font-size:4.5px;color:var(--tdim)}
+.op-wklbl{font-family:var(--px);font-size:4.5px;color:var(--tdim);display:block;margin-top:2px}
 
 /* legend DC / AC */
 .dc-ac-leg{padding:8px 14px;border-top:1px solid var(--bdr);display:flex;gap:16px;flex-wrap:wrap}
@@ -760,16 +797,21 @@ canvas#raceChart{width:100%;display:block}
       <div class="hm-hms-itm"><span class="hm-hms-num" id="m-s">--</span><div class="hm-hms-lbl">СЕКУНД</div></div>
     </div>
   </div>
-  <div class="hm-info">
-    <div class="hm-info-item">🏁 <strong>5</strong> ОПЕРАТОРОВ</div>
-    <div class="hm-info-sep">·</div>
-    <div class="hm-info-item">⚡ <strong>1010</strong> СТАНЦИЙ</div>
-    <div class="hm-info-sep">·</div>
-    <div class="hm-info-item">📅 ФИНАЛ <strong>31 ДЕК</strong></div>
-  </div>
-  <div class="hm-narr">
-    <span class="hm-narr-ico">↗</span>
-    <span class="hm-narr-soon">⏳ AI NARRATIVE — СКОРО</span>
+  <div class="blk hm-season-blk">
+    <div class="blk-hdr">
+      <span class="blk-title">О СЕЗОНЕ ›</span>
+    </div>
+    <div class="hm-info">
+      <div class="hm-info-item">🏁 <strong>5</strong> ОПЕРАТОРОВ</div>
+      <div class="hm-info-sep">·</div>
+      <div class="hm-info-item">⚡ <strong>1010</strong> СТАНЦИЙ</div>
+      <div class="hm-info-sep">·</div>
+      <div class="hm-info-item">📅 ФИНАЛ <strong>31 ДЕК</strong></div>
+    </div>
+    <div class="hm-narr">
+      <span class="hm-narr-ico">↗</span>
+      <span class="hm-narr-soon">⏳ AI NARRATIVE — СКОРО</span>
+    </div>
   </div>
   <div class="hm-prog">
     <div class="hm-prog-lbl">ОБЩИЙ ПРОГРЕСС К ЦЕЛИ</div>
