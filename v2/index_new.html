@@ -425,8 +425,7 @@ canvas#raceChart{width:100%;display:block}
 .cl-item{display:flex;align-items:center;gap:5px;justify-content:flex-end}
 .cl-val{font-family:var(--px);font-size:9px}
 .cl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.chart-xaxis{display:flex;justify-content:space-between;padding:4px 0 2px}
-.chart-xaxis span{font-family:var(--px);font-size:5.5px;color:var(--tdim)}
+
 
 /* ═══════════════════════════════════════════════
    СТАТЫ
@@ -681,11 +680,7 @@ canvas#raceChart{width:100%;display:block}
       <canvas id="raceChart" height="200"></canvas>
       <div class="chart-legend" id="chartLegend"></div>
     </div>
-    <div class="chart-xaxis">
-      <span>НЕД. 1</span>
-      <span id="chartMid">НЕД. —</span>
-      <span>НЕД. 53</span>
-    </div>
+
   </div>
 </div>
 
@@ -974,28 +969,32 @@ function renderChart(){
   const dpr=window.devicePixelRatio||1;
   canvas.width=W*dpr; canvas.height=H*dpr; ctx.scale(dpr,dpr);
   const cw=curWeek();
-  const el=document.getElementById('chartMid'); if(el) el.textContent='НЕД. '+Math.round(cw/2);
-  const pL=8,pR=isMob?36:44,pT=10,pB=22,cW=W-pL-pR,cH=H-pT-pB;
+  const pL=8,pR=8,pT=10,pB=22,cW=W-pL-pR,cH=H-pT-pB;
 
-  // Динамическая ось Y — округляем до 50
+  // Динамическая ось Y — округляем до 20
   const maxV=Math.max(...Object.values(weeklyData).flat(),10);
-  const yMax=Math.ceil(maxV/50)*50;
+  const yMax=Math.ceil(maxV/20)*20;
 
-  // Сетка и метки оси Y
-  ctx.font=`${isMob?8:9}px 'Share Tech Mono'`;
-  ctx.fillStyle='rgba(100,148,100,0.5)';
-  ctx.textAlign='right';
-  const ySteps=yMax/50;
-  for(let i=0;i<=ySteps;i++){
-    const v=i*50;
-    const y=pT+cH-(v/yMax)*cH;
-    ctx.strokeStyle='rgba(28,46,28,0.6)'; ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+cW,y);ctx.stroke();
-    ctx.fillText(v,pL+cW+pR-2,y+3);
+  // Dot grid фон
+  ctx.fillStyle='rgba(28,46,28,0.5)';
+  const dotStep=isMob?16:20;
+  for(let gx=pL;gx<=pL+cW;gx+=dotStep){
+    for(let gy=pT;gy<=pT+cH;gy+=dotStep){
+      ctx.fillRect(gx,gy,1,1);
+    }
   }
 
-  // Метки оси X
+  // Горизонтальные линии сетки (без цифр)
+  const ySteps=yMax/20;
+  for(let i=0;i<=ySteps;i++){
+    const y=pT+cH-(i/ySteps)*cH;
+    ctx.strokeStyle='rgba(28,46,28,0.8)'; ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+cW,y);ctx.stroke();
+  }
+
+  // Метки оси X на canvas
   const xMarks=isMob?[1,20,40,53]:[1,10,20,30,40,50,53];
+  ctx.font=`${isMob?7:8}px 'Share Tech Mono'`;
   ctx.textAlign='center';
   ctx.fillStyle='rgba(100,148,100,0.5)';
   xMarks.forEach(wk=>{
