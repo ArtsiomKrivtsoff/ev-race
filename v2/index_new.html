@@ -648,9 +648,9 @@ canvas#raceChart{width:100%;display:block}
     <span class="live-badge"><span class="live-dot"></span>LIVE</span>
   </div>
   <div class="ss-grid">
-    <div class="ss-cell"><div class="ss-ico">🏆</div><div class="ss-txt">⏳ В РАЗРАБОТКЕ</div></div>
-    <div class="ss-cell"><div class="ss-ico">📍</div><div class="ss-txt">⏳ В РАЗРАБОТКЕ</div></div>
-    <div class="ss-cell"><div class="ss-ico">⚡</div><div class="ss-txt">⏳ В РАЗРАБОТКЕ</div></div>
+    <div class="ss-cell"><div class="ss-ico">🏆</div><div class="ss-txt" id="diag-leader">...</div></div>
+    <div class="ss-cell"><div class="ss-ico">📍</div><div class="ss-txt" id="diag-region">...</div></div>
+    <div class="ss-cell"><div class="ss-ico">⚡</div><div class="ss-txt" id="diag-tempo">...</div></div>
   </div>
 </div>
 
@@ -752,14 +752,7 @@ const OPS=[
   {id:'united',    name:'United Company',color:'#F5821F',logo:'../logos/united.png',    dk:true},
   {id:'csms',      name:'ЦСМС',          color:'#FF6B6B',logo:'../logos/csms.png',      dk:false},
 ];
-function getOpStatus(op, rank, gap){
-  if(op.total===0) return 'ПАУЗА ТЯНЕТСЯ';
-  if(rank===1 && op.w7===0) return 'ДЕРЖИТСЯ';
-  if(rank===1) return 'ЛИДЕР ДЕРЖИТСЯ';
-  if(gap<=5 && op.w7>0) return 'СОКРАЩАЕТ РАЗРЫВ';
-  if(op.w7===0) return 'ТЕМП РОВНЫЙ';
-  return 'НАБИРАЕТ ТЕМП';
-}
+const STATUS={batteryfly:'ЛИДЕР СЕЗОНА',forevo:'НАСТУПАЕТ',zaryadka:'СТАБИЛЬНОСТЬ',united:'РОСТ ПРОДОЛЖАЕТСЯ',csms:'РАСШИРЕНИЕ СЕТИ'};
 let data=OPS.map(o=>({...o,total:0,dc:0,ac:0,w7:0,goal:0,last:'—'}));
 let weeklyData={};
 
@@ -867,7 +860,7 @@ async function init(){
       });
     }
     data.sort((a,b)=>b.total-a.total);
-    renderProgress(); renderOps(); renderStats(); renderChart();
+    renderProgress(); renderOps(); renderStats(); renderChart(); renderDiagnostics();
   }catch(e){console.error(e);}
 }
 
@@ -923,7 +916,7 @@ function renderOps(){
           <img class="op-logo${op.dk?' dk':''}" src="${op.logo}" alt="${op.name}" onerror="this.style.display='none'">
           <span class="op-name">${op.name}</span>
         </div>
-       <div class="op-status">${getOpStatus(op, i+1, data[0].total-op.total)}</div>
+        <div class="op-status">${STATUS[op.id]||'—'}</div>
         <div class="op-badges">
           ${op.dc>0?`<span class="op-badge badge-dc">DC ${op.dc}</span>`:''}
           ${op.ac>0?`<span class="op-badge badge-ac">AC ${op.ac}</span>`:''}
@@ -1018,7 +1011,60 @@ function car(ctx,x,y,c){
   ctx.fillStyle='#fffaaa'; ctx.fillRect(x+10*p,y+4*p,p,p*2);
 }
 
-/* ── ВИЗИТЫ ── */
+/* ── ДИАГНОСТИКА СЕЗОНА ── */
+async function fetchRegion(){
+  const since=new Date(Date.now()-7*24*3600000).toISOString().slice(0,10);
+  const r=await fetch(
+    SURL+'/rest/v1/stations?select=region,count&operator=in.(batteryfly,forevo,zaryadka,united,csms)&station_date=gte.'+since+'&region=not.is.null',
+    {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}}
+  );
+  return r.json();
+}
+
+function diagLeader(){
+  if(!data||data.length===0) return '—';
+  const leader=data[0];
+  const second=data[1];
+  if(!second||leader.total===0) return 'Лидер держится уверенно';
+  const gap=leader.total-second.total;
+  if(gap<=3) return 'Разрыв наверху сократился';
+  if(gap<=10) return 'Преследователи стали ближе';
+  return 'Лидер держится уверенно';
+}
+
+function diagTempo(){
+  const wk=curWeek();
+  if(wk<=0) return '—';
+  const tot=data.reduce((s,o)=>s+o.total,0);
+  const w7tot=data.reduce((s,o)=>s+o.w7,0);
+  const avg=tot/wk;
+  if(w7tot>=avg*1.2) return 'Темп выше среднего';
+  if(w7tot<=avg*0.8) return 'Темп ниже среднего';
+  return 'Темп держится ровно';
+}
+
+function diagRegion(rows){
+  if(!Array.isArray(rows)||rows.length===0) return 'Активность по регионам';
+  const cnt={};
+  rows.forEach(r=>{
+    if(!r.region) return;
+    cnt[r.region]=(cnt[r.region]||0)+(r.count||1);
+  });
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
+  if(!top) return 'Активность по регионам';
+  return top[0]+' в центре роста';
+}
+
+async function renderDiagnostics(){
+  document.getElementById('diag-leader').textContent=diagLeader();
+  document.getElementById('diag-tempo').textContent=diagTempo();
+  try{
+    const rows=await fetchRegion();
+    document.getElementById('diag-region').textContent=diagRegion(rows);
+  }catch(e){
+    document.getElementById('diag-region').textContent='Данные обновляются';
+  }
+}
 async function trackVisit(){
   try{
     await fetch(SURL+'/rest/v1/visits',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({visited_at:new Date().toISOString(),page:'main'})});
