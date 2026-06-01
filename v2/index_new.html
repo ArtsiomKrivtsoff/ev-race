@@ -752,7 +752,14 @@ const OPS=[
   {id:'united',    name:'United Company',color:'#F5821F',logo:'../logos/united.png',    dk:true},
   {id:'csms',      name:'ЦСМС',          color:'#FF6B6B',logo:'../logos/csms.png',      dk:false},
 ];
-const STATUS={batteryfly:'ЛИДЕР СЕЗОНА',forevo:'НАСТУПАЕТ',zaryadka:'СТАБИЛЬНОСТЬ',united:'РОСТ ПРОДОЛЖАЕТСЯ',csms:'РАСШИРЕНИЕ СЕТИ'};
+function getOpStatus(op, rank, gap){
+  if(op.total===0) return 'ПАУЗА ТЯНЕТСЯ';
+  if(rank===1 && op.w7===0) return 'ДЕРЖИТСЯ';
+  if(rank===1) return 'ЛИДЕР ДЕРЖИТСЯ';
+  if(gap<=5 && op.w7>0) return 'СОКРАЩАЕТ РАЗРЫВ';
+  if(op.w7===0) return 'ТЕМП РОВНЫЙ';
+  return 'НАБИРАЕТ ТЕМП';
+}
 let data=OPS.map(o=>({...o,total:0,dc:0,ac:0,w7:0,goal:0,last:'—'}));
 let weeklyData={};
 
@@ -916,7 +923,7 @@ function renderOps(){
           <img class="op-logo${op.dk?' dk':''}" src="${op.logo}" alt="${op.name}" onerror="this.style.display='none'">
           <span class="op-name">${op.name}</span>
         </div>
-        <div class="op-status">${STATUS[op.id]||'—'}</div>
+       <div class="op-status">${getOpStatus(op, i+1, data[0].total-op.total)}</div>
         <div class="op-badges">
           ${op.dc>0?`<span class="op-badge badge-dc">DC ${op.dc}</span>`:''}
           ${op.ac>0?`<span class="op-badge badge-ac">AC ${op.ac}</span>`:''}
