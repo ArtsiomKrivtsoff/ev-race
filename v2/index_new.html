@@ -14,7 +14,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <link id="theme-css" rel="stylesheet" href="../CSS/arcade.css?v=2">
 <link rel="stylesheet" href="../CSS/operator.css?v=2">
-<link rel="stylesheet" href="home-v2.css?v=5">
+<link rel="stylesheet" href="home-v2.css?v=7">
 <link rel="prefetch" href="../CSS/tesla-light.css">
 <link rel="prefetch" href="../CSS/tesla-dark.css">
 <!-- styles: ../CSS/arcade.css + home-v2.css -->
@@ -92,7 +92,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     </div>
     <div class="hl-narrative">
       <span class="hl-narr-ico">↗</span>
-      <span class="hl-narr-text" id="hero-narr-d">...</span>
+      <span class="hl-narr-soon" id="hero-narrative">⏳ AI NARRATIVE — СКОРО</span>
     </div>
   </div>
   <div class="hero-right">
@@ -166,7 +166,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     </div>
     <div class="hm-narr">
       <span class="hm-narr-ico">↗</span>
-      <span class="hm-narr-text" id="hero-narr-m">...</span>
+      <span class="hm-narr-soon" id="hero-narrative-mobile">⏳ AI NARRATIVE — СКОРО</span>
     </div>
   </div>
 </div>
@@ -333,6 +333,20 @@ function getRoundForDate(dateStr){
 function getCurrentRound(){
   return getRoundForDate(new Date().toISOString().split('T')[0]);
 }
+function fmtLocalDate(d){
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+function getRoundDates(rn){
+  if(rn===1) return {start:'2026-01-01',end:'2026-01-02'};
+  const s=new Date('2026-01-03T12:00:00');
+  s.setDate(s.getDate()+(rn-2)*7);
+  const e=new Date(s);
+  e.setDate(e.getDate()+6);
+  const fin=new Date('2026-12-31T12:00:00');
+  if(e>fin) e.setTime(fin.getTime());
+  return {start:fmtLocalDate(s),end:fmtLocalDate(e)};
+}
 /* Круги: 53 круга, сб–пт, круг 1 = 1–2 янв — см. tour.html */
 
 const VOTE_MESSAGES={
@@ -471,10 +485,34 @@ async function fetchRoundChart(){
   roundChartData=w;
 }
 
+/* ── HERO NARRATIVE (ai_season_feed) ── */
+function applySeasonFeedLine(el,line,type){
+  if(!el||!line) return;
+  el.dataset.type=type||'';
+  if(type==='haiku'){
+    el.innerHTML=line.split('\n').join('<br>');
+  }else{
+    el.textContent=line;
+  }
+}
+
+async function loadSeasonFeed(){
+  const r=await fetch(
+    SURL+'/rest/v1/ai_season_feed?select=line,type&order=created_at.desc&limit=1',
+    {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}}
+  );
+  const rows=await r.json();
+  if(!Array.isArray(rows)||!rows.length) return;
+  const {line,type}=rows[0];
+  if(!line) return;
+  applySeasonFeedLine(document.getElementById('hero-narrative'),line,type);
+  applySeasonFeedLine(document.getElementById('hero-narrative-mobile'),line,type);
+}
+
 /* ── INIT ── */
 async function init(){
   try{
-    const [sum]=await Promise.all([fetchSummary(),fetchRoundChart()]);
+    const [sum]=await Promise.all([fetchSummary(),fetchRoundChart(),loadSeasonFeed()]);
     if(Array.isArray(sum)){
       sum.forEach(row=>{
         const op=data.find(o=>o.id===row.operator);
@@ -645,11 +683,13 @@ function car(ctx,x,y,c){
   ctx.fillStyle='#fffaaa'; ctx.fillRect(x+10*p,y+4*p,p,p*2);
 }
 
-/* ── ДИАГНОСТИКА СЕЗОНА ── */
+/* ── ДИАГНОСТИКА СЕЗОНА (telemetry текущего круга — см. v2/SEASON-STATE.md) ── */
 async function fetchRegion(){
-  const since=new Date(Date.now()-7*24*3600000).toISOString().slice(0,10);
+  const rn=getCurrentRound();
+  if(rn<1) return [];
+  const {start,end}=getRoundDates(rn);
   const r=await fetch(
-    SURL+'/rest/v1/stations?select=region,count&operator=in.(batteryfly,forevo,zaryadka,united,csms)&station_date=gte.'+since+'&region=not.is.null',
+    SURL+'/rest/v1/stations?select=region,count&operator=in.(batteryfly,forevo,zaryadka,united,csms)&station_date=gte.'+start+'&station_date=lte.'+end+'&region=not.is.null',
     {headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}}
   );
   return r.json();
@@ -693,13 +733,8 @@ function diagRegion(rows){
 }
 
 async function renderDiagnostics(){
-  const leaderTxt=diagLeader();
-  document.getElementById('diag-leader').textContent=leaderTxt;
+  document.getElementById('diag-leader').textContent=diagLeader();
   document.getElementById('diag-tempo').textContent=diagTempo();
-  ['hero-narr-d','hero-narr-m'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.textContent=leaderTxt;
-  });
   try{
     const rows=await fetchRegion();
     document.getElementById('diag-region').textContent=diagRegion(rows);
