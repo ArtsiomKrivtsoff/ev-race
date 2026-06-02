@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>EV RACE 2026 — гонка за 1010 зарядных станций Беларуси</title>
-<meta name="description" content="Публичный трекер гонки операторов DC зарядных станций Беларуси 2026.">
+<meta name="description" content="Публичный трекер гонки операторов зарядных станций Беларуси 2026. 53 круга, 1010 станций, финал 31 декабря.">
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
@@ -14,7 +14,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <link id="theme-css" rel="stylesheet" href="../CSS/arcade.css?v=2">
 <link rel="stylesheet" href="../CSS/operator.css?v=2">
-<link rel="stylesheet" href="home-v2.css?v=4">
+<link rel="stylesheet" href="home-v2.css?v=5">
 <link rel="prefetch" href="../CSS/tesla-light.css">
 <link rel="prefetch" href="../CSS/tesla-dark.css">
 <!-- styles: ../CSS/arcade.css + home-v2.css -->
@@ -27,7 +27,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <span></span><span></span><span></span>
   </button>
   <div class="nav-desktop">
-    <a class="nav-link active" href="/">ГЛАВНАЯ</a>
+    <a class="nav-link active" href="./index_new.html">ГЛАВНАЯ</a>
     <div class="nav-dropdown-wrap">
       <a class="nav-link" href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
       <button class="nav-drop-btn" onclick="toggleDrop(event)" aria-label="Операторы">▾</button>
@@ -55,7 +55,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 </div>
 
 <div class="nav-mobile-drop" id="mobileMenu">
-  <a class="nav-mobile-link active" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
+  <a class="nav-mobile-link active" href="./index_new.html" onclick="closeBurger()">ГЛАВНАЯ</a>
   <div class="mob-nav-row">
     <a class="nav-mobile-link" href="/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
     <button class="mob-acc-btn" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Операторы">▾</button>
@@ -74,12 +74,6 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 
 <div class="page-wrap">
 
-<svg aria-hidden="true" class="by-map-defs" xmlns="http://www.w3.org/2000/svg">
-  <symbol id="by-map" viewBox="0 0 200 102">
-    <path d="M6.0,47.5 L26.4,47.7 L49.2,39.7 L54.1,27.9 L71.4,21.1 L69.4,11.7 L82.2,8.1 L104.8,0.0 L127.0,5.3 L130.0,10.5 L141.1,8.0 L161.7,13.0 L163.7,22.9 L159.2,28.6 L172.4,42.4 L181.0,46.2 L179.7,50.0 L193.9,53.7 L200.0,59.4 L191.8,64.0 L174.8,63.2 L170.8,65.2 L175.7,72.2 L180.9,85.7 L162.8,86.9 L156.3,91.6 L155.0,102.2 L146.6,100.1 L127.6,101.1 L122.0,96.2 L114.1,99.9 L106.2,96.8 L89.6,96.4 L66.1,91.4 L44.8,89.7 L28.5,90.2 L17.0,95.9 L6.9,96.7 L6.5,87.3 L0.0,77.6 L12.6,73.3 L12.8,64.9 L6.9,56.9 L6.0,47.5 Z"/>
-  </symbol>
-</svg>
-
 <!-- ═══════════════════════════════════════════
      DESKTOP HERO
 ═══════════════════════════════════════════ -->
@@ -89,7 +83,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <div class="hl-title">EV RACE</div>
     <div class="hl-sub">в БЕЛАРУСИ 2026</div>
     <div class="hl-map">
-      <svg viewBox="0 0 200 102" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"><use href="#by-map"/></svg>
+      <svg viewBox="0 0 200 102" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="var(--green)" stroke-width="1.2" d="M6.0,47.5 L26.4,47.7 L49.2,39.7 L54.1,27.9 L71.4,21.1 L69.4,11.7 L82.2,8.1 L104.8,0.0 L127.0,5.3 L130.0,10.5 L141.1,8.0 L161.7,13.0 L163.7,22.9 L159.2,28.6 L172.4,42.4 L181.0,46.2 L179.7,50.0 L193.9,53.7 L200.0,59.4 L191.8,64.0 L174.8,63.2 L170.8,65.2 L175.7,72.2 L180.9,85.7 L162.8,86.9 L156.3,91.6 L155.0,102.2 L146.6,100.1 L127.6,101.1 L122.0,96.2 L114.1,99.9 L106.2,96.8 L89.6,96.4 L66.1,91.4 L44.8,89.7 L28.5,90.2 L17.0,95.9 L6.9,96.7 L6.5,87.3 L0.0,77.6 L12.6,73.3 L12.8,64.9 L6.9,56.9 L6.0,47.5 Z"/></svg>
     </div>
     <div class="hl-meta">
       <div class="hl-meta-item">🏁 <strong>5</strong> ОПЕРАТОРОВ</div>
@@ -98,17 +92,17 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     </div>
     <div class="hl-narrative">
       <span class="hl-narr-ico">↗</span>
-      <span class="hl-narr-soon">⏳ AI NARRATIVE — СКОРО</span>
+      <span class="hl-narr-text" id="hero-narr-d">...</span>
     </div>
   </div>
   <div class="hero-right">
     <div class="hr-cdlbl">▸ ДО ФИНАЛА ОСТАЛОСЬ ◂</div>
     <div class="hr-days" id="d-days">—</div>
     <div class="hr-dayslbl">ДНЕЙ</div>
-    <div class="hr-hms">
-      <div class="hr-hms-blk"><span class="hr-hms-num" id="d-h">--</span><div class="hr-hms-lbl">ЧАСОВ</div></div>
-      <div class="hr-hms-blk"><span class="hr-hms-num" id="d-m">--</span><div class="hr-hms-lbl">МИНУТ</div></div>
-      <div class="hr-hms-blk"><span class="hr-hms-num" id="d-s">--</span><div class="hr-hms-lbl">СЕКУНД</div></div>
+    <div class="hr-hms" hidden>
+      <div class="hr-hms-blk"><span class="hr-hms-num" id="d-h">00</span><div class="hr-hms-lbl">ЧАСОВ</div></div>
+      <div class="hr-hms-blk"><span class="hr-hms-num" id="d-m">00</span><div class="hr-hms-lbl">МИНУТ</div></div>
+      <div class="hr-hms-blk"><span class="hr-hms-num" id="d-s">00</span><div class="hr-hms-lbl">СЕКУНД</div></div>
     </div>
     <div class="hr-prog-lbl">ОБЩИЙ ПРОГРЕСС К ЦЕЛИ</div>
     <div class="hr-prog-nums">
@@ -126,6 +120,11 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
      MOBILE HERO
 ═══════════════════════════════════════════ -->
 <div class="hero-mobile">
+  <div class="hm-brand">
+    <div class="hm-brand-tag">[ СЕЗОН 2026 ]</div>
+    <div class="hm-brand-title">EV RACE</div>
+    <div class="hm-brand-sub">в БЕЛАРУСИ 2026</div>
+  </div>
   <div class="hm-cd">
     <div class="hm-cd-top">▸ ДО ФИНАЛА ОСТАЛОСЬ ◂</div>
     <div class="hm-cd-main">
@@ -134,13 +133,13 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
         <div class="hm-days-lbl">ДНЕЙ</div>
       </div>
       <div class="hm-map">
-        <svg viewBox="0 0 200 102" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"><use href="#by-map"/></svg>
+        <svg viewBox="0 0 200 102" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="var(--green)" stroke-width="1.8" d="M6.0,47.5 L26.4,47.7 L49.2,39.7 L54.1,27.9 L71.4,21.1 L69.4,11.7 L82.2,8.1 L104.8,0.0 L127.0,5.3 L130.0,10.5 L141.1,8.0 L161.7,13.0 L163.7,22.9 L159.2,28.6 L172.4,42.4 L181.0,46.2 L179.7,50.0 L193.9,53.7 L200.0,59.4 L191.8,64.0 L174.8,63.2 L170.8,65.2 L175.7,72.2 L180.9,85.7 L162.8,86.9 L156.3,91.6 L155.0,102.2 L146.6,100.1 L127.6,101.1 L122.0,96.2 L114.1,99.9 L106.2,96.8 L89.6,96.4 L66.1,91.4 L44.8,89.7 L28.5,90.2 L17.0,95.9 L6.9,96.7 L6.5,87.3 L0.0,77.6 L12.6,73.3 L12.8,64.9 L6.9,56.9 L6.0,47.5 Z"/></svg>
       </div>
     </div>
-    <div class="hm-hms">
-      <div class="hm-hms-itm"><span class="hm-hms-num" id="m-h">--</span><div class="hm-hms-lbl">ЧАСОВ</div></div>
-      <div class="hm-hms-itm"><span class="hm-hms-num" id="m-m">--</span><div class="hm-hms-lbl">МИНУТ</div></div>
-      <div class="hm-hms-itm"><span class="hm-hms-num" id="m-s">--</span><div class="hm-hms-lbl">СЕКУНД</div></div>
+    <div class="hm-hms" hidden>
+      <div class="hm-hms-itm"><span class="hm-hms-num" id="m-h">00</span><div class="hm-hms-lbl">ЧАСОВ</div></div>
+      <div class="hm-hms-itm"><span class="hm-hms-num" id="m-m">00</span><div class="hm-hms-lbl">МИНУТ</div></div>
+      <div class="hm-hms-itm"><span class="hm-hms-num" id="m-s">00</span><div class="hm-hms-lbl">СЕКУНД</div></div>
     </div>
     <div class="hm-prog-in">
       <div class="hm-prog-lbl">ОБЩИЙ ПРОГРЕСС К ЦЕЛИ</div>
@@ -167,7 +166,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     </div>
     <div class="hm-narr">
       <span class="hm-narr-ico">↗</span>
-      <span class="hm-narr-soon">⏳ AI NARRATIVE — СКОРО</span>
+      <span class="hm-narr-text" id="hero-narr-m">...</span>
     </div>
   </div>
 </div>
@@ -196,6 +195,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <div class="leg-item"><span class="leg-dot" style="background:var(--yellow)"></span>DC — БЫСТРЫЕ СТАНЦИИ</div>
     <div class="leg-item"><span class="leg-dot" style="background:var(--cyan)"></span>AC — МЕДЛЕННЫЕ СТАНЦИИ</div>
   </div>
+  <p class="ops-reg-hint">Все операторы страны — в <a href="https://evrace.by/stations.html">реестре станций</a> и на <a href="https://evrace.by/map.html">карте</a>. В гонке — только пять конкурсных.</p>
 </div>
 
 <!-- ═══ ГРАФИК ═══ -->
@@ -203,7 +203,8 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
   <div class="blk-hdr">
     <span class="blk-title">↗ СЕЗОННАЯ ГОНКА</span>
     <div class="chart-meta">
-      <span>СТАРТ <b>01.01.2026</b></span>
+      <span>ИДЁТ КРУГ <b id="chart-round">—</b> / 53</span>
+      <span><a class="chart-rules-link" href="/tour.html">ПРАВИЛА КРУГОВ →</a></span>
       <span>ФИНАЛ <b>31.12.2026</b></span>
     </div>
   </div>
@@ -211,19 +212,9 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <div class="chart-wrap">
       <canvas id="raceChart" height="200"></canvas>
     </div>
-
+    <div class="chart-legend" id="chartLegend"></div>
   </div>
 </div>
-
-<!-- ═══ СТАТЫ ═══ -->
-<div class="stats-grid">
-  <div class="stat-card"><div class="sc-lbl">ИДЁТ<br>КРУГ</div><div class="sc-val" id="sv-wk">—</div><div class="sc-unit">/ 53</div></div>
-  <div class="stat-card"><div class="sc-lbl">НОВЫХ<br>ЗА НЕДЕЛЮ</div><div class="sc-val y" id="sv-new">—</div><div class="sc-unit">СТАНЦИЙ</div></div>
-  <div class="stat-card"><div class="sc-lbl">ВСЕГО<br>УСТАНОВЛЕНО</div><div class="sc-val" id="sv-tot">—</div><div class="sc-unit">СТАНЦИЙ</div></div>
-  <div class="stat-card"><div class="sc-lbl">СРЕДНИЙ<br>ТЕМП</div><div class="sc-val c" id="sv-tmp">—</div><div class="sc-unit">СТ / НЕДЕЛЮ</div></div>
-  <div class="stat-card"><div class="sc-lbl">СЛЕД.<br>ОБНОВЛЕНИЕ</div><div class="sc-val" id="sv-nxt" style="font-size:12px">—</div><div class="sc-unit">СЕГОДНЯ</div></div>
-</div>
-<p class="stats-reg-hint">Все операторы страны — в <a href="https://evrace.by/stations.html">реестре станций</a> и на <a href="https://evrace.by/map.html">карте</a>. В гонке — только пять конкурсных.</p>
 
 <!-- ═══ ГОЛОСОВАНИЕ ═══ -->
 <div class="vote-section">
@@ -318,15 +309,16 @@ const OPS=[
   {id:'csms',      name:'ЦСМС',          color:'#FF6B6B',logo:'../logos/csms.png',      dk:false},
 ];
 function getOpStatus(op,rank,gap){
+  const rn=op.roundN||0;
   if(op.total===0) return 'ПАУЗА ТЯНЕТСЯ';
-  if(rank===1&&op.w7===0) return 'ДЕРЖИТСЯ';
+  if(rank===1&&rn===0) return 'ДЕРЖИТСЯ';
   if(rank===1) return 'ЛИДЕР ДЕРЖИТСЯ';
-  if(gap<=5&&op.w7>0) return 'СОКРАЩАЕТ РАЗРЫВ';
-  if(op.w7===0) return 'ТЕМП РОВНЫЙ';
+  if(gap<=5&&rn>0) return 'СОКРАЩАЕТ РАЗРЫВ';
+  if(rn===0) return 'ТЕМП РОВНЫЙ';
   return 'НАБИРАЕТ ТЕМП';
 }
 let data=OPS.map(o=>({...o,total:0,dc:0,ac:0,w7:0,roundN:0,goal:0,last:'—'}));
-let weeklyData={};
+let roundChartData={};
 let selectedOperator=null;
 
 function getRoundForDate(dateStr){
@@ -341,6 +333,7 @@ function getRoundForDate(dateStr){
 function getCurrentRound(){
   return getRoundForDate(new Date().toISOString().split('T')[0]);
 }
+/* Круги: 53 круга, сб–пт, круг 1 = 1–2 янв — см. tour.html */
 
 const VOTE_MESSAGES={
   batteryfly:['МОЩНЫЙ ВЫБОР!','СТАВКА НА ЛИДЕРА!','ВЕРИШЬ В ЛИДЕРА!'],
@@ -361,6 +354,7 @@ function setTheme(t){
   });
   const ts=document.getElementById('vote-turnstile');
   if(ts) ts.setAttribute('data-theme',t==='tesla-light'?'light':'dark');
+  if(Object.keys(roundChartData).length) renderChart();
 }
 function toggleFx(){
   const on=document.body.classList.toggle('reduced-fx');
@@ -422,8 +416,12 @@ window.addEventListener('scroll',()=>document.getElementById('scroll-top')?.clas
 function tick(){
   const diff=END-new Date();
   const showHms=diff>0&&diff<86400000;
+  const hrHms=document.querySelector('.hero-right .hr-hms');
+  const hmHms=document.querySelector('.hm-cd .hm-hms');
   document.querySelector('.hero-right')?.classList.toggle('cd-hms-on',showHms);
   document.querySelector('.hm-cd')?.classList.toggle('cd-hms-on',showHms);
+  if(hrHms) hrHms.hidden=!showHms;
+  if(hmHms) hmHms.hidden=!showHms;
   if(diff<=0){
     ['d-days','m-days'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='000';});
     return;
@@ -447,39 +445,36 @@ function tick(){
 }
 setInterval(tick,1000); tick();
 
-/* ── WEEK ── */
-function curWeek(){return Math.min(Math.ceil((Math.floor((new Date()-START)/86400000)+1)/7),53)}
-
 /* ── FETCH ── */
 async function fetchSummary(){
   const r=await fetch(SURL+'/rest/v1/rpc/get_stations_summary',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json'},body:'{}'});
   return r.json();
 }
-async function fetchWeekly(){
+async function fetchRoundChart(){
   const r=await fetch(SURL+'/rest/v1/stations?select=operator,station_date,count,station_type&operator=in.(batteryfly,forevo,zaryadka,united,csms)&order=station_date.asc',{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
   const rows=await r.json();
   if(!Array.isArray(rows)) return;
   const w={};
   const curRound=getCurrentRound();
-  OPS.forEach(o=>{w[o.id]=new Array(53).fill(0);data.find(d=>d.id===o.id).roundN=0;});
-  rows.forEach(r=>{
-    if(!w[r.operator]) return;
-    const ms=new Date(r.station_date)-START; if(ms<0) return;
-    const wk=Math.min(Math.ceil((ms/86400000+1)/7),53)-1;
-    w[r.operator][wk]+=(r.count||0);
-    if(getRoundForDate(r.station_date)===curRound){
-      const op=data.find(o=>o.id===r.operator);
-      if(op) op.roundN+=(r.count||0);
+  OPS.forEach(o=>{w[o.id]=new Array(TOTAL_ROUNDS).fill(0);data.find(d=>d.id===o.id).roundN=0;});
+  rows.forEach(row=>{
+    if(!w[row.operator]) return;
+    const rn=getRoundForDate(row.station_date);
+    if(rn<1) return;
+    w[row.operator][rn-1]+=(row.count||0);
+    if(rn===curRound){
+      const op=data.find(o=>o.id===row.operator);
+      if(op) op.roundN+=(row.count||0);
     }
   });
-  OPS.forEach(o=>{let c=0; w[o.id]=w[o.id].map(v=>{c+=v;return c;})});
-  weeklyData=w;
+  OPS.forEach(o=>{let c=0; w[o.id]=w[o.id].map(v=>{c+=v;return c;});});
+  roundChartData=w;
 }
 
 /* ── INIT ── */
 async function init(){
   try{
-    const [sum]=await Promise.all([fetchSummary(),fetchWeekly()]);
+    const [sum]=await Promise.all([fetchSummary(),fetchRoundChart()]);
     if(Array.isArray(sum)){
       sum.forEach(row=>{
         const op=data.find(o=>o.id===row.operator);
@@ -487,7 +482,9 @@ async function init(){
       });
     }
     data.sort((a,b)=>b.total-a.total);
-    renderProgress(); renderOps(); renderStats(); renderChart(); renderDiagnostics();
+    const crEl=document.getElementById('chart-round');
+    if(crEl) crEl.textContent=getCurrentRound();
+    renderProgress(); renderOps(); renderChart(); renderDiagnostics();
   }catch(e){console.error(e);}
 }
 
@@ -563,28 +560,15 @@ function renderOps(){
   });
 }
 
-/* ── СТАТЫ ── */
-function renderStats(){
-  const tot=data.reduce((s,o)=>s+o.total,0);
-  const nw=data.reduce((s,o)=>s+o.w7,0);
-  const rn=getCurrentRound();
-  document.getElementById('sv-wk').textContent=rn;
-  document.getElementById('sv-new').textContent='+'+nw;
-  document.getElementById('sv-tot').textContent=tot;
-  document.getElementById('sv-tmp').textContent=rn>0?(tot/rn).toFixed(1):'—';
-  function updNext(){
-    const msk=new Date(Date.now()+3*3600000);
-    const nm=new Date(Date.UTC(msk.getUTCFullYear(),msk.getUTCMonth(),msk.getUTCDate()+1));
-    const d=nm-(Date.now()+3*3600000); if(d<=0) return;
-    const h=String(Math.floor(d/3600000)).padStart(2,'0');
-    const m=String(Math.floor((d%3600000)/60000)).padStart(2,'0');
-    const s=String(Math.floor((d%60000)/1000)).padStart(2,'0');
-    const el=document.getElementById('sv-nxt'); if(el) el.textContent=h+':'+m+':'+s;
-  }
-  updNext(); setInterval(updNext,1000);
+/* ── CHART (накопительно по кругам, как tour.html) ── */
+function roundX(r,pL,cW){return pL+((r-1)/(TOTAL_ROUNDS-1))*cW;}
+
+function renderChartLegend(){
+  const el=document.getElementById('chartLegend');
+  if(!el) return;
+  el.innerHTML=data.map(op=>`<span class="chart-leg-item"><i style="background:${op.color}"></i>${op.name} <b>${op.total}</b></span>`).join('');
 }
 
-/* ── CHART ── */
 function renderChart(){
   const canvas=document.getElementById('raceChart'); if(!canvas) return;
   const ctx=canvas.getContext('2d');
@@ -592,10 +576,10 @@ function renderChart(){
   const W=canvas.offsetWidth||500; const H=isMob?180:260;
   const dpr=window.devicePixelRatio||1;
   canvas.width=W*dpr; canvas.height=H*dpr; ctx.scale(dpr,dpr);
-  const cw=curWeek();
-  const pL=30,pR=8,pT=10,pB=22,cW=W-pL-pR,cH=H-pT-pB;
+  const cr=getCurrentRound();
+  const pL=30,pR=16,pT=10,pB=24,cW=W-pL-pR,cH=H-pT-pB;
 
-  const maxV=Math.max(...Object.values(weeklyData).flat(),10);
+  const maxV=Math.max(...Object.values(roundChartData).flat(),10);
   const yStep=maxV<=40?10:20;
   const yMax=Math.ceil(maxV/yStep)*yStep;
 
@@ -613,42 +597,46 @@ function renderChart(){
     const y=pT+cH-(i/ySteps)*cH;
     ctx.strokeStyle='rgba(61,92,61,0.55)'; ctx.lineWidth=1;
     ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+cW,y);ctx.stroke();
-    if(i>0||yMax<=40){
-      ctx.textAlign='right'; ctx.textBaseline='middle';
-      ctx.fillStyle='rgba(106,148,106,0.85)';
-      ctx.fillText(String(i*yStep),pL-4,y);
-    }
+    ctx.textAlign='right'; ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(106,148,106,0.85)';
+    ctx.fillText(String(i*yStep),pL-4,y);
   }
 
-  const xMarks=isMob?[1,18,53]:[1,10,20,30,40,50,53];
-  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  const xMarks=isMob?(cr>1?[1,cr]:[1]):[1,10,20,30,40,50,TOTAL_ROUNDS];
+  ctx.textBaseline='alphabetic';
   ctx.fillStyle='rgba(106,148,106,0.85)';
-  xMarks.forEach(wk=>{
-    const x=pL+((wk-1)/52)*cW;
-    ctx.fillText('НЕД. '+wk,x,H-6);
+  xMarks.forEach((rk,idx)=>{
+    const isFirst=idx===0;
+    const isLast=idx===xMarks.length-1;
+    const x=roundX(rk,pL,cW);
+    ctx.textAlign=isFirst?'left':isLast?'right':'center';
+    const tx=isFirst?pL:isLast?pL+cW:x;
+    ctx.fillText('КР.'+rk,tx,H-8);
   });
 
+  const lastIdx=Math.max(0,cr-1);
   data.forEach(op=>{
-    const wd=weeklyData[op.id]; if(!wd) return;
+    const rd=roundChartData[op.id]; if(!rd) return;
     ctx.strokeStyle=op.color; ctx.lineWidth=2;
     ctx.shadowColor=op.color; ctx.shadowBlur=5;
     ctx.setLineDash([]);
     ctx.beginPath();
-    for(let w=0;w<=cw;w++){
-      const x=pL+(w/52)*cW;
-      const v=wd[w]||0;
+    for(let i=0;i<=lastIdx;i++){
+      const x=roundX(i+1,pL,cW);
+      const v=rd[i]||0;
       const y=pT+cH-(v/yMax)*cH;
-      w===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
     }
     ctx.stroke();
-    const cx=pL+(cw/52)*cW;
-    const cv=wd[Math.min(cw,52)]||0;
+    const cx=roundX(cr,pL,cW);
+    const cv=rd[lastIdx]||0;
     const cy=pT+cH-(cv/yMax)*cH;
     ctx.setLineDash([4,7]);ctx.strokeStyle=op.color+'55';ctx.shadowBlur=0;
     ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(pL+cW,cy);ctx.stroke();
     ctx.setLineDash([]); ctx.shadowBlur=0;
-    if(cw<=52) car(ctx,cx-12,cy-5,op.color);
+    if(cr<=TOTAL_ROUNDS) car(ctx,Math.max(pL,cx-12),cy-5,op.color);
   });
+  renderChartLegend();
 }
 function car(ctx,x,y,c){
   const p=1.4; ctx.fillStyle=c;
@@ -676,19 +664,19 @@ function diagLeader(){
   if(gap===0) return 'Ничья наверху';
   if(gap<=3) return 'Разрыв наверху сократился';
   if(gap<=10) return 'Преследователи стали ближе';
-  if(leader.w7===0) return 'Лидер замедлился';
+  if(leader.roundN===0) return 'Лидер замедлился';
   return 'Лидер держится уверенно';
 }
 
 function diagTempo(){
-  const wk=curWeek();
-  if(wk<=0) return '—';
+  const rn=getCurrentRound();
+  if(rn<=0) return '—';
   const tot=data.reduce((s,o)=>s+o.total,0);
-  const w7tot=data.reduce((s,o)=>s+o.w7,0);
-  if(w7tot===0) return 'Сезон встал';
-  const avg=tot/wk;
-  if(w7tot>=avg*1.2) return 'Темп выше среднего';
-  if(w7tot<=avg*0.8) return 'Темп ниже среднего';
+  const roundTot=data.reduce((s,o)=>s+(o.roundN||0),0);
+  if(roundTot===0) return 'Сезон встал';
+  const avg=tot/rn;
+  if(roundTot>=avg*1.2) return 'Темп выше среднего';
+  if(roundTot<=avg*0.8) return 'Темп ниже среднего';
   return 'Темп держится ровно';
 }
 
@@ -705,8 +693,13 @@ function diagRegion(rows){
 }
 
 async function renderDiagnostics(){
-  document.getElementById('diag-leader').textContent=diagLeader();
+  const leaderTxt=diagLeader();
+  document.getElementById('diag-leader').textContent=leaderTxt;
   document.getElementById('diag-tempo').textContent=diagTempo();
+  ['hero-narr-d','hero-narr-m'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=leaderTxt;
+  });
   try{
     const rows=await fetchRegion();
     document.getElementById('diag-region').textContent=diagRegion(rows);
@@ -819,7 +812,7 @@ renderVoteOptions();
 checkVoted();
 init();
 trackVisit();
-window.addEventListener('resize',()=>{if(Object.keys(weeklyData).length) renderChart();});
+window.addEventListener('resize',()=>{if(Object.keys(roundChartData).length) renderChart();});
 </script>
 </body>
 </html>
