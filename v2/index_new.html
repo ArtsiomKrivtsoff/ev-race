@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -6,687 +6,30 @@
 <title>EV RACE 2026 — гонка за 1010 зарядных станций Беларуси</title>
 <meta name="description" content="Публичный трекер гонки операторов DC зарядных станций Беларуси 2026.">
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
+ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-<script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');ym(108141830,'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true});</script>
-<style>
-/* ═══════════════════════════════════════════════
-   RESET & BASE
-   ═══════════════════════════════════════════════ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  background:#060a06;
-  color:#c8e6c8;
-  font-family:'Share Tech Mono',monospace;
-  font-size:14px;
-  line-height:1.5;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-/* scanlines — arcade.css style */
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
-  pointer-events:none;z-index:9000;
-}
-body.no-scanlines::before{display:none}
-/* flicker — arcade.css signature */
-@keyframes flicker{0%,100%{opacity:1}93%{opacity:.88}96%{opacity:.94}}
-body{animation:flicker 8s infinite}
-a{color:inherit;text-decoration:none}
-img{display:block}
-
-/* ═══════════════════════════════════════════════
-   VARIABLES — точно по философии EV RACE
-   ═══════════════════════════════════════════════ */
-:root{
-  --green:#00ff41;
-  --gdim:#00aa2b;
-  --gglow:rgba(0,255,65,0.12);
-  --yellow:#ffd700;
-  --cyan:#00e5ff;
-  --bg:#060a06;
-  --card:#090e09;
-  --bdr:#1c2e1c;
-  --txt:#c8e6c8;
-  --tdim:#3d5c3d;
-  --tmid:#6a946a;
-  --px:'Press Start 2P',monospace;
-  --mo:'Share Tech Mono',monospace;
-  /* цвета операторов */
-  --bf:#005EEB;--fo:#b44fff;--za:#00cfff;--uc:#F5821F;--cs:#FF6B6B;
-}
-
-/* ═══════════════════════════════════════════════
-   CONTAINER — 1100px как в arcade.css
-   ═══════════════════════════════════════════════ */
-.container{max-width:1100px;margin:0 auto;padding:0 14px}
-
-/* ═══════════════════════════════════════════════
-   STATUSBAR — идентично arcade.css
-   ═══════════════════════════════════════════════ */
-.statusbar{
-  position:sticky;top:0;z-index:500;
-  background:rgba(6,10,6,0.97);
-  border-bottom:1px solid var(--bdr);
-  backdrop-filter:blur(8px);
-  display:flex;align-items:center;
-  justify-content:space-between;
-  gap:6px;padding:0 14px;height:44px;
-}
-
-/* бургер */
-.burger-btn{
-  display:flex;flex-direction:column;justify-content:center;
-  gap:5px;width:36px;height:36px;padding:6px;
-  background:transparent;border:1px solid var(--bdr);
-  cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;
-  transition:border-color .15s;
-}
-.burger-btn:hover{border-color:var(--tdim)}
-.burger-btn span{display:block;height:2px;background:var(--gdim);transition:.2s}
-.burger-btn.open span{background:var(--green)}
-.burger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.burger-btn.open span:nth-child(2){opacity:0}
-.burger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
-/* мобильный логотип — по центру шапки (только mobile) */
-.nav-logo-mobile{
-  display:none;
-  position:absolute;left:50%;transform:translateX(-50%);
-  flex-direction:column;align-items:center;gap:1px;
-  pointer-events:none;
-}
-.nav-logo-mobile strong{
-  font-family:var(--px);font-size:9px;
-  color:var(--green);text-shadow:0 0 10px var(--green);
-  letter-spacing:1px;line-height:1;
-}
-.nav-logo-mobile span{
-  font-family:var(--px);font-size:5px;
-  color:var(--yellow);letter-spacing:1px;
-}
-
-/* десктоп nav — 600px как arcade.css */
-.nav-desktop{display:none;align-items:center;gap:6px;flex-wrap:wrap;flex:1;padding:0 8px}
-@media(min-width:600px){
-  .burger-btn{display:none}
-  .nav-desktop{display:flex}
-  .nav-logo-mobile{display:none !important}
-  .theme-seg{display:flex}
-}
-@media(max-width:599px){
-  .nav-logo-mobile{display:flex}
-  .theme-seg{display:none}
-}
-
-/* nav links — Share Tech Mono как arcade.css */
-.nav-link{
-  font-family:var(--mo);font-size:10px;letter-spacing:2px;
-  padding:7px 10px;border:1px solid var(--bdr);
-  background:transparent;color:var(--tdim);
-  text-decoration:none;transition:.2s;white-space:nowrap;
-  -webkit-tap-highlight-color:transparent;
-}
-.nav-link:hover,.nav-link.active{border-color:var(--gdim);color:var(--green)}
-.nav-link.active{background:rgba(0,255,65,0.04)}
-
-/* dropdown */
-.nav-dropdown-wrap{position:relative;display:flex;align-items:center;gap:0}
-.nav-drop-btn{
-  background:none;border:1px solid var(--bdr);border-left:none;
-  color:var(--tdim);font-size:10px;cursor:pointer;
-  padding:7px 6px;transition:color .15s;height:100%;
-}
-.nav-drop-btn:hover{color:var(--green)}
-.dropdown-menu{
-  display:none;position:absolute;top:calc(100% + 6px);left:0;
-  background:rgba(6,10,6,0.99);border:1px solid var(--bdr);
-  min-width:170px;z-index:600;
-  box-shadow:0 8px 24px rgba(0,0,0,0.9);
-}
-.dropdown-menu.open{display:block}
-.dropdown-item{
-  display:flex;align-items:center;gap:8px;
-  padding:9px 14px;font-family:var(--mo);font-size:11px;
-  color:var(--tdim);border-bottom:1px solid var(--bdr);
-  transition:color .15s;letter-spacing:1px;
-}
-.dropdown-item:last-child{border-bottom:none}
-.dropdown-item:hover{color:var(--green);background:var(--gglow)}
-.d-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-
-/* mobile dropdown menu */
-.nav-mobile-drop{
-  display:none;position:fixed;
-  top:44px;left:0;right:0;z-index:490;
-  background:rgba(6,10,6,0.99);
-  border-bottom:1px solid var(--bdr);
-  flex-direction:column;
-}
-.nav-mobile-drop.open{display:flex}
-.nav-mobile-link{
-  font-family:var(--mo);font-size:13px;color:var(--tdim);
-  padding:14px 16px;border-bottom:1px solid var(--bdr);
-  letter-spacing:1px;transition:color .15s;
-  -webkit-tap-highlight-color:transparent;
-}
-.nav-mobile-link.active,.nav-mobile-link:hover{color:var(--green)}
-.mob-nav-row{display:flex;align-items:center;border-bottom:1px solid var(--bdr)}
-.mob-nav-row .nav-mobile-link{border-bottom:none;flex:1}
-.mob-acc-btn{
-  background:none;border:none;border-left:1px solid var(--bdr);
-  color:var(--tdim);padding:0 14px;font-size:12px;cursor:pointer;
-  align-self:stretch;display:flex;align-items:center;transition:color .15s;
-}
-.mob-acc-btn:hover,.mob-acc-btn.open{color:var(--green)}
-.mob-acc-list{display:none;flex-direction:column;background:#050905}
-.mob-acc-list.open{display:flex}
-.mob-acc-list a{
-  display:flex;align-items:center;gap:8px;
-  padding:11px 28px;font-family:var(--mo);font-size:12px;
-  color:var(--tdim);border-bottom:1px solid var(--bdr);
-  transition:color .15s;
-}
-.mob-acc-list a:hover{color:var(--green)}
-
-/* theme seg */
-.theme-seg{gap:3px;flex-shrink:0;background:var(--card);border:1px solid var(--bdr);padding:3px}
-.theme-seg-btn{
-  font-family:var(--mo);font-size:9px;letter-spacing:1px;
-  background:transparent;border:none;
-  color:var(--tdim);padding:4px 7px;cursor:pointer;
-  white-space:nowrap;transition:.15s;-webkit-tap-highlight-color:transparent;
-}
-.theme-seg-btn.active{background:rgba(0,255,65,0.1);color:var(--green)}
-.theme-seg-btn:not(.active):hover{color:var(--gdim)}
-
-/* fx toggle */
-.fx-toggle{
-  background:none;border:1px solid var(--bdr);
-  display:flex;overflow:hidden;cursor:pointer;
-  flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:.15s;
-}
-.fx-toggle:hover{border-color:var(--tdim)}
-.fx-seg{
-  font-family:var(--mo);font-size:9px;letter-spacing:1px;
-  padding:5px 8px;color:var(--tdim);transition:.15s;white-space:nowrap;
-}
-.fx-seg.active{background:var(--gglow);color:var(--green)}
-/* на мобайле — скрываем «ЧЁТКО», добавляем янтарную точку */
-@media(max-width:599px){
-  .fx-seg.fx-off{display:none}
-  .fx-seg.fx-on::after{content:' ●';color:var(--yellow);font-size:7px}
-}
-
-/* scroll top */
-#scroll-top{
-  display:none;position:fixed;bottom:20px;right:16px;z-index:400;
-  background:var(--card);border:1px solid var(--bdr);
-  color:var(--green);font-family:var(--mo);font-size:12px;
-  width:36px;height:36px;cursor:pointer;transition:.15s;
-}
-#scroll-top.visible{display:flex;align-items:center;justify-content:center}
-#scroll-top:hover{border-color:var(--green);box-shadow:0 0 10px var(--gglow)}
-
-/* ═══════════════════════════════════════════════
-   BLOCK BASE — #090e09 + 1px #1c2e1c + r5px
-   ═══════════════════════════════════════════════ */
-.blk{
-  background:var(--card);
-  border:1px solid var(--bdr);
-  border-radius:5px;
-  margin:8px 0;
-  overflow:hidden;
-}
-.blk-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:9px 14px;border-bottom:1px solid var(--bdr);
-  flex-wrap:wrap;gap:6px;
-}
-.blk-title{font-family:var(--px);font-size:6px;color:var(--tmid);letter-spacing:2px}
-.blk-link{font-family:var(--px);font-size:6px;color:var(--gdim);transition:color .15s}
-.blk-link:hover{color:var(--green)}
-
-/* ═══════════════════════════════════════════════
-   HERO DESKTOP (≥640px) — 2 колонки
-   ═══════════════════════════════════════════════ */
-.hero-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;margin:8px 0;
-}
-@media(max-width:639px){.hero-grid{display:none}}
-
-/* левая колонка */
-.hero-left{
-  background:var(--card);border:1px solid var(--bdr);
-  border-radius:5px;padding:22px 18px 18px;
-  position:relative;overflow:hidden;
-  display:flex;flex-direction:column;gap:11px;
-}
-/* тонкий зелёный градиент-вспышка */
-.hero-left::after{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 70% 0%,rgba(0,255,65,0.04) 0%,transparent 60%);
-  pointer-events:none;
-}
-/* карта Беларуси — фоновый призрак */
-.hl-map{
-  position:absolute;right:0;top:0;bottom:0;
-  width:52%;opacity:0.12;pointer-events:none;
-  display:flex;align-items:center;
-}
-.hl-map svg{width:100%;height:auto}
-.hl-map svg path{fill:none;stroke:var(--green);stroke-width:1.2}
-
-.hl-tag{font-family:var(--px);font-size:5.5px;color:var(--tdim);letter-spacing:1px}
-.hl-title{
-  font-family:var(--px);
-  font-size:clamp(32px,5vw,58px);
-  color:var(--green);
-  text-shadow:0 0 20px var(--green),0 0 50px rgba(0,255,65,0.3);
-  line-height:1.05;position:relative;z-index:1;
-}
-.hl-sub{
-  font-family:var(--px);
-  font-size:clamp(10px,1.8vw,15px);
-  color:var(--yellow);
-  text-shadow:0 0 10px rgba(255,215,0,0.45);
-  position:relative;z-index:1;
-}
-.hl-meta{display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
-.hl-meta-item{
-  font-family:var(--px);font-size:7px;
-  color:var(--tmid);display:flex;align-items:center;gap:7px;
-}
-.hl-meta-item strong{color:var(--yellow)}
-/* narrative — зелёная рамка, текст зелёный */
-.hl-narrative{
-  border:1px solid var(--gdim);background:rgba(0,255,65,0.03);
-  border-radius:4px;padding:11px 13px;
-  display:flex;align-items:center;gap:10px;
-  box-shadow:0 0 14px rgba(0,255,65,0.05);
-  position:relative;z-index:1;transition:.15s;
-}
-.hl-narrative:hover{background:rgba(0,255,65,0.06)}
-.hl-narr-ico{font-size:14px;flex-shrink:0;color:var(--green)}
-.hl-narr-txt{font-family:var(--px);font-size:7px;color:var(--green);line-height:1.8;text-shadow:0 0 8px rgba(0,255,65,0.35)}
-.hl-narr-soon{font-family:var(--mo);font-size:12px;color:var(--tdim);font-style:italic}
-.hl-scroll{font-family:var(--px);font-size:6px;color:var(--tdim);text-align:center;letter-spacing:1px;position:relative;z-index:1}
-
-/* правая колонка — countdown */
-.hero-right{
-  background:var(--card);border:1px solid var(--bdr);
-  border-radius:5px;padding:16px;
-  display:flex;flex-direction:column;
-}
-.hr-cdlbl{font-family:var(--px);font-size:6px;color:var(--tdim);letter-spacing:1px;text-align:center;margin-bottom:8px}
-.hr-days{
-  font-family:var(--px);
-  font-size:clamp(60px,10vw,90px);
-  color:var(--green);
-  text-shadow:0 0 24px var(--green),0 0 60px rgba(0,255,65,0.4);
-  text-align:center;line-height:1;margin-bottom:4px;
-}
-.hr-dayslbl{font-family:var(--px);font-size:9px;color:var(--gdim);text-align:center;margin-bottom:14px}
-.hr-hms{
-  display:flex;justify-content:center;align-items:center;gap:6px;
-  padding-bottom:14px;border-bottom:1px solid var(--bdr);margin-bottom:14px;flex-wrap:wrap;
-}
-.hr-hms-blk{text-align:center}
-.hr-hms-num{font-family:var(--px);font-size:18px;color:var(--txt);display:block}
-.hr-hms-lbl{font-family:var(--px);font-size:5px;color:var(--tdim);margin-top:3px}
-.hr-hms-sep{font-family:var(--mo);font-size:14px;color:var(--bdr);margin:0 2px;align-self:flex-start;margin-top:4px}
-.hr-prog-lbl{font-family:var(--px);font-size:6px;color:var(--tdim);letter-spacing:1px;margin-bottom:8px}
-.hr-prog-nums{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
-.hr-prog-cur{font-family:var(--px);font-size:28px;color:var(--green);text-shadow:0 0 14px var(--green);line-height:1}
-.hr-prog-sep{font-family:var(--px);font-size:14px;color:var(--tdim)}
-.hr-prog-goal{font-family:var(--px);font-size:14px;color:var(--tmid)}
-.hr-prog-pct{font-family:var(--px);font-size:8px;color:var(--yellow);text-align:right;margin-bottom:5px}
-.prog-bar{height:10px;background:#050d05;border:1px solid var(--bdr);border-radius:2px;overflow:hidden;display:flex;margin-bottom:6px}
-.prog-bar-seg{height:100%;transition:width 1.2s ease}
-.hr-prog-upd{font-family:var(--mo);font-size:10px;color:var(--tdim);text-align:right;margin-top:auto;padding-top:8px}
-
-/* ═══════════════════════════════════════════════
-   HERO MOBILE (<640px)
-   ═══════════════════════════════════════════════ */
-@media(min-width:640px){.hero-mobile{display:none}}
-
-.hm-cd{
-  background:var(--card);border:1px solid var(--bdr);
-  border-radius:5px;margin:8px 0;
-  padding:14px 14px 12px;position:relative;overflow:hidden;
-}
-.hm-cd::after{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 65% 0%,rgba(0,255,65,0.04) 0%,transparent 60%);
-  pointer-events:none;
-}
-.hm-cd-top{font-family:var(--px);font-size:6px;color:var(--tdim);letter-spacing:2px;text-align:center;margin-bottom:10px}
-.hm-cd-main{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
-/* ДНЕЙ inline с числом */
-.hm-cd-main>div:first-child{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
-.hm-days{
-  font-family:var(--px);
-  font-size:clamp(56px,18vw,88px);
-  color:var(--green);
-  text-shadow:0 0 22px var(--green),0 0 50px rgba(0,255,65,0.35);
-  line-height:1;display:block;
-}
-.hm-days-lbl{font-family:var(--px);font-size:clamp(14px,4vw,20px);color:var(--gdim);margin-bottom:6px}
-.hm-map{flex-shrink:0;width:100px;opacity:0.45;margin-top:0;align-self:stretch;display:flex;align-items:center}
-@media(min-width:380px){.hm-map{width:110px}}
-.hm-map svg{width:100%;height:auto}
-.hm-map svg path{fill:none;stroke:var(--green);stroke-width:1.8;filter:drop-shadow(0 0 4px var(--green))}
-/* hms — горизонтально с точками, без border */
-.hm-hms{display:flex;align-items:baseline;gap:0;padding-top:10px;border-top:1px solid var(--bdr);flex-wrap:wrap}
-.hm-hms-itm{display:flex;align-items:baseline;gap:4px;white-space:nowrap}
-.hm-hms-itm:not(:last-child)::after{content:'·';color:var(--bdr);margin:0 8px;font-size:14px}
-.hm-hms-num{font-family:var(--px);font-size:16px;color:var(--txt);display:inline}
-.hm-hms-lbl{font-family:var(--px);font-size:5.5px;color:var(--tdim);display:inline}
-
-.hm-info{
-  padding:11px 14px;
-  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
-  border-bottom:1px solid var(--bdr);
-}
-.hm-info-item{font-family:var(--px);font-size:7px;color:var(--tmid);display:flex;align-items:center;gap:5px;white-space:nowrap}
-.hm-info-item strong{color:var(--yellow)}
-.hm-info-sep{color:var(--bdr);font-size:14px;margin:0 2px}
-
-.hm-narr{
-  padding:12px 14px;
-  display:flex;align-items:center;gap:10px;
-}
-.hm-narr-ico{font-size:14px;flex-shrink:0;color:var(--green)}
-.hm-narr-txt{font-family:var(--px);font-size:7px;color:var(--green);line-height:1.8;text-shadow:0 0 8px rgba(0,255,65,0.35)}
-.hm-narr-soon{font-family:var(--mo);font-size:12px;color:var(--tdim);font-style:italic}
-/* внутренняя рамка нарратива */
-.hm-season-blk .hm-narr{
-  margin:0 10px 10px;
-  border:1px solid var(--gdim);border-radius:4px;
-  background:rgba(0,255,65,0.03);
-  box-shadow:0 0 12px rgba(0,255,65,0.05);
-}
-
-.hm-prog{
-  background:var(--card);border:1px solid var(--bdr);border-radius:5px;
-  margin:8px 0;padding:14px;
-}
-.hm-prog-lbl{font-family:var(--px);font-size:6px;color:var(--tdim);letter-spacing:1px;margin-bottom:8px}
-.hm-prog-nums{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
-.hm-prog-cur{font-family:var(--px);font-size:28px;color:var(--green);text-shadow:0 0 14px var(--green);line-height:1}
-.hm-prog-sep{font-family:var(--px);font-size:14px;color:var(--tdim)}
-.hm-prog-goal{font-family:var(--px);font-size:14px;color:var(--tmid)}
-.hm-prog-pct{font-family:var(--px);font-size:8px;color:var(--yellow);text-align:right;margin-bottom:5px}
-.hm-prog-upd{font-family:var(--mo);font-size:10px;color:var(--tdim);text-align:right;margin-top:6px}
-
-/* ═══ СОСТОЯНИЕ СЕЗОНА ═══ */
-.ss-grid{display:grid;grid-template-columns:1fr 1fr 1fr}
-.ss-cell{
-  padding:14px 12px;border-right:1px solid var(--bdr);
-  display:flex;align-items:flex-start;gap:10px;
-}
-.ss-cell:last-child{border-right:none}
-.ss-ico{font-size:22px;flex-shrink:0;margin-top:2px}
-.ss-txt{
-  font-family:var(--mo);font-size:11px;
-  color:var(--tmid);line-height:1.6;
-}
-@media(max-width:480px){
-  .ss-grid{grid-template-columns:1fr}
-  .ss-cell{border-right:none;border-bottom:1px solid var(--bdr)}
-  .ss-cell:last-child{border-bottom:none}
-  .ss-txt{font-size:12px}
-}
-/* live badge */
-.live-badge{display:flex;align-items:center;gap:6px;font-family:var(--px);font-size:6px;color:var(--green)}
-.live-dot{
-  width:6px;height:6px;background:var(--green);border-radius:50%;
-  box-shadow:0 0 6px var(--green);animation:blink 1.4s infinite;
-}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
-/* ═══════════════════════════════════════════════
-   ОПЕРАТОРЫ — карточки с цветной рамкой
-   ═══════════════════════════════════════════════ */
-
-#ops-list{padding:8px 10px 4px}
-
-.op-row{
-  display:grid;
-  grid-template-columns:58px 1fr auto;
-  gap:12px;align-items:center;
-  padding:12px 14px;
-  margin-bottom:8px;
-  border:1px solid var(--oc,var(--bdr));
-  border-radius:4px;
-  background:rgba(0,0,0,0.25);
-  position:relative;
-  box-shadow:0 0 18px color-mix(in srgb,var(--oc,transparent) 7%,transparent);
-  transition:box-shadow .2s;
-}
-.op-row:last-child{margin-bottom:0}
-.op-row:hover{box-shadow:0 0 28px color-mix(in srgb,var(--oc,transparent) 18%,transparent)}
-/* 3px полоска слева */
-.op-row::before{
-  content:'';position:absolute;
-  left:0;top:4px;bottom:4px;width:3px;
-  border-radius:0 2px 2px 0;
-  background:var(--oc,transparent);
-  box-shadow:2px 0 10px color-mix(in srgb,var(--oc,transparent) 50%,transparent);
-}
-
-/* rank — большой квадрат */
-.op-rank{
-  width:58px;height:58px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  border:1px solid var(--oc,var(--bdr));border-radius:3px;
-  background:rgba(0,0,0,0.4);
-  box-shadow:inset 0 0 12px color-mix(in srgb,var(--oc,transparent) 12%,transparent);
-}
-.op-rank span{
-  font-family:var(--px);font-size:20px;
-  color:var(--oc,var(--tdim));
-  text-shadow:0 0 12px var(--oc,transparent);
-}
-
-/* middle */
-.op-mid{min-width:0;display:flex;flex-direction:column;gap:5px}
-.op-nameline{display:flex;align-items:center;gap:8px}
-.op-logo{width:20px;height:20px;object-fit:contain;flex-shrink:0}
-.op-logo.dk{background:#111;padding:2px;border-radius:2px}
-.op-name{font-family:var(--px);font-size:9px;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-/* статус — цветом оператора */
-.op-status{font-family:var(--mo);font-size:11px;color:var(--oc);opacity:0.85}
-/* badges — горизонтально */
-.op-badges{display:flex;gap:5px;flex-wrap:wrap;flex-direction:row}
-.op-badge{font-family:var(--px);font-size:5.5px;padding:2px 6px;border-radius:2px;border:1px solid;line-height:1.5}
-.badge-dc{color:var(--yellow);border-color:var(--yellow);background:rgba(255,215,0,0.08)}
-.badge-ac{color:var(--cyan);border-color:var(--cyan);background:rgba(0,229,255,0.08)}
-/* pixel bar */
-.op-pixbar{display:flex;gap:2px;height:8px}
-.op-pixseg{height:100%;width:6px;flex-shrink:0;border-radius:1px}
-
-/* десктоп — badges справа от имени/статуса */
-@media(min-width:640px){
-  .op-mid{
-    display:grid;
-    grid-template-columns:1fr auto;
-    grid-template-rows:auto auto auto;
-    column-gap:14px;
-  }
-  .op-nameline{grid-column:1;grid-row:1}
-  .op-status{grid-column:1;grid-row:2;align-self:center}
-  .op-badges{grid-column:2;grid-row:1/3;align-self:center;flex-direction:column;gap:4px}
-  .op-pixbar{grid-column:1/3;grid-row:3;margin-top:6px;height:9px}
-  .op-pixseg{width:7px}
-}
-
-/* right — ОГРОМНОЕ число + weekly */
-.op-right{
-  display:flex;flex-direction:column;
-  align-items:flex-end;justify-content:center;
-  gap:6px;min-width:80px;
-}
-.op-total{
-  font-family:var(--px);
-  font-size:clamp(36px,9vw,54px);
-  line-height:1;
-  color:var(--oc);
-  text-shadow:0 0 20px var(--oc),0 0 40px color-mix(in srgb,var(--oc) 35%,transparent);
-}
-.op-total-lbl{font-family:var(--px);font-size:5px;color:var(--tdim);margin-top:-2px}
-/* +N за неделю */
-.op-wkbox{
-  border:1px solid var(--oc,var(--bdr));border-radius:3px;
-  padding:5px 10px;text-align:center;min-width:62px;
-  box-shadow:0 0 10px color-mix(in srgb,var(--oc,transparent) 15%,transparent);
-}
-.op-wknum{
-  font-family:var(--px);font-size:13px;
-  color:var(--oc);text-shadow:0 0 8px var(--oc);display:block;
-}
-.op-wklbl{font-family:var(--px);font-size:4.5px;color:var(--tdim);display:block;margin-top:2px}
-
-/* legend DC / AC */
-.dc-ac-leg{padding:8px 14px;border-top:1px solid var(--bdr);display:flex;gap:16px;flex-wrap:wrap}
-.leg-item{display:flex;align-items:center;gap:5px;font-family:var(--px);font-size:5.5px;color:var(--tdim)}
-.leg-dot{width:7px;height:7px;border-radius:50%}
-
-/* ═══════════════════════════════════════════════
-   ГРАФИК — СЕЗОННАЯ ГОНКА
-   ═══════════════════════════════════════════════ */
-.chart-meta{display:flex;gap:14px}
-.chart-meta span{font-family:var(--px);font-size:5.5px;color:var(--tdim)}
-.chart-meta span b{color:var(--gdim);font-weight:normal}
-.chart-body{padding:12px 10px 6px;position:relative}
-.chart-wrap{position:relative}
-canvas#raceChart{width:100%;display:block}
-.chart-legend{
-  position:absolute;right:2px;top:50%;transform:translateY(-50%);
-  display:flex;flex-direction:column;gap:7px;
-}
-.cl-item{display:flex;align-items:center;gap:5px;justify-content:flex-end}
-.cl-val{font-family:var(--px);font-size:9px}
-.cl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-
-/* ═══════════════════════════════════════════════
-   СТАТЫ — 3 колонки мобайл, 6 десктоп
-   ═══════════════════════════════════════════════ */
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
-@media(min-width:640px){.stats-grid{grid-template-columns:repeat(6,1fr)}}
-.stat-card{
-  background:var(--card);border:1px solid var(--bdr);border-radius:5px;
-  padding:11px 8px;text-align:center;transition:border-color .15s;
-}
-.stat-card:hover{border-color:var(--tdim)}
-.sc-lbl{font-family:var(--px);font-size:5px;color:var(--tdim);letter-spacing:.5px;line-height:1.8;margin-bottom:5px}
-.sc-val{
-  font-family:var(--px);
-  font-size:clamp(12px,3.5vw,20px);
-  color:var(--green);
-  text-shadow:0 0 10px rgba(0,255,65,.45);
-  line-height:1;
-}
-@media(min-width:640px){.sc-val{font-size:clamp(12px,1.7vw,20px)}}
-.sc-val.y{color:var(--yellow);text-shadow:0 0 10px rgba(255,215,0,.4)}
-.sc-val.c{color:var(--cyan);text-shadow:0 0 10px rgba(0,229,255,.35)}
-.sc-unit{font-family:var(--px);font-size:4.5px;color:var(--tdim);margin-top:3px}
-
-/* ═══════════════════════════════════════════════
-   НИЖНИЙ БЛОК — идентично arcade.css
-   ═══════════════════════════════════════════════ */
-.big-phrase{
-  font-family:var(--px);
-  font-size:clamp(12px,2.5vw,16px);
-  color:var(--yellow);
-  text-shadow:0 0 20px var(--yellow),0 0 40px rgba(255,215,0,0.3);
-  text-align:center;padding:28px 12px 20px;
-  letter-spacing:2px;line-height:1.5;
-}
-.author-section{
-  border:1px solid var(--bdr);border-radius:5px;
-  background:var(--card);padding:20px 16px;
-  margin:8px 0;display:flex;flex-direction:column;
-  align-items:center;gap:12px;text-align:center;
-}
-.author-about-btn,.author-chat-btn{
-  display:block;width:100%;max-width:400px;
-  font-family:var(--mo);font-size:14px;
-  border:1px solid var(--green);color:var(--green);
-  padding:14px;letter-spacing:2px;
-  transition:.2s;text-align:center;
-  -webkit-tap-highlight-color:transparent;
-}
-.author-about-btn:hover,.author-chat-btn:hover{background:rgba(0,255,65,0.08)}
-.author-chat-btn{line-height:1.6}
-.chat-sub{display:block;font-family:var(--mo);font-size:11px;color:var(--gdim);margin-top:4px;letter-spacing:1px}
-.section-label{font-family:var(--px);font-size:6px;color:var(--tdim);letter-spacing:2px;margin:4px 0 0}
-.author-links{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;max-width:400px}
-.author-link-btn{
-  font-family:var(--mo);font-size:11px;
-  border:1px solid var(--bdr);color:var(--tdim);
-  padding:11px 4px;text-align:center;transition:.2s;
-  display:flex;align-items:center;justify-content:center;
-  min-height:44px;word-break:break-word;line-height:1.4;
-  -webkit-tap-highlight-color:transparent;
-}
-.author-link-btn:hover{border-color:var(--gdim);color:var(--green)}
-.author-contacts{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:400px}
-.author-contact-btn{
-  font-family:var(--mo);font-size:11px;
-  border:1px solid var(--bdr);color:var(--tmid);
-  padding:12px 6px;text-align:center;transition:.2s;
-  display:flex;align-items:center;justify-content:center;
-  min-height:44px;-webkit-tap-highlight-color:transparent;
-}
-.author-contact-btn:hover{border-color:var(--green);color:var(--green)}
-.visit-counter{font-family:var(--px);font-size:6px;color:var(--tdim);text-align:center;margin:10px 0;letter-spacing:1px;line-height:1.8}
-.theme-footer-switch{display:flex;align-items:center;gap:8px;justify-content:center;margin:16px 0 8px}
-.theme-foot-lbl{font-family:var(--px);font-size:6px;color:var(--tdim);letter-spacing:2px;margin-right:4px}
-.theme-foot-btn{
-  font-size:14px;width:34px;height:34px;
-  border:1px solid var(--bdr);background:none;
-  color:var(--tdim);cursor:pointer;transition:.15s;
-  display:flex;align-items:center;justify-content:center;
-  -webkit-tap-highlight-color:transparent;
-}
-.theme-foot-btn.active{background:rgba(0,255,65,0.1);color:var(--green);border-color:var(--green)}
-.theme-foot-btn:hover:not(.active){border-color:var(--gdim);color:var(--gdim)}
-.footer{border-top:1px solid var(--bdr);padding:18px 0 90px;text-align:center}
-.footer-disclaimer{font-family:var(--mo);font-size:11px;color:var(--tdim);line-height:1.9;margin-bottom:8px}
-.footer-copy{font-family:var(--px);font-size:6px;color:var(--tdim);letter-spacing:1px}
-
-/* мобайл адаптация нижнего блока */
-@media(max-width:400px){
-  .author-links{grid-template-columns:1fr}
-  .author-contacts{grid-template-columns:1fr}
-}
-</style>
+<link id="theme-css" rel="stylesheet" href="../CSS/arcade.css?v=2">
+<link rel="stylesheet" href="home-v2.css?v=1">
+<link rel="prefetch" href="../CSS/tesla-light.css">
+<link rel="prefetch" href="../CSS/tesla-dark.css">
+<!-- styles: ../CSS/arcade.css + home-v2.css -->
 </head>
 <body>
 <div class="container">
 
-<!-- ═══ STATUSBAR ═══ -->
 <div class="statusbar" id="statusbar">
   <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
     <span></span><span></span><span></span>
   </button>
-  <div class="nav-logo-mobile" aria-hidden="true">
-    <strong>EV RACE</strong>
-    <span>БЕЛАРУСЬ 2026</span>
-  </div>
-  <nav class="nav-desktop">
+  <div class="nav-desktop">
     <a class="nav-link active" href="/">ГЛАВНАЯ</a>
     <div class="nav-dropdown-wrap">
       <a class="nav-link" href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
-      <button class="nav-drop-btn" onclick="toggleDrop(event)">▾</button>
+      <button class="nav-drop-btn" onclick="toggleDrop(event)" aria-label="Операторы">▾</button>
       <div class="dropdown-menu" id="dropMenu">
         <a class="dropdown-item" href="/operators/batteryfly.html"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
         <a class="dropdown-item" href="/operators/forevo.html"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
@@ -695,39 +38,40 @@ canvas#raceChart{width:100%;display:block}
         <a class="dropdown-item" href="/operators/csms.html"><span class="d-dot" style="background:#FF6B6B"></span>ЦСМС</a>
       </div>
     </div>
-    <a class="nav-link" href="/stations.html">СТАНЦИИ 2026</a>
-    <a class="nav-link" href="/letters.html">ПИСЬМА</a>
-    <a class="nav-link" href="/map.html">КАРТА</a>
-  </nav>
+    <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
+    <a class="nav-link" href="https://evrace.by/letters.html">ПИСЬМА</a>
+    <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
+  </div>
   <div class="theme-seg">
     <button class="theme-seg-btn active" id="btn-arcade"      onclick="setTheme('arcade')">⬡ ARCADE</button>
     <button class="theme-seg-btn"        id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
     <button class="theme-seg-btn"        id="btn-tesla-dark"  onclick="setTheme('tesla-dark')">◑ TESLA</button>
   </div>
-  <button class="fx-toggle" id="fxToggle" onclick="toggleFx()">
-    <span class="fx-seg fx-on active">ЭФФЕКТЫ</span>
-    <span class="fx-seg fx-off">ЧЁТКО</span>
+  <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Сканлайны и свечение">
+    <span class="fx-seg fx-on active" data-state="on">ЭФФЕКТЫ</span>
+    <span class="fx-seg fx-off"       data-state="off">ЧЁТКО</span>
   </button>
 </div>
 
-<!-- ═══ MOBILE MENU ═══ -->
 <div class="nav-mobile-drop" id="mobileMenu">
   <a class="nav-mobile-link active" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
   <div class="mob-nav-row">
     <a class="nav-mobile-link" href="/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
-    <button class="mob-acc-btn" id="mobAccBtn" onclick="toggleMobAcc()">▾</button>
+    <button class="mob-acc-btn" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Операторы">▾</button>
   </div>
   <div class="mob-acc-list" id="mobAccList">
     <a href="/operators/batteryfly.html" onclick="closeBurger()"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
-    <a href="/operators/forevo.html"     onclick="closeBurger()"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
-    <a href="/operators/united.html"     onclick="closeBurger()"><span class="d-dot" style="background:#F5821F"></span>United Company</a>
-    <a href="/operators/zaryadka.html"   onclick="closeBurger()"><span class="d-dot" style="background:#00cfff"></span>Zaryadka</a>
-    <a href="/operators/csms.html"       onclick="closeBurger()"><span class="d-dot" style="background:#FF6B6B"></span>ЦСМС</a>
+    <a href="/operators/forevo.html" onclick="closeBurger()"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
+    <a href="/operators/united.html" onclick="closeBurger()"><span class="d-dot" style="background:#F5821F"></span>United Company</a>
+    <a href="/operators/zaryadka.html" onclick="closeBurger()"><span class="d-dot" style="background:#00cfff"></span>Zaryadka</a>
+    <a href="/operators/csms.html" onclick="closeBurger()"><span class="d-dot" style="background:#FF6B6B"></span>ЦСМС</a>
   </div>
-  <a class="nav-mobile-link" href="/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
-  <a class="nav-mobile-link" href="/letters.html"  onclick="closeBurger()">ПИСЬМА</a>
-  <a class="nav-mobile-link" href="/map.html"       onclick="closeBurger()">КАРТА</a>
+  <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
+  <a class="nav-mobile-link" href="https://evrace.by/letters.html" onclick="closeBurger()">ПИСЬМА</a>
+  <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
 </div>
+
+<div class="page-wrap">
 
 <!-- ═══════════════════════════════════════════
      DESKTOP HERO
@@ -796,6 +140,17 @@ canvas#raceChart{width:100%;display:block}
       <div class="hm-hms-itm"><span class="hm-hms-num" id="m-m">--</span><div class="hm-hms-lbl">МИНУТ</div></div>
       <div class="hm-hms-itm"><span class="hm-hms-num" id="m-s">--</span><div class="hm-hms-lbl">СЕКУНД</div></div>
     </div>
+    <div class="hm-prog-in">
+      <div class="hm-prog-lbl">ОБЩИЙ ПРОГРЕСС К ЦЕЛИ</div>
+      <div class="hm-prog-nums">
+        <span class="hm-prog-cur" id="m-cur">—</span>
+        <span class="hm-prog-sep">/</span>
+        <span class="hm-prog-goal">1010</span>
+      </div>
+      <div class="hm-prog-pct" id="m-pct">—%</div>
+      <div class="prog-bar" id="m-bar"></div>
+      <div class="hm-prog-upd" id="m-upd">ОБНОВЛЕНО: —</div>
+    </div>
   </div>
   <div class="blk hm-season-blk">
     <div class="blk-hdr">
@@ -812,17 +167,6 @@ canvas#raceChart{width:100%;display:block}
       <span class="hm-narr-ico">↗</span>
       <span class="hm-narr-soon">⏳ AI NARRATIVE — СКОРО</span>
     </div>
-  </div>
-  <div class="hm-prog">
-    <div class="hm-prog-lbl">ОБЩИЙ ПРОГРЕСС К ЦЕЛИ</div>
-    <div class="hm-prog-nums">
-      <span class="hm-prog-cur" id="m-cur">—</span>
-      <span class="hm-prog-sep">/</span>
-      <span class="hm-prog-goal" style="font-family:'Press Start 2P',monospace;font-size:14px;color:#6a946a">1010</span>
-    </div>
-    <div class="hm-prog-pct" id="m-pct">—%</div>
-    <div class="prog-bar" id="m-bar"></div>
-    <div class="hm-prog-upd" id="m-upd">ОБНОВЛЕНО: —</div>
   </div>
 </div>
 
@@ -877,11 +221,44 @@ canvas#raceChart{width:100%;display:block}
   <div class="stat-card"><div class="sc-lbl">ВСЕГО<br>УСТАНОВЛЕНО</div><div class="sc-val" id="sv-tot">—</div><div class="sc-unit">СТАНЦИЙ</div></div>
   <div class="stat-card"><div class="sc-lbl">СРЕДНИЙ<br>ТЕМП</div><div class="sc-val c" id="sv-tmp">—</div><div class="sc-unit">СТ / НЕДЕЛЮ</div></div>
   <div class="stat-card"><div class="sc-lbl">СЛЕД.<br>ОБНОВЛЕНИЕ</div><div class="sc-val" id="sv-nxt" style="font-size:12px">—</div><div class="sc-unit">СЕГОДНЯ</div></div>
-  <div class="stat-card"><div class="sc-lbl">ФИНАЛ<br>СЕЗОНА</div><div class="sc-val" style="font-size:11px">31.12</div><div class="sc-unit">2026</div></div>
+</div>
+<p class="stats-reg-hint">Все операторы страны — в <a href="https://evrace.by/stations.html">реестре станций</a> и на <a href="https://evrace.by/map.html">карте</a>. В гонке — только пять конкурсных.</p>
+
+<!-- ═══ ГОЛОСОВАНИЕ ═══ -->
+<div class="vote-section">
+  <div class="vote-section-label">СДЕЛАЙ СТАВКУ</div>
+  <div class="vote-question">КТО УСТАНОВИТ БОЛЬШЕ ВСЕХ СТАНЦИЙ К 31.12.2026?<br>СДЕЛАЙ СВОЮ СТАВКУ — ОДИН ИГРОК, ОДИН ГОЛОС:</div>
+  <div class="vote-options" id="vote-options"></div>
+  <div class="cf-turnstile" id="vote-turnstile" data-sitekey="0x4AAAAAACtvG988gnpS7YBa" data-theme="dark" data-size="flexible" style="margin-bottom:10px"></div>
+  <button class="vote-submit" id="vote-submit" onclick="submitVote()" disabled>▶ ПОСТАВИТЬ ◀</button>
+  <div class="vote-results" id="vote-results">
+    <div class="vote-message" id="vote-message"></div>
+    <div id="vote-bars"></div>
+    <div class="vote-total-players" id="vote-total"></div>
+  </div>
 </div>
 
-<!-- ═══ НИЖНИЙ БЛОК ═══ -->
 <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
+
+<div class="chronicle-blk">
+  <div class="header-intro">
+    <strong>18 марта 2026 года</strong> в Министерстве энергетики Республики Беларусь прошёл круглый стол по развитию зарядной инфраструктуры. Пять частных операторов озвучили министру свои планы по запуску быстрых зарядных станций до конца 2026 года.<br><br>
+    Планы каждого озвучивать не стану, НО...<br><br>
+    Суммарно все обещали ввести в работу до конца 2026 года <span class="highlight">1010 зарядных станций</span>.<br><br>
+    Эта страница считает. Сравним заявленное с реальным 31 декабря!
+  </div>
+  <div class="upd-block upd2">
+    <div class="upd-label">► UPD 2 · 16.05.2026</div>
+    <div class="upd-text">100 DC станций за полгода. Серьёзно?<br>Окей. Меняю правила — теперь считаю AC тоже.<br>Не потому что так надо. Потому что хочу живой гонки, а не похорон.<br>Вперёд.</div>
+    <div class="upd-sign">Блюститель честного заряда · <span>Artsiom Krivtsoff</span></div>
+  </div>
+  <div class="upd-block">
+    <div class="upd-label">► UPD 26.03.2026</div>
+    <div class="upd-text">Великодушие — одно из моих имён! Засчитываю все DC станции с 1 января 2026 года.<br>Это фора, господа операторы. Теперь отмазок нет. Пользуйтесь.</div>
+    <div class="upd-sign">Блюститель честного заряда · <span>Artsiom Krivtsoff</span></div>
+  </div>
+</div>
+
 <div class="author-section">
   <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank">▶ ОБ АВТОРЕ ◀</a>
   <a class="author-chat-btn" href="https://t.me/evclubb" target="_blank">▶ ЗЕЛЁНЫЙ ЧАТ ◀<span class="chat-sub">крупнейшее электромобильное сообщество в Беларуси</span></a>
@@ -897,26 +274,31 @@ canvas#raceChart{width:100%;display:block}
     <a class="author-link-btn" href="https://tiktok.com/@artsiomkrivtsoff" target="_blank">TikTok</a>
     <a class="author-link-btn" href="https://www.youtube.com/@imeyuskazat" target="_blank">YouTube</a>
   </div>
-  <div class="section-label">▼ СВЯЗАТЬСЯ ▼</div>
+  <div class="section-label">▼ СВЯЗАТЬСЯ | УСТАНОВИТЬ ЗАРЯДНУЮ СТАНЦИЮ | ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ ▼</div>
   <div class="author-contacts">
     <a class="author-contact-btn" href="tel:+375295170067">📞 +375 29 517-00-67</a>
     <a class="author-contact-btn" href="https://t.me/Krivtsoffag" target="_blank">✈ TELEGRAM</a>
   </div>
 </div>
-<div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visitCount">...</span> РАЗ</div>
+
+<div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">...</span> РАЗ</div>
+
 <div class="theme-footer-switch">
   <span class="theme-foot-lbl">СТИЛЬ</span>
   <button class="theme-foot-btn active" id="foot-arcade"      onclick="setTheme('arcade')">⬡</button>
   <button class="theme-foot-btn"        id="foot-tesla-light" onclick="setTheme('tesla-light')">☀</button>
   <button class="theme-foot-btn"        id="foot-tesla-dark"  onclick="setTheme('tesla-dark')">◑</button>
 </div>
+
 <div class="footer">
-  <div class="footer-disclaimer">Страница создана в развлекательных целях. Данные носят информационный характер. Прогнозы — это игра. 🎮</div>
+  <div class="footer-disclaimer">Эта страница создана исключительно в развлекательных целях.<br>Все данные об установленных станциях носят информационный характер и не являются официальной статистикой.<br>Прогнозы — это игра, а не инвестиционная рекомендация. 🎮<br>Страница не запрашивает и не хранит ваши личные данные.</div>
   <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
 </div>
 
+</div><!-- /page-wrap -->
+
 </div><!-- /container -->
-<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
 
 <script>
 const SURL='https://uvrboxrddqlasgrnnnne.supabase.co';
@@ -943,35 +325,61 @@ function getOpStatus(op,rank,gap){
 }
 let data=OPS.map(o=>({...o,total:0,dc:0,ac:0,w7:0,goal:0,last:'—'}));
 let weeklyData={};
+let selectedOperator=null;
 
-/* ── ТЕМА ── */
+const VOTE_MESSAGES={
+  batteryfly:['МОЩНЫЙ ВЫБОР!','СТАВКА НА ЛИДЕРА!','ВЕРИШЬ В ЛИДЕРА!'],
+  forevo:    ['СМЕЛАЯ СТАВКА!','ВЕРИШЬ В forEVo!','ИНТЕРЕСНЫЙ ВЫБОР!'],
+  zaryadka:  ['ОРИГИНАЛЬНЫЙ ВЫБОР!','ВЕРИШЬ В ZARYADKA!','НЕОЖИДАННО!'],
+  united:    ['РИСКОВАННАЯ СТАВКА!','ТЁМНАЯ ЛОШАДКА!','ПРОТИВ ТЕЧЕНИЯ!'],
+  csms:      ['ОЧЕНЬ СМЕЛАЯ СТАВКА!','ВЕРИШЬ В РЕГИОНЫ!','НЕОЖИДАННЫЙ ВЫБОР!'],
+};
+
+/* ── ТЕМА / FX (как forevo.html) ── */
 function setTheme(t){
+  document.getElementById('theme-css').href='../CSS/'+t+'.css?v=2';
   localStorage.setItem('ev_race_theme',t);
+  document.documentElement.setAttribute('data-theme',t);
   THEMES.forEach(x=>{
     const b=document.getElementById('btn-'+x); if(b) b.classList.toggle('active',x===t);
     const f=document.getElementById('foot-'+x); if(f) f.classList.toggle('active',x===t);
   });
+  const ts=document.getElementById('vote-turnstile');
+  if(ts) ts.setAttribute('data-theme',t==='tesla-light'?'light':'dark');
 }
 function toggleFx(){
-  const on=document.body.classList.toggle('no-scanlines');
-  document.querySelector('.fx-on')?.classList.toggle('active',!on);
-  document.querySelector('.fx-off')?.classList.toggle('active',on);
-  localStorage.setItem('ev_race_fx',on?'0':'1');
+  const on=document.body.classList.toggle('reduced-fx');
+  localStorage.setItem('ev_race_reduced_fx',on?'1':'0');
+  ['flicker','blink','shine'].forEach(k=>document.documentElement.setAttribute('data-anim-'+k,on?'0':'1'));
+  document.querySelector('.fx-seg.fx-on')?.classList.toggle('active',!on);
+  document.querySelector('.fx-seg.fx-off')?.classList.toggle('active',on);
 }
 (function(){
+  if(localStorage.getItem('ev_race_fx')==='0'&&!localStorage.getItem('ev_race_reduced_fx')){
+    localStorage.setItem('ev_race_reduced_fx','1');
+  }
   const t=localStorage.getItem('ev_race_theme');
   if(t&&THEMES.includes(t)) setTheme(t);
-  if(localStorage.getItem('ev_race_fx')==='0'){
-    document.body.classList.add('no-scanlines');
-    document.querySelector('.fx-on')?.classList.remove('active');
-    document.querySelector('.fx-off')?.classList.add('active');
+  else{
+    document.documentElement.setAttribute('data-theme','arcade');
+    document.getElementById('theme-css').href='../CSS/arcade.css?v=2';
   }
+  if(localStorage.getItem('ev_race_reduced_fx')==='1'){
+    document.body.classList.add('reduced-fx');
+    ['flicker','blink','shine'].forEach(k=>document.documentElement.setAttribute('data-anim-'+k,'0'));
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.querySelector('.fx-seg.fx-on')?.classList.remove('active');
+      document.querySelector('.fx-seg.fx-off')?.classList.add('active');
+    });
+  }
+  const sb=document.getElementById('statusbar');
+  if(sb) document.documentElement.style.setProperty('--statusbar-h',sb.offsetHeight+'px');
 })();
 
 /* ── NAV ── */
 function toggleBurger(){
-  const b=document.getElementById('burgerBtn'),m=document.getElementById('mobileMenu');
-  const o=m.classList.toggle('open'); b.classList.toggle('open',o);
+  const btn=document.getElementById('burgerBtn'),menu=document.getElementById('mobileMenu');
+  const open=menu.classList.toggle('open'); btn.classList.toggle('open',open);
 }
 function closeBurger(){
   document.getElementById('mobileMenu').classList.remove('open');
@@ -986,10 +394,12 @@ function toggleMobAcc(){
   document.getElementById('mobAccList').classList.toggle('open');
 }
 document.addEventListener('click',e=>{
-  const m=document.getElementById('mobileMenu'),b=document.getElementById('burgerBtn');
-  if(m?.classList.contains('open')&&!m.contains(e.target)&&!b.contains(e.target)){m.classList.remove('open');b.classList.remove('open');}
-  const d=document.getElementById('dropMenu');
-  if(d?.classList.contains('open')&&!d.closest('.nav-dropdown-wrap').contains(e.target)) d.classList.remove('open');
+  const menu=document.getElementById('mobileMenu'),bbtn=document.getElementById('burgerBtn');
+  if(menu?.classList.contains('open')&&!menu.contains(e.target)&&!bbtn.contains(e.target)){
+    menu.classList.remove('open'); bbtn.classList.remove('open');
+  }
+  const dm=document.getElementById('dropMenu');
+  if(dm?.classList.contains('open')&&!dm.closest('.nav-dropdown-wrap').contains(e.target)) dm.classList.remove('open');
 });
 window.addEventListener('scroll',()=>document.getElementById('scroll-top')?.classList.toggle('visible',window.scrollY>300));
 
@@ -1076,20 +486,6 @@ function renderProgress(){
   });
 }
 
-/* ── PIXBAR ── */
-function pixBar(dc,ac,goal){
-  const tot=dc+ac; const segs=26;
-  const filled=goal>0?Math.round((tot/goal)*segs):0;
-  const dcS=tot>0?Math.round((dc/tot)*filled):0;
-  const acS=filled-dcS;
-  let h='<div class="op-pixbar">';
-  for(let i=0;i<segs;i++){
-    const bg=i<dcS?'#ffd700':i<dcS+acS?'#00e5ff':'#0a160a';
-    h+=`<div class="op-pixseg" style="background:${bg}"></div>`;
-  }
-  return h+'</div>';
-}
-
 /* ── ОПЕРАТОРЫ ── */
 function renderOps(){
   const list=document.getElementById('ops-list'); list.innerHTML='';
@@ -1097,6 +493,10 @@ function renderOps(){
     const row=document.createElement('div');
     row.className='op-row';
     row.style.setProperty('--oc',op.color);
+    const tot=op.dc+op.ac;
+    const fillPct=op.goal>0?Math.min(tot/op.goal*100,100):0;
+    const dcW=tot>0?fillPct*(op.dc/tot):0;
+    const acW=tot>0?fillPct*(op.ac/tot):0;
     row.innerHTML=`
       <div class="op-rank"><span>${i+1}</span></div>
       <div class="op-mid">
@@ -1105,11 +505,14 @@ function renderOps(){
           <span class="op-name">${op.name}</span>
         </div>
         <div class="op-status">${getOpStatus(op,i+1,data[0].total-op.total)}</div>
-        <div class="op-badges">
-          ${op.dc>0?`<span class="op-badge badge-dc">DC ${op.dc}</span>`:''}
-          ${op.ac>0?`<span class="op-badge badge-ac">AC ${op.ac}</span>`:''}
+        <div class="op-bar-v2">
+          <div class="seg-dc" style="width:0%;background:${op.color}"></div>
+          <div class="seg-ac" style="width:0%;background:${op.color}"></div>
         </div>
-        ${pixBar(op.dc,op.ac,op.goal)}
+        <div class="op-split-row">
+          <span class="op-chip chip-dc">DC <b>${op.dc}</b></span>
+          <span class="op-chip chip-ac">AC <b>${op.ac}</b></span>
+        </div>
       </div>
       <div class="op-right">
         <div>
@@ -1122,6 +525,14 @@ function renderOps(){
         </div>
       </div>`;
     list.appendChild(row);
+    if(tot>0){
+      setTimeout(()=>{
+        const dc=row.querySelector('.seg-dc');
+        const ac=row.querySelector('.seg-ac');
+        if(dc) dc.style.width=dcW+'%';
+        if(ac) ac.style.width=acW+'%';
+      },150+i*80);
+    }
   });
 }
 
@@ -1179,13 +590,13 @@ function renderChart(){
   }
 
   // Метки оси X на canvas
-  const xMarks=isMob?[1,20,40,53]:[1,10,20,30,40,50,53];
+  const xMarks=isMob?[1,18,53]:[1,10,20,30,40,50,53];
   ctx.font=`${isMob?7:8}px 'Share Tech Mono'`;
   ctx.textAlign='center';
   ctx.fillStyle='rgba(100,148,100,0.5)';
   xMarks.forEach(wk=>{
     const x=pL+((wk-1)/52)*cW;
-    ctx.fillText(wk,x,H-6);
+    ctx.fillText('НЕД. '+wk,x,H-6);
   });
 
   // Линии операторов
@@ -1288,16 +699,111 @@ async function renderDiagnostics(){
     document.getElementById('diag-region').textContent='Данные обновляются';
   }
 }
+/* ── ГОЛОСОВАНИЕ ── */
+function renderVoteOptions(){
+  const c=document.getElementById('vote-options');
+  c.innerHTML='';
+  OPS.forEach(op=>{
+    const btn=document.createElement('button');
+    btn.className='vote-btn';
+    btn.dataset.id=op.id;
+    btn.innerHTML=`<img src="${op.logo}" alt="${op.name}"><span>${op.name}</span>`;
+    btn.onclick=()=>selectVote(op.id);
+    c.appendChild(btn);
+  });
+}
+function selectVote(id){
+  selectedOperator=id;
+  document.querySelectorAll('.vote-btn').forEach(b=>b.classList.toggle('selected',b.dataset.id===id));
+  document.getElementById('vote-submit').disabled=false;
+}
+async function submitVote(){
+  if(!selectedOperator) return;
+  const token=document.querySelector('[name="cf-turnstile-response"]')?.value;
+  if(!token){ alert('Пожалуйста, подождите проверки безопасности...'); return; }
+  const btn=document.getElementById('vote-submit');
+  btn.disabled=true; btn.textContent='... ОБРАБОТКА ...';
+  localStorage.setItem('ev_race_vote',selectedOperator);
+  localStorage.setItem('ev_race_voted','1');
+  try{
+    await fetch(SURL+'/functions/v1/submit-vote',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SKEY},
+      body:JSON.stringify({operator:selectedOperator,cf_token:token})
+    });
+  }catch(e){ console.log('Vote error',e); }
+  await showResults(selectedOperator);
+}
+async function showResults(myVote){
+  let votes={}, total=0;
+  try{
+    const res=await fetch(SURL+'/rest/v1/rpc/get_vote_counts',{
+      method:'POST',
+      headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json'},
+      body:'{}'
+    });
+    const data=await res.json();
+    if(Array.isArray(data)){
+      data.forEach(r=>{ votes[r.operator]=parseInt(r.count); });
+      total=data.reduce((s,r)=>s+parseInt(r.count),0);
+    }
+  }catch(e){ console.log('Fetch error',e); }
+  if(total===0) total=1;
+  document.getElementById('vote-options').style.display='none';
+  document.getElementById('vote-submit').style.display='none';
+  document.getElementById('vote-turnstile').style.display='none';
+  document.getElementById('vote-results').style.display='block';
+  const myCount=votes[myVote]||1;
+  const myPct=Math.round(myCount/total*100);
+  const msgs=VOTE_MESSAGES[myVote]||['СТАВКА СДЕЛАНА!'];
+  const msg=msgs[Math.floor(Math.random()*msgs.length)];
+  const opName=OPS.find(o=>o.id===myVote)?.name||myVote;
+  const subtext=myPct>=40?`${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}`:
+    myPct>=20?`ТОЛЬКО ${myPct}% ИГРОКОВ ПОСТАВИЛИ НА ${opName.toUpperCase()}`:
+    `ЛИШЬ ${myPct}% ИГРОКОВ ВЕРЯТ В ${opName.toUpperCase()}`;
+  document.getElementById('vote-message').innerHTML=`${msg}<br><span style="font-size:9px;color:var(--text-dim)">${subtext}</span>`;
+  const barsDiv=document.getElementById('vote-bars');
+  barsDiv.innerHTML='';
+  [...OPS].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0)).forEach(op=>{
+    const cnt=votes[op.id]||0;
+    const pct=Math.round(cnt/total*100);
+    const isMe=op.id===myVote;
+    const div=document.createElement('div');
+    div.className='vote-result-item';
+    div.innerHTML=`
+      <div class="vote-result-top">
+        <span class="rname" style="${isMe?'color:var(--text)':''}">${isMe?'▶ ':''}${op.name}</span>
+        <span class="rpct">${pct}%</span>
+      </div>
+      <div class="vote-result-bar-wrap"><div class="vote-result-bar${isMe?' mine':''}" style="width:0%"></div></div>`;
+    barsDiv.appendChild(div);
+    setTimeout(()=>{ div.querySelector('.vote-result-bar').style.width=pct+'%'; },200);
+  });
+  document.getElementById('vote-total').textContent=`▶ ВСЕГО СТАВОК: ${total} ◀`;
+}
+async function checkVoted(){
+  const voted=localStorage.getItem('ev_race_voted');
+  const myVote=localStorage.getItem('ev_race_vote');
+  if(voted&&myVote){
+    document.getElementById('vote-submit').style.display='none';
+    document.querySelectorAll('.vote-btn').forEach(b=>{ b.disabled=true; if(b.dataset.id===myVote) b.classList.add('selected'); });
+    await showResults(myVote);
+  }
+}
+
 async function trackVisit(){
   try{
     await fetch(SURL+'/rest/v1/visits',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({visited_at:new Date().toISOString(),page:'main'})});
     const r=await fetch(SURL+'/rest/v1/visits?select=id&page=eq.main',{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Prefer':'count=exact','Range':'0-0'}});
     const cnt=r.headers.get('content-range')?.split('/')[1]||'...';
-    document.getElementById('visitCount').textContent=Number(cnt).toLocaleString('ru');
-  }catch(e){document.getElementById('visitCount').textContent='...';}
+    document.getElementById('visit-count').textContent=Number(cnt).toLocaleString('ru');
+  }catch(e){ document.getElementById('visit-count').textContent='...'; }
 }
 
-init(); trackVisit();
+renderVoteOptions();
+checkVoted();
+init();
+trackVisit();
 window.addEventListener('resize',()=>{if(Object.keys(weeklyData).length) renderChart();});
 </script>
 </body>
