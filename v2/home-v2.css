@@ -160,25 +160,42 @@
 }
 .hl-meta-item strong { color: var(--yellow); }
 .hl-narrative {
-  border: 1px solid var(--green-dim);
-  background: rgba(0, 255, 65, 0.03);
+  border: 1px solid var(--green);
+  background: rgba(0, 255, 65, 0.04);
   border-radius: 4px;
-  padding: 11px 13px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 0 14px rgba(0, 255, 65, 0.05);
+  gap: 12px;
+  box-shadow: 0 0 18px rgba(0, 255, 65, 0.1);
   position: relative;
   z-index: 1;
   margin-top: auto;
 }
-.hl-narr-ico { font-size: 14px; flex-shrink: 0; color: var(--green); }
-.hl-narr-soon,
-.hm-narr-soon {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  color: var(--home-text-dim);
-  font-style: italic;
+.hl-narr-ico,
+.hm-narr-ico {
+  flex-shrink: 0;
+  color: var(--green);
+  line-height: 0;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.85));
+}
+.hl-narr-ico svg { display: block; }
+
+.hero-narr-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: var(--green);
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.55);
+  line-height: 1.65;
+  font-style: normal;
+}
+.hero-narr-text[data-type="haiku"] {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+@media (max-width: 639px) {
+  .hero-narr-text { font-size: 10px; }
 }
 
 .hero-right {
@@ -504,12 +521,12 @@
 }
 .hm-season-blk .hm-narr {
   margin: 0 10px 10px;
-  border: 1px solid var(--green-dim);
+  border: 1px solid var(--green);
   border-radius: 4px;
-  background: rgba(0, 255, 65, 0.03);
-  box-shadow: 0 0 12px rgba(0, 255, 65, 0.05);
+  background: rgba(0, 255, 65, 0.04);
+  box-shadow: 0 0 16px rgba(0, 255, 65, 0.1);
 }
-.hm-narr-ico { font-size: 14px; flex-shrink: 0; color: var(--green); }
+.hm-narr-ico svg { display: block; }
 
 /* ── season status ── */
 .page-wrap .ss-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; }
