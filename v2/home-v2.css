@@ -527,6 +527,25 @@
 }
 
 /* ── operators (leaderboard rows + op-bar-v2) ── */
+/* Сброс утечек из arcade.css (.op-card): rank absolute, name flex:1 */
+.page-wrap #ops-list .op-row .op-rank {
+  position: static;
+  top: auto;
+  right: auto;
+  image-rendering: auto;
+}
+.page-wrap #ops-list .op-row .op-logo {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.page-wrap #ops-list .op-row .op-name {
+  flex: 0 1 auto;
+  overflow: visible;
+  text-overflow: clip;
+  letter-spacing: var(--ls-tight);
+}
+
 #ops-list { padding: var(--s-2) 10px 4px; }
 
 .op-row {
@@ -646,13 +665,13 @@
 }
 
 @media (max-width: 639px) {
-  .op-row {
+  .page-wrap #ops-list .op-row {
     grid-template-columns: 40px 1fr;
     grid-template-rows: auto auto;
   }
-  .op-rank { width: 40px; height: 40px; grid-row: 1 / 3; }
-  .op-rank span { font-size: 14px; }
-  .op-right {
+  .page-wrap #ops-list .op-rank { width: 40px; height: 40px; grid-row: 1 / 3; }
+  .page-wrap #ops-list .op-rank span { font-size: 14px; }
+  .page-wrap #ops-list .op-right {
     grid-column: 2;
     flex-direction: row;
     align-items: center;
@@ -660,17 +679,32 @@
     width: 100%;
     min-width: 0;
   }
-  .op-total { font-size: clamp(24px, 7vw, 36px); }
-  .op-mid { grid-column: 2; }
+  .page-wrap #ops-list .op-total { font-size: clamp(24px, 7vw, 36px); }
+  .page-wrap #ops-list .op-mid { grid-column: 2; }
 }
 
 @media (min-width: 640px) {
-  .op-rank { width: 58px; height: 58px; }
-  .op-rank span { font-size: 20px; }
-  .op-right { min-width: 80px; }
-  .op-total { font-size: clamp(36px, 9vw, 54px); }
-  .op-wknum { font-size: 13px; }
+  .page-wrap #ops-list .op-row {
+    grid-template-columns: 56px minmax(180px, 1fr) auto;
+    gap: 16px;
+    padding: 14px 18px;
+  }
+  .page-wrap #ops-list .op-rank { width: 58px; height: 58px; }
+  .page-wrap #ops-list .op-rank span { font-size: 20px; }
+  .page-wrap #ops-list .op-right {
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+  .page-wrap #ops-list .op-total {
+    font-size: clamp(32px, 4vw, 48px);
+    white-space: nowrap;
+  }
+  .page-wrap #ops-list .op-name { font-size: 10px; }
+  .page-wrap #ops-list .op-wknum { font-size: 13px; }
 }
+
+/* голосование: в arcade заголовок через ::before — дубль убираем */
+.page-wrap .vote-section-label { display: none; }
 
 .dc-ac-leg {
   padding: var(--s-2) var(--s-4);
