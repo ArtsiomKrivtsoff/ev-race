@@ -173,13 +173,12 @@
   margin-top: auto;
 }
 .hl-narr-ico { font-size: 14px; flex-shrink: 0; color: var(--green); }
-.hl-narr-text,
-.hm-narr-text {
+.hl-narr-soon,
+.hm-narr-soon {
   font-family: 'Share Tech Mono', monospace;
   font-size: 12px;
-  color: var(--green);
-  text-transform: uppercase;
-  line-height: 1.5;
+  color: var(--home-text-dim);
+  font-style: italic;
 }
 
 .hero-right {
@@ -645,22 +644,22 @@
   opacity: 0.9;
 }
 .page-wrap #ops-list .op-pixbar {
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: repeat(40, 1fr);
   gap: 2px;
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
   margin-top: 2px;
 }
 .page-wrap #ops-list .op-pixbar-seg {
-  flex: 0 0 auto;
-  width: 7px;
+  width: 100%;
+  min-width: 0;
   height: 7px;
   border-radius: 1px;
   image-rendering: pixelated;
 }
 @media (max-width: 639px) {
-  .page-wrap #ops-list .op-pixbar-seg { width: 6px; height: 6px; }
+  .page-wrap #ops-list .op-pixbar { grid-template-columns: repeat(28, 1fr); }
+  .page-wrap #ops-list .op-pixbar-seg { height: 6px; }
 }
 
 .op-split-row {
