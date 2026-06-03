@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": [
+    "/CSS/*",
+    "/JS/*",
+    "/logos/*",
+    "/operators/*",
+    "/docs/*",
+    "/v2/*",
+    "/supabase/*",
+    "/favicon.ico",
+    "/robots.txt",
+    "/sitemap.xml",
+    "/og.png",
+    "/og-map.png",
+    "/*.html",
+    "/*.css",
+    "/*.js",
+    "/*.ico",
+    "/*.png",
+    "/*.xml",
+    "/*.txt",
+    "/*.json"
+  ]
+}
