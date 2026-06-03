@@ -17,6 +17,25 @@ const OP_CLASS = {
   gto: "op-gt",
 };
 
+/** Paths like /CSS/arcade.css must not hit get-location (2 URL segments). */
+const RESERVED_FIRST_SEGMENTS = new Set([
+  "css",
+  "js",
+  "logos",
+  "operators",
+  "docs",
+  "v2",
+  "supabase",
+  "build",
+  ".well-known",
+]);
+
+function shouldServeStatic(operatorSlug, slug) {
+  if (slug.includes(".")) return true;
+  if (RESERVED_FIRST_SEGMENTS.has(operatorSlug)) return true;
+  return false;
+}
+
 function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
@@ -302,6 +321,10 @@ export async function onRequestGet(context) {
     .trim()
     .toLowerCase()
     .replace(/\/+$/, "");
+
+  if (shouldServeStatic(operatorSlug, slug)) {
+    return env.ASSETS.fetch(request);
+  }
 
   if (!operatorSlug || !slug || !env.SUPABASE_URL || !env.SUPABASE_ANON_KEY) {
     return render404();
