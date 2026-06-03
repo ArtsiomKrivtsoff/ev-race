@@ -1597,6 +1597,38 @@ td, th, .cur-round-num, .tmr-val, .new-badge,
 .loc-date { color: var(--fg-2); font-weight: 500; }
 .loc-card .loc-rating { align-self: flex-start; margin-top: var(--s-2); }
 
+/* LOCATION PAGE — Infrastructure Platform (Stage 2.2) */
+.location-page .page-wrap { padding-bottom: var(--s-4); }
+.loc-breadcrumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; color: var(--fg-3); margin-bottom: var(--s-3); }
+.loc-breadcrumbs a { color: var(--fg); text-decoration: none; font-weight: 500; }
+.location-card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r); padding: var(--s-3); margin-bottom: var(--s-3); }
+.loc-identity { display: grid; grid-template-columns: 1fr; gap: var(--s-3); }
+@media (min-width: 720px) { .loc-identity { grid-template-columns: 1fr 280px; } }
+.loc-identity-title { font-size: 22px; font-weight: 600; margin: 0 0 var(--s-2); color: var(--fg); }
+.loc-identity-addr { font-size: 14px; color: var(--fg-2); margin: 0 0 var(--s-2); }
+.loc-agg-line { font-size: 13px; color: var(--accent); margin-bottom: var(--s-2); }
+.loc-single-tech { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--fg-2); margin-bottom: var(--s-2); }
+.loc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: var(--s-2); }
+.loc-btn { font-size: 13px; font-weight: 500; padding: 10px 16px; border: 1px solid var(--hairline); border-radius: var(--r); background: var(--surface-2); color: var(--fg); text-decoration: none; cursor: pointer; }
+.loc-btn-primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.loc-map-embed { width: 100%; height: 220px; border: 1px solid var(--hairline); border-radius: var(--r); }
+.location-rating-big { font-size: 24px; font-weight: 600; color: var(--fg); }
+.location-rating-count { font-size: 13px; color: var(--fg-3); margin-left: 8px; }
+.loc-section-title { font-size: 16px; font-weight: 600; margin: 0 0 var(--s-3); color: var(--fg); }
+.stations-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-2); margin-bottom: var(--s-3); }
+@media (min-width: 520px) { .stations-summary { grid-template-columns: repeat(5, 1fr); } }
+.stations-summary-cell { text-align: center; padding: var(--s-2); border: 1px solid var(--hairline); border-radius: var(--r); }
+.stations-summary-cell .ss-val { display: block; font-size: 18px; font-weight: 600; color: var(--fg); }
+.stations-summary-cell .ss-lbl { display: block; font-size: 11px; color: var(--fg-3); margin-top: 4px; }
+.loc-table-wrap { overflow-x: auto; }
+.loc-st-agg { display: block; font-size: 11px; color: var(--fg-3); margin-top: 2px; }
+.loc-nearby-list { display: flex; flex-direction: column; gap: var(--s-2); }
+.loc-nearby-item { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: var(--s-2); border: 1px solid var(--hairline); border-radius: var(--r); text-decoration: none; color: inherit; }
+.loc-nearby-item:hover { border-color: var(--fg-4); background: var(--surface-2); }
+.loc-nearby-title { flex: 1; min-width: 0; font-size: 13px; color: var(--fg-2); }
+.loc-nearby-dist { font-size: 12px; color: var(--fg-3); }
+.loc-nearby-empty, .loc-soon-text { font-size: 14px; color: var(--fg-2); margin: 0; }
+
 /* ===== Load more ===== */
 .load-more-btn, .show-all-btn {
   display: block;

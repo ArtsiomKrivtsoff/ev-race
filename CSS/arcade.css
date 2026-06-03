@@ -1560,3 +1560,69 @@ body.reduced-fx .op-bar-v2 .seg-dc { box-shadow: none; }
 body.reduced-fx .streak-badge.hot  { text-shadow: none; }
 body.reduced-fx .cur-round-timer .tmr-val { text-shadow: 0 0 3px var(--yellow); }
 body.reduced-fx .op-debut .zzz  { animation: none; }
+
+/* ============================================================
+   LOCATION PAGE — Infrastructure Platform (Stage 2.2)
+   ============================================================ */
+.location-page .page-wrap { padding-bottom: var(--s-4); }
+.loc-breadcrumbs {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  font-size: 10px; color: var(--text-dim); margin-bottom: var(--s-3);
+}
+.loc-breadcrumbs a { color: var(--green); text-decoration: none; }
+.loc-breadcrumbs a:hover { text-decoration: underline; }
+.location-card {
+  background: var(--card-bg); border: 1px solid var(--border-faint);
+  border-radius: var(--radius); padding: var(--s-3); margin-bottom: var(--s-3);
+}
+.loc-identity { display: grid; grid-template-columns: 1fr; gap: var(--s-3); }
+@media (min-width: 720px) {
+  .loc-identity { grid-template-columns: 1fr 280px; align-items: start; }
+}
+.loc-identity-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); margin-bottom: var(--s-2); }
+.loc-identity-title {
+  font-family: 'Press Start 2P', monospace; font-size: 11px; line-height: 1.6;
+  color: var(--green); margin: 0 0 var(--s-2);
+}
+.loc-identity-addr { font-size: 12px; color: var(--text-dim); margin: 0 0 var(--s-2); }
+.loc-agg-line { font-size: 10px; color: var(--cyan); margin-bottom: var(--s-2); }
+.loc-single-tech { display: flex; flex-wrap: wrap; gap: 8px; font-size: 11px; color: var(--text-dim); margin-bottom: var(--s-2); }
+.loc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: var(--s-2); }
+.loc-btn {
+  font-family: 'Press Start 2P', monospace; font-size: 8px;
+  padding: 8px 12px; border: 1px solid var(--border-dim);
+  background: transparent; color: var(--green); text-decoration: none;
+  cursor: pointer; border-radius: var(--radius);
+}
+.loc-btn-primary { border-color: var(--green); background: rgba(0,255,65,.08); }
+.loc-btn:hover { background: rgba(0,255,65,.12); }
+.loc-map-embed { width: 100%; height: 220px; border: 1px solid var(--border-faint); border-radius: var(--radius); }
+.location-rating-big { font-family: 'Press Start 2P', monospace; font-size: 14px; color: var(--yellow); }
+.location-rating-count { font-size: 10px; color: var(--text-dim); margin-left: 8px; }
+.loc-section-title {
+  font-family: 'Press Start 2P', monospace; font-size: 9px;
+  color: var(--green); margin: 0 0 var(--s-3);
+}
+.stations-summary {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-2); margin-bottom: var(--s-3);
+}
+@media (min-width: 520px) { .stations-summary { grid-template-columns: repeat(5, 1fr); } }
+.stations-summary-cell {
+  text-align: center; padding: var(--s-2); border: 1px solid var(--border-faint); border-radius: var(--radius);
+}
+.stations-summary-cell .ss-val { display: block; font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--dc); }
+.stations-summary-cell .ss-lbl { display: block; font-size: 9px; color: var(--text-dim); margin-top: 4px; }
+.loc-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.loc-stations-table { min-width: 520px; }
+.loc-st-agg { display: block; font-size: 9px; color: var(--cyan); margin-top: 2px; }
+.loc-nearby-list { display: flex; flex-direction: column; gap: var(--s-2); }
+.loc-nearby-item {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: var(--s-2); border: 1px solid var(--border-faint); border-radius: var(--radius);
+  text-decoration: none; color: inherit; transition: border-color .15s;
+}
+.loc-nearby-item:hover { border-color: var(--green); }
+.loc-nearby-title { flex: 1; min-width: 0; font-size: 11px; color: var(--text-dim); }
+.loc-nearby-dist { font-size: 10px; color: var(--cyan); white-space: nowrap; }
+.loc-nearby-empty, .loc-soon-text { font-size: 11px; color: var(--text-dim); margin: 0; }
+.loc-community-soon { opacity: .85; }
