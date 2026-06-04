@@ -306,9 +306,9 @@
     );
   }
 
-  function fitInfraValues() {
-    document.querySelectorAll(".loc-infra-val[data-fit-line]").forEach(function (el) {
-      var box = el.closest(".loc-infra-copy");
+  function fitFitLineElements() {
+    document.querySelectorAll("[data-fit-line]").forEach(function (el) {
+      var box = el.parentElement;
       if (!box) return;
       var max = parseFloat(getComputedStyle(el).fontSize) || 12;
       var min = window.matchMedia("(max-width: 639px)").matches ? 5 : 7;
@@ -352,7 +352,7 @@
     initReviewsPagination();
     initPhotoLightbox();
     initPhotoPanelOverflow();
-    fitInfraValues();
-    window.addEventListener("resize", fitInfraValues);
+    fitFitLineElements();
+    window.addEventListener("resize", fitFitLineElements);
   });
 })();

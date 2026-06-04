@@ -128,9 +128,15 @@ function renderBadge(n) {
   return `<span class="loc-blk-badge">${escapeHtml(String(num))}</span>`;
 }
 
-function renderReviewCta(className) {
+function renderReviewCta(className, label = "ОЦЕНИТЬ ЛОКАЦИЮ", style = "accent") {
   const extra = className ? ` ${className}` : "";
-  return `<a class="loc-btn loc-btn-accent loc-review-cta${extra}" href="#review-form">ОЦЕНИТЬ ЛОКАЦИЮ</a>`;
+  const btnCls =
+    style === "plain"
+      ? "loc-btn"
+      : style === "primary"
+        ? "loc-btn loc-btn-primary"
+        : "loc-btn loc-btn-accent";
+  return `<a class="${btnCls} loc-review-cta${extra}" href="#review-form">${escapeHtml(label)}</a>`;
 }
 
 function starsHtml(rating) {
@@ -152,12 +158,23 @@ function formatBreakdown(map) {
     .join(", ");
 }
 
-function formatConnectors(counts) {
+function formatConnectorLabel(type) {
+  const raw = String(type || "").trim();
+  const norm = raw.replace(/\s+/g, "").toUpperCase();
+  if (norm === "TYPE2" || norm === "TYPE-2") return "TYPE 2";
+  return raw.toUpperCase();
+}
+
+function formatConnectorsStack(counts) {
   if (!counts?.size) return "—";
-  return [...counts.entries()]
+  const lines = [...counts.entries()]
     .sort((a, b) => b[1] - a[1])
-    .map(([t, n]) => `${escapeHtml(String(t).toUpperCase())}×${n}`)
-    .join("·");
+    .map(
+      ([t, n]) =>
+        `<span class="loc-conn-line">${escapeHtml(formatConnectorLabel(t))} ×${n}</span>`,
+    )
+    .join("");
+  return `<span class="loc-infra-val-stack">${lines}</span>`;
 }
 
 function tagPolarity(tag) {
@@ -169,13 +186,14 @@ const ICON_POWER = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" 
 const ICON_CONN = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M6 8h12v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/></svg>`;
 const ICON_CAR = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>`;
 
-function renderInfraCell(icon, label, valueHtml, cellMod = "") {
+function renderInfraCell(icon, label, valueHtml, cellMod = "", fitLine = true) {
   const modCls = cellMod ? ` ${cellMod}` : "";
+  const fitAttr = fitLine ? " data-fit-line" : "";
   return `<div class="loc-infra-cell${modCls}">
 <span class="loc-infra-ico">${icon}</span>
 <div class="loc-infra-copy">
 <span class="loc-infra-label">${escapeHtml(label)}</span>
-<span class="loc-infra-val" data-fit-line>${valueHtml}</span>
+<span class="loc-infra-val${fitLine ? "" : " loc-infra-val--multiline"}"${fitAttr}>${valueHtml}</span>
 </div>
 </div>`;
 }
@@ -196,21 +214,28 @@ function renderRatingMeta(loc, community) {
 
 function renderRatingCard(loc, community, { compact, linkHref }) {
   const hasRating = loc.cached_review_count > 0 && loc.cached_avg_rating;
-  const val = hasRating ? escapeHtml(String(loc.cached_avg_rating)) : "—";
-  const stars = hasRating
-    ? starsHtml(loc.cached_avg_rating)
-    : "☆☆☆☆☆";
-  const cta = compact
-    ? `<div class="loc-rating-cta">${renderReviewCta("loc-review-cta--block")}</div>`
-    : "";
   const cls = `loc-hero-inset loc-hero-rating${hasRating ? "" : " loc-hero-rating--empty"}${compact ? " loc-hero-rating--compact" : ""}`;
-  const inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
-<span class="loc-rating-val">${val}</span>
-<span class="loc-rating-stars" aria-hidden="true">${stars}</span>
+
+  let inner;
+  if (!hasRating) {
+    const cta = compact
+      ? `<div class="loc-rating-cta">${renderReviewCta("loc-review-cta--block", "ОЦЕНИТЬ", "plain")}</div>`
+      : "";
+    inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
+<span class="loc-rating-empty-msg">ОТЗЫВА ПОКА НЕТ</span>
+${cta}`;
+  } else {
+    const cta = compact
+      ? `<div class="loc-rating-cta">${renderReviewCta("loc-review-cta--block", "ОЦЕНИТЬ", "plain")}</div>`
+      : "";
+    inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
+<span class="loc-rating-val">${escapeHtml(String(loc.cached_avg_rating))}</span>
+<span class="loc-rating-stars" aria-hidden="true">${starsHtml(loc.cached_avg_rating)}</span>
 ${renderRatingMeta(loc, community)}
 ${cta}`;
+  }
 
-  if (linkHref && !compact) {
+  if (linkHref && !compact && hasRating) {
     return `<a class="${cls}" href="${linkHref}">${inner}</a>`;
   }
   return `<div class="${cls}">${inner}</div>`;
@@ -232,10 +257,9 @@ function renderHeroIdentity(loc, opCls, opName, aggregatorLine, routeYandex, tit
 
   let titleBlock;
   if (name) {
-    titleBlock = `<h1 class="loc-hero-name"${idAttr}>${escapeHtml(name)}</h1>
-<p class="loc-hero-addr-meta">${city}, ${address}</p>`;
+    titleBlock = `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${city}</span><span class="loc-hero-street" data-fit-line>${address}</span><span class="loc-hero-venue">${escapeHtml(name)}</span></h1>`;
   } else {
-    titleBlock = `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${city}</span><span class="loc-hero-street">${address}</span></h1>`;
+    titleBlock = `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${city}</span><span class="loc-hero-street" data-fit-line>${address}</span></h1>`;
   }
 
   const routeBtn = routeYandex
@@ -306,7 +330,7 @@ export function renderInfrastructureBlock(stations, metrics) {
   const powerVal = metrics.totalPower
     ? `${metrics.totalPower.toLocaleString("ru")} кВт`
     : "—";
-  const connVal = formatConnectors(metrics.connectorCounts);
+  const connVal = formatConnectorsStack(metrics.connectorCounts);
   const simVal = metrics.totalSim
     ? `до ${metrics.totalSim} ${metrics.totalSim === 1 ? "авто" : "авто"}`
     : "—";
@@ -331,7 +355,7 @@ export function renderInfrastructureBlock(stations, metrics) {
 <div class="blk-hdr"><span class="blk-title">СТАНЦИЙ В ЛОКАЦИИ</span>${renderBadge(metrics.stationCount)}</div>
 <div class="loc-infra-grid">
 ${renderInfraCell(ICON_POWER, "Мощность локации", escapeHtml(powerVal.toUpperCase()))}
-${renderInfraCell(ICON_CONN, "Коннекторы", connVal, "loc-infra-cell--conn")}
+${renderInfraCell(ICON_CONN, "Коннекторы", connVal, "loc-infra-cell--conn", false)}
 ${renderInfraCell(ICON_CAR, "Одновременно", escapeHtml(simVal.toUpperCase()))}
 </div>
 ${breakdown}

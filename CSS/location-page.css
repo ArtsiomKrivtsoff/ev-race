@@ -134,25 +134,62 @@ body.location-page .blk-hdr {
   gap: var(--s-2);
   min-width: 0;
 }
-.loc-hero-operator { margin-bottom: 2px; }
-.loc-hero-op {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.06em;
+.loc-hero-operator { margin-bottom: 4px; }
+.loc-hero-operator .loc-hero-op {
+  display: inline-block;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 1.1vw, 13px);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
 }
+.loc-hero-operator .loc-hero-op.op-bf { color: #4d8fff; }
+.loc-hero-operator .loc-hero-op.op-fo { color: #cc88ff; }
+.loc-hero-operator .loc-hero-op.op-za { color: #66ddff; }
+.loc-hero-operator .loc-hero-op.op-uc { color: #ffaa55; }
+.loc-hero-operator .loc-hero-op.op-cs { color: #ff9999; }
+.loc-hero-operator .loc-hero-op.op-ma { color: #76d275; }
+.loc-hero-operator .loc-hero-op.op-ev { color: #b066ff; }
+.loc-hero-operator .loc-hero-op.op-or { color: #ff8833; }
+.loc-hero-operator .loc-hero-op.op-pr { color: #24c3d3; }
+.loc-hero-operator .loc-hero-op.op-gt { color: #4a7cc7; }
+.loc-hero-operator .loc-hero-op.op-other { color: var(--green); }
 .loc-hero-name {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 30px;
-  line-height: 1.15;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
-.loc-hero-name .loc-hero-city,
-.loc-hero-name .loc-hero-street {
-  display: block;
+.loc-hero-city {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(14px, 2.4vw, 22px);
+  line-height: 1.35;
+  color: var(--green);
+  text-shadow: 0 0 12px rgba(0, 255, 65, 0.45);
+  text-transform: uppercase;
+}
+.loc-hero-street {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 1.6vw, 15px);
+  line-height: 1.4;
+  color: var(--green);
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.35);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.loc-hero-venue {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(10px, 1.2vw, 13px);
+  line-height: 1.4;
+  color: var(--cyan, #66ddff);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 .loc-hero-addr-meta {
   margin: 0;
@@ -163,7 +200,7 @@ body.location-page .blk-hdr {
 }
 .loc-hero-agg {
   font-size: 11px;
-  color: var(--home-text-dim, var(--text-dim));
+  color: var(--cyan, #66ddff);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -212,9 +249,19 @@ body.location-page .blk-hdr {
   color: var(--green);
   text-shadow: 0 0 16px var(--green), 0 0 40px rgba(0, 255, 65, 0.35);
 }
-.loc-hero-rating--empty .loc-rating-val {
-  color: var(--home-text-dim, var(--text-dim));
-  text-shadow: none;
+.loc-hero-rating--empty .loc-rating-val,
+.loc-hero-rating--empty .loc-rating-stars,
+.loc-hero-rating--empty .loc-rating-meta {
+  display: none;
+}
+.loc-rating-empty-msg {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--home-text-mid, var(--text-dim));
+  line-height: 1.45;
+  margin: 4px 0 0;
 }
 .loc-rating-stars {
   font-size: 14px;
@@ -265,7 +312,8 @@ body.location-page .blk-hdr {
     border-radius: 5px;
   }
   .loc-hero-mobile-row { display: none; }
-  .loc-hero-name { font-size: 48px; }
+  .loc-hero-city { font-size: clamp(18px, 2vw, 26px); }
+  .loc-hero-street { font-size: clamp(11px, 1.3vw, 17px); }
   .loc-hero-actions-desktop { display: inline-flex; }
   .loc-hero-rating:not(.loc-hero-rating--compact) {
     width: 168px;
@@ -314,8 +362,8 @@ body.location-page .blk-hdr {
 .loc-infra-cell {
   display: flex;
   align-items: stretch;
-  gap: 12px;
-  padding: 18px 14px;
+  gap: 10px;
+  padding: 14px 10px;
   border-right: 1px solid var(--home-bdr, var(--border-faint));
   min-width: 0;
 }
@@ -333,8 +381,8 @@ body.location-page .blk-hdr {
 }
 .loc-infra-ico svg {
   display: block;
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
 }
 .loc-infra-copy {
   display: flex;
@@ -345,23 +393,42 @@ body.location-page .blk-hdr {
 }
 .loc-infra-label {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
+  font-size: 8px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--home-text-dim, var(--text-dim));
-  line-height: 1.3;
+  line-height: 1.25;
 }
 .loc-infra-val {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(10px, 1.25vw, 15px);
-  line-height: 1.55;
+  font-size: clamp(7px, 0.85vw, 11px);
+  line-height: 1.45;
   color: var(--green);
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(0, 255, 65, 0.55);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.45);
   white-space: nowrap;
 }
-.loc-infra-cell--conn .loc-infra-val {
-  letter-spacing: -0.02em;
+.loc-infra-val--multiline {
+  white-space: normal;
+}
+.loc-infra-val-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-start;
+}
+.loc-conn-line {
+  display: block;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(6px, 0.72vw, 9px);
+  line-height: 1.4;
+  color: var(--green);
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.45);
+  white-space: nowrap;
+}
+.loc-infra-cell--conn .loc-infra-copy {
+  gap: 6px;
 }
 .loc-infra-breakdown {
   padding: var(--loc-pad);
