@@ -1,5 +1,5 @@
 /* ============================================================
-   Location page v3 — Infrastructure Platform polish
+   Location page v9 — hero density, empty rating, infra polish
    Depends: arcade.css, operator.css, home-v2.css (.blk)
    ============================================================ */
 
@@ -120,12 +120,16 @@ body.location-page .blk-hdr {
   margin: 0;
   padding: var(--loc-pad);
 }
+.loc-hero-mobile-place .loc-hero-identity {
+  height: 100%;
+}
 .loc-hero-mobile-rating .loc-hero-rating {
   height: 100%;
   border: none;
   background: transparent;
   box-shadow: none;
   padding: 0;
+  justify-content: center;
 }
 
 .loc-hero-identity {
@@ -182,6 +186,8 @@ body.location-page .blk-hdr {
   text-shadow: 0 0 10px rgba(0, 255, 65, 0.35);
   text-transform: uppercase;
   white-space: nowrap;
+  display: block;
+  max-width: 100%;
 }
 .loc-hero-venue {
   font-family: 'Share Tech Mono', monospace;
@@ -207,8 +213,18 @@ body.location-page .blk-hdr {
 .loc-hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--s-2);
   margin-top: var(--s-2);
+}
+.loc-hero-mobile-place .loc-hero-actions {
+  flex-wrap: nowrap;
+  width: 100%;
+  margin-top: auto;
+}
+.loc-hero-mobile-place .loc-hero-actions .loc-btn {
+  flex: 1 1 50%;
+  min-width: 0;
+  font-size: clamp(10px, 2.5vw, 12px);
 }
 .loc-hero-actions-desktop { display: none; }
 
@@ -238,39 +254,35 @@ body.location-page .blk-hdr {
   text-align: center;
   padding: var(--s-3);
   min-width: 0;
+  container-type: size;
+  container-name: loc-rating;
 }
 .loc-hero-rating--compact .loc-rating-val {
-  font-size: 56px;
+  font-size: clamp(28px, 22cqh, 56px);
 }
 .loc-rating-val {
   font-family: 'Press Start 2P', monospace;
-  font-size: 56px;
+  font-size: clamp(28px, 22cqh, 56px);
   line-height: 1;
   color: var(--green);
   text-shadow: 0 0 16px var(--green), 0 0 40px rgba(0, 255, 65, 0.35);
 }
-.loc-hero-rating--empty .loc-rating-val,
-.loc-hero-rating--empty .loc-rating-stars,
-.loc-hero-rating--empty .loc-rating-meta {
-  display: none;
+.loc-rating-val--placeholder {
+  opacity: 0.4;
+  text-shadow: none;
 }
-.loc-rating-empty-msg {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--home-text-mid, var(--text-dim));
-  line-height: 1.45;
-  margin: 4px 0 0;
+.loc-rating-stars--empty {
+  opacity: 0.4;
+  color: var(--home-text-dim, var(--text-dim));
 }
 .loc-rating-stars {
-  font-size: 14px;
+  font-size: clamp(10px, 8cqh, 14px);
   letter-spacing: 2px;
   color: var(--yellow);
   margin: 6px 0;
 }
 .loc-rating-meta {
-  font-size: 9px;
+  font-size: clamp(8px, 6cqh, 9px);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--home-text-mid, var(--text-dim));
@@ -280,30 +292,34 @@ body.location-page .blk-hdr {
   margin-top: auto;
   padding-top: var(--s-3);
 }
+.loc-rating-cta .loc-btn {
+  width: 100%;
+}
 
 .loc-hero-map-wrap {
   padding: var(--s-3);
-  min-height: var(--loc-map-min);
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  align-self: stretch;
 }
 .loc-hero-map {
   flex: 1;
-  min-height: 140px;
+  min-height: 112px;
   border-radius: 3px;
   overflow: hidden;
   background: #0a120a;
 }
 .loc-hero-map .leaflet-container {
   height: 100%;
-  min-height: 140px;
+  min-height: 112px;
   background: #0a120a;
 }
 
 @media (min-width: 900px) {
   .loc-hero-shell {
     display: grid;
-    grid-template-columns: minmax(0, 13fr) auto minmax(var(--loc-map-min), 8fr);
+    grid-template-columns: minmax(0, 13fr) auto minmax(140px, 8fr);
     gap: var(--loc-gap);
     align-items: stretch;
     padding: var(--loc-pad);
@@ -314,16 +330,41 @@ body.location-page .blk-hdr {
   .loc-hero-mobile-row { display: none; }
   .loc-hero-city { font-size: clamp(18px, 2vw, 26px); }
   .loc-hero-street { font-size: clamp(11px, 1.3vw, 17px); }
-  .loc-hero-actions-desktop { display: inline-flex; }
+  .loc-hero-actions {
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .loc-hero-actions .loc-btn {
+    flex: 1 1 33.333%;
+    min-width: 0;
+    font-size: clamp(11px, 1vw, 14px);
+    font-weight: 600;
+  }
+  .loc-hero-actions-desktop {
+    display: flex;
+    flex: 1 1 33.333%;
+    min-width: 0;
+  }
+  .loc-hero-actions-desktop .loc-review-cta {
+    flex: 1;
+    width: 100%;
+    font-size: clamp(11px, 1vw, 14px);
+    font-weight: 600;
+  }
   .loc-hero-rating:not(.loc-hero-rating--compact) {
     width: 168px;
-    min-height: 168px;
-    padding: var(--s-4);
+    padding: var(--s-3);
+    align-self: stretch;
   }
   .loc-hero-rating:not(.loc-hero-rating--compact) .loc-rating-val {
-    font-size: 84px;
+    font-size: clamp(32px, 28cqh, 84px);
   }
-  .loc-hero-map { min-height: 180px; }
+  .loc-hero-rating:not(.loc-hero-rating--compact) .loc-rating-stars {
+    font-size: clamp(10px, 8cqh, 14px);
+  }
+  .loc-hero-rating:not(.loc-hero-rating--compact) .loc-rating-meta {
+    font-size: clamp(8px, 6cqh, 9px);
+  }
 }
 
 /* ── Main grid ── */
@@ -452,13 +493,17 @@ body.location-page .blk-hdr {
   padding-right: 0;
 }
 .loc-infra-breakdown-lbl {
-  display: block;
+  display: inline;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 6px;
+  margin-right: 6px;
   color: var(--home-text-dim, var(--text-dim));
+}
+.loc-infra-breakdown-col .loc-infra-breakdown-lbl {
+  display: block;
+  margin-bottom: 6px;
 }
 .loc-infra-breakdown-val {
   font-family: 'Share Tech Mono', monospace;
@@ -481,6 +526,16 @@ body.location-page .blk-hdr {
   color: var(--home-text-dim, var(--text-dim));
 }
 @media (max-width: 639px) {
+  .loc-infra-blk .loc-blk-badge {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    letter-spacing: 0.04em;
+  }
+  .loc-infra-blk .blk-hdr {
+    gap: 10px;
+  }
   .loc-infra-cell {
     padding: 10px 5px;
     gap: 5px;
@@ -488,6 +543,9 @@ body.location-page .blk-hdr {
   .loc-infra-ico svg {
     width: 22px;
     height: 22px;
+  }
+  .loc-infra-copy {
+    gap: 10px;
   }
   .loc-infra-label {
     font-size: 6px;
@@ -855,7 +913,7 @@ body.location-page .blk-hdr {
 .loc-lightbox-next { right: 16px; top: 50%; transform: translateY(-50%); }
 
 /* ── Reduced FX ── */
-body.reduced-fx .loc-rating-val,
+body.reduced-fx .loc-rating-val:not(.loc-rating-val--placeholder),
 body.reduced-fx .loc-infra-val,
 body.reduced-fx .loc-tag-agg-count {
   text-shadow: none;

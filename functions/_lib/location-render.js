@@ -154,7 +154,7 @@ function formatBreakdown(map) {
   if (!map?.size) return "—";
   return [...map.entries()]
     .sort((a, b) => b[0] - a[0])
-    .map(([kw, n]) => `${kw} кВт × ${n}`)
+    .map(([kw, n]) => `${kw}×${n}`)
     .join(", ");
 }
 
@@ -201,7 +201,7 @@ function renderInfraCell(icon, label, valueHtml, cellMod = "", fitLine = true) {
 function renderRatingMeta(loc, community) {
   const rc = loc.cached_review_count || 0;
   const pc = community?.photo_count ?? 0;
-  if (rc <= 0 && pc <= 0) return `<span class="loc-rating-meta">отзывов пока нет</span>`;
+  if (rc <= 0 && pc <= 0) return `<span class="loc-rating-meta">ОТЗЫВОВ ПОКА НЕТ</span>`;
   const parts = [];
   if (rc > 0) {
     parts.push(
@@ -222,7 +222,9 @@ function renderRatingCard(loc, community, { compact, linkHref }) {
       ? `<div class="loc-rating-cta">${renderReviewCta("loc-review-cta--block", "ОЦЕНИТЬ", "plain")}</div>`
       : "";
     inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
-<span class="loc-rating-empty-msg">ОТЗЫВА ПОКА НЕТ</span>
+<span class="loc-rating-val loc-rating-val--placeholder" aria-hidden="true">X.X</span>
+<span class="loc-rating-stars loc-rating-stars--empty" aria-hidden="true">☆☆☆☆☆</span>
+<span class="loc-rating-meta">ОТЗЫВОВ ПОКА НЕТ</span>
 ${cta}`;
   } else {
     const cta = compact
@@ -244,7 +246,6 @@ ${cta}`;
 function renderMapInset(mapBlock) {
   if (!mapBlock) return "";
   return `<div class="loc-hero-inset loc-hero-map-wrap">
-<span class="loc-inset-lbl">НА КАРТЕ</span>
 ${mapBlock}
 </div>`;
 }
@@ -273,7 +274,7 @@ ${aggregatorLine}
 <div class="loc-hero-actions">
 ${routeBtn}
 <button class="loc-btn" type="button" id="loc-share-btn" onclick="shareLocation()">ПОДЕЛИТЬСЯ</button>
-<span class="loc-hero-actions-desktop">${renderReviewCta("")}</span>
+<span class="loc-hero-actions-desktop">${renderReviewCta("", "ОЦЕНИТЬ", "accent")}</span>
 </div>
 </div>`;
 }
@@ -331,25 +332,19 @@ export function renderInfrastructureBlock(stations, metrics) {
     ? `${metrics.totalPower.toLocaleString("ru")} кВт`
     : "—";
   const connVal = formatConnectorsStack(metrics.connectorCounts);
-  const simVal = metrics.totalSim
-    ? `до ${metrics.totalSim} ${metrics.totalSim === 1 ? "авто" : "авто"}`
-    : "—";
+  const simVal = metrics.totalSim ? `${metrics.totalSim} АВТО` : "—";
 
   let breakdown = "";
   if (metrics.hasDc && metrics.hasAc) {
     breakdown = `<div class="loc-infra-breakdown loc-infra-breakdown--split">
-<div class="loc-infra-breakdown-col"><span class="loc-infra-breakdown-lbl">DC зарядок</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.dcBreakdown)}</span></div>
-<div class="loc-infra-breakdown-col"><span class="loc-infra-breakdown-lbl">AC зарядок</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.acBreakdown)}</span></div>
+<div class="loc-infra-breakdown-col"><span class="loc-infra-breakdown-lbl">DC:</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.dcBreakdown)}</span></div>
+<div class="loc-infra-breakdown-col"><span class="loc-infra-breakdown-lbl">AC:</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.acBreakdown)}</span></div>
 </div>`;
   } else if (metrics.hasDc) {
-    breakdown = `<div class="loc-infra-breakdown"><span class="loc-infra-breakdown-lbl">DC зарядок</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.dcBreakdown)}</span></div>`;
+    breakdown = `<div class="loc-infra-breakdown"><span class="loc-infra-breakdown-lbl">DC:</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.dcBreakdown)}</span></div>`;
   } else if (metrics.hasAc) {
-    breakdown = `<div class="loc-infra-breakdown"><span class="loc-infra-breakdown-lbl">AC зарядок</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.acBreakdown)}</span></div>`;
+    breakdown = `<div class="loc-infra-breakdown"><span class="loc-infra-breakdown-lbl">AC:</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.acBreakdown)}</span></div>`;
   }
-
-  const launch = metrics.latestDate
-    ? `<div class="loc-infra-footer">Запуск: ${fmtDate(metrics.latestDate)}</div>`
-    : "";
 
   return `<div class="blk loc-infra-blk loc-grid-main">
 <div class="blk-hdr"><span class="blk-title">СТАНЦИЙ В ЛОКАЦИИ</span>${renderBadge(metrics.stationCount)}</div>
@@ -359,7 +354,6 @@ ${renderInfraCell(ICON_CONN, "Коннекторы", connVal, "loc-infra-cell--c
 ${renderInfraCell(ICON_CAR, "Одновременно", escapeHtml(simVal.toUpperCase()))}
 </div>
 ${breakdown}
-${launch}
 </div>`;
 }
 

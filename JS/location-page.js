@@ -308,18 +308,20 @@
 
   function fitFitLineElements() {
     document.querySelectorAll("[data-fit-line]").forEach(function (el) {
-      var box = el.parentElement;
+      var box = el.closest(".loc-hero-identity") || el.parentElement;
       if (!box) return;
+      var available = box.clientWidth;
       var max = parseFloat(getComputedStyle(el).fontSize) || 12;
       var min = window.matchMedia("(max-width: 639px)").matches ? 5 : 7;
       el.style.fontSize = max + "px";
       var guard = 0;
-      while (el.scrollWidth > box.clientWidth && max > min && guard < 50) {
+      while (el.scrollWidth > available && max > min && guard < 50) {
         max -= 0.5;
         el.style.fontSize = max + "px";
         guard += 1;
       }
     });
+    document.dispatchEvent(new CustomEvent("evrace:hero-fit"));
   }
 
   function initPhotoPanelOverflow() {

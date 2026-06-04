@@ -76,4 +76,18 @@
   setTimeout(function () {
     map.invalidateSize();
   }, 100);
+
+  window.addEventListener("resize", function () {
+    map.invalidateSize();
+  });
+
+  document.addEventListener("evrace:hero-fit", function () {
+    map.invalidateSize();
+  });
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      map.invalidateSize();
+    });
+  }
 })();
