@@ -4,14 +4,11 @@
    ============================================================ */
 
 body.location-page {
-  --loc-sidebar-w: 300px;
+  --loc-sidebar-w: minmax(260px, 320px);
   --loc-map-h: 200px;
 }
 
-.location-page .page-wrap {
-  padding-bottom: var(--s-4);
-  max-width: 1100px;
-}
+/* ширина = только .container из arcade.css (1100→1280→1440), как stations/map */
 
 /* ── Breadcrumbs ── */
 .loc-breadcrumbs {
@@ -205,7 +202,7 @@ body.location-page {
 }
 @media (min-width: 960px) {
   .loc-main-grid {
-    grid-template-columns: minmax(0, 1fr) var(--loc-sidebar-w);
+    grid-template-columns: minmax(0, 1fr) var(--loc-sidebar-w, 300px);
   }
 }
 
