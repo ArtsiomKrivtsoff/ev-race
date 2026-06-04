@@ -103,6 +103,5 @@ export function renderSiteFooter() {
 <div class="footer">
   <div class="footer-disclaimer">Эта страница создана в развлекательных и информационных целях.<br>Все данные об установленных станциях носят информационный характер и не являются официальной статистикой.<br>Страница не запрашивает и не хранит ваши личные данные.</div>
   <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
-</div>
-<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх" aria-label="Наверх">↑</button>`;
+</div>`;
 }
