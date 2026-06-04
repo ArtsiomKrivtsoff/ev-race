@@ -358,7 +358,10 @@ body.location-page .blk-hdr {
   color: var(--green);
   text-transform: uppercase;
   text-shadow: 0 0 10px rgba(0, 255, 65, 0.55);
-  word-break: break-word;
+  white-space: nowrap;
+}
+.loc-infra-cell--conn .loc-infra-val {
+  letter-spacing: -0.02em;
 }
 .loc-infra-breakdown {
   padding: var(--loc-pad);
@@ -411,23 +414,22 @@ body.location-page .blk-hdr {
   color: var(--home-text-dim, var(--text-dim));
 }
 @media (max-width: 639px) {
-  .loc-infra-grid {
-    grid-template-columns: 1fr;
-  }
   .loc-infra-cell {
-    border-right: none;
-    border-bottom: 1px solid var(--home-bdr, var(--border-faint));
-    padding: 16px;
-  }
-  .loc-infra-cell:last-child {
-    border-bottom: none;
+    padding: 10px 5px;
+    gap: 5px;
   }
   .loc-infra-ico svg {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
+  }
+  .loc-infra-label {
+    font-size: 6px;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
   }
   .loc-infra-val {
-    font-size: 10px;
+    font-size: 7px;
+    line-height: 1.35;
   }
 }
 @media (min-width: 640px) and (max-width: 899px) {

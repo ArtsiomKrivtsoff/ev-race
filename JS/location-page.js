@@ -306,6 +306,22 @@
     );
   }
 
+  function fitInfraValues() {
+    document.querySelectorAll(".loc-infra-val[data-fit-line]").forEach(function (el) {
+      var box = el.closest(".loc-infra-copy");
+      if (!box) return;
+      var max = parseFloat(getComputedStyle(el).fontSize) || 12;
+      var min = window.matchMedia("(max-width: 639px)").matches ? 5 : 7;
+      el.style.fontSize = max + "px";
+      var guard = 0;
+      while (el.scrollWidth > box.clientWidth && max > min && guard < 50) {
+        max -= 0.5;
+        el.style.fontSize = max + "px";
+        guard += 1;
+      }
+    });
+  }
+
   function initPhotoPanelOverflow() {
     var panel = document.querySelector(".loc-photo-panel");
     if (!panel) return;
@@ -336,5 +352,7 @@
     initReviewsPagination();
     initPhotoLightbox();
     initPhotoPanelOverflow();
+    fitInfraValues();
+    window.addEventListener("resize", fitInfraValues);
   });
 })();

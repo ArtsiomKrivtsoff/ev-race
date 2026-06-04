@@ -156,8 +156,8 @@ function formatConnectors(counts) {
   if (!counts?.size) return "—";
   return [...counts.entries()]
     .sort((a, b) => b[1] - a[1])
-    .map(([t, n]) => `${escapeHtml(String(t).toUpperCase())} ×${n}`)
-    .join(" · ");
+    .map(([t, n]) => `${escapeHtml(String(t).toUpperCase())}×${n}`)
+    .join("·");
 }
 
 function tagPolarity(tag) {
@@ -169,12 +169,13 @@ const ICON_POWER = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" 
 const ICON_CONN = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M6 8h12v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/></svg>`;
 const ICON_CAR = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>`;
 
-function renderInfraCell(icon, label, valueHtml) {
-  return `<div class="loc-infra-cell">
+function renderInfraCell(icon, label, valueHtml, cellMod = "") {
+  const modCls = cellMod ? ` ${cellMod}` : "";
+  return `<div class="loc-infra-cell${modCls}">
 <span class="loc-infra-ico">${icon}</span>
 <div class="loc-infra-copy">
 <span class="loc-infra-label">${escapeHtml(label)}</span>
-<span class="loc-infra-val">${valueHtml}</span>
+<span class="loc-infra-val" data-fit-line>${valueHtml}</span>
 </div>
 </div>`;
 }
@@ -330,7 +331,7 @@ export function renderInfrastructureBlock(stations, metrics) {
 <div class="blk-hdr"><span class="blk-title">СТАНЦИЙ В ЛОКАЦИИ</span>${renderBadge(metrics.stationCount)}</div>
 <div class="loc-infra-grid">
 ${renderInfraCell(ICON_POWER, "Мощность локации", escapeHtml(powerVal.toUpperCase()))}
-${renderInfraCell(ICON_CONN, "Коннекторы", connVal)}
+${renderInfraCell(ICON_CONN, "Коннекторы", connVal, "loc-infra-cell--conn")}
 ${renderInfraCell(ICON_CAR, "Одновременно", escapeHtml(simVal.toUpperCase()))}
 </div>
 ${breakdown}
