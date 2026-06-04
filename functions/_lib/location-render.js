@@ -1,6 +1,6 @@
 /**
- * Location page middle — HTML fragments (SSR).
- * Layout contract: Location Page v2 (place-first hierarchy).
+ * Location page — SSR fragments (Infrastructure Platform polish v3).
+ * Design tokens: home-v2.css + location-page.css
  */
 
 export const OP_NAMES = {
@@ -31,6 +31,16 @@ export const OP_CLASS = {
   istpal: "op-other",
 };
 
+const NEGATIVE_TAG_HINTS = [
+  "медлен",
+  "занят",
+  "ice",
+  "двс",
+  "сломан",
+  "не работ",
+  "очеред",
+];
+
 export function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
@@ -46,29 +56,6 @@ export function opDisplayName(operator, operatorSlug) {
   return operator || "—";
 }
 
-export function opBadge(op, agg) {
-  const cls = OP_CLASS[op] || "op-other";
-  const name = OP_NAMES[op] || op;
-  const showVia = agg && agg !== op;
-  const viaName = showVia ? OP_NAMES[agg] || agg : null;
-  const badge = `<span class="op-badge ${cls}">${escapeHtml(name)}</span>`;
-  if (!showVia) return badge;
-  return `<span class="op-cell">${badge}<span class="op-via">в ${escapeHtml(viaName)}</span></span>`;
-}
-
-export function typeBadge(t) {
-  if (!t) return "";
-  if (t === "DC") return '<span class="badge-dc">DC</span>';
-  if (t === "AC") return '<span class="badge-ac">AC</span>';
-  if (t === "ACDC") return '<span class="badge-acdc">AC+DC</span>';
-  return "";
-}
-
-export function gunCell(type) {
-  if (!type) return '<span class="no-gun">—</span>';
-  return `<span class="gun-pill"><span class="gun-dot"></span>${escapeHtml(type)}</span>`;
-}
-
 export function fmtDate(dateStr) {
   if (!dateStr) return "—";
   const p = dateStr.split("-");
@@ -76,227 +63,422 @@ export function fmtDate(dateStr) {
   return `${p[2]}.${p[1]}.${p[0].slice(2)}`;
 }
 
-export function gunAt(connectors, idx) {
-  return connectors?.[idx] ?? null;
-}
-
-export function powerHtml(s) {
-  const dc = s.dc_power || 0;
-  const ac = s.ac_power || 0;
-  const cnt = s.count || 1;
-  const pwrStr =
-    dc && ac ? `${dc}+${ac} кВт` : dc || ac ? `${dc || ac} кВт` : "—";
-  if (pwrStr === "—") return "—";
-  if (cnt > 1) {
-    return `${escapeHtml(pwrStr)} <span class="loc-pwr-mult">×${escapeHtml(String(cnt))}</span>`;
-  }
-  return escapeHtml(pwrStr);
-}
-
+/** @deprecated use computeLocationMetrics */
 export function computeSummary(stations) {
-  let dc = 0;
-  let ac = 0;
-  let guns = 0;
-  let maxDc = 0;
-  let maxAc = 0;
-  let maxSim = 0;
+  const m = computeLocationMetrics(stations);
+  return {
+    dc: 0,
+    ac: 0,
+    guns: 0,
+    maxDc: 0,
+    maxAc: 0,
+    maxSim: m.totalSim,
+    totalPower: m.totalPower,
+  };
+}
+
+export function computeLocationMetrics(stations) {
+  let stationCount = 0;
   let totalPower = 0;
+  let totalSim = 0;
+  const connectorCounts = new Map();
+  const dcBreakdown = new Map();
+  const acBreakdown = new Map();
+  let hasDc = false;
+  let hasAc = false;
+  let latestDate = "";
 
   for (const s of stations) {
     const cnt = s.count || 1;
-    guns += (s.connectors?.length || 0) * cnt;
+    stationCount += cnt;
     totalPower += ((s.dc_power || 0) + (s.ac_power || 0)) * cnt;
+    totalSim += (s.simultaneous_charge || 0) * cnt;
+
+    for (const c of s.connectors || []) {
+      if (!c) continue;
+      connectorCounts.set(c, (connectorCounts.get(c) || 0) + cnt);
+    }
     if (s.dc_power) {
-      dc += cnt;
-      maxDc = Math.max(maxDc, s.dc_power);
+      hasDc = true;
+      dcBreakdown.set(s.dc_power, (dcBreakdown.get(s.dc_power) || 0) + cnt);
     }
     if (s.ac_power) {
-      ac += cnt;
-      maxAc = Math.max(maxAc, s.ac_power);
+      hasAc = true;
+      acBreakdown.set(s.ac_power, (acBreakdown.get(s.ac_power) || 0) + cnt);
     }
-    if (s.simultaneous_charge) {
-      maxSim = Math.max(maxSim, s.simultaneous_charge);
-    }
+    if (s.station_date && s.station_date > latestDate) latestDate = s.station_date;
   }
 
-  return { dc, ac, guns, maxDc, maxAc, maxSim, totalPower };
+  return {
+    stationCount,
+    totalPower,
+    totalSim,
+    connectorCounts,
+    dcBreakdown,
+    acBreakdown,
+    hasDc,
+    hasAc,
+    latestDate,
+  };
 }
 
-export function collectConnectorTypes(stations) {
-  const set = new Set();
-  for (const s of stations) {
-    for (const c of s.connectors || []) {
-      if (c) set.add(c);
-    }
+function renderBadge(n) {
+  const num = Number(n) || 0;
+  if (num <= 0) return "";
+  return `<span class="loc-blk-badge">${escapeHtml(String(num))}</span>`;
+}
+
+function renderReviewCta(className) {
+  const extra = className ? ` ${className}` : "";
+  return `<a class="loc-btn loc-btn-accent loc-review-cta${extra}" href="#review-form">ОЦЕНИТЬ ЛОКАЦИЮ</a>`;
+}
+
+function starsHtml(rating) {
+  const r = Math.max(0, Math.min(5, Number(rating) || 0));
+  const full = Math.floor(r);
+  const half = r - full >= 0.25 && r - full < 0.75 ? 1 : 0;
+  const extraFull = r - full >= 0.75 ? 1 : 0;
+  const f = full + extraFull;
+  const h = half && !extraFull ? 1 : 0;
+  let s = "★".repeat(f) + (h ? "⯨" : "") + "☆".repeat(Math.max(0, 5 - f - h));
+  return s.replace(/⯨/g, "★");
+}
+
+function formatBreakdown(map) {
+  if (!map?.size) return "—";
+  return [...map.entries()]
+    .sort((a, b) => b[0] - a[0])
+    .map(([kw, n]) => `${kw} кВт × ${n}`)
+    .join(", ");
+}
+
+function formatConnectors(counts) {
+  if (!counts?.size) return "—";
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([t, n]) => `${escapeHtml(t)} ×${n}`)
+    .join(" · ");
+}
+
+function tagPolarity(tag) {
+  const t = String(tag).toLowerCase();
+  return NEGATIVE_TAG_HINTS.some((h) => t.includes(h)) ? "negative" : "positive";
+}
+
+const ICON_POWER = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
+const ICON_CONN = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M6 8h12v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/></svg>`;
+const ICON_CAR = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>`;
+
+function renderRatingMeta(loc, community) {
+  const rc = loc.cached_review_count || 0;
+  const pc = community?.photo_count ?? 0;
+  if (rc <= 0 && pc <= 0) return `<span class="loc-rating-meta">отзывов пока нет</span>`;
+  const parts = [];
+  if (rc > 0) {
+    parts.push(
+      `${rc} ${rc === 1 ? "ОТЗЫВ" : rc < 5 ? "ОТЗЫВА" : "ОТЗЫВОВ"}`,
+    );
   }
-  return [...set];
+  if (pc > 0) parts.push(`${pc} ФОТО`);
+  return `<span class="loc-rating-meta">${escapeHtml(parts.join(" • "))}</span>`;
 }
 
-function renderStationRow(s, indent) {
-  const prefix = indent
-    ? `<span class="loc-st-indent">↳ ${escapeHtml(OP_NAMES[s.operator] || s.operator)}</span>`
-    : opBadge(s.operator, s.aggregator);
-  return `<tr class="loc-st-row">
-<td>${prefix}</td>
-<td>${typeBadge(s.station_type)}</td>
-<td class="center">${gunCell(gunAt(s.connectors, 0))}</td>
-<td class="center">${gunCell(gunAt(s.connectors, 1))}</td>
-<td class="center">${gunCell(gunAt(s.connectors, 2))}</td>
-<td class="power right">${powerHtml(s)}</td>
-<td class="date right">${fmtDate(s.station_date)}</td>
-</tr>`;
+function renderRatingCard(loc, community, { compact, linkHref }) {
+  const hasRating = loc.cached_review_count > 0 && loc.cached_avg_rating;
+  const val = hasRating ? escapeHtml(String(loc.cached_avg_rating)) : "—";
+  const stars = hasRating
+    ? starsHtml(loc.cached_avg_rating)
+    : "☆☆☆☆☆";
+  const cta = compact
+    ? `<div class="loc-rating-cta">${renderReviewCta("loc-review-cta--block")}</div>`
+    : "";
+  const cls = `loc-hero-inset loc-hero-rating${hasRating ? "" : " loc-hero-rating--empty"}${compact ? " loc-hero-rating--compact" : ""}`;
+  const inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
+<span class="loc-rating-val">${val}</span>
+<span class="loc-rating-stars" aria-hidden="true">${stars}</span>
+${renderRatingMeta(loc, community)}
+${cta}`;
+
+  if (linkHref && !compact) {
+    return `<a class="${cls}" href="${linkHref}">${inner}</a>`;
+  }
+  return `<div class="${cls}">${inner}</div>`;
 }
 
-function renderStationsTableMulti(stations) {
-  const summary = computeSummary(stations);
-  const totalStCount = stations.reduce((n, s) => n + (s.count || 1), 0);
-  const latestDate = stations.reduce(
-    (d, s) => (s.station_date && s.station_date > d ? s.station_date : d),
-    "",
-  );
-  const seenOps = new Set();
-  const opBadges = stations
-    .filter((s) => {
-      const key = `${s.operator}|${s.aggregator || ""}`;
-      if (seenOps.has(key)) return false;
-      seenOps.add(key);
-      return true;
-    })
-    .map((s) => opBadge(s.operator, s.aggregator))
-    .join(" ");
-
-  const headerRow = `<tr class="loc-st-summary">
-<td>${opBadges}</td>
-<td><span class="loc-st-count">📍 ${totalStCount} СТ.</span></td>
-<td colspan="3" class="center loc-st-meta">${summary.guns} пист.</td>
-<td class="power right">${summary.totalPower ? summary.totalPower.toLocaleString("ru") + " кВт" : "—"}</td>
-<td class="date right">${fmtDate(latestDate)}</td>
-</tr>`;
-
-  const subRows = stations.map((s) => renderStationRow(s, true)).join("");
-
-  return `<div class="table-wrap loc-table-wrap">
-<table class="reg loc-stations-table">
-<thead><tr>
-<th>ОПЕРАТОР</th><th>ТИП</th><th class="center">РАЗЪЁМ 1</th><th class="center">РАЗЪЁМ 2</th><th class="center">РАЗЪЁМ 3</th><th class="right">МОЩНОСТЬ</th><th class="right">ДАТА</th>
-</tr></thead>
-<tbody>${headerRow}${subRows}</tbody>
-</table>
+function renderMapInset(mapBlock) {
+  if (!mapBlock) return "";
+  return `<div class="loc-hero-inset loc-hero-map-wrap">
+<span class="loc-inset-lbl">НА КАРТЕ</span>
+${mapBlock}
 </div>`;
 }
 
-export function renderStationsBlock(stations) {
-  if (stations.length <= 1) return "";
+function renderHeroIdentity(loc, opCls, opName, aggregatorLine, routeYandex, titleId) {
+  const city = escapeHtml(loc.city || "");
+  const address = escapeHtml(loc.address || "");
+  const name = loc.location_name?.trim();
+  const idAttr = titleId ? ' id="loc-title"' : "";
 
-  return `<div class="blk loc-stations-blk">
-<div class="blk-hdr"><span class="blk-title">СТАНЦИИ НА ЛОКАЦИИ</span><span class="blk-link">${stations.length} шт.</span></div>
-${renderStationsTableMulti(stations)}
-<div class="loc-cards-wrap">${renderStationsMobile(stations)}</div>
-</div>`;
-}
+  let titleBlock;
+  if (name) {
+    titleBlock = `<h1 class="loc-hero-name"${idAttr}>${escapeHtml(name)}</h1>
+<p class="loc-hero-addr-meta">${city}, ${address}</p>`;
+  } else {
+    titleBlock = `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${city}</span><span class="loc-hero-street">${address}</span></h1>`;
+  }
 
-export function renderStationsMobile(stations) {
-  if (stations.length <= 1) return "";
+  const routeBtn = routeYandex
+    ? `<a class="loc-btn loc-btn-primary" href="${escapeHtml(routeYandex)}" target="_blank" rel="noopener noreferrer">МАРШРУТ</a>`
+    : "";
 
-  const first = stations[0];
-  const latestDate = stations.reduce(
-    (d, s) => (s.station_date && s.station_date > d ? s.station_date : d),
-    "",
-  );
-
-  const stationsHtml = stations
-    .map((s) => {
-      const guns = (s.connectors || [])
-        .map(
-          (x) =>
-            `<span class="gun-pill"><span class="gun-dot"></span>${escapeHtml(x)}</span>`,
-        )
-        .join("");
-      return `<div class="station-row">
-<div class="st-left">${typeBadge(s.station_type)}<div class="st-guns">${guns || '<span class="st-no-gun">—</span>'}</div></div>
-<div class="st-right"><span class="st-power">${powerHtml(s)}</span></div>
-</div>`;
-    })
-    .join("");
-
-  return `<div class="loc-card loc-card--page">
-<div class="loc-head">
-<div class="loc-head-left">${opBadge(first.operator, first.aggregator)}<span class="loc-city">${escapeHtml(first.city || "—")}</span></div>
+  return `<div class="loc-hero-identity">
+<div class="loc-hero-operator"><span class="loc-hero-op ${opCls}">${escapeHtml(opName)}</span></div>
+${titleBlock}
+${aggregatorLine}
+<div class="loc-hero-actions">
+${routeBtn}
+<button class="loc-btn" type="button" id="loc-share-btn" onclick="shareLocation()">ПОДЕЛИТЬСЯ</button>
+<span class="loc-hero-actions-desktop">${renderReviewCta("")}</span>
 </div>
-${stationsHtml}
-<div class="loc-footer"><span class="loc-date">${fmtDate(latestDate)}</span></div>
 </div>`;
 }
 
-export function renderHeroRating(loc) {
-  if (loc.cached_review_count > 0 && loc.cached_avg_rating) {
-    return `<div class="loc-hero-rating">
-<span class="loc-hero-rating-stars" aria-hidden="true">★★★★☆</span>
-<span class="loc-hero-rating-val">${escapeHtml(String(loc.cached_avg_rating))}</span>
-<span class="loc-hero-rating-count">(${escapeHtml(String(loc.cached_review_count))} ${loc.cached_review_count === 1 ? "отзыв" : loc.cached_review_count < 5 ? "отзыва" : "отзывов"})</span>
-</div>`;
-  }
-  return `<div class="loc-hero-rating loc-hero-rating--soon">
-<span class="loc-hero-rating-stars" aria-hidden="true">☆☆☆☆☆</span>
-<span class="loc-hero-rating-soon">рейтинг скоро</span>
-</div>`;
+export function renderHero(loc, community, opts) {
+  const { opCls, opName, aggregatorLine, routeYandex, mapBlock } = opts;
+  const identityDesktop = renderHeroIdentity(
+    loc,
+    opCls,
+    opName,
+    aggregatorLine,
+    routeYandex,
+    false,
+  );
+  const identityMobile = renderHeroIdentity(
+    loc,
+    opCls,
+    opName,
+    aggregatorLine,
+    routeYandex,
+    true,
+  );
+  const ratingDesktop = renderRatingCard(loc, community, {
+    compact: false,
+    linkHref: "#reviews-list",
+  });
+  const ratingMobile = renderRatingCard(loc, community, {
+    compact: true,
+    linkHref: null,
+  });
+  const mapInset = renderMapInset(mapBlock);
+
+  return `<section class="loc-hero" aria-labelledby="loc-title">
+<div class="loc-hero-shell">
+${identityDesktop}
+${ratingDesktop}
+${mapInset}
+</div>
+<div class="loc-hero-mobile-row">
+<div class="loc-hero-mobile-place blk">${identityMobile}</div>
+<div class="loc-hero-mobile-rating blk">${ratingMobile}</div>
+</div>
+</section>`;
 }
 
-export function renderInfrastructureBlock(stations, summary) {
+export function renderInfrastructureBlock(stations, metrics) {
   if (!stations.length) {
-    return `<div class="blk loc-infra-blk">
-<div class="blk-hdr"><span class="blk-title">⚡ ИНФРАСТРУКТУРА</span></div>
+    return `<div class="blk loc-infra-blk loc-grid-main">
+<div class="blk-hdr"><span class="blk-title">СТАНЦИЙ В ЛОКАЦИИ</span></div>
 <p class="loc-empty">Данных о зарядных постах на этой локации пока нет.</p>
 </div>`;
   }
 
-  const connectors = collectConnectorTypes(stations);
-  const connStr = connectors.length ? connectors.map((c) => escapeHtml(c)).join(" · ") : "—";
-  const powerVal = summary.totalPower
-    ? `${summary.totalPower.toLocaleString("ru")} кВт`
+  const powerVal = metrics.totalPower
+    ? `${metrics.totalPower.toLocaleString("ru")} кВт`
     : "—";
-  const simVal = summary.maxSim
-    ? `до ${summary.maxSim} ${summary.maxSim === 1 ? "автомобиля" : summary.maxSim < 5 ? "автомобилей" : "автомобилей"}`
+  const connVal = formatConnectors(metrics.connectorCounts);
+  const simVal = metrics.totalSim
+    ? `до ${metrics.totalSim} ${metrics.totalSim === 1 ? "авто" : "авто"}`
     : "—";
 
-  const dcLine =
-    summary.dc > 0
-      ? `DC зарядок: ${summary.dc}${summary.maxDc ? ` · до ${summary.maxDc} кВт` : ""}`
-      : "";
-  const acLine =
-    summary.ac > 0
-      ? `AC зарядок: ${summary.ac}${summary.maxAc ? ` · до ${summary.maxAc} кВт` : ""}`
-      : "";
-  const countLines = [dcLine, acLine].filter(Boolean).join("<br>");
+  let breakdown = "";
+  if (metrics.hasDc && metrics.hasAc) {
+    breakdown = `<div class="loc-infra-breakdown loc-infra-breakdown--split">
+<div class="loc-infra-breakdown-col"><span class="loc-infra-breakdown-lbl">DC зарядок</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.dcBreakdown)}</span></div>
+<div class="loc-infra-breakdown-col"><span class="loc-infra-breakdown-lbl">AC зарядок</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.acBreakdown)}</span></div>
+</div>`;
+  } else if (metrics.hasDc) {
+    breakdown = `<div class="loc-infra-breakdown"><span class="loc-infra-breakdown-lbl">DC зарядок</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.dcBreakdown)}</span></div>`;
+  } else if (metrics.hasAc) {
+    breakdown = `<div class="loc-infra-breakdown"><span class="loc-infra-breakdown-lbl">AC зарядок</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.acBreakdown)}</span></div>`;
+  }
 
-  let singleDetail = "";
-  if (stations.length === 1) {
-    const s = stations[0];
-    singleDetail = `<div class="loc-infra-single">
-${typeBadge(s.station_type)}
-<span class="loc-infra-single-pwr">${powerHtml(s)}</span>
-<span class="loc-infra-single-date">запуск ${fmtDate(s.station_date)}</span>
+  const launch = metrics.latestDate
+    ? `<div class="loc-infra-footer">Запуск: ${fmtDate(metrics.latestDate)}</div>`
+    : "";
+
+  return `<div class="blk loc-infra-blk loc-grid-main">
+<div class="blk-hdr"><span class="blk-title">СТАНЦИЙ В ЛОКАЦИИ</span>${renderBadge(metrics.stationCount)}</div>
+<div class="loc-infra-grid">
+<div class="loc-infra-item">
+<span class="loc-infra-ico">${ICON_POWER}</span>
+<span class="loc-infra-label">Мощность локации</span>
+<span class="loc-infra-val">${escapeHtml(powerVal)}</span>
+</div>
+<div class="loc-infra-item">
+<span class="loc-infra-ico">${ICON_CONN}</span>
+<span class="loc-infra-label">Коннекторы</span>
+<span class="loc-infra-val loc-infra-val--conn">${connVal}</span>
+</div>
+<div class="loc-infra-item">
+<span class="loc-infra-ico">${ICON_CAR}</span>
+<span class="loc-infra-label">Одновременно</span>
+<span class="loc-infra-val">${escapeHtml(simVal)}</span>
+</div>
+</div>
+${breakdown}
+${launch}
+</div>`;
+}
+
+export function renderPhotosBlock(community) {
+  const photos = community?.photos || [];
+  const count = community?.photo_count ?? photos.length ?? 0;
+
+  if (!count) {
+    return `<div class="blk loc-photos-blk loc-grid-side" id="photos">
+<div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span></div>
+<div class="loc-photos-empty">
+<p class="loc-empty-lead">Фото появляются в отзывах</p>
+${renderReviewCta("loc-review-cta--block")}
+</div>
 </div>`;
   }
 
-  return `<div class="blk loc-infra-blk">
-<div class="blk-hdr"><span class="blk-title">⚡ ИНФРАСТРУКТУРА</span></div>
-<div class="loc-infra-grid">
-<div class="loc-infra-item loc-infra-item--primary">
-<div class="loc-infra-label">Максимальная мощность</div>
-<div class="loc-infra-val">${powerVal}</div>
+  const visible = photos.slice(0, 4);
+  const rest = count - visible.length;
+  const thumbs = visible
+    .map((p, i) => {
+      const overlay =
+        i === visible.length - 1 && rest > 0
+          ? `<span class="loc-photo-more">+${rest}</span>`
+          : "";
+      return `<button type="button" class="loc-photo-thumb" data-photo-index="${i}" aria-label="Фото ${i + 1}">
+<img src="${escapeHtml(p.url || "")}" alt="" loading="lazy">${overlay}
+</button>`;
+    })
+    .join("");
+
+  return `<div class="blk loc-photos-blk loc-grid-side" id="photos">
+<div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span>${renderBadge(count)}</div>
+<div class="loc-photo-panel">
+<div class="loc-photo-grid">${thumbs}</div>
 </div>
-<div class="loc-infra-item">
-<div class="loc-infra-label">Разъёмы</div>
-<div class="loc-infra-val loc-infra-val--connectors">${connStr}</div>
+</div>`;
+}
+
+export function renderTagsBlock(community) {
+  const raw = community?.tags || [];
+  const tags = raw.filter((t) => (t.count || 0) > 0);
+
+  if (!tags.length) {
+    return `<div class="blk loc-tags-blk loc-grid-main">
+<div class="blk-hdr"><span class="blk-title">ТЕГИ (НА ОСНОВЕ ОТЗЫВОВ)</span></div>
+<div class="loc-tags-empty">
+<p class="loc-empty-lead">Теги появятся после отзывов сообщества</p>
+${renderReviewCta("loc-review-cta--block")}
 </div>
-<div class="loc-infra-item">
-<div class="loc-infra-label">Одновременно</div>
-<div class="loc-infra-val">${simVal}</div>
+</div>`;
+  }
+
+  const cells = tags
+    .map((t) => {
+      const pol = t.polarity || tagPolarity(t.tag || t.label || "");
+      const label = escapeHtml(t.tag || t.label || "");
+      const c = t.count || 0;
+      return `<div class="loc-tag-agg-cell loc-tag-agg-cell--${pol}">
+<span class="loc-tag-agg-label">${label}</span>
+<span class="loc-tag-agg-count">${escapeHtml(String(c))}</span>
+</div>`;
+    })
+    .join("");
+
+  return `<div class="blk loc-tags-blk loc-grid-main">
+<div class="blk-hdr"><span class="blk-title">ТЕГИ (НА ОСНОВЕ ОТЗЫВОВ)</span>${renderBadge(tags.length)}</div>
+<div class="loc-tag-agg-grid">${cells}</div>
+</div>`;
+}
+
+export function renderReviewFormBlock() {
+  return `<div class="blk loc-review-form-blk loc-grid-side" id="review-form">
+<div class="blk-hdr"><span class="blk-title">ОЦЕНИТЬ ЛОКАЦИЮ</span></div>
+<div class="loc-review-form-body">
+<p class="loc-form-sub"><span aria-hidden="true">🔒</span> Войдите через Telegram</p>
+<button type="button" class="loc-btn loc-btn-tg" disabled title="Скоро">ВОЙТИ ЧЕРЕЗ TELEGRAM</button>
+<p class="loc-privacy-note">Не храним и не запрашиваем персональные данные. Telegram — только анонимный hash для одного отзыва на локацию.</p>
+<p class="loc-form-meta">Быстро · Безопасно · Анонимно</p>
+<div class="loc-form-or">или</div>
+${renderReviewCta("loc-review-cta--block")}
 </div>
+</div>`;
+}
+
+function renderReviewCard(review, index) {
+  const photoN = review.photo_count || (review.photos?.length ?? 0);
+  const photoMark =
+    photoN > 0
+      ? `<button type="button" class="loc-review-photo-mark" data-review-photo="${index}" aria-label="Фото в отзыве: ${photoN}">📷 ${photoN}</button>`
+      : "";
+  const tags = (review.tags || [])
+    .map((t) => {
+      const pol = tagPolarity(t);
+      return `<span class="loc-review-tag loc-review-tag--${pol}">${escapeHtml(t)}</span>`;
+    })
+    .join("");
+
+  return `<article class="loc-review-card" data-review-index="${index}">
+<header class="loc-review-head">
+<span class="loc-review-avatar" aria-hidden="true">🤖</span>
+<div class="loc-review-who">
+<span class="loc-review-author">${escapeHtml(review.author || "Гость")}</span>
+<span class="loc-review-time">${escapeHtml(review.time_ago || "")}</span>
+${photoMark}
 </div>
-${countLines ? `<div class="loc-infra-counts">${countLines}</div>` : ""}
-${singleDetail}
+<span class="loc-review-stars" aria-label="Оценка ${escapeHtml(String(review.rating || ""))}">${starsHtml(review.rating)}</span>
+</header>
+${tags ? `<div class="loc-review-tags">${tags}</div>` : ""}
+<p class="loc-review-text">${escapeHtml(review.comment || review.text || "")}</p>
+<footer class="loc-review-foot">
+<button type="button" class="loc-review-helpful" disabled title="Скоро">ПОЛЕЗНО ${review.helpful_count ? escapeHtml(String(review.helpful_count)) : ""}</button>
+<button type="button" class="loc-review-more" disabled title="Скоро" aria-label="Ещё">⋯</button>
+</footer>
+</article>`;
+}
+
+export function renderReviewsBlock(community) {
+  const reviews = community?.reviews || [];
+  const count = community?.review_count ?? reviews.length ?? 0;
+
+  if (!reviews.length) {
+    return `<div class="blk loc-reviews-blk loc-grid-main" id="reviews-list">
+<div class="blk-hdr"><span class="blk-title">ОТЗЫВЫ</span>${renderBadge(count)}</div>
+<p class="loc-empty">Пока нет отзывов</p>
+</div>`;
+  }
+
+  const cards = reviews.map((r, i) => renderReviewCard(r, i)).join("");
+
+  return `<div class="blk loc-reviews-blk loc-grid-main" id="reviews-list">
+<div class="blk-hdr"><span class="blk-title">ОТЗЫВЫ</span>${renderBadge(count)}</div>
+<div class="loc-reviews-list" data-page-size="3">${cards}</div>
+<button type="button" class="loc-reviews-more" hidden>ПОКАЗАТЬ ЕЩЁ ОТЗЫВЫ ▾</button>
+</div>`;
+}
+
+export function renderNearbyBlock(nearby, city) {
+  const cityLabel = escapeHtml((city || "").toUpperCase());
+  return `<div class="blk loc-nearby-blk loc-grid-side">
+<div class="blk-hdr"><span class="blk-title">РЯДОМ · ${cityLabel}</span></div>
+<div class="loc-nearby-list">${renderNearby(nearby)}</div>
 </div>`;
 }
 
@@ -308,71 +490,20 @@ export function renderNearby(nearby) {
     .slice(0, 8)
     .map((n) => {
       const title = n.location_name || n.address;
-      const dist =
-        n.distance_km != null
-          ? `<span class="loc-nearby-dist">${escapeHtml(String(n.distance_km))} км</span>`
-          : "";
       const href = `/${escapeHtml(n.operator_slug)}/${escapeHtml(n.slug)}`;
       const rating =
         n.cached_review_count > 0 && n.cached_avg_rating
           ? `<span class="loc-nearby-rating">★ ${escapeHtml(String(n.cached_avg_rating))}</span>`
           : "";
+      const dist = `<span class="loc-nearby-dist">${escapeHtml(String(n.distance_km))} км</span>`;
       return `<a class="loc-nearby-item" href="${href}">
 <span class="op-filter-btn ${opClass(n.operator_slug)}">${escapeHtml(n.operator)}</span>
 <span class="loc-nearby-body">
 <span class="loc-nearby-title">${escapeHtml(title)}</span>
 <span class="loc-nearby-addr">${escapeHtml(n.address)}</span>
 </span>
-${rating}${dist}
+<span class="loc-nearby-meta">${rating}${dist}</span>
 </a>`;
     })
     .join("");
-}
-
-export function renderReportBlock() {
-  return `<div class="blk loc-report-blk">
-<div class="blk-hdr"><span class="blk-title">ОТПРАВИТЬ ОТЧЁТ</span></div>
-<div class="loc-report-body">
-<p class="loc-report-lead">Поделитесь опытом зарядки на этой локации — фото, очередь, работоспособность.</p>
-<button type="button" class="loc-report-btn loc-report-btn-tg" disabled title="Скоро">СКОРО · TELEGRAM</button>
-<div class="loc-report-or">или</div>
-<button type="button" class="loc-report-btn loc-report-btn-anon" disabled title="Скоро">ОСТАВИТЬ АНОНИМНО</button>
-<p class="loc-privacy-note">Мы не храним персональные данные. Вход через Telegram даёт только анонимный hash; анонимный отзыв — без имени и аккаунта.</p>
-</div>
-</div>`;
-}
-
-export function renderPhotosPlaceholder() {
-  return `<div class="blk loc-photos-blk">
-<div class="blk-hdr"><span class="blk-title">ФОТО С ЛОКАЦИИ</span></div>
-<div class="loc-photo-grid">
-${Array.from({ length: 6 }, (_, i) => `<div class="loc-photo-slot" aria-hidden="true"><span>ФОТО ${i + 1}</span></div>`).join("")}
-</div>
-<p class="loc-soon-text">Скоро: фото от сообщества после модерации.</p>
-</div>`;
-}
-
-export function renderReviewsBlock() {
-  return `<div class="blk loc-reviews-blk">
-<div class="blk-hdr"><span class="blk-title">ОТЗЫВЫ</span></div>
-<div class="loc-review-tags">
-<span class="loc-tag loc-tag--soon">#скоро</span>
-<span class="loc-tag loc-tag--soon">#полевойотчёт</span>
-</div>
-<p class="loc-soon-text loc-review-tags-hint">Теги появятся из отзывов сообщества.</p>
-<div class="loc-reviews-empty">
-<p class="loc-soon-text">Пока нет отзывов. Будьте первым — отправьте полевой отчёт ниже.</p>
-</div>
-</div>`;
-}
-
-export function renderStatusPlaceholder() {
-  return `<div class="blk loc-status-blk loc-status-blk--muted">
-<div class="blk-hdr"><span class="blk-title">СТАТУС СЕЙЧАС</span></div>
-<div class="loc-status-body">
-<span class="loc-status-dot"></span>
-<span class="loc-status-label">LIVE — СКОРО</span>
-<p class="loc-soon-text">Онлайн-статус и очередь — в следующих обновлениях.</p>
-</div>
-</div>`;
 }
