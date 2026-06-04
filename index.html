@@ -64,7 +64,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=2">
 <link rel="stylesheet" href="CSS/operator.css?v=2">
-<link rel="stylesheet" href="CSS/home-v2.css?v=11">
+<link rel="stylesheet" href="CSS/home-v2.css?v=13">
 <link rel="prefetch" href="CSS/tesla-light.css">
 <link rel="prefetch" href="CSS/tesla-dark.css">
 <!-- styles: CSS/arcade.css + home-v2.css -->
@@ -108,9 +108,9 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
   <a class="nav-mobile-link active" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
   <div class="mob-nav-row">
     <a class="nav-mobile-link" href="/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
-    <button class="mob-acc-btn" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Операторы">▾</button>
+    <button class="mob-acc-btn open" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Операторы">▾</button>
   </div>
-  <div class="mob-acc-list" id="mobAccList">
+  <div class="mob-acc-list open" id="mobAccList">
     <a href="/operators/batteryfly.html" onclick="closeBurger()"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
     <a href="/operators/forevo.html" onclick="closeBurger()"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
     <a href="/operators/united.html" onclick="closeBurger()"><span class="d-dot" style="background:#F5821F"></span>United Company</a>
@@ -657,8 +657,8 @@ function pixBar(dc,ac,goal){
   const acS=filled-dcS;
   let h='<div class="op-pixbar">';
   for(let i=0;i<segs;i++){
-    const bg=i<dcS?'#ffd700':i<dcS+acS?'#00e5ff':'#0d1a0d';
-    h+=`<div class="op-pixbar-seg" style="background:${bg}"></div>`;
+    const cls=i<dcS?'seg-dc':i<dcS+acS?'seg-ac':'seg-empty';
+    h+=`<div class="op-pixbar-seg ${cls}"></div>`;
   }
   return h+'</div>';
 }
@@ -727,7 +727,7 @@ function renderChart(){
   }
 
   const ySteps=yMax/yStep;
-  ctx.font=`${isMob?7:8}px 'Share Tech Mono'`;
+  ctx.font=`${isMob?8:9}px 'Share Tech Mono'`;
   for(let i=0;i<=ySteps;i++){
     const y=pT+cH-(i/ySteps)*cH;
     ctx.strokeStyle='rgba(61,92,61,0.55)'; ctx.lineWidth=1;
@@ -737,7 +737,7 @@ function renderChart(){
     ctx.fillText(String(i*yStep),pL-4,y);
   }
 
-  const xMarks=isMob?(cr>1?[1,cr]:[1]):[1,10,20,30,40,50,TOTAL_ROUNDS];
+  const xMarks=isMob?[1,TOTAL_ROUNDS]:[1,10,20,30,40,50,TOTAL_ROUNDS];
   ctx.textBaseline='alphabetic';
   ctx.fillStyle='rgba(106,148,106,0.85)';
   xMarks.forEach((rk,idx)=>{
