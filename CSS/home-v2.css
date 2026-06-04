@@ -1,6 +1,6 @@
 /* ============================================================
    EV RACE — home-v2.css (dashboard only → arcade.css later)
-   Requires: ../CSS/arcade.css loaded first
+   Requires: CSS/arcade.css loaded first (same folder as this file on deploy)
    ============================================================ */
 
 :root {
@@ -874,3 +874,427 @@ body.reduced-fx .op-total {
 }
 .chronicle-blk .upd-block { margin-top: 0; }
 .chronicle-blk .upd-block + .upd-block { margin-top: var(--s-3); }
+
+/* ============================================================
+   TESLA LIGHT / DARK — только главная (home-v2)
+   Философия: Inter, hairlines, плоские surface, без CRT/glow/PS2P.
+   Переключатель «ЭФФЕКТЫ / ЧЁТКО» — только ARCADE (скрыт ниже).
+   ============================================================ */
+
+html[data-theme="tesla-light"],
+html[data-theme="tesla-dark"] {
+  --home-text: var(--fg);
+  --home-text-mid: var(--fg-2);
+  --home-text-dim: var(--fg-3);
+  --home-card: var(--surface);
+  --home-bdr: var(--hairline);
+  --home-bg-glow: transparent;
+}
+
+html[data-theme="tesla-light"] .fx-toggle,
+html[data-theme="tesla-dark"] .fx-toggle {
+  display: none !important;
+}
+
+html[data-theme="tesla-light"] .page-wrap .blk,
+html[data-theme="tesla-dark"] .page-wrap .blk,
+html[data-theme="tesla-light"] .page-wrap .hero-left,
+html[data-theme="tesla-dark"] .page-wrap .hero-left,
+html[data-theme="tesla-light"] .page-wrap .hero-right,
+html[data-theme="tesla-dark"] .page-wrap .hero-right,
+html[data-theme="tesla-light"] .page-wrap .hm-cd,
+html[data-theme="tesla-dark"] .page-wrap .hm-cd {
+  border-radius: var(--r);
+  box-shadow: var(--shadow-1);
+}
+
+html[data-theme="tesla-light"] .page-wrap .hero-left::after,
+html[data-theme="tesla-dark"] .page-wrap .hero-left::after,
+html[data-theme="tesla-light"] .page-wrap .hm-cd::after,
+html[data-theme="tesla-dark"] .page-wrap .hm-cd::after {
+  display: none;
+}
+
+html[data-theme="tesla-light"] .page-wrap .blk-title,
+html[data-theme="tesla-dark"] .page-wrap .blk-title,
+html[data-theme="tesla-light"] .page-wrap .ops-reg-hint,
+html[data-theme="tesla-dark"] .page-wrap .ops-reg-hint,
+html[data-theme="tesla-light"] .page-wrap .chart-leg-item,
+html[data-theme="tesla-dark"] .page-wrap .chart-leg-item {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+html[data-theme="tesla-light"] .page-wrap .blk-link,
+html[data-theme="tesla-dark"] .page-wrap .blk-link,
+html[data-theme="tesla-light"] .page-wrap .chart-rules-link,
+html[data-theme="tesla-dark"] .page-wrap .chart-rules-link {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 500;
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] .page-wrap .hl-map,
+html[data-theme="tesla-dark"] .page-wrap .hl-map {
+  opacity: 0.08;
+}
+html[data-theme="tesla-light"] .page-wrap .hl-map svg path,
+html[data-theme="tesla-dark"] .page-wrap .hl-map svg path {
+  stroke: var(--fg-4);
+}
+
+html[data-theme="tesla-light"] .page-wrap .hl-tag,
+html[data-theme="tesla-dark"] .page-wrap .hl-tag,
+html[data-theme="tesla-light"] .page-wrap .hm-brand-tag,
+html[data-theme="tesla-dark"] .page-wrap .hm-brand-tag,
+html[data-theme="tesla-light"] .page-wrap .hr-cdlbl,
+html[data-theme="tesla-dark"] .page-wrap .hr-cdlbl,
+html[data-theme="tesla-light"] .page-wrap .hm-cd-top,
+html[data-theme="tesla-dark"] .page-wrap .hm-cd-top,
+html[data-theme="tesla-light"] .page-wrap .hr-prog-lbl,
+html[data-theme="tesla-dark"] .page-wrap .hr-prog-lbl,
+html[data-theme="tesla-light"] .page-wrap .hm-prog-lbl,
+html[data-theme="tesla-dark"] .page-wrap .hm-prog-lbl,
+html[data-theme="tesla-light"] .page-wrap .hr-dayslbl,
+html[data-theme="tesla-dark"] .page-wrap .hr-dayslbl,
+html[data-theme="tesla-light"] .page-wrap .hr-hms-lbl,
+html[data-theme="tesla-dark"] .page-wrap .hr-hms-lbl,
+html[data-theme="tesla-light"] .page-wrap .hm-hms-lbl,
+html[data-theme="tesla-dark"] .page-wrap .hm-hms-lbl,
+html[data-theme="tesla-light"] .page-wrap .hr-prog-pct,
+html[data-theme="tesla-dark"] .page-wrap .hr-prog-pct,
+html[data-theme="tesla-light"] .page-wrap .hm-prog-pct,
+html[data-theme="tesla-dark"] .page-wrap .hm-prog-pct,
+html[data-theme="tesla-light"] .page-wrap .leg-item,
+html[data-theme="tesla-dark"] .page-wrap .leg-item,
+html[data-theme="tesla-light"] .page-wrap .chart-meta span,
+html[data-theme="tesla-dark"] .page-wrap .chart-meta span,
+html[data-theme="tesla-light"] .page-wrap .live-badge,
+html[data-theme="tesla-dark"] .page-wrap .live-badge,
+html[data-theme="tesla-light"] .page-wrap .op-total-lbl,
+html[data-theme="tesla-dark"] .page-wrap .op-total-lbl,
+html[data-theme="tesla-light"] .page-wrap .op-wklbl,
+html[data-theme="tesla-dark"] .page-wrap .op-wklbl {
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow: none;
+  color: var(--fg-3);
+}
+
+html[data-theme="tesla-light"] .page-wrap .hl-title,
+html[data-theme="tesla-dark"] .page-wrap .hl-title,
+html[data-theme="tesla-light"] .page-wrap .hm-brand-title,
+html[data-theme="tesla-dark"] .page-wrap .hm-brand-title {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: -0.03em;
+  text-transform: none;
+  color: var(--fg);
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] .page-wrap .hl-sub,
+html[data-theme="tesla-dark"] .page-wrap .hl-sub,
+html[data-theme="tesla-light"] .page-wrap .hm-brand-sub,
+html[data-theme="tesla-dark"] .page-wrap .hm-brand-sub {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: clamp(0.8125rem, 1.8vw, 1rem);
+  text-transform: none;
+  color: var(--fg-2);
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] .page-wrap .hl-meta-item,
+html[data-theme="tesla-dark"] .page-wrap .hl-meta-item,
+html[data-theme="tesla-light"] .page-wrap .hm-info-item,
+html[data-theme="tesla-dark"] .page-wrap .hm-info-item {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: none;
+  text-shadow: none;
+  color: var(--fg-2);
+}
+html[data-theme="tesla-light"] .page-wrap .hl-meta-item strong,
+html[data-theme="tesla-dark"] .page-wrap .hl-meta-item strong,
+html[data-theme="tesla-light"] .page-wrap .hm-info-item strong,
+html[data-theme="tesla-dark"] .page-wrap .hm-info-item strong {
+  color: var(--dc);
+  font-weight: 600;
+}
+
+html[data-theme="tesla-light"] .page-wrap .hl-narrative,
+html[data-theme="tesla-dark"] .page-wrap .hl-narrative,
+html[data-theme="tesla-light"] .page-wrap .hm-season-blk .hm-narr,
+html[data-theme="tesla-dark"] .page-wrap .hm-season-blk .hm-narr {
+  border: 1px solid var(--hairline);
+  background: var(--accent-bg);
+  border-radius: var(--r);
+  box-shadow: none;
+}
+html[data-theme="tesla-light"] .page-wrap .hl-narr-ico,
+html[data-theme="tesla-dark"] .page-wrap .hl-narr-ico,
+html[data-theme="tesla-light"] .page-wrap .hm-narr-ico,
+html[data-theme="tesla-dark"] .page-wrap .hm-narr-ico {
+  color: var(--accent);
+  filter: none;
+}
+
+html[data-theme="tesla-light"] .page-wrap .hero-narr-text,
+html[data-theme="tesla-dark"] .page-wrap .hero-narr-text {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.55;
+  text-transform: none;
+  text-shadow: none;
+  color: var(--fg);
+}
+html[data-theme="tesla-light"] .page-wrap .hero-narr-text[data-type="haiku"],
+html[data-theme="tesla-dark"] .page-wrap .hero-narr-text[data-type="haiku"] {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--fg-2);
+}
+
+html[data-theme="tesla-light"] .page-wrap .hr-days,
+html[data-theme="tesla-dark"] .page-wrap .hr-days,
+html[data-theme="tesla-light"] .page-wrap .hm-days,
+html[data-theme="tesla-dark"] .page-wrap .hm-days {
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  text-shadow: none;
+  color: var(--fg);
+}
+html[data-theme="tesla-light"] .page-wrap .hr-days,
+html[data-theme="tesla-dark"] .page-wrap .hr-days {
+  font-size: clamp(3.5rem, 10vw, 5.5rem);
+}
+html[data-theme="tesla-light"] .page-wrap .hm-days,
+html[data-theme="tesla-dark"] .page-wrap .hm-days {
+  font-size: clamp(3.25rem, 18vw, 5.25rem);
+}
+html[data-theme="tesla-light"] .page-wrap .hm-days-lbl,
+html[data-theme="tesla-dark"] .page-wrap .hm-days-lbl {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: none;
+  color: var(--fg-3);
+}
+
+html[data-theme="tesla-light"] .page-wrap .hr-hms-num,
+html[data-theme="tesla-dark"] .page-wrap .hr-hms-num,
+html[data-theme="tesla-light"] .page-wrap .hm-hms-num,
+html[data-theme="tesla-dark"] .page-wrap .hm-hms-num,
+html[data-theme="tesla-light"] .page-wrap .hr-prog-cur,
+html[data-theme="tesla-dark"] .page-wrap .hr-prog-cur,
+html[data-theme="tesla-light"] .page-wrap .hm-prog-cur,
+html[data-theme="tesla-dark"] .page-wrap .hm-prog-cur {
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-shadow: none;
+  color: var(--fg);
+}
+html[data-theme="tesla-light"] .page-wrap .hr-prog-cur,
+html[data-theme="tesla-dark"] .page-wrap .hr-prog-cur,
+html[data-theme="tesla-light"] .page-wrap .hm-prog-cur,
+html[data-theme="tesla-dark"] .page-wrap .hm-prog-cur {
+  font-size: 1.75rem;
+}
+html[data-theme="tesla-light"] .page-wrap .hr-prog-sep,
+html[data-theme="tesla-dark"] .page-wrap .hr-prog-sep,
+html[data-theme="tesla-light"] .page-wrap .hm-prog-sep,
+html[data-theme="tesla-dark"] .page-wrap .hm-prog-sep,
+html[data-theme="tesla-light"] .page-wrap .hr-prog-goal,
+html[data-theme="tesla-dark"] .page-wrap .hr-prog-goal,
+html[data-theme="tesla-light"] .page-wrap .hm-prog-goal,
+html[data-theme="tesla-dark"] .page-wrap .hm-prog-goal {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  text-shadow: none;
+  color: var(--fg-3);
+}
+
+html[data-theme="tesla-light"] .page-wrap .prog-bar,
+html[data-theme="tesla-dark"] .page-wrap .prog-bar {
+  height: 8px;
+  background: var(--surface-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-s);
+}
+
+html[data-theme="tesla-light"] .page-wrap .hr-prog-upd,
+html[data-theme="tesla-dark"] .page-wrap .hr-prog-upd,
+html[data-theme="tesla-light"] .page-wrap .hm-prog-upd,
+html[data-theme="tesla-dark"] .page-wrap .hm-prog-upd {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+}
+html[data-theme="tesla-light"] .page-wrap .hr-prog-upd .prog-upd-add,
+html[data-theme="tesla-dark"] .page-wrap .hr-prog-upd .prog-upd-add,
+html[data-theme="tesla-light"] .page-wrap .hm-prog-upd .prog-upd-add,
+html[data-theme="tesla-dark"] .page-wrap .hm-prog-upd .prog-upd-add {
+  color: var(--ok);
+  font-weight: 600;
+}
+
+html[data-theme="tesla-light"] .page-wrap .hm-map,
+html[data-theme="tesla-dark"] .page-wrap .hm-map {
+  opacity: 0.35;
+}
+html[data-theme="tesla-light"] .page-wrap .hm-map svg path,
+html[data-theme="tesla-dark"] .page-wrap .hm-map svg path {
+  stroke: var(--fg-4);
+  filter: none;
+}
+
+html[data-theme="tesla-light"] .page-wrap .ss-ico,
+html[data-theme="tesla-dark"] .page-wrap .ss-ico {
+  color: var(--accent);
+  filter: none;
+}
+html[data-theme="tesla-light"] .page-wrap .ss-ico svg,
+html[data-theme="tesla-dark"] .page-wrap .ss-ico svg {
+  stroke: var(--accent);
+}
+html[data-theme="tesla-light"] .page-wrap .ss-txt,
+html[data-theme="tesla-dark"] .page-wrap .ss-txt {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-transform: none;
+  text-shadow: none;
+  color: var(--fg);
+}
+
+html[data-theme="tesla-light"] .page-wrap .live-dot,
+html[data-theme="tesla-dark"] .page-wrap .live-dot {
+  background: var(--ok);
+  box-shadow: none;
+  animation: none;
+}
+html[data-theme="tesla-light"] .page-wrap .live-badge,
+html[data-theme="tesla-dark"] .page-wrap .live-badge {
+  color: var(--ok);
+}
+
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-row,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-row {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-1);
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-row::before,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-row::before {
+  box-shadow: none;
+  border-radius: var(--r-s) 0 0 var(--r-s);
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-rank,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-rank {
+  background: var(--surface-2);
+  border-radius: var(--r-s);
+  border-color: var(--hairline);
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-rank span,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-rank span {
+  font-family: var(--font-num);
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-name,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-name {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: none;
+  color: var(--fg);
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-status,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-status {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-total,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-total {
+  font-family: var(--font-num);
+  font-weight: 600;
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-wknum,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-wknum {
+  font-family: var(--font-num);
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-wkbox,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-wkbox {
+  border-radius: var(--r-s);
+  border-color: var(--hairline);
+  background: var(--surface-2);
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-pixbar-seg,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-pixbar-seg {
+  height: 4px;
+  border-radius: 2px;
+  image-rendering: auto;
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-split-row .op-chip,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-split-row .op-chip {
+  font-family: var(--font);
+  border-radius: var(--r-s);
+}
+
+html[data-theme="tesla-light"] .page-wrap .chart-meta span b,
+html[data-theme="tesla-dark"] .page-wrap .chart-meta span b {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+html[data-theme="tesla-light"] .page-wrap .race-premise-blk .race-premise,
+html[data-theme="tesla-dark"] .page-wrap .race-premise-blk .race-premise {
+  font-family: var(--font);
+  color: var(--fg-2);
+}
+html[data-theme="tesla-light"] .page-wrap .race-premise-blk .race-premise strong,
+html[data-theme="tesla-dark"] .page-wrap .race-premise-blk .race-premise strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+html[data-theme="tesla-light"] .page-wrap .race-premise-blk .race-premise .highlight,
+html[data-theme="tesla-dark"] .page-wrap .race-premise-blk .race-premise .highlight {
+  font-family: var(--font);
+  font-size: inherit;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+html[data-theme="tesla-light"] body.reduced-fx .page-wrap .hl-title,
+html[data-theme="tesla-dark"] body.reduced-fx .page-wrap .hl-title,
+html[data-theme="tesla-light"] body.reduced-fx .page-wrap .hr-days,
+html[data-theme="tesla-dark"] body.reduced-fx .page-wrap .hr-days,
+html[data-theme="tesla-light"] body.reduced-fx .page-wrap .hm-days,
+html[data-theme="tesla-dark"] body.reduced-fx .page-wrap .hm-days,
+html[data-theme="tesla-light"] body.reduced-fx .page-wrap .op-total,
+html[data-theme="tesla-dark"] body.reduced-fx .page-wrap .op-total {
+  text-shadow: none;
+}
