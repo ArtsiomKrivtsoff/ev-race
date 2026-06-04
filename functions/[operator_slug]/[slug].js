@@ -1,5 +1,5 @@
 /**
- * Infrastructure Platform — location page SSR (Stage 2.2)
+ * Infrastructure Platform — location page SSR (Stage 2.2 / v2 layout)
  * Route: /{operator_slug}/{slug}
  */
 
@@ -7,16 +7,15 @@ import { renderSiteHeader, renderSiteFooter } from "../_lib/site-chrome.js";
 import {
   escapeHtml,
   opClass,
+  opDisplayName,
   computeSummary,
-  renderStatCards,
-  renderRatingBlock,
-  renderStationsTable,
-  renderStationsMobile,
+  renderHeroRating,
+  renderInfrastructureBlock,
+  renderStationsBlock,
   renderNearby,
   renderReportBlock,
   renderPhotosPlaceholder,
-  renderTagsPlaceholder,
-  renderReviewsPlaceholder,
+  renderReviewsBlock,
   renderStatusPlaceholder,
 } from "../_lib/location-render.js";
 
@@ -69,8 +68,9 @@ function renderLocationPage(data, envConfig) {
     meta.canonical_url || `https://evrace.by/${loc.operator_slug}/${loc.slug}`;
   const ogTitle = meta.og_title || "Зарядная локация";
   const ogDesc = meta.og_description || "";
-  const placeTitle = loc.location_name || `${loc.city}, ${loc.address}`;
+  const addressLine = `${loc.city}, ${loc.address}`;
   const opCls = opClass(loc.operator_slug);
+  const opName = opDisplayName(loc.operator, loc.operator_slug);
   const lat = loc.lat;
   const lng = loc.lng;
   const hasCoords = lat != null && lng != null;
@@ -78,14 +78,14 @@ function renderLocationPage(data, envConfig) {
   const routeYandex = hasCoords
     ? `https://yandex.ru/maps/?rtext=~${lat},${lng}&rtt=auto`
     : "";
-  const routeGoogle = hasCoords
-    ? `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
-    : "";
 
-  const aggregatorLine =
+  const aggName =
     loc.aggregator && loc.aggregator !== loc.operator
-      ? `<div class="loc-agg-line">Доступ через ${escapeHtml(loc.aggregator)}</div>`
-      : "";
+      ? opDisplayName(loc.aggregator, loc.aggregator)
+      : null;
+  const aggregatorLine = aggName
+    ? `<div class="loc-hero-agg">в ${escapeHtml(aggName)}</div>`
+    : "";
 
   const mapBlock = hasCoords
     ? `<div class="loc-hero-map" id="loc-map"
@@ -95,7 +95,7 @@ function renderLocationPage(data, envConfig) {
   data-aggregator="${escapeHtml(loc.aggregator || "")}"
   role="img"
   aria-label="Карта локации"></div>`
-    : `<div class="loc-hero-map loc-hero-map--empty"><span class="loc-soon-text">Координаты не указаны</span></div>`;
+    : "";
 
   const stationsWithCity = stations.map((s) => ({
     ...s,
@@ -108,6 +108,11 @@ function renderLocationPage(data, envConfig) {
     supabaseUrl: envConfig.supabaseUrl || "",
     supabaseKey: envConfig.supabaseKey || "",
   });
+
+  const titleHtml = loc.location_name
+    ? `<p class="loc-hero-venue">${escapeHtml(loc.location_name)}</p>
+<h1 class="loc-hero-address" id="loc-title">${escapeHtml(addressLine)}</h1>`
+    : `<h1 class="loc-hero-address" id="loc-title">${escapeHtml(addressLine)}</h1>`;
 
   return `<!DOCTYPE html>
 <html lang="ru">
@@ -133,7 +138,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=5">
-<link rel="stylesheet" href="/CSS/location-page.css?v=2">
+<link rel="stylesheet" href="/CSS/location-page.css?v=3">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="/CSS/tesla-dark.css?v=5">
 ${hasCoords ? '<link rel="stylesheet" href="/CSS/vendor/leaflet.css?v=1">' : ""}
@@ -148,56 +153,48 @@ ${renderSiteHeader("stations")}
 <a href="/">Главная</a><span class="loc-bc-sep">›</span>
 <a href="/stations.html">Станции 2026</a><span class="loc-bc-sep">›</span>
 <span>${escapeHtml(loc.city)}</span><span class="loc-bc-sep">›</span>
-<span>${escapeHtml(placeTitle)}</span>
+<span>${escapeHtml(loc.location_name || loc.address)}</span>
 </nav>
 
 <section class="loc-hero" aria-labelledby="loc-title">
-<div class="loc-hero-main">
-<div class="loc-hero-head">
-<span class="op-filter-btn ${opCls}">${escapeHtml(loc.operator)}</span>
-</div>
-<h1 class="loc-hero-title" id="loc-title">${escapeHtml(placeTitle)}</h1>
-<p class="loc-hero-addr">${escapeHtml(loc.city)} · ${escapeHtml(loc.address)}</p>
+<div class="loc-hero-body">
+${renderHeroRating(loc)}
+${titleHtml}
+<div class="loc-hero-operator">
+<span class="loc-hero-op ${opCls}">${escapeHtml(opName)}</span>
 ${aggregatorLine}
+</div>
 <div class="loc-actions">
-${routeYandex ? `<a class="loc-btn loc-btn-primary" href="${escapeHtml(routeYandex)}" target="_blank" rel="noopener noreferrer">МАРШРУТ</a>` : ""}
-${routeGoogle ? `<a class="loc-btn" href="${escapeHtml(routeGoogle)}" target="_blank" rel="noopener noreferrer">GOOGLE</a>` : ""}
-<button class="loc-btn" type="button" onclick="navigator.share&&navigator.share({title:document.title,url:location.href}).catch(function(){})">ПОДЕЛИТЬСЯ</button>
+${routeYandex ? `<a class="loc-btn loc-btn-primary" href="${escapeHtml(routeYandex)}" target="_blank" rel="noopener noreferrer">ПРОЛОЖИТЬ МАРШРУТ</a>` : ""}
+<button class="loc-btn" type="button" id="loc-share-btn" onclick="shareLocation()">ПОДЕЛИТЬСЯ</button>
 </div>
 </div>
-${renderRatingBlock(loc)}
 ${mapBlock}
 </section>
 
-${renderStatCards(summary)}
+${renderInfrastructureBlock(stationsWithCity, summary)}
 
-<div class="loc-main-grid">
-<div class="loc-main-col">
-<div class="blk loc-stations-blk">
-<div class="blk-hdr"><span class="blk-title">СТАНЦИИ НА ЛОКАЦИИ</span><span class="blk-link">${stations.length} шт.</span></div>
-${renderStationsTable(stationsWithCity)}
-<div class="loc-cards-wrap">${renderStationsMobile(stationsWithCity)}</div>
-</div>
-${renderTagsPlaceholder()}
-${renderReviewsPlaceholder()}
-</div>
+${renderStationsBlock(stationsWithCity)}
 
-<aside class="loc-sidebar">
+<div class="loc-community-grid">
 ${renderPhotosPlaceholder()}
-${renderStatusPlaceholder()}
-${renderReportBlock()}
+${renderReviewsBlock()}
+</div>
+
 <div class="blk loc-nearby-blk">
 <div class="blk-hdr"><span class="blk-title">РЯДОМ · ${escapeHtml(loc.city.toUpperCase())}</span></div>
 <div class="loc-nearby-list">${renderNearby(data.nearby)}</div>
 </div>
-</aside>
-</div>
+
+${renderReportBlock()}
+
+${renderStatusPlaceholder()}
 
 ${renderSiteFooter()}
 </div>
 </div>
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх" aria-label="Наверх">↑</button>
-<script src="/JS/location-page.js?v=1"></script>
+<script src="/JS/location-page.js?v=2"></script>
 ${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=1"></script>' : ""}
 </body>
 </html>`;
