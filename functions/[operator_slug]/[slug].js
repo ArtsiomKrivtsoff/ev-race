@@ -133,7 +133,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=5">
-<link rel="stylesheet" href="/CSS/location-page.css?v=1">
+<link rel="stylesheet" href="/CSS/location-page.css?v=2">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="/CSS/tesla-dark.css?v=5">
 ${hasCoords ? '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">' : ""}
@@ -196,6 +196,7 @@ ${renderReportBlock()}
 ${renderSiteFooter()}
 </div>
 </div>
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх" aria-label="Наверх">↑</button>
 <script src="/JS/location-page.js?v=1"></script>
 ${hasCoords ? '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="/JS/location-map.js?v=1"></script>' : ""}
 </body>
