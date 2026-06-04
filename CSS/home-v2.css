@@ -1,7 +1,11 @@
 /* ============================================================
-   EV RACE — home-v2.css (dashboard only → arcade.css later)
-   Requires: CSS/arcade.css loaded first (same folder as this file on deploy)
+   EV RACE — home-v2.css (только index.html)
+   Requires: CSS/arcade.css + CSS/operator.css
    ============================================================ */
+
+/* Бургер: операторы раскрыты по умолчанию */
+#mobAccList.open { display: flex; }
+#mobAccBtn.open { color: var(--green); }
 
 :root {
   --home-text: #c8e6c8;
@@ -17,7 +21,12 @@
   overflow-x: hidden;
 }
 
-.container { overflow-x: hidden; }
+/* overflow только на .page-wrap — иначе ломается position:sticky у .statusbar */
+.container > .statusbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
 
 /* ── block shell ── */
 .blk {
@@ -652,7 +661,7 @@
 .op-nameline { display: flex; align-items: center; }
 .op-name {
   font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--home-text);
   white-space: nowrap;
   overflow: hidden;
@@ -674,13 +683,25 @@
 .page-wrap #ops-list .op-pixbar-seg {
   width: 100%;
   min-width: 0;
-  height: 7px;
-  border-radius: 1px;
-  image-rendering: pixelated;
+  height: 10px;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+.page-wrap #ops-list .op-pixbar-seg.seg-dc {
+  background: #ffd700;
+  border: 1px solid transparent;
+}
+.page-wrap #ops-list .op-pixbar-seg.seg-ac {
+  background: #00e5ff;
+  border: 1px solid transparent;
+}
+.page-wrap #ops-list .op-pixbar-seg.seg-empty {
+  background: transparent;
+  border: 1px solid var(--home-bdr);
 }
 @media (max-width: 639px) {
   .page-wrap #ops-list .op-pixbar { grid-template-columns: repeat(28, 1fr); }
-  .page-wrap #ops-list .op-pixbar-seg { height: 6px; }
+  .page-wrap #ops-list .op-pixbar-seg { height: 8px; }
 }
 
 .op-split-row {
@@ -688,8 +709,8 @@
   gap: var(--s-2);
   flex-wrap: wrap;
 }
-.op-split-row .op-chip { padding: 2px 8px; font-size: 10px; }
-.op-split-row .op-chip b { font-size: 9px; }
+.op-split-row .op-chip { padding: 2px 8px; font-size: 11px; }
+.op-split-row .op-chip b { font-size: 10px; }
 
 .op-right {
   display: flex;
@@ -708,7 +729,7 @@
 }
 .op-total-lbl {
   font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--home-text-dim);
   margin-top: -2px;
   text-align: right;
@@ -722,13 +743,13 @@
 }
 .op-wknum {
   font-family: 'Press Start 2P', monospace;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--oc);
   display: block;
 }
 .op-wklbl {
   font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--home-text-dim);
   display: block;
   margin-top: 2px;
@@ -770,7 +791,7 @@
     white-space: nowrap;
   }
   .page-wrap #ops-list .op-name {
-    font-size: 10px;
+    font-size: 11px;
     overflow: visible;
     text-overflow: clip;
   }
@@ -792,7 +813,7 @@
   align-items: center;
   gap: 5px;
   font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--home-text-dim);
 }
 .leg-dot { width: 7px; height: 7px; border-radius: 50%; }
@@ -801,13 +822,13 @@
 .chart-meta { display: flex; gap: 14px; flex-wrap: wrap; }
 .chart-meta span {
   font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--home-text-dim);
 }
 .chart-meta span b { color: var(--green-dim); font-weight: normal; }
 .chart-rules-link {
   font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--green-dim);
   text-decoration: none;
 }
@@ -827,7 +848,7 @@ canvas#raceChart { width: 100%; display: block; max-width: 100%; }
   align-items: center;
   gap: 5px;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--home-text-mid);
 }
 .chart-leg-item i {
@@ -1252,11 +1273,9 @@ html[data-theme="tesla-dark"] .page-wrap #ops-list .op-wkbox {
   border-color: var(--hairline);
   background: var(--surface-2);
 }
-html[data-theme="tesla-light"] .page-wrap #ops-list .op-pixbar-seg,
-html[data-theme="tesla-dark"] .page-wrap #ops-list .op-pixbar-seg {
-  height: 4px;
-  border-radius: 2px;
-  image-rendering: auto;
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-pixbar-seg.seg-empty,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-pixbar-seg.seg-empty {
+  border-color: var(--hairline);
 }
 html[data-theme="tesla-light"] .page-wrap #ops-list .op-split-row .op-chip,
 html[data-theme="tesla-dark"] .page-wrap #ops-list .op-split-row .op-chip {
