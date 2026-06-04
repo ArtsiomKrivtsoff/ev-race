@@ -136,7 +136,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link rel="stylesheet" href="/CSS/location-page.css?v=2">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="/CSS/tesla-dark.css?v=5">
-${hasCoords ? '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">' : ""}
+${hasCoords ? '<link rel="stylesheet" href="/CSS/vendor/leaflet.css?v=1">' : ""}
 <script>window.__EVRACE__=${cfgJson};</script>
 </head>
 <body class="location-page">
@@ -198,7 +198,7 @@ ${renderSiteFooter()}
 </div>
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх" aria-label="Наверх">↑</button>
 <script src="/JS/location-page.js?v=1"></script>
-${hasCoords ? '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="/JS/location-map.js?v=1"></script>' : ""}
+${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=1"></script>' : ""}
 </body>
 </html>`;
 }
