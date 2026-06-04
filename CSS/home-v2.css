@@ -1,0 +1,876 @@
+/* ============================================================
+   EV RACE — home-v2.css (dashboard only → arcade.css later)
+   Requires: CSS/arcade.css loaded first (same folder as this file on deploy)
+   ============================================================ */
+
+:root {
+  --home-text: #c8e6c8;
+  --home-text-mid: #6a946a;
+  --home-text-dim: #3d5c3d;
+  --home-card: #090e09;
+  --home-bdr: #1c2e1c;
+  --home-bg-glow: rgba(0, 255, 65, 0.12);
+}
+
+.page-wrap {
+  color: var(--home-text);
+  overflow-x: hidden;
+}
+
+.container { overflow-x: hidden; }
+
+/* ── block shell ── */
+.blk {
+  background: var(--home-card);
+  border: 1px solid var(--home-bdr);
+  border-radius: 5px;
+  margin: var(--s-2) 0;
+  overflow: hidden;
+}
+.blk-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px var(--s-4);
+  border-bottom: 1px solid var(--home-bdr);
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.blk-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--home-text-mid);
+  letter-spacing: var(--ls);
+  text-transform: uppercase;
+}
+.blk-link {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--green-dim);
+  transition: color 0.15s;
+}
+.blk-link:hover { color: var(--green); }
+
+.ops-reg-hint,
+.stats-reg-hint {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--home-text-dim);
+  text-align: center;
+  margin: var(--s-2) 0 var(--s-3);
+  letter-spacing: var(--ls-tight);
+  line-height: 1.7;
+}
+.ops-reg-hint {
+  padding: 0 var(--s-4) var(--s-3);
+  margin: 0;
+  text-align: left;
+}
+.stats-reg-hint a,
+.ops-reg-hint a {
+  color: var(--green-dim);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.stats-reg-hint a:hover,
+.ops-reg-hint a:hover { color: var(--green); }
+
+/* ── hero desktop ── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: var(--s-2) 0 0;
+  align-items: stretch;
+}
+@media (max-width: 639px) { .hero-grid { display: none; } }
+
+.hero-left {
+  background: var(--home-card);
+  border: 1px solid var(--home-bdr);
+  border-radius: 5px;
+  padding: 22px 18px 18px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  min-height: 100%;
+}
+.hero-left::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 0%, rgba(0, 255, 65, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.by-map-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.hl-map {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 130px;
+  max-width: 42%;
+  opacity: 0.12;
+  pointer-events: none;
+}
+.hl-map svg { width: 100%; height: auto; display: block; }
+.hl-map svg path,
+.hm-map svg path {
+  fill: none;
+}
+.hl-tag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  letter-spacing: 1px;
+}
+.hl-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(32px, 5vw, 58px);
+  color: var(--green);
+  text-shadow: 0 0 20px var(--green), 0 0 50px rgba(0, 255, 65, 0.3);
+  line-height: 1.05;
+  position: relative;
+  z-index: 1;
+}
+.hl-sub {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 1.8vw, 15px);
+  color: var(--yellow);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.45);
+  position: relative;
+  z-index: 1;
+}
+.hl-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  position: relative;
+  z-index: 1;
+}
+.hl-meta-item {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-mid);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.hl-meta-item strong { color: var(--yellow); }
+.hl-narrative {
+  border: 1px solid var(--green);
+  background: rgba(0, 255, 65, 0.04);
+  border-radius: 4px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 0 18px rgba(0, 255, 65, 0.1);
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+}
+.hl-narr-ico,
+.hm-narr-ico {
+  flex-shrink: 0;
+  color: var(--green);
+  line-height: 0;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.85));
+}
+.hl-narr-ico svg { display: block; }
+
+.hero-narr-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: var(--green);
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.55);
+  line-height: 1.65;
+  font-style: normal;
+}
+.hero-narr-text[data-type="haiku"] {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+@media (max-width: 639px) {
+  .hero-narr-text { font-size: 10px; }
+}
+
+.hero-right {
+  background: var(--home-card);
+  border: 1px solid var(--home-bdr);
+  border-radius: 5px;
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+}
+.hr-cdlbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: var(--s-2);
+}
+.hr-days {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(60px, 10vw, 90px);
+  color: var(--green);
+  text-shadow: 0 0 24px var(--green), 0 0 60px rgba(0, 255, 65, 0.4);
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.hr-dayslbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--green-dim);
+  text-align: center;
+  margin-bottom: 14px;
+}
+.hr-hms {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--home-bdr);
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.page-wrap .hero-right.cd-hms-on .hr-hms { display: flex; }
+.page-wrap .hero-right .hr-hms[hidden] { display: none !important; }
+.hr-hms-blk { text-align: center; }
+.hr-hms-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  color: var(--home-text);
+  display: block;
+}
+.hr-hms-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  margin-top: 3px;
+}
+.hr-prog-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  letter-spacing: 1px;
+  margin-bottom: var(--s-2);
+}
+.hr-prog-nums {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  margin-bottom: 4px;
+}
+.hr-prog-cur {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 28px;
+  color: var(--green);
+  text-shadow: 0 0 14px var(--green);
+  line-height: 1;
+}
+.hr-prog-sep {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--home-text-dim);
+}
+.hr-prog-goal {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--home-text-mid);
+}
+.hr-prog-pct {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--yellow);
+  text-align: right;
+  margin-bottom: 5px;
+}
+.prog-bar {
+  height: 10px;
+  background: #050d05;
+  border: 1px solid var(--home-bdr);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 6px;
+}
+.prog-bar-seg { height: 100%; transition: width 1.2s ease; }
+.hr-prog-upd {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--home-text-dim);
+  text-align: right;
+  margin-top: auto;
+  padding-top: var(--s-2);
+}
+.hr-prog-upd .prog-upd-sep { color: var(--home-text-dim); opacity: 0.55; }
+.hr-prog-upd .prog-upd-add { color: var(--green); }
+
+/* ── hero mobile ── */
+@media (min-width: 640px) { .hero-mobile { display: none; } }
+
+.hm-brand {
+  margin: var(--s-2) 0 0;
+  padding: 14px 14px 0;
+}
+.hm-brand-tag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.hm-brand-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(28px, 9vw, 42px);
+  color: var(--green);
+  text-shadow: 0 0 18px var(--green), 0 0 40px rgba(0, 255, 65, 0.3);
+  line-height: 1.05;
+}
+.hm-brand-sub {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 3.2vw, 13px);
+  color: var(--yellow);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+  margin-top: 6px;
+}
+
+.hm-cd {
+  background: var(--home-card);
+  border: 1px solid var(--home-bdr);
+  border-radius: 5px;
+  margin: 10px 0 var(--s-2);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.hm-cd::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 65% 0%, rgba(0, 255, 65, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hm-cd-top {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.hm-cd-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-2);
+  margin-bottom: 10px;
+}
+.hm-cd-main > div:first-child {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+.hm-days {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(56px, 18vw, 88px);
+  color: var(--green);
+  text-shadow: 0 0 22px var(--green), 0 0 50px rgba(0, 255, 65, 0.35);
+  line-height: 1;
+  display: block;
+}
+.hm-days-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(14px, 4vw, 20px);
+  color: var(--green-dim);
+  margin-bottom: 6px;
+}
+.hm-map {
+  flex-shrink: 0;
+  width: 100px;
+  opacity: 0.45;
+  display: flex;
+  align-items: center;
+}
+@media (min-width: 380px) { .hm-map { width: 110px; } }
+.hm-map svg { width: 100%; height: auto; }
+.hm-map svg path {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 4px var(--green));
+}
+.hm-hms {
+  display: none;
+  align-items: baseline;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 1px solid var(--home-bdr);
+}
+.page-wrap .hm-cd.cd-hms-on .hm-hms { display: flex; }
+.page-wrap .hm-cd .hm-hms[hidden] { display: none !important; }
+.hm-hms-itm {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+.hm-hms-itm:not(:last-child)::after {
+  content: '·';
+  color: var(--home-bdr);
+  margin: 0 8px;
+  font-size: 14px;
+}
+.hm-hms-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: var(--home-text);
+}
+.hm-hms-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+}
+
+.hm-prog-in {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--home-bdr);
+  position: relative;
+  z-index: 1;
+}
+.hm-prog-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  letter-spacing: 1px;
+  margin-bottom: var(--s-2);
+}
+.hm-prog-nums {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  margin-bottom: 4px;
+}
+.hm-prog-cur {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 28px;
+  color: var(--green);
+  text-shadow: 0 0 14px var(--green);
+  line-height: 1;
+}
+.hm-prog-sep {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--home-text-dim);
+}
+.hm-prog-goal {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--home-text-mid);
+}
+.hm-prog-pct {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--yellow);
+  text-align: right;
+  margin-bottom: 5px;
+}
+.hm-prog-upd {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--home-text-dim);
+  text-align: right;
+  margin-top: 6px;
+}
+.hm-prog-upd .prog-upd-sep { color: var(--home-text-dim); opacity: 0.55; }
+.hm-prog-upd .prog-upd-add { color: var(--green); }
+
+.hm-info {
+  padding: 11px var(--s-4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.hm-season-blk .hm-info { border-bottom: none; }
+@media (max-width: 400px) {
+  .hm-info { flex-direction: column; align-items: flex-start; }
+  .hm-info-sep { display: none; }
+}
+.hm-info-item {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-mid);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.hm-info-item strong { color: var(--yellow); }
+.hm-info-sep { color: var(--home-bdr); font-size: 14px; margin: 0 2px; }
+
+.hm-narr {
+  padding: 12px var(--s-4);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hm-season-blk .hm-narr {
+  margin: 0 10px 10px;
+  border: 1px solid var(--green);
+  border-radius: 4px;
+  background: rgba(0, 255, 65, 0.04);
+  box-shadow: 0 0 16px rgba(0, 255, 65, 0.1);
+}
+.hm-narr-ico svg { display: block; }
+
+/* ── season status ── */
+.page-wrap .ss-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.page-wrap .ss-cell {
+  padding: 18px 14px;
+  border-right: 1px solid var(--home-bdr);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.page-wrap .ss-cell:last-child { border-right: none; }
+.page-wrap .ss-ico {
+  flex-shrink: 0;
+  color: var(--green);
+  line-height: 0;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.85));
+}
+.page-wrap .ss-ico svg {
+  width: 32px;
+  height: 32px;
+  stroke: var(--green);
+  stroke-width: 2;
+}
+.page-wrap .ss-txt {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--green);
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  line-height: 1.6;
+}
+@media (max-width: 480px) {
+  .page-wrap .ss-grid { grid-template-columns: 1fr; }
+  .page-wrap .ss-cell {
+    border-right: none;
+    border-bottom: 1px solid var(--home-bdr);
+    padding: 16px;
+  }
+  .page-wrap .ss-cell:last-child { border-bottom: none; }
+  .page-wrap .ss-ico svg { width: 28px; height: 28px; }
+  .page-wrap .ss-txt { font-size: 9px; }
+}
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--green);
+}
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--green);
+  animation: blink 1.4s infinite;
+}
+
+/* ── operators (leaderboard rows + op-bar-v2) ── */
+/* Сброс утечек из arcade.css (.op-card): rank absolute, name flex:1 */
+.page-wrap #ops-list .op-row .op-rank {
+  position: static;
+  top: auto;
+  right: auto;
+  image-rendering: auto;
+}
+.page-wrap #ops-list .op-row .op-name {
+  flex: 0 1 auto;
+  overflow: visible;
+  text-overflow: clip;
+  letter-spacing: var(--ls-tight);
+}
+
+#ops-list { padding: var(--s-2) 10px 4px; }
+
+.op-row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: var(--s-3);
+  align-items: center;
+  padding: 12px 14px;
+  margin-bottom: var(--s-2);
+  border: 1px solid var(--oc, var(--home-bdr));
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  position: relative;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--oc, transparent) 7%, transparent);
+}
+.op-row:last-child { margin-bottom: 0; }
+.op-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--oc, transparent);
+  box-shadow: 2px 0 10px color-mix(in srgb, var(--oc, transparent) 50%, transparent);
+}
+.op-rank {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--oc, var(--home-bdr));
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.4);
+}
+.op-rank span {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  color: var(--oc, var(--home-text-dim));
+  text-shadow: 0 0 12px var(--oc, transparent);
+}
+.op-mid { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.op-nameline { display: flex; align-items: center; }
+.op-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.op-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--oc);
+  opacity: 0.9;
+}
+.page-wrap #ops-list .op-pixbar {
+  display: grid;
+  grid-template-columns: repeat(40, 1fr);
+  gap: 2px;
+  width: 100%;
+  margin-top: 2px;
+}
+.page-wrap #ops-list .op-pixbar-seg {
+  width: 100%;
+  min-width: 0;
+  height: 7px;
+  border-radius: 1px;
+  image-rendering: pixelated;
+}
+@media (max-width: 639px) {
+  .page-wrap #ops-list .op-pixbar { grid-template-columns: repeat(28, 1fr); }
+  .page-wrap #ops-list .op-pixbar-seg { height: 6px; }
+}
+
+.op-split-row {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+.op-split-row .op-chip { padding: 2px 8px; font-size: 10px; }
+.op-split-row .op-chip b { font-size: 9px; }
+
+.op-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  min-width: 72px;
+}
+.op-total {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(28px, 8vw, 44px);
+  line-height: 1;
+  color: var(--oc);
+  text-shadow: 0 0 14px var(--oc);
+}
+.op-total-lbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  margin-top: -2px;
+  text-align: right;
+}
+.op-wkbox {
+  border: 1px solid var(--oc, var(--home-bdr));
+  border-radius: 3px;
+  padding: 4px 8px;
+  text-align: center;
+  min-width: 58px;
+}
+.op-wknum {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: var(--oc);
+  display: block;
+}
+.op-wklbl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  display: block;
+  margin-top: 2px;
+}
+
+@media (max-width: 639px) {
+  .page-wrap #ops-list .op-row {
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .page-wrap #ops-list .op-rank { width: 40px; height: 40px; grid-row: 1 / 3; }
+  .page-wrap #ops-list .op-rank span { font-size: 14px; }
+  .page-wrap #ops-list .op-right {
+    grid-column: 2;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-width: 0;
+  }
+  .page-wrap #ops-list .op-total { font-size: clamp(24px, 7vw, 36px); }
+  .page-wrap #ops-list .op-mid { grid-column: 2; }
+}
+
+@media (min-width: 640px) {
+  .page-wrap #ops-list .op-row {
+    grid-template-columns: 56px minmax(180px, 1fr) auto;
+    gap: 16px;
+    padding: 14px 18px;
+  }
+  .page-wrap #ops-list .op-rank { width: 58px; height: 58px; }
+  .page-wrap #ops-list .op-rank span { font-size: 20px; }
+  .page-wrap #ops-list .op-right {
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+  .page-wrap #ops-list .op-total {
+    font-size: clamp(32px, 4vw, 48px);
+    white-space: nowrap;
+  }
+  .page-wrap #ops-list .op-name {
+    font-size: 10px;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .page-wrap #ops-list .op-wknum { font-size: 13px; }
+}
+
+/* голосование: в arcade заголовок через ::before — дубль убираем */
+.page-wrap .vote-section-label { display: none; }
+
+.dc-ac-leg {
+  padding: var(--s-2) var(--s-4);
+  border-top: 1px solid var(--home-bdr);
+  display: flex;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+}
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+}
+.leg-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* ── chart ── */
+.chart-meta { display: flex; gap: 14px; flex-wrap: wrap; }
+.chart-meta span {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+}
+.chart-meta span b { color: var(--green-dim); font-weight: normal; }
+.chart-rules-link {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--green-dim);
+  text-decoration: none;
+}
+.chart-rules-link:hover { color: var(--green); }
+.chart-body { padding: 12px 10px 6px; }
+.chart-wrap { position: relative; }
+canvas#raceChart { width: 100%; display: block; max-width: 100%; }
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding: 8px 4px 4px;
+  justify-content: center;
+}
+.chart-leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--home-text-mid);
+}
+.chart-leg-item i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.chart-leg-item b { color: var(--home-text); font-weight: normal; }
+
+@media (max-width: 639px) {
+  .chart-body { padding-bottom: var(--s-2); }
+  .chart-legend { justify-content: flex-start; }
+}
+
+body.reduced-fx .hl-title,
+body.reduced-fx .hr-days,
+body.reduced-fx .hm-days,
+body.reduced-fx .op-total {
+  text-shadow: 0 0 6px var(--green);
+}
+
+/* ── о гонке (origin, под hero) ── */
+.page-wrap .race-premise-blk { margin-top: 0; }
+.page-wrap .race-premise-blk .race-premise {
+  padding: 14px var(--s-4) 16px;
+  margin: 0;
+  font-size: clamp(12px, 1.75vw, 14px);
+  line-height: 1.75;
+  text-align: left;
+}
+.page-wrap .race-premise-blk .race-premise strong {
+  color: var(--green);
+}
+.page-wrap .race-premise-blk .race-premise .highlight {
+  color: var(--yellow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+}
+
+/* ── chronicle (только UPD внизу) ── */
+.chronicle-blk {
+  margin: var(--s-4) 0;
+}
+.chronicle-blk .upd-block { margin-top: 0; }
+.chronicle-blk .upd-block + .upd-block { margin-top: var(--s-3); }
