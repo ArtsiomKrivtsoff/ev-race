@@ -1,6 +1,6 @@
 /**
  * Location page middle — HTML fragments (SSR).
- * Patterns aligned with stations.js / map.html.
+ * Layout contract: Location Page v2 (place-first hierarchy).
  */
 
 export const OP_NAMES = {
@@ -39,6 +39,11 @@ export function escapeHtml(s) {
 
 export function opClass(slug) {
   return OP_CLASS[slug] || "op-other";
+}
+
+export function opDisplayName(operator, operatorSlug) {
+  if (operatorSlug && OP_NAMES[operatorSlug]) return OP_NAMES[operatorSlug];
+  return operator || "—";
 }
 
 export function opBadge(op, agg) {
@@ -117,6 +122,16 @@ export function computeSummary(stations) {
   return { dc, ac, guns, maxDc, maxAc, maxSim, totalPower };
 }
 
+export function collectConnectorTypes(stations) {
+  const set = new Set();
+  for (const s of stations) {
+    for (const c of s.connectors || []) {
+      if (c) set.add(c);
+    }
+  }
+  return [...set];
+}
+
 function renderStationRow(s, indent) {
   const prefix = indent
     ? `<span class="loc-st-indent">↳ ${escapeHtml(OP_NAMES[s.operator] || s.operator)}</span>`
@@ -132,22 +147,7 @@ function renderStationRow(s, indent) {
 </tr>`;
 }
 
-export function renderStationsTable(stations) {
-  if (!stations.length) {
-    return `<p class="loc-empty">Станций в реестре для этой локации пока нет.</p>`;
-  }
-
-  if (stations.length === 1) {
-    return `<div class="table-wrap loc-table-wrap">
-<table class="reg loc-stations-table">
-<thead><tr>
-<th>ОПЕРАТОР</th><th>ТИП</th><th class="center">РАЗЪЁМ 1</th><th class="center">РАЗЪЁМ 2</th><th class="center">РАЗЪЁМ 3</th><th class="right">МОЩНОСТЬ</th><th class="right">ДАТА</th>
-</tr></thead>
-<tbody>${renderStationRow(stations[0], false)}</tbody>
-</table>
-</div>`;
-  }
-
+function renderStationsTableMulti(stations) {
   const summary = computeSummary(stations);
   const totalStCount = stations.reduce((n, s) => n + (s.count || 1), 0);
   const latestDate = stations.reduce(
@@ -185,10 +185,19 @@ export function renderStationsTable(stations) {
 </div>`;
 }
 
-export function renderStationsMobile(stations) {
-  if (!stations.length) return "";
+export function renderStationsBlock(stations) {
+  if (stations.length <= 1) return "";
 
-  const summary = computeSummary(stations);
+  return `<div class="blk loc-stations-blk">
+<div class="blk-hdr"><span class="blk-title">СТАНЦИИ НА ЛОКАЦИИ</span><span class="blk-link">${stations.length} шт.</span></div>
+${renderStationsTableMulti(stations)}
+<div class="loc-cards-wrap">${renderStationsMobile(stations)}</div>
+</div>`;
+}
+
+export function renderStationsMobile(stations) {
+  if (stations.length <= 1) return "";
+
   const first = stations[0];
   const latestDate = stations.reduce(
     (d, s) => (s.station_date && s.station_date > d ? s.station_date : d),
@@ -210,57 +219,84 @@ export function renderStationsMobile(stations) {
     })
     .join("");
 
-  const locNameHtml = first.location_name
-    ? `<span class="loc-name">${escapeHtml(first.location_name)}</span>`
-    : "";
-  const locAddrHtml = first.address
-    ? `<span class="loc-addr">${escapeHtml(first.address)}</span>`
-    : "";
-
   return `<div class="loc-card loc-card--page">
 <div class="loc-head">
-<div class="loc-head-left">${opBadge(first.operator, first.aggregator)}<span class="loc-city">${escapeHtml(first.city || "—")}</span>${locNameHtml}${locAddrHtml}</div>
-<div class="loc-head-right">
-<div class="loc-total-power">${summary.totalPower ? summary.totalPower.toLocaleString("ru") + " кВт" : "—"}</div>
-<div class="loc-total-label">ВСЕГО</div>
-${summary.guns ? `<div class="loc-total-label">${summary.guns} пист.</div>` : ""}
-</div>
+<div class="loc-head-left">${opBadge(first.operator, first.aggregator)}<span class="loc-city">${escapeHtml(first.city || "—")}</span></div>
 </div>
 ${stationsHtml}
 <div class="loc-footer"><span class="loc-date">${fmtDate(latestDate)}</span></div>
 </div>`;
 }
 
-export function renderStatCards(summary) {
-  const dcVal =
-    summary.dc > 0
-      ? `${summary.dc} <span class="stat-val-unit">| ${summary.maxDc} кВт</span>`
-      : "—";
-  const acVal =
-    summary.ac > 0
-      ? `${summary.ac} <span class="stat-val-unit">| ${summary.maxAc} кВт</span>`
-      : "—";
-
-  return `<div class="loc-stats stats-row">
-<div class="stat-card"><div class="stat-label">DC СТАНЦИЙ <span class="stat-val-unit">| КВТ</span></div><div class="stat-val stat-val--compound">${dcVal}</div></div>
-<div class="stat-card"><div class="stat-label">AC СТАНЦИЙ <span class="stat-val-unit">| КВТ</span></div><div class="stat-val stat-val--compound">${acVal}</div></div>
-<div class="stat-card"><div class="stat-label">КОННЕКТ.</div><div class="stat-val">${summary.guns || "—"}</div></div>
-<div class="stat-card"><div class="stat-label">МОЩНОСТЬ Σ</div><div class="stat-val">${summary.totalPower ? summary.totalPower.toLocaleString("ru") : "—"}</div></div>
-<div class="stat-card"><div class="stat-label">АВТО СРАЗУ</div><div class="stat-val" style="color:var(--cyan)">${summary.maxSim || "—"}</div></div>
+export function renderHeroRating(loc) {
+  if (loc.cached_review_count > 0 && loc.cached_avg_rating) {
+    return `<div class="loc-hero-rating">
+<span class="loc-hero-rating-stars" aria-hidden="true">★★★★☆</span>
+<span class="loc-hero-rating-val">${escapeHtml(String(loc.cached_avg_rating))}</span>
+<span class="loc-hero-rating-count">(${escapeHtml(String(loc.cached_review_count))} ${loc.cached_review_count === 1 ? "отзыв" : loc.cached_review_count < 5 ? "отзыва" : "отзывов"})</span>
+</div>`;
+  }
+  return `<div class="loc-hero-rating loc-hero-rating--soon">
+<span class="loc-hero-rating-stars" aria-hidden="true">☆☆☆☆☆</span>
+<span class="loc-hero-rating-soon">рейтинг скоро</span>
 </div>`;
 }
 
-export function renderRatingBlock(loc) {
-  if (loc.cached_review_count > 0 && loc.cached_avg_rating) {
-    return `<div class="loc-rating-box">
-<div class="loc-rating-score">★ ${escapeHtml(String(loc.cached_avg_rating))}</div>
-<div class="loc-rating-meta">${escapeHtml(String(loc.cached_review_count))} отзывов</div>
+export function renderInfrastructureBlock(stations, summary) {
+  if (!stations.length) {
+    return `<div class="blk loc-infra-blk">
+<div class="blk-hdr"><span class="blk-title">⚡ ИНФРАСТРУКТУРА</span></div>
+<p class="loc-empty">Данных о зарядных постах на этой локации пока нет.</p>
 </div>`;
   }
-  return `<div class="loc-rating-box loc-rating-box--soon">
-<span class="loc-rating-stars">☆☆☆☆☆</span>
-<span class="loc-rating-soon">СКОРО</span>
-<p class="loc-rating-hint">Народный рейтинг и полевые отчёты</p>
+
+  const connectors = collectConnectorTypes(stations);
+  const connStr = connectors.length ? connectors.map((c) => escapeHtml(c)).join(" · ") : "—";
+  const powerVal = summary.totalPower
+    ? `${summary.totalPower.toLocaleString("ru")} кВт`
+    : "—";
+  const simVal = summary.maxSim
+    ? `до ${summary.maxSim} ${summary.maxSim === 1 ? "автомобиля" : summary.maxSim < 5 ? "автомобилей" : "автомобилей"}`
+    : "—";
+
+  const dcLine =
+    summary.dc > 0
+      ? `DC зарядок: ${summary.dc}${summary.maxDc ? ` · до ${summary.maxDc} кВт` : ""}`
+      : "";
+  const acLine =
+    summary.ac > 0
+      ? `AC зарядок: ${summary.ac}${summary.maxAc ? ` · до ${summary.maxAc} кВт` : ""}`
+      : "";
+  const countLines = [dcLine, acLine].filter(Boolean).join("<br>");
+
+  let singleDetail = "";
+  if (stations.length === 1) {
+    const s = stations[0];
+    singleDetail = `<div class="loc-infra-single">
+${typeBadge(s.station_type)}
+<span class="loc-infra-single-pwr">${powerHtml(s)}</span>
+<span class="loc-infra-single-date">запуск ${fmtDate(s.station_date)}</span>
+</div>`;
+  }
+
+  return `<div class="blk loc-infra-blk">
+<div class="blk-hdr"><span class="blk-title">⚡ ИНФРАСТРУКТУРА</span></div>
+<div class="loc-infra-grid">
+<div class="loc-infra-item loc-infra-item--primary">
+<div class="loc-infra-label">Максимальная мощность</div>
+<div class="loc-infra-val">${powerVal}</div>
+</div>
+<div class="loc-infra-item">
+<div class="loc-infra-label">Разъёмы</div>
+<div class="loc-infra-val loc-infra-val--connectors">${connStr}</div>
+</div>
+<div class="loc-infra-item">
+<div class="loc-infra-label">Одновременно</div>
+<div class="loc-infra-val">${simVal}</div>
+</div>
+</div>
+${countLines ? `<div class="loc-infra-counts">${countLines}</div>` : ""}
+${singleDetail}
 </div>`;
 }
 
@@ -316,29 +352,22 @@ ${Array.from({ length: 6 }, (_, i) => `<div class="loc-photo-slot" aria-hidden="
 </div>`;
 }
 
-export function renderTagsPlaceholder() {
-  return `<div class="blk loc-tags-blk">
-<div class="blk-hdr"><span class="blk-title">ТЕГИ ЛОКАЦИИ</span></div>
-<div class="loc-tag-chips">
+export function renderReviewsBlock() {
+  return `<div class="blk loc-reviews-blk">
+<div class="blk-hdr"><span class="blk-title">ОТЗЫВЫ</span></div>
+<div class="loc-review-tags">
 <span class="loc-tag loc-tag--soon">#скоро</span>
 <span class="loc-tag loc-tag--soon">#полевойотчёт</span>
 </div>
-<p class="loc-soon-text">Теги появятся вместе с отзывами сообщества.</p>
-</div>`;
-}
-
-export function renderReviewsPlaceholder() {
-  return `<div class="blk loc-reviews-blk">
-<div class="blk-hdr"><span class="blk-title">ОТЗЫВЫ</span></div>
+<p class="loc-soon-text loc-review-tags-hint">Теги появятся из отзывов сообщества.</p>
 <div class="loc-reviews-empty">
-<span class="loc-rating-stars">☆☆☆☆☆</span>
-<p class="loc-soon-text">Пока нет отзывов. Будьте первым — блок отчёта справа.</p>
+<p class="loc-soon-text">Пока нет отзывов. Будьте первым — отправьте полевой отчёт ниже.</p>
 </div>
 </div>`;
 }
 
 export function renderStatusPlaceholder() {
-  return `<div class="blk loc-status-blk">
+  return `<div class="blk loc-status-blk loc-status-blk--muted">
 <div class="blk-hdr"><span class="blk-title">СТАТУС СЕЙЧАС</span></div>
 <div class="loc-status-body">
 <span class="loc-status-dot"></span>
