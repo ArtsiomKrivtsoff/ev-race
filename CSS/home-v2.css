@@ -607,7 +607,7 @@
   right: auto;
   image-rendering: auto;
 }
-.page-wrap #ops-list .op-row .op-name {
+.page-wrap #ops-list .op-row .op-page-link {
   flex: 0 1 auto;
   overflow: visible;
   text-overflow: clip;
@@ -658,14 +658,43 @@
   text-shadow: 0 0 12px var(--oc, transparent);
 }
 .op-mid { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
-.op-nameline { display: flex; align-items: center; }
-.op-name {
+.op-nameline { display: flex; align-items: center; min-height: 28px; }
+.op-page-link {
   font-family: 'Press Start 2P', monospace;
   font-size: 10px;
-  color: var(--home-text);
+  color: var(--oc, var(--home-text));
+  text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.op-page-link:hover,
+.op-page-link:focus-visible {
+  color: var(--oc, var(--green));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.op-page-arr { opacity: 0.65; }
+.op-page-link:hover .op-page-arr,
+.op-page-link:focus-visible .op-page-arr { opacity: 1; }
+.op-dossier-link {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--home-text-dim);
+  text-decoration: none;
+  letter-spacing: var(--ls-tight);
+  align-self: flex-start;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.op-dossier-link:hover,
+.op-dossier-link:focus-visible {
+  color: var(--oc, var(--green));
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .op-status {
   font-family: 'Share Tech Mono', monospace;
@@ -790,7 +819,7 @@
     font-size: clamp(32px, 4vw, 48px);
     white-space: nowrap;
   }
-  .page-wrap #ops-list .op-name {
+  .page-wrap #ops-list .op-page-link {
     font-size: 11px;
     overflow: visible;
     text-overflow: clip;
@@ -1240,13 +1269,34 @@ html[data-theme="tesla-dark"] .page-wrap #ops-list .op-rank span {
   font-weight: 600;
   text-shadow: none;
 }
-html[data-theme="tesla-light"] .page-wrap #ops-list .op-name,
-html[data-theme="tesla-dark"] .page-wrap #ops-list .op-name {
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-page-link,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-page-link {
   font-family: var(--font);
   font-size: 13px;
   font-weight: 600;
   text-transform: none;
-  color: var(--fg);
+  color: var(--oc, var(--fg));
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-page-link:hover,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-page-link:hover,
+html[data-theme="tesla-light"] .page-wrap #ops-list .op-page-link:focus-visible,
+html[data-theme="tesla-dark"] .page-wrap #ops-list .op-page-link:focus-visible {
+  color: var(--oc, var(--accent));
+}
+html[data-theme="tesla-light"] .page-wrap .op-dossier-link,
+html[data-theme="tesla-dark"] .page-wrap .op-dossier-link {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: none;
+  color: var(--fg-3);
+}
+html[data-theme="tesla-light"] .page-wrap .op-dossier-link:hover,
+html[data-theme="tesla-dark"] .page-wrap .op-dossier-link:hover,
+html[data-theme="tesla-light"] .page-wrap .op-dossier-link:focus-visible,
+html[data-theme="tesla-dark"] .page-wrap .op-dossier-link:focus-visible {
+  color: var(--oc, var(--accent));
 }
 html[data-theme="tesla-light"] .page-wrap #ops-list .op-status,
 html[data-theme="tesla-dark"] .page-wrap #ops-list .op-status {
