@@ -324,7 +324,7 @@ function getOpStatus(op,rank,gap){
   if(rn===0) return 'ТЕМП РОВНЫЙ';
   return 'НАБИРАЕТ ТЕМП';
 }
-let data=OPS.map(o=>({...o,total:0,dc:0,ac:0,w7:0,roundN:0,goal:0,last:'—'});
+let data=OPS.map(o=>({...o,total:0,dc:0,ac:0,w7:0,roundN:0,goal:0,last:'—'}));
 let lastStationUpd='—';
 let roundChartData={};
 let selectedOperator=null;
