@@ -4,6 +4,8 @@
   "exclude": [
     "/CSS/*",
     "/JS/*",
+    "/CSS/vendor/*",
+    "/JS/vendor/*",
     "/logos/*",
     "/operators/*",
     "/docs/*",
