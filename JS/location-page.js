@@ -43,6 +43,38 @@
     document.getElementById("mobAccList")?.classList.toggle("open");
   };
 
+  window.shareLocation = function () {
+    var url = location.href;
+    var title = document.title;
+    var btn = document.getElementById("loc-share-btn");
+    var isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+    function copiedFeedback() {
+      if (!btn) return;
+      var prev = btn.textContent;
+      btn.textContent = "ССЫЛКА СКОПИРОВАНА";
+      btn.classList.add("is-copied");
+      setTimeout(function () {
+        btn.textContent = prev;
+        btn.classList.remove("is-copied");
+      }, 2000);
+    }
+
+    if (isMobile && navigator.share) {
+      navigator.share({ title: title, url: url }).catch(function () {});
+      return;
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(copiedFeedback).catch(function () {
+        window.prompt("Скопируйте ссылку:", url);
+      });
+      return;
+    }
+
+    window.prompt("Скопируйте ссылку:", url);
+  };
+
   document.addEventListener("click", function (e) {
     var menu = document.getElementById("mobileMenu");
     var btn = document.getElementById("burgerBtn");
