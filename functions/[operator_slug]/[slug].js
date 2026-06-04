@@ -1,5 +1,5 @@
 /**
- * Infrastructure Platform — location page SSR (Stage 2.2 / v2 layout)
+ * Infrastructure Platform — location page SSR (polish v3)
  * Route: /{operator_slug}/{slug}
  */
 
@@ -8,15 +8,14 @@ import {
   escapeHtml,
   opClass,
   opDisplayName,
-  computeSummary,
-  renderHeroRating,
+  computeLocationMetrics,
+  renderHero,
   renderInfrastructureBlock,
-  renderStationsBlock,
-  renderNearby,
-  renderReportBlock,
-  renderPhotosPlaceholder,
+  renderPhotosBlock,
+  renderTagsBlock,
+  renderReviewFormBlock,
   renderReviewsBlock,
-  renderStatusPlaceholder,
+  renderNearbyBlock,
 } from "../_lib/location-render.js";
 
 const RESERVED_FIRST_SEGMENTS = new Set([
@@ -59,16 +58,20 @@ function render404() {
   );
 }
 
+function safeJsonForScript(obj) {
+  return JSON.stringify(obj).replace(/</g, "\\u003c");
+}
+
 function renderLocationPage(data, envConfig) {
   const loc = data.location;
   const stations = data.stations || [];
+  const community = data.community || {};
   const meta = data.meta || {};
-  const summary = computeSummary(stations);
+  const metrics = computeLocationMetrics(stations);
   const canonical =
     meta.canonical_url || `https://evrace.by/${loc.operator_slug}/${loc.slug}`;
   const ogTitle = meta.og_title || "Зарядная локация";
   const ogDesc = meta.og_description || "";
-  const addressLine = `${loc.city}, ${loc.address}`;
   const opCls = opClass(loc.operator_slug);
   const opName = opDisplayName(loc.operator, loc.operator_slug);
   const lat = loc.lat;
@@ -97,22 +100,15 @@ function renderLocationPage(data, envConfig) {
   aria-label="Карта локации"></div>`
     : "";
 
-  const stationsWithCity = stations.map((s) => ({
-    ...s,
-    city: loc.city,
-    address: loc.address,
-    location_name: loc.location_name,
-  }));
-
   const cfgJson = JSON.stringify({
     supabaseUrl: envConfig.supabaseUrl || "",
     supabaseKey: envConfig.supabaseKey || "",
   });
 
-  const titleHtml = loc.location_name
-    ? `<p class="loc-hero-venue">${escapeHtml(loc.location_name)}</p>
-<h1 class="loc-hero-address" id="loc-title">${escapeHtml(addressLine)}</h1>`
-    : `<h1 class="loc-hero-address" id="loc-title">${escapeHtml(addressLine)}</h1>`;
+  const communityJson = safeJsonForScript({
+    photos: community.photos || [],
+    reviews: community.reviews || [],
+  });
 
   return `<!DOCTYPE html>
 <html lang="ru">
@@ -138,11 +134,12 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=5">
-<link rel="stylesheet" href="/CSS/location-page.css?v=3">
+<link rel="stylesheet" href="/CSS/location-page.css?v=4">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="/CSS/tesla-dark.css?v=5">
 ${hasCoords ? '<link rel="stylesheet" href="/CSS/vendor/leaflet.css?v=1">' : ""}
 <script>window.__EVRACE__=${cfgJson};</script>
+<script type="application/json" id="loc-community-data">${communityJson}</script>
 </head>
 <body class="location-page">
 <div class="container">
@@ -156,45 +153,38 @@ ${renderSiteHeader("stations")}
 <span>${escapeHtml(loc.location_name || loc.address)}</span>
 </nav>
 
-<section class="loc-hero" aria-labelledby="loc-title">
-<div class="loc-hero-body">
-${renderHeroRating(loc)}
-${titleHtml}
-<div class="loc-hero-operator">
-<span class="loc-hero-op ${opCls}">${escapeHtml(opName)}</span>
-${aggregatorLine}
+${renderHero(loc, community, {
+  opCls,
+  opName,
+  aggregatorLine,
+  routeYandex,
+  mapBlock,
+})}
+
+<div class="loc-main-grid">
+${renderInfrastructureBlock(stations, metrics)}
+${renderPhotosBlock(community)}
+${renderTagsBlock(community)}
+${renderReviewFormBlock()}
+${renderReviewsBlock(community)}
+${renderNearbyBlock(data.nearby, loc.city)}
 </div>
-<div class="loc-actions">
-${routeYandex ? `<a class="loc-btn loc-btn-primary" href="${escapeHtml(routeYandex)}" target="_blank" rel="noopener noreferrer">ПРОЛОЖИТЬ МАРШРУТ</a>` : ""}
-<button class="loc-btn" type="button" id="loc-share-btn" onclick="shareLocation()">ПОДЕЛИТЬСЯ</button>
-</div>
-</div>
-${mapBlock}
-</section>
-
-${renderInfrastructureBlock(stationsWithCity, summary)}
-
-${renderStationsBlock(stationsWithCity)}
-
-<div class="loc-community-grid">
-${renderPhotosPlaceholder()}
-${renderReviewsBlock()}
-</div>
-
-<div class="blk loc-nearby-blk">
-<div class="blk-hdr"><span class="blk-title">РЯДОМ · ${escapeHtml(loc.city.toUpperCase())}</span></div>
-<div class="loc-nearby-list">${renderNearby(data.nearby)}</div>
-</div>
-
-${renderReportBlock()}
-
-${renderStatusPlaceholder()}
 
 ${renderSiteFooter()}
 </div>
 </div>
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх" aria-label="Наверх">↑</button>
-<script src="/JS/location-page.js?v=2"></script>
+<div class="loc-lightbox" id="loc-lightbox" hidden>
+<button type="button" class="loc-lightbox-close" aria-label="Закрыть">×</button>
+<button type="button" class="loc-lightbox-prev" aria-label="Предыдущее">‹</button>
+<button type="button" class="loc-lightbox-next" aria-label="Следующее">›</button>
+<div class="loc-lightbox-stage">
+<img class="loc-lightbox-img" alt="">
+<p class="loc-lightbox-cap"></p>
+<p class="loc-lightbox-counter"></p>
+</div>
+</div>
+<script src="/JS/location-page.js?v=3"></script>
 ${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=1"></script>' : ""}
 </body>
 </html>`;
