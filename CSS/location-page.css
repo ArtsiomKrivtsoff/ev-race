@@ -6,6 +6,13 @@
 body.location-page {
   --loc-map-min: 180px;
   --loc-inset-glow: rgba(0, 255, 65, 0.1);
+  --loc-gap: var(--s-3);
+  --loc-pad: var(--s-4);
+}
+
+/* Единый gutter: grid gap вместо margin у .blk */
+body.location-page .loc-main-grid .blk {
+  margin: 0;
 }
 
 /* ── Breadcrumbs ── */
@@ -28,6 +35,9 @@ body.location-page {
 .loc-breadcrumbs .loc-bc-sep { opacity: 0.45; }
 
 /* ── Shared ── */
+body.location-page .blk-hdr {
+  padding: var(--loc-pad);
+}
 .loc-blk-badge {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
@@ -39,7 +49,7 @@ body.location-page {
 }
 .loc-empty,
 .loc-empty-lead {
-  padding: var(--s-4);
+  padding: var(--loc-pad);
   color: var(--home-text-mid, var(--text-dim));
   font-size: 13px;
   line-height: 1.5;
@@ -94,7 +104,7 @@ body.location-page {
 
 /* ── Hero ── */
 .loc-hero {
-  margin-bottom: var(--s-4);
+  margin-bottom: var(--loc-gap);
 }
 .loc-hero-shell {
   display: none;
@@ -102,13 +112,13 @@ body.location-page {
 .loc-hero-mobile-row {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  gap: var(--s-3);
+  gap: var(--loc-gap);
   align-items: stretch;
 }
 .loc-hero-mobile-place,
 .loc-hero-mobile-rating {
   margin: 0;
-  padding: var(--s-3);
+  padding: var(--loc-pad);
 }
 .loc-hero-mobile-rating .loc-hero-rating {
   height: 100%;
@@ -247,9 +257,9 @@ body.location-page {
   .loc-hero-shell {
     display: grid;
     grid-template-columns: minmax(0, 13fr) auto minmax(var(--loc-map-min), 8fr);
-    gap: var(--s-4);
+    gap: var(--loc-gap);
     align-items: stretch;
-    padding: var(--s-4);
+    padding: var(--loc-pad);
     background: var(--home-card, var(--card-bg));
     border: 1px solid var(--home-bdr, var(--border-faint));
     border-radius: 5px;
@@ -272,11 +282,13 @@ body.location-page {
 .loc-main-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0;
+  gap: var(--loc-gap);
 }
 @media (min-width: 900px) {
   .loc-main-grid {
     grid-template-columns: 2fr 1fr;
+    column-gap: var(--loc-gap);
+    row-gap: var(--loc-gap);
     align-items: start;
   }
   .loc-grid-main { grid-column: 1; }
@@ -292,84 +304,151 @@ body.location-page {
   }
 }
 
-/* ── Infrastructure ── */
+/* ── Infrastructure (ss-cell pattern) ── */
 .loc-infra-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--s-3);
-  padding: var(--s-4);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  padding: 0;
 }
-@media (min-width: 640px) {
-  .loc-infra-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.loc-infra-cell {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  padding: 18px 14px;
+  border-right: 1px solid var(--home-bdr, var(--border-faint));
+  min-width: 0;
 }
-.loc-infra-item {
+.loc-infra-cell:last-child {
+  border-right: none;
+}
+.loc-infra-ico {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  color: var(--green);
+  line-height: 0;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.85));
+}
+.loc-infra-ico svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+.loc-infra-copy {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  padding: var(--s-3);
-  border: 1px solid var(--home-bdr, var(--border-faint));
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.15);
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
 }
-.loc-infra-ico { color: var(--green); opacity: 0.85; }
 .loc-infra-label {
+  font-family: 'Share Tech Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--home-text-dim, var(--text-dim));
+  line-height: 1.3;
 }
 .loc-infra-val {
   font-family: 'Press Start 2P', monospace;
-  font-size: 11px;
-  line-height: 1.5;
+  font-size: clamp(10px, 1.25vw, 15px);
+  line-height: 1.55;
   color: var(--green);
-  text-shadow: 0 0 10px rgba(0, 255, 65, 0.35);
-}
-.loc-infra-val--conn {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  text-shadow: none;
-  color: var(--home-text, var(--text));
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.55);
+  word-break: break-word;
 }
 .loc-infra-breakdown {
-  padding: 0 var(--s-4) var(--s-3);
+  padding: var(--loc-pad);
+  border-top: 1px solid var(--home-bdr, var(--border-faint));
   font-size: 11px;
   color: var(--home-text-mid, var(--text-dim));
 }
 .loc-infra-breakdown--split {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--s-3);
+  gap: 0;
+}
+.loc-infra-breakdown-col {
+  padding: 0 var(--loc-pad);
+}
+.loc-infra-breakdown-col:first-child {
+  border-right: 1px solid var(--home-bdr, var(--border-faint));
+  padding-left: 0;
+}
+.loc-infra-breakdown-col:last-child {
+  padding-right: 0;
 }
 .loc-infra-breakdown-lbl {
   display: block;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   color: var(--home-text-dim, var(--text-dim));
 }
-.loc-infra-footer {
-  padding: var(--s-3) var(--s-4);
-  border-top: 1px solid var(--home-bdr, var(--border-faint));
-  font-size: 10px;
-  letter-spacing: 0.06em;
+.loc-infra-breakdown-val {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--home-text, var(--text));
   text-transform: uppercase;
-  color: var(--home-text-mid, var(--text-dim));
+  letter-spacing: 0.04em;
+}
+.loc-infra-breakdown:not(.loc-infra-breakdown--split) .loc-infra-breakdown-val {
+  color: var(--green);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.35);
+}
+.loc-infra-footer {
+  padding: var(--loc-pad);
+  border-top: 1px solid var(--home-bdr, var(--border-faint));
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--home-text-dim, var(--text-dim));
+}
+@media (max-width: 639px) {
+  .loc-infra-grid {
+    grid-template-columns: 1fr;
+  }
+  .loc-infra-cell {
+    border-right: none;
+    border-bottom: 1px solid var(--home-bdr, var(--border-faint));
+    padding: 16px;
+  }
+  .loc-infra-cell:last-child {
+    border-bottom: none;
+  }
+  .loc-infra-ico svg {
+    width: 28px;
+    height: 28px;
+  }
+  .loc-infra-val {
+    font-size: 10px;
+  }
+}
+@media (min-width: 640px) and (max-width: 899px) {
+  .loc-infra-cell {
+    padding: 14px 10px;
+    gap: 10px;
+  }
+  .loc-infra-val {
+    font-size: 9px;
+  }
 }
 
 /* ── Photos ── */
 .loc-photos-empty,
 .loc-tags-empty {
-  padding: var(--s-4);
+  padding: var(--loc-pad);
   text-align: center;
 }
 .loc-photo-panel {
   position: relative;
-  padding: var(--s-3);
+  padding: var(--loc-pad);
 }
 .loc-photo-grid {
   display: grid;
@@ -422,8 +501,8 @@ body.location-page {
 .loc-tag-agg-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  padding: var(--s-4);
+  gap: var(--loc-gap);
+  padding: var(--loc-pad);
 }
 @media (min-width: 640px) {
   .loc-tag-agg-grid { grid-template-columns: repeat(3, 1fr); }
@@ -456,7 +535,7 @@ body.location-page {
 
 /* ── Review form ── */
 .loc-review-form-body {
-  padding: var(--s-4);
+  padding: var(--loc-pad);
   display: flex;
   flex-direction: column;
   gap: var(--s-3);
@@ -490,8 +569,8 @@ body.location-page {
 .loc-reviews-list {
   display: flex;
   flex-direction: column;
-  gap: var(--s-3);
-  padding: var(--s-4);
+  gap: var(--loc-gap);
+  padding: var(--loc-pad);
 }
 .loc-review-card {
   padding: var(--s-3);
@@ -587,8 +666,8 @@ body.location-page {
 }
 .loc-reviews-more {
   display: block;
-  width: calc(100% - var(--s-4) * 2);
-  margin: 0 var(--s-4) var(--s-4);
+  width: calc(100% - var(--loc-pad) * 2);
+  margin: 0 var(--loc-pad) var(--loc-pad);
   padding: 12px;
   border: 1px dashed var(--home-bdr, var(--border-faint));
   background: transparent;
@@ -607,7 +686,7 @@ body.location-page {
   flex-direction: column;
 }
 .loc-nearby-empty {
-  padding: var(--s-4);
+  padding: var(--loc-pad);
   font-size: 12px;
   color: var(--home-text-mid, var(--text-dim));
   margin: 0;
@@ -617,7 +696,7 @@ body.location-page {
   grid-template-columns: auto 1fr auto;
   gap: 10px;
   align-items: center;
-  padding: 10px var(--s-4);
+  padding: var(--loc-pad) var(--loc-pad);
   border-bottom: 1px solid var(--home-bdr, var(--border-faint));
   text-decoration: none;
   color: inherit;
