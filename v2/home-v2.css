@@ -310,6 +310,8 @@
   margin-top: auto;
   padding-top: var(--s-2);
 }
+.hr-prog-upd .prog-upd-sep { color: var(--home-text-dim); opacity: 0.55; }
+.hr-prog-upd .prog-upd-add { color: var(--green); }
 
 /* ── hero mobile ── */
 @media (min-width: 640px) { .hero-mobile { display: none; } }
@@ -489,6 +491,8 @@
   text-align: right;
   margin-top: 6px;
 }
+.hm-prog-upd .prog-upd-sep { color: var(--home-text-dim); opacity: 0.55; }
+.hm-prog-upd .prog-upd-add { color: var(--green); }
 
 .hm-info {
   padding: 11px var(--s-4);

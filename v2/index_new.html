@@ -14,7 +14,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <link id="theme-css" rel="stylesheet" href="../CSS/arcade.css?v=2">
 <link rel="stylesheet" href="../CSS/operator.css?v=2">
-<link rel="stylesheet" href="home-v2.css?v=9">
+<link rel="stylesheet" href="home-v2.css?v=10">
 <link rel="prefetch" href="../CSS/tesla-light.css">
 <link rel="prefetch" href="../CSS/tesla-dark.css">
 <!-- styles: ../CSS/arcade.css + home-v2.css -->
@@ -326,6 +326,7 @@ function getOpStatus(op,rank,gap){
 }
 let data=OPS.map(o=>({...o,total:0,dc:0,ac:0,w7:0,roundN:0,goal:0,last:'—'}));
 let lastStationUpd='—';
+let lastStationDayAdd=0;
 let roundChartData={};
 let selectedOperator=null;
 
@@ -504,14 +505,42 @@ function applySeasonFeedLine(el,line,type){
   }
 }
 
+const RACE_OPS='batteryfly,forevo,zaryadka,united,csms';
+
 async function fetchLastStationDate(){
-  const r=await fetch(
-    SURL+'/rest/v1/stations?select=station_date&operator=in.(batteryfly,forevo,zaryadka,united,csms)&order=station_date.desc&limit=1',
-    {headers:{'apikey':SKEY}}
+  const hdr={headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}};
+  const r1=await fetch(
+    SURL+'/rest/v1/stations?select=station_date&operator=in.('+RACE_OPS+')&order=station_date.desc&limit=1',
+    hdr
   );
-  const rows=await r.json();
+  const rows=await r1.json();
   const lastDate=rows?.[0]?.station_date;
-  if(lastDate) lastStationUpd=String(lastDate).slice(0,10).split('-').reverse().join('.');
+  if(!lastDate) return;
+  const iso=String(lastDate).slice(0,10);
+  lastStationUpd=iso.split('-').reverse().join('.');
+  const r2=await fetch(
+    SURL+'/rest/v1/stations?select=count&operator=in.('+RACE_OPS+')&station_date=eq.'+iso,
+    hdr
+  );
+  const dayRows=await r2.json();
+  if(Array.isArray(dayRows)) lastStationDayAdd=dayRows.reduce((s,r)=>s+(r.count||0),0);
+}
+
+function formatStations(n){
+  const abs=Math.abs(n);
+  const mod10=abs%10;
+  const mod100=abs%100;
+  if(mod100>=11&&mod100<=19) return `+${n} СТАНЦИЙ`;
+  if(mod10===1) return `+${n} СТАНЦИЯ`;
+  if(mod10>=2&&mod10<=4) return `+${n} СТАНЦИИ`;
+  return `+${n} СТАНЦИЙ`;
+}
+
+function formatProgUpdHtml(){
+  if(lastStationUpd==='—') return 'ОБНОВЛЕНО: —';
+  return 'ОБНОВЛЕНО: '+lastStationUpd+
+    ' <span class="prog-upd-sep">·</span> '+
+    '<span class="prog-upd-add">'+formatStations(lastStationDayAdd)+'</span>';
 }
 
 async function loadSeasonFeed(){
@@ -548,11 +577,11 @@ async function init(){
 function renderProgress(){
   const tot=data.reduce((s,o)=>s+o.total,0);
   const pct=+(tot/GOAL*100).toFixed(1);
-  const upd=lastStationUpd;
+  const updHtml=formatProgUpdHtml();
   [['d-cur','d-pct','d-bar','d-upd'],['m-cur','m-pct','m-bar','m-upd']].forEach(([cid,pid,bid,uid])=>{
     const c=document.getElementById(cid); if(c) c.textContent=tot;
     const p=document.getElementById(pid); if(p) p.textContent=pct+'%';
-    const u=document.getElementById(uid); if(u) u.textContent='ОБНОВЛЕНО: '+upd;
+    const u=document.getElementById(uid); if(u) u.innerHTML=updHtml;
     const b=document.getElementById(bid);
     if(b){
       b.innerHTML='';
