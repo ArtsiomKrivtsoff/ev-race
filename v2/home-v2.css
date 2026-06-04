@@ -846,12 +846,27 @@ body.reduced-fx .op-total {
   text-shadow: 0 0 6px var(--green);
 }
 
-/* ── chronicle block (intro + UPD use arcade classes) ── */
+/* ── о гонке (origin, под hero) ── */
+.page-wrap .race-premise-blk { margin-top: 0; }
+.page-wrap .race-premise-blk .race-premise {
+  padding: 14px var(--s-4) 16px;
+  margin: 0;
+  font-size: clamp(12px, 1.75vw, 14px);
+  line-height: 1.75;
+  text-align: left;
+}
+.page-wrap .race-premise-blk .race-premise strong {
+  color: var(--green);
+}
+.page-wrap .race-premise-blk .race-premise .highlight {
+  color: var(--yellow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+}
+
+/* ── chronicle (только UPD внизу) ── */
 .chronicle-blk {
   margin: var(--s-4) 0;
 }
-.chronicle-blk .header-intro {
-  text-align: left;
-  margin-bottom: var(--s-4);
-}
-.chronicle-blk .upd-block { margin-top: var(--s-3); }
+.chronicle-blk .upd-block { margin-top: 0; }
+.chronicle-blk .upd-block + .upd-block { margin-top: var(--s-3); }
