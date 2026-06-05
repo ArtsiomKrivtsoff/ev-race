@@ -1,5 +1,5 @@
 /* ============================================================
-   Location page v13 — infra KPI + station island rows
+   Location page v15 — connector legend, KPI icons, gun pills
    Depends: arcade.css, operator.css, home-v2.css (.blk)
    ============================================================ */
 
@@ -486,8 +486,8 @@ body.location-page .blk-hdr {
 }
 .loc-infra-ico svg {
   display: block;
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
 }
 .loc-infra-copy {
   flex: 1;
@@ -499,7 +499,6 @@ body.location-page .blk-hdr {
 }
 .loc-infra-val {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(10px, 1.15vw, 14px);
   line-height: 1.45;
   color: var(--green);
   text-transform: uppercase;
@@ -507,11 +506,17 @@ body.location-page .blk-hdr {
   white-space: nowrap;
   text-align: center;
 }
+.loc-infra-val--edge {
+  font-size: clamp(9px, 1.05vw, 12px);
+}
+.loc-infra-cell--conn .loc-infra-copy {
+  align-items: flex-start;
+}
 .loc-infra-val-stack {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  align-items: center;
+  align-items: flex-start;
   max-width: 100%;
   min-width: 0;
 }
@@ -521,13 +526,16 @@ body.location-page .blk-hdr {
   font-size: inherit;
   line-height: 1.4;
   color: inherit;
-  text-transform: uppercase;
+  text-transform: none;
   text-shadow: inherit;
   white-space: nowrap;
   max-width: 100%;
+  text-align: left;
 }
 .loc-infra-cell--conn .loc-infra-val--center {
   font-size: clamp(8px, 0.95vw, 12px);
+  text-align: left;
+  align-self: flex-start;
 }
 
 /* Station rows (stations.html badges + gun-pill) */
@@ -575,6 +583,10 @@ body.location-page .blk-hdr {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  border: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
 }
 .loc-st-power {
   flex: 0 0 auto;
@@ -589,8 +601,12 @@ body.location-page .blk-hdr {
   .loc-infra-grid {
     min-height: 88px;
   }
-  .loc-infra-val {
-    font-size: clamp(14px, 1.4vw, 24px);
+  .loc-infra-ico svg {
+    width: 32px;
+    height: 32px;
+  }
+  .loc-infra-val--edge {
+    font-size: clamp(12px, 1.2vw, 20px);
   }
   .loc-infra-cell--conn .loc-infra-val--center {
     font-size: clamp(10px, 1vw, 16px);
@@ -619,8 +635,8 @@ body.location-page .blk-hdr {
     gap: 5px;
   }
   .loc-infra-ico svg {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
   }
   .loc-st-row {
     gap: 6px;
@@ -1094,6 +1110,16 @@ html[data-theme="tesla-dark"] body.location-page .loc-st-power {
   font-weight: 600;
   color: var(--fg);
   text-shadow: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-st-guns .gun-pill,
+html[data-theme="tesla-dark"] body.location-page .loc-st-guns .gun-pill {
+  border: none;
+  background: transparent;
+  color: var(--fg-2);
+}
+html[data-theme="tesla-light"] body.location-page .loc-st-guns .gun-dot,
+html[data-theme="tesla-dark"] body.location-page .loc-st-guns .gun-dot {
+  background: var(--accent);
 }
 
 html[data-theme="tesla-light"] body.location-page .loc-blk-badge,

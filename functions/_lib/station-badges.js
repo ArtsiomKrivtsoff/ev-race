@@ -8,6 +8,68 @@ export function escapeHtml(s) {
   );
 }
 
+/** Canonical KPI connector legend — order and labels (location infra middle cell). */
+export const CONNECTOR_LEGEND = [
+  { key: "ccs", label: "CCS" },
+  { key: "gbt", label: "GBT" },
+  { key: "type2", label: "Type 2" },
+  { key: "gbt_ac", label: "GBT AC" },
+];
+
+/** Map raw gun1/2/3 value → legend key. Unknown types sort after legend. */
+export function normalizeConnectorKey(raw) {
+  const norm = String(raw || "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toUpperCase();
+  if (!norm) return null;
+  if (norm === "GBT AC" || norm === "GBT-AC" || norm === "GBTAC") return "gbt_ac";
+  if (norm === "TYPE2" || norm === "TYPE-2" || norm === "TYPE 2") return "type2";
+  if (norm.startsWith("CCS")) return "ccs";
+  if (norm === "GBT") return "gbt";
+  return `_other:${norm}`;
+}
+
+export function connectorLegendLabel(key) {
+  const row = CONNECTOR_LEGEND.find((r) => r.key === key);
+  if (row) return row.label;
+  if (key.startsWith("_other:")) {
+    return key.slice(7).replace(/\bTYPE 2\b/i, "Type 2");
+  }
+  return key;
+}
+
+export function connectorLegendSortIndex(key) {
+  const idx = CONNECTOR_LEGEND.findIndex((r) => r.key === key);
+  return idx >= 0 ? idx : CONNECTOR_LEGEND.length + 1;
+}
+
+/** Aggregate gun counts by legend key × station count. */
+export function aggregateConnectorLegendCounts(stations) {
+  const counts = new Map();
+  for (const s of stations) {
+    const cnt = s.count || 1;
+    for (const gun of stationGunTypes(s)) {
+      const key = normalizeConnectorKey(gun);
+      if (!key) continue;
+      counts.set(key, (counts.get(key) || 0) + cnt);
+    }
+  }
+  return counts;
+}
+
+export function formatConnectorLegendLines(counts) {
+  if (!counts?.size) return [];
+  return [...counts.entries()]
+    .sort((a, b) => {
+      const ai = connectorLegendSortIndex(a[0]);
+      const bi = connectorLegendSortIndex(b[0]);
+      if (ai !== bi) return ai - bi;
+      return a[0].localeCompare(b[0]);
+    })
+    .map(([key, n]) => ({ label: connectorLegendLabel(key), count: n }));
+}
+
 export function powerSum(station) {
   return (station.dc_power || 0) + (station.ac_power || 0);
 }

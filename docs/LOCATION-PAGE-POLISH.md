@@ -178,27 +178,29 @@ grid-template-columns: minmax(0, 13fr) auto minmax(180px, 8fr);
 
 **Одна карточка `.blk`** — **единственный** технический блок локации. **Таблица станций — убрать** на всех breakpoints.
 
-**Шапка:** **«СТАНЦИЙ В ЛОКАЦИИ»** + badge **X** = `meta.station_count` (`sum(count)`).
+**Шапка:** **«СТАНЦИЙ В ЛОКАЦИИ»** + badge **X** = физических станций (`sum(count)`).
 
-**Сетка 3 колонки** — иконки как на mock, ячейки **центрированы**:
+**Строка 2 — KPI (3 ячейки, без подписей внутри):** ⚡ суммарная кВт · 🔌 коннекторы · 🚗 `N АВТО`.
 
-| Колонка | Label | Value | Формула |
-|---------|-------|-------|---------|
-| ⚡ | **МОЩНОСТЬ ЛОКАЦИИ** | суммарно, напр. `384 кВт` | `Σ (dc_power + ac_power) × count` |
-| 🔌 | **Коннекторы** | `CCS ×2` · `GBT ×1` … | gun1–3 × `count`, группировка по типу |
-| 🚗 | **Одновременно** | `до N авто` | `Σ simultaneous_charge × count` (поле **всегда заполнено** в БД) |
+**Строка 3+ — список станций:** номер · badge типа · gun-pills (островок) · мощность. `count` → N строк.
 
-**Footer — sub-block** `.loc-infra-breakdown`:
+### KPI — средняя ячейка (коннекторы) — ОБЯЗАТЕЛЬНО
 
-| Условие | Layout |
-|---------|--------|
-| Только DC | «DC зарядок» + `160 кВт × 1, 80 кВт × 2` |
-| DC + AC | две колонки: DC breakdown \| AC breakdown |
-| Только AC | «AC зарядок» + тот же формат |
+Сверять с легендой реестра / скрином перед push (см. `.cursor/rules/location-page-infra.mdc`).
 
-Breakdown: группировка по `dc_power` / `ac_power` (ненулевые), `sum(count)`, сортировка kW ↓.
+| Правило | Значение |
+|---------|----------|
+| **Порядок строк** | фиксированный: **CCS → GBT → Type 2 → GBT AC** (только существующие) |
+| **Подписи** | ровно: `CCS`, `GBT`, `Type 2`, `GBT AC` (CCS2 → `CCS`) |
+| **Формат** | `{label} ×{count}` на строку |
+| **Выравнивание** | **по левому краю** контейнера, не по центру |
+| **Сортировка** | **не** по количеству × |
 
-**Responsive:** mobile values 28–32px / labels 12–13px / header 16px; desktop values **42px** / labels 13px / header **18px**.
+Код: `formatConnectorLegendLines()` / `normalizeConnectorKey()` в `station-badges.js`.
+
+**Footer DC/AC breakdown** — **удалён** (детализация = строки станций).
+
+**Responsive:** edge KPI fit-text синхронно; center — отдельный fit. Desktop infra может быть выше фото.
 
 **При «ДЕЛАЙ» удалить:** `renderStationsBlock`, table/mobile station render, связанный CSS.
 

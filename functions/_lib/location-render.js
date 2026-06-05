@@ -6,9 +6,12 @@
 import {
   escapeHtml,
   expandStationsByCount,
+  formatConnectorLegendLines,
   formatStationPower,
+  normalizeConnectorKey,
   renderStationGuns,
   renderTypeBadge,
+  stationGunTypes,
 } from "./station-badges.js";
 
 export const OP_NAMES = {
@@ -98,9 +101,11 @@ export function computeLocationMetrics(stations) {
     totalPower += ((s.dc_power || 0) + (s.ac_power || 0)) * cnt;
     totalSim += (s.simultaneous_charge || 0) * cnt;
 
-    for (const c of s.connectors || []) {
+    for (const c of stationGunTypes(s)) {
       if (!c) continue;
-      connectorCounts.set(c, (connectorCounts.get(c) || 0) + cnt);
+      const key = normalizeConnectorKey(c);
+      if (!key) continue;
+      connectorCounts.set(key, (connectorCounts.get(key) || 0) + cnt);
     }
     if (s.dc_power) {
       hasDc = true;
@@ -154,25 +159,18 @@ function starsHtml(rating) {
   return s.replace(/⯨/g, "★");
 }
 
-function formatConnectorLabel(type) {
-  const raw = String(type || "").trim();
-  const norm = raw.replace(/\s+/g, "").toUpperCase();
-  if (norm === "TYPE2" || norm === "TYPE-2") return "TYPE 2";
-  return raw.toUpperCase();
-}
-
 function formatConnectorsStack(counts) {
-  if (!counts?.size) {
+  const lines = formatConnectorLegendLines(counts);
+  if (!lines.length) {
     return `<span class="loc-infra-val loc-infra-val--center">—</span>`;
   }
-  const lines = [...counts.entries()]
-    .sort((a, b) => b[1] - a[1])
+  const html = lines
     .map(
-      ([t, n]) =>
-        `<span class="loc-conn-line">${escapeHtml(formatConnectorLabel(t))} ×${n}</span>`,
+      ({ label, count }) =>
+        `<span class="loc-conn-line">${escapeHtml(label)} ×${count}</span>`,
     )
     .join("");
-  return `<span class="loc-infra-val-stack loc-infra-val--center">${lines}</span>`;
+  return `<span class="loc-infra-val-stack loc-infra-val--center">${html}</span>`;
 }
 
 function tagPolarity(tag) {
