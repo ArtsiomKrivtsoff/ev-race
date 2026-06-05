@@ -281,13 +281,18 @@ function renderHeroIdentity(
   opCls,
   opName,
   aggregatorLine,
-  routeYandex,
   { showDesktopReviewCta = true } = {},
 ) {
   const titleBlock = renderHeroTitleBlock(loc);
+  const lat = loc.lat;
+  const lng = loc.lng;
+  const hasCoords = lat != null && lng != null;
+  const routeLabel = [loc.city, loc.address].filter(Boolean).join(", ")
+    || loc.location_name?.trim()
+    || opName;
 
-  const routeBtn = routeYandex
-    ? `<a class="loc-btn loc-btn-primary" href="${escapeHtml(routeYandex)}" target="_blank" rel="noopener noreferrer">МАРШРУТ</a>`
+  const routeBtn = hasCoords
+    ? `<button class="loc-btn loc-btn-primary route-nav-btn" type="button" data-route-lat="${escapeHtml(String(lat))}" data-route-lng="${escapeHtml(String(lng))}" data-route-label="${escapeHtml(routeLabel)}">МАРШРУТ</button>`
     : "";
 
   const desktopCta = showDesktopReviewCta
@@ -311,7 +316,6 @@ export function renderHero(loc, community, opts) {
     opCls,
     opName,
     aggregatorLine,
-    routeYandex,
     mapBlock,
     h1Text,
   } = opts;
@@ -320,7 +324,6 @@ export function renderHero(loc, community, opts) {
     opCls,
     opName,
     aggregatorLine,
-    routeYandex,
     { showDesktopReviewCta: true },
   );
   const ratingDesktop = renderRatingCard(loc, community, {

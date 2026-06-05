@@ -1,8 +1,8 @@
 # Phase A — Schema Migration Verification Report
 
-**Статус:** IMPLEMENTED, NOT VERIFIED (production)  
-**Дата:** 2026-06-05  
-**Миграция:** `ElectricVehicleChargingStation` → `LocalBusiness` + `Organization`
+**Статус:** IMPLEMENTED — **production View Source PASS** (2026-06-05)  
+**Коммит:** `2c5ff11`  
+**Manual pending:** validator.schema.org + Google Rich Results Test (0/0 sign-off)
 
 ---
 
@@ -73,13 +73,40 @@ node scripts/verify-phase-a-schema-production.mjs
 | 2 | [Google Rich Results Test](https://search.google.com/test/rich-results) | типы распознаны; 0 critical errors |
 | 3 | View Source | `@graph` содержит WebPage, BreadcrumbList, LocalBusiness, Organization; нет EVCS |
 
-### Production results
+## Production — automated audit PASS
 
-| URL | validator | Rich Results | View Source script | PASS |
-|-----|-----------|--------------|-------------------|------|
-| AC-MST | ⏳ | ⏳ | ⏳ | ⏳ |
-| MIX-ZAR | ⏳ | ⏳ | ⏳ | ⏳ |
-| DC-ORG | ⏳ | ⏳ | ⏳ | ⏳ |
+**Deploy:** `2c5ff11` · **Date:** 2026-06-05
+
+```bash
+node scripts/verify-phase-a-schema-production.mjs   # overall: PASS (3/3)
+node scripts/verify-seo-a-p0-production.mjs         # overall: PASS (3/3)
+```
+
+| Alias | Kind | Graph types | EVCS | Org `@id` | max / sum kW | Auto |
+|-------|------|-------------|------|-----------|--------------|------|
+| AC-MST | AC | WebPage, BreadcrumbList, Organization, LocalBusiness | absent | `/operator/zaryadka` | 44 / 176 | **PASS** |
+| MIX-ZAR | ACDC | same | absent | `/operator/zaryadka` | 160 / 732 | **PASS** |
+| DC-ORG | DC | same | absent | `/operator/orange` | 160 / 320 | **PASS** |
+
+Подтверждено на prod HTML:
+
+- `LocalBusiness.mainEntityOfPage` → canonical ✅
+- `WebPage.mainEntity` **отсутствует** ✅
+- `LocalBusiness.provider` → `Organization.@id` ✅
+- SEO-A Core: terminology + power alignment ✅
+
+### Production results — manual tools
+
+| URL | validator 0/0 | Rich Results | PASS |
+|-----|---------------|--------------|------|
+| AC-MST | ⏳ ваш sign-off | ⏳ | ⏳ |
+| MIX-ZAR | ⏳ | ⏳ | ⏳ |
+| DC-ORG | ⏳ | ⏳ | ⏳ |
+
+Ссылки (AC-MST пример):
+
+- [validator.schema.org](https://validator.schema.org/#url=https%3A%2F%2Fevrace.by%2Fzaryadka%2Fminsk-mstislavca-6)
+- [Rich Results Test](https://search.google.com/test/rich-results?url=https%3A%2F%2Fevrace.by%2Fzaryadka%2Fminsk-mstislavca-6)
 
 ---
 

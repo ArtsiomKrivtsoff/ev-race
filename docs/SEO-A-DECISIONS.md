@@ -143,11 +143,11 @@ Smoke: `node scripts/verify-phase-a-schema-production.mjs` + `verify-seo-a-p0-pr
 |----|--------|--------|
 | 1 | **Dynamic sitemap** | **CLOSED** — prod 133 URL, commit `2671277` |
 | 2 | `map.html` → location page | **CLOSED** — `19be2b6` |
-| 3 | `stations.html` → location page | **CLOSED** — commit pending push |
+| 3 | `stations.html` → location page | **CLOSED** — `2364ccd` |
 
 **Приёмка SEO-B:** Search Console — sitemap с location URLs; crawl path: home / map / stations → location pages.
 
-**SEO-B статус:** **CLOSED** (P1-1…P1-3 код + verify).
+**SEO-B статус:** **CLOSED** (P1-1…P1-3 код + verify). Отчёт: [`SEO-B-FINAL-VERIFICATION-REPORT.md`](SEO-B-FINAL-VERIFICATION-REPORT.md).
 
 Smoke: **5–10 случайных локаций** разных операторов (не одна ACDC-эталон).
 

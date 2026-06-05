@@ -1,0 +1,5 @@
+# Supabase local/deploy config — ev-race
+# Project: uvrboxrddqlasgrnnnne
+
+[functions.get-location]
+verify_jwt = false

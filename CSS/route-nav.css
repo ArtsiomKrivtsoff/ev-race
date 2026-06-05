@@ -1,0 +1,96 @@
+/* Shared route navigator picker (map + location page) */
+.route-nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.55);
+  -webkit-tap-highlight-color: transparent;
+}
+.route-nav-overlay[hidden] { display: none !important; }
+.route-nav-sheet {
+  width: 100%;
+  max-width: 420px;
+  max-height: min(78vh, 520px);
+  overflow: auto;
+  background: var(--card-bg, #0a0a0a);
+  border: 1px solid var(--border-dim, #1a1a1a);
+  border-bottom: none;
+  box-sizing: border-box;
+}
+@media (min-width: 600px) {
+  .route-nav-overlay { align-items: center; padding: 16px; }
+  .route-nav-sheet { border-bottom: 1px solid var(--border-dim, #1a1a1a); border-radius: 4px; }
+}
+.route-nav-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--border-dim, #1a1a1a);
+}
+.route-nav-title {
+  margin: 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: var(--ls-tight, 0.08em);
+  color: var(--green, #00ff41);
+  text-transform: uppercase;
+}
+.route-nav-close {
+  border: 1px solid var(--border, #333);
+  background: transparent;
+  color: var(--text-dim, #888);
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.route-nav-sub {
+  margin: 0;
+  padding: 8px 14px 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim, #888);
+  line-height: 1.5;
+  border-bottom: 1px solid var(--border-hairline, #151515);
+}
+.route-nav-list { list-style: none; margin: 0; padding: 6px 0; }
+.route-nav-item { margin: 0; padding: 0; }
+.route-nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--green, #00ff41);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-hairline, #151515);
+}
+.route-nav-link:hover,
+.route-nav-link:focus-visible { background: rgba(0, 255, 65, 0.06); }
+.route-nav-link--rec { color: var(--green, #00ff41); font-weight: 600; }
+.route-nav-badge {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--yellow, #ffd700);
+  white-space: nowrap;
+}
+body.theme-tesla-light .route-nav-sheet { background: #fff; border-color: #ddd; }
+body.theme-tesla-light .route-nav-hdr,
+body.theme-tesla-light .route-nav-sub { border-color: #eee; }
+body.theme-tesla-light .route-nav-title { color: #111; font-family: 'Roboto', sans-serif; }
+body.theme-tesla-light .route-nav-sub { font-family: 'Roboto', sans-serif; color: #888; }
+body.theme-tesla-light .route-nav-link { font-family: 'Roboto', sans-serif; color: #111; border-color: #f0f0f0; }
+body.theme-tesla-light .route-nav-close { border-color: #ddd; color: #888; }
+body.theme-tesla-dark .route-nav-sheet { background: #1e1e1e; border-color: #2a2a2a; }
+body.theme-tesla-dark .route-nav-title { color: #f0f0f0; font-family: 'Roboto', sans-serif; }
+body.theme-tesla-dark .route-nav-link { font-family: 'Roboto', sans-serif; color: #f0f0f0; }

@@ -38,6 +38,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 
 <link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=5">
+<link rel="stylesheet" href="CSS/route-nav.css?v=1">
 <link rel="prefetch" href="CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="CSS/tesla-dark.css?v=5">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -150,7 +151,10 @@ html, body { height: 100%; overflow: hidden; margin: 0; padding: 0; }
 .popup-loc-links { display: flex; flex-direction: column; gap: 4px; margin: 6px 0 var(--s-2); }
 .popup-loc-link  { display: block; width: 100%; padding: 6px 0; font-size: 10px; font-family: 'Share Tech Mono', monospace; text-align: center; letter-spacing: var(--ls-tight); text-decoration: none; border: 1px solid var(--green); color: var(--green); background: transparent; box-sizing: border-box; }
 .popup-loc-link:hover { background: rgba(0,255,65,.08); }
-.popup-route-btn{ display: block; width: 100%; margin-top: var(--s-2); padding: 6px 0; font-size: 10px; font-family: 'Share Tech Mono', monospace; text-align: center; border: none; cursor: pointer; color: #fff; letter-spacing: var(--ls-tight); }
+.popup-loc-addr-link { color: var(--green); text-decoration: underline; text-underline-offset: 2px; }
+.popup-loc-addr-link:hover { opacity: .85; }
+.popup-actions { display: flex; flex-direction: column; gap: 4px; margin-top: var(--s-2); padding-top: 6px; border-top: 1px solid var(--border-dim); }
+.popup-route-btn{ display: block; width: 100%; margin-top: 0; padding: 6px 0; font-size: 10px; font-family: 'Share Tech Mono', monospace; text-align: center; border: none; cursor: pointer; color: #fff; letter-spacing: var(--ls-tight); }
 
 /* ── КЛАСТЕРЫ ── */
 .marker-cluster-small,
@@ -232,7 +236,9 @@ body.theme-tesla-light .popup-loc-name { font-family: 'Roboto', sans-serif; colo
 body.theme-tesla-light .popup-row      { font-family: 'Roboto', sans-serif; color: #888; }
 body.theme-tesla-light .popup-row span { color: #111; }
 body.theme-tesla-light .popup-total    { font-family: 'Roboto', sans-serif; color: #888; border-top-color: #eee; }
+body.theme-tesla-light .popup-loc-addr-link { color: #111; }
 body.theme-tesla-light .popup-loc-link { font-family: 'Roboto', sans-serif; border-radius: 20px; }
+body.theme-tesla-light .popup-actions { border-top-color: #eee; }
 body.theme-tesla-light .popup-route-btn{ font-family: 'Roboto', sans-serif; border-radius: 20px; }
 body.theme-tesla-light .marker-cluster-small div,
 body.theme-tesla-light .marker-cluster-medium div,
@@ -273,7 +279,9 @@ body.theme-tesla-dark .popup-loc-name { font-family: 'Roboto', sans-serif; color
 body.theme-tesla-dark .popup-row      { font-family: 'Roboto', sans-serif; color: #555; }
 body.theme-tesla-dark .popup-row span { color: #f0f0f0; }
 body.theme-tesla-dark .popup-total    { font-family: 'Roboto', sans-serif; color: #555; border-top-color: #2a2a2a; }
+body.theme-tesla-dark .popup-loc-addr-link { color: #f0f0f0; }
 body.theme-tesla-dark .popup-loc-link { font-family: 'Roboto', sans-serif; border-radius: 20px; }
+body.theme-tesla-dark .popup-actions { border-top-color: #2a2a2a; }
 body.theme-tesla-dark .popup-route-btn{ font-family: 'Roboto', sans-serif; border-radius: 20px; }
 body.theme-tesla-dark .marker-cluster-small div,
 body.theme-tesla-dark .marker-cluster-medium div,
@@ -536,11 +544,6 @@ function makeIcon(operator, aggregator) {
 // =============================================================
 const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-function buildRoute(lat, lng, name) {
-  if (/iPad|iPhone|iPod/.test(navigator.userAgent)) window.open(`maps://maps.apple.com/?daddr=${lat},${lng}`);
-  else window.open(`geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(name)})`);
-}
-
 function groupByCoords(stations) {
   const g = {};
   stations.forEach(s => {
@@ -581,22 +584,60 @@ function locationPageUrl(loc) {
   return SITE_ORIGIN + '/' + encodeURIComponent(loc.operator_slug) + '/' + encodeURIComponent(loc.slug);
 }
 
-function renderLocationLinks(stations) {
+function resolveStationLocationItems(stations) {
   const seen = new Set();
-  const links = [];
+  const items = [];
   stations.forEach(s => {
     const loc = locationByKey[stationLocationKey(s)];
     if (!loc) return;
     const href = locationPageUrl(loc);
     if (!href || seen.has(href)) return;
     seen.add(href);
-    const color = OP_COLORS[s.operator] || OP_COLOR_FALLBACK;
-    links.push(
-      `<a class="popup-loc-link" href="${escapePopupHtml(href)}" style="border-color:${color};color:${color}">КАРТОЧКА ЛОКАЦИИ →</a>`
-    );
+    items.push({
+      href,
+      color: OP_COLORS[s.operator] || OP_COLOR_FALLBACK
+    });
   });
-  if (!links.length) return '';
+  return items;
+}
+
+function renderLocationLinkButton(href, color) {
+  return `<a class="popup-loc-link" href="${escapePopupHtml(href)}" style="border-color:${color};color:${color}">КАРТОЧКА ЛОКАЦИИ →</a>`;
+}
+
+function renderLocationLinks(stations) {
+  const items = resolveStationLocationItems(stations);
+  if (!items.length) return '';
+  const links = items.map(it => renderLocationLinkButton(it.href, it.color));
   return `<div class="popup-loc-links">${links.join('')}</div>`;
+}
+
+function renderLocAddressHtml(first, stations, addr) {
+  const items = resolveStationLocationItems(stations);
+  const addrEsc = escapePopupHtml(addr || '—');
+  const addrRow = items.length === 1
+    ? `<div class="popup-row">&#x1F4CD; <a class="popup-loc-addr-link" href="${escapePopupHtml(items[0].href)}" style="color:${items[0].color}">${addrEsc}</a></div>`
+    : `<div class="popup-row">&#x1F4CD; <span>${addrEsc}</span></div>`;
+
+  if (first.location_name) {
+    const nameEsc = escapePopupHtml(first.location_name);
+    const nameHtml = items.length === 1
+      ? `<a class="popup-loc-addr-link" href="${escapePopupHtml(items[0].href)}" style="color:${items[0].color}">${nameEsc}</a>`
+      : nameEsc;
+    return `<div class="popup-loc-name">${nameHtml}</div>${addrRow}`;
+  }
+  return addrRow;
+}
+
+function renderPopupActions(stations, first, color, opName) {
+  const items = resolveStationLocationItems(stations);
+  const linkBtns = items.map(it => renderLocationLinkButton(it.href, it.color)).join('');
+  const routeLabel = escapePopupHtml([first.city, first.address].filter(Boolean).join(', ') || opName);
+  const routeBtn = isMobile
+    ? `<button class="popup-route-btn route-nav-btn" type="button" style="background:${color}" data-route-lat="${first.lat}" data-route-lng="${first.lng}" data-route-label="${routeLabel}">&#x25BA; МАРШРУТ</button>`
+    : '';
+  if (!linkBtns && !routeBtn) return '';
+  return `<div class="popup-actions">${linkBtns}${routeBtn}</div>`;
 }
 
 // Двухстрочная плашка оператора — соответствует opBadge() из stations.js.
@@ -624,10 +665,7 @@ function makePopup(stations) {
     .join(' ');
 
   // Локация — крупно жирно если есть location_name; иначе просто адрес
-  const locHtml = first.location_name
-    ? `<div class="popup-loc-name">${first.location_name}</div><div class="popup-row">&#x1F4CD; <span>${addr}</span></div>`
-    : `<div class="popup-row">&#x1F4CD; <span>${addr || '—'}</span></div>`;
-  const locLinksHtml = renderLocationLinks(stations);
+  const locHtml = renderLocAddressHtml(first, stations, addr);
 
   // Список станций (мощность, разъёмы, дата)
   let stationsHtml = '';
@@ -651,11 +689,9 @@ function makePopup(stations) {
   if (totalAC) totalPwr.push(`AC ${totalAC} кВт`);
   const totalStr = totalCount > 1 ? `<div class="popup-total">&#x2211; ${totalCount} станции · ${totalPwr.join(' · ')}</div>` : '';
 
-  const routeBtn = isMobile
-    ? `<button class="popup-route-btn" style="background:${color}" onclick="buildRoute(${first.lat},${first.lng},'${opName.replace(/'/g,"\\'")}')">&#x25BA; МАРШРУТ</button>`
-    : '';
+  const actionsHtml = renderPopupActions(stations, first, color, opName);
 
-  return `<div class="popup-wrap"><div class="popup-op-row">${opBadges}</div>${locHtml}${locLinksHtml}${stationsHtml}${totalStr}${routeBtn}</div>`;
+  return `<div class="popup-wrap"><div class="popup-op-row">${opBadges}</div>${locHtml}${stationsHtml}${totalStr}${actionsHtml}</div>`;
 }
 
 // =============================================================
@@ -895,12 +931,16 @@ async function loadStations() {
       fetch(SURL + '/rest/v1/locations?select=operator,city,address,operator_slug,slug,location_name&is_active=eq.true', { headers })
     ]);
     if (!stRes.ok) { console.error('Supabase stations:', stRes.status); return; }
-    if (!locRes.ok) { console.error('Supabase locations:', locRes.status); return; }
     const data = await stRes.json();
-    const locData = await locRes.json();
     if (!Array.isArray(data)) { console.error('Stations not array'); return; }
-    if (!Array.isArray(locData)) { console.error('Locations not array'); return; }
-    locationByKey = buildLocationLookup(locData);
+    if (locRes.ok) {
+      const locData = await locRes.json();
+      if (Array.isArray(locData)) locationByKey = buildLocationLookup(locData);
+      else console.error('Locations not array');
+    } else {
+      console.error('Supabase locations:', locRes.status, '(map works without location links)');
+      locationByKey = {};
+    }
     allStations = data;
     renderMarkers();
   } catch (e) { console.error('Load:', e); }
@@ -936,5 +976,6 @@ async function trackVisit() {
   trackVisit();
 })();
 </script>
+<script src="JS/route-nav.js?v=1"></script>
 </body>
 </html>

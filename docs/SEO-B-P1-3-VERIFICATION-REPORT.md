@@ -1,8 +1,9 @@
 # EV RACE — SEO-B P1-3 Verification Report (Stations → Location)
 
 **Дата:** 2026-06-05  
-**Коммит:** pending — P1-3 stations location links  
-**Вердикт:** **P1-3 CLOSED** · **SEO-B CLOSED**
+**Коммит:** `2364ccd` — stations registry links to location pages  
+**Вердикт:** **P1-3 CLOSED** · **SEO-B CLOSED**  
+**Итоговый отчёт SEO-B:** [`SEO-B-FINAL-VERIFICATION-REPORT.md`](SEO-B-FINAL-VERIFICATION-REPORT.md)
 
 ---
 
@@ -32,6 +33,15 @@ filters:  getFiltered, setOp, setSearch, resetFilters — present
 sort:     getSorted, sortable headers — present
 pagination: PAGE_SIZE, renderLoadMore, loadMore, showAll — present
 list/group: setView, STATE.view, renderDesktop — present
+
+=== example Desktop list ===
+<a class="loc-page-link" href="https://evrace.by/malanka/minsk-k-turovskogo-6"><span class="loc-address">К. Туровского, 6</span></a>
+
+=== example Desktop group ===
+<a class="loc-page-link" href="https://evrace.by/malanka/minsk-k-turovskogo-6"><span style="color:var(--green)">К. Туровского, 6</span></a>
+
+=== example Mobile card ===
+<a class="loc-page-link" href="https://evrace.by/malanka/minsk-k-turovskogo-6"><span class="loc-city">Минск</span><span class="loc-addr">К. Туровского, 6</span></a>
 
 PASS: stations location links OK
 ```
@@ -95,7 +105,7 @@ PASS: stations location links OK
 |----|--------|--------|
 | 1 | Dynamic sitemap | `2671277` |
 | 2 | Map → Location | `19be2b6` |
-| 3 | Stations → Location | pending push |
+| 3 | Stations → Location | `2364ccd` |
 
 **Следующий трек:** **Platform** (Reviews, Ratings, Photos, Tags, Community).
 

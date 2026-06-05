@@ -1,7 +1,7 @@
 # SEO-B P1-2 — Map → Location (план)
 
 **Дата:** 2026-06-05  
-**Статус:** **CLOSED** — prod после deploy  
+**Статус:** **CLOSED** (код + verify) — **push `19be2b6` → prod**  
 **Предусловие:** P1-1 Dynamic Sitemap — **CLOSED** (prod 133 URL, commit `2671277`)
 
 ---

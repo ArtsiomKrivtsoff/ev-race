@@ -33,8 +33,8 @@ Stage 3 (отзывы) — **только после** закрытия фунд
 | Блок | Содержание | Статус |
 |------|------------|--------|
 | **SEO-A** | Schema, terminology, power, H1, description, JSON-LD на location page | P0 — закрытие после fix |
-| **SEO-B** | `stations.html` → location, `map.html` → location, dynamic sitemap | P1 — сразу после SEO-A |
-| **Stage 3** | Reviews & Ratings | После SEO-A + SEO-B |
+| **SEO-B** | dynamic sitemap → `map.html` → location → `stations.html` → location | P1 — **NEXT** |
+| **Platform** | Reviews, Ratings, Photos, Tags, Community | После SEO-A + SEO-B |
 
 Internal linking и sitemap — **SEO-B**, не Stage 3. Могут быть важнее JSON-LD для индексации.
 

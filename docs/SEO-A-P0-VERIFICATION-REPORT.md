@@ -1,119 +1,101 @@
 # SEO-A P0 — Verification Report
 
-**Дата:** 2026-06-05  
-**Коммит:** `4105b64` — `fix(seo-a): P0 schema, AC terminology, and power alignment`  
-**Deploy:** push в `main` выполнен; Cloudflare Pages — дождаться green deploy.
+**Статус:** **IMPLEMENTED, NOT VERIFIED**  
+**Коммиты:** `4105b64`, `2464238`  
+**Дата отчёта:** 2026-06-05
+
+Код принят. Закрытие SEO-A — **только после production PASS** по чеклисту §Production gate.
 
 ---
 
-## 1. Schema fix (P0-1)
+## Production gate (обязательно перед закрытием)
 
-### Изменения
+### Smoke URLs
 
-| Было | Стало |
-|------|-------|
-| `WebPage.mainEntity → #evcs` | **удалено** |
-| — | `ElectricVehicleChargingStation.mainEntityOfPage → canonical` |
-| — | `additionalProperty.total_installed_kw` (sum) |
+| Alias | URL |
+|-------|-----|
+| AC-MST | `https://evrace.by/zaryadka/minsk-mstislavca-6` |
+| MIX-ZAR | `https://evrace.by/zaryadka/minsk-inzhenernaya-18` |
+| DC-ORG | `https://evrace.by/orange/minsk-per-rabochiy-6` |
 
-**Файл:** `functions/_lib/location-seo.js`
+### 1. validator.schema.org
 
-### Local PASS
-
-```bash
-node scripts/verify-location-seo-local.mjs
-```
-
-- `WebPage.mainEntity` — absent ✅  
-- `EVCS.mainEntityOfPage.@id` = canonical ✅  
-- `total_installed_kw` present ✅  
-
-### Production (ручная приёмка)
-
-После deploy — на **3 URL**:
-
-1. `https://evrace.by/zaryadka/minsk-mstislavca-6` (AC-MST)
-2. `https://evrace.by/zaryadka/minsk-inzhenernaya-18` (MIX-ZAR)
-3. `https://evrace.by/orange/minsk-per-rabochiy-6` (DC-ORG)
-
-**validator.schema.org** — вставить JSON-LD из View Source:
+На каждом URL — JSON-LD из View Source:
 
 ```text
 0 errors / 0 warnings
 ```
 
-Автоматическая smoke:
+| URL | Errors | Warnings | PASS |
+|-----|--------|----------|------|
+| AC-MST | ⏳ | ⏳ | ⏳ |
+| MIX-ZAR | ⏳ | ⏳ | ⏳ |
+| DC-ORG | ⏳ | ⏳ | ⏳ |
+
+### 2. Schema structure
+
+| Check | AC-MST | MIX-ZAR | DC-ORG |
+|-------|--------|---------|--------|
+| `ElectricVehicleChargingStation.mainEntityOfPage` → canonical | ⏳ | ⏳ | ⏳ |
+| `WebPage.mainEntity` **отсутствует** | ⏳ | ⏳ | ⏳ |
+
+### 3. AC terminology
+
+```bash
+node scripts/check-ac-terminology.mjs   # репо → exit 0
+node scripts/check-ac-terminology.mjs
+node scripts/verify-seo-a-p0-production.mjs
+```
+
+| Check | Result |
+|-------|--------|
+| Repo `grep` | ✅ 0 (local) |
+| Production HTML (3 URL) | ⏳ |
+| Legend: `AC — ЗАРЯДКА ПЕРЕМЕННЫМ ТОКОМ` | ⏳ |
+
+### 4. Power contract
+
+На каждом URL:
+
+| Слой | Поле | PASS |
+|------|------|------|
+| Description | «до N кВт» = max post | ⏳ |
+| UI primary KPI | `ДО N КВТ` = max post | ⏳ |
+| UI secondary KPI | `{sum} КВТ СУММАРНО` (если sum ≠ max) | ⏳ |
+| JSON-LD | `max_power_kw` + `total_installed_kw` | ⏳ |
+
+**Эталон AC-MST:**
+
+| Слой | Ожидание |
+|------|----------|
+| Description / UI primary / `max_power_kw` | **44** |
+| UI secondary / `total_installed_kw` | **176** |
+
+---
+
+## Local verification (done)
+
+| P0 | Result |
+|----|--------|
+| Schema logic | ✅ `verify-location-seo-local.mjs` |
+| AC terminology | ✅ `check-ac-terminology.mjs` |
+| Power logic | ✅ shared `computeSeoMaxPostKw()` |
+
+---
+
+## Итог
+
+| | |
+|---|---|
+| **Сейчас** | IMPLEMENTED, NOT VERIFIED |
+| **SEO-A закрыт** | когда §Production gate = PASS на всех 4 блоках |
+| **Дальше** | SEO-B (stations, map, sitemap) — **только после** закрытия SEO-A |
+| **Stage 3** | **не раньше SEO-B** |
+
+### Команда для финальной smoke
 
 ```bash
 node scripts/verify-seo-a-p0-production.mjs
 ```
 
----
-
-## 2. AC terminology (P0-2)
-
-### Изменения
-
-| Файл | Было | Стало |
-|------|------|-------|
-| `functions/_lib/station-badges.js` | AC — МЕДЛЕННЫЕ СТАНЦИИ | AC — ЗАРЯДКА ПЕРЕМЕННЫМ ТОКОМ |
-| `index.html`, `index_new.html`, `v2/index_new.html` | то же | то же |
-| `CSS/arcade.css` | comment «медленнее» | «переменный ток» |
-
-### Local PASS
-
-```bash
-grep -ri "МЕДЛЕНН"   # → 0 результатов
-node scripts/check-ac-terminology.mjs   # → exit 0
-```
-
----
-
-## 3. Power alignment (P0-3)
-
-### Модель
-
-| Слой | Значение | Пример AC-MST |
-|------|----------|---------------|
-| **SEO** (meta, JSON-LD `max_power_kw`) | max одного поста | до **44** кВт |
-| **UI primary KPI** | `ДО {max} КВТ` | **ДО 44 КВТ** |
-| **UI secondary** | sum | **176 КВТ СУММАРНО** (если sum ≠ max) |
-| **JSON-LD** | `total_installed_kw` | 176 |
-
-**Файлы:** `location-seo.js`, `location-render.js`, `CSS/location-page.css` (`.loc-infra-sub`)
-
-### Local logic
-
-`computeSeoMaxPostKw()` — единая формула для SEO phrase и UI primary.
-
-### Production criteria
-
-На каждом smoke URL:
-
-```text
-meta description «до N кВт» = UI «ДО N КВТ» = JSON-LD max_power_kw
-```
-
----
-
-## 4. Сводка статуса
-
-| P0 | Local | Production |
-|----|-------|------------|
-| Schema | **PASS** | ⏳ после deploy + Validator |
-| AC terminology | **PASS** | ⏳ `verify-seo-a-p0-production.mjs` |
-| Power alignment | **PASS** (logic) | ⏳ smoke 3 URL |
-
-**SEO-A = ЗАКРЫТ** только когда все три строки Production = **PASS**.
-
----
-
-## 5. Следующий шаг — SEO-B
-
-После PASS по таблице §4:
-
-1. `stations.html` → location pages  
-2. `map.html` → location pages  
-3. Dynamic sitemap  
-
-Stage 3 (отзывы) — **не раньше SEO-B**.
+Пришлите JSON-вывод + скрины Validator → обновим таблицы §1–§4 и зафиксируем **SEO-A = ЗАКРЫТ**.
