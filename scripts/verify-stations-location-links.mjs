@@ -95,47 +95,44 @@ function locationPageUrl(s, locationByKey) {
   );
 }
 
-function renderLocListHtml(s, locationByKey) {
+function renderLocPageBtn(s, locationByKey, label) {
+  const href = locationPageUrl(s, locationByKey);
+  if (!href) return "";
+  const text = label || "КАРТОЧКА →";
+  return `<a class="loc-page-btn" href="${escapeAttr(href)}">${text}</a>`;
+}
+
+function renderLocAddrCell(s, locationByKey) {
   const inner = s.location_name
     ? `<span class="loc-name">${s.location_name}</span><span class="loc-address">${s.address || ""}</span>`
     : `<span class="loc-address">${s.address || "—"}</span>`;
-  const href = locationPageUrl(s, locationByKey);
-  if (!href) return inner;
-  return `<a class="loc-page-link" href="${escapeAttr(href)}">${inner}</a>`;
+  const btn = renderLocPageBtn(s, locationByKey);
+  if (!btn) return inner;
+  return `<div class="loc-addr-cell">${inner}${btn}</div>`;
 }
 
-function renderLocGroupHtml(first, locationByKey) {
+function renderLocGroupAddrCell(first, stations, locationByKey) {
   const inner = first.location_name
     ? `<strong style="color:var(--green)">${first.location_name}</strong><br><span class="loc-address">${first.address || ""}</span>`
     : `<span style="color:var(--green)">${first.address || "—"}</span>`;
-  const href = locationPageUrl(first, locationByKey);
-  if (!href) return inner;
-  return `<a class="loc-page-link" href="${escapeAttr(href)}">${inner}</a>`;
+  const btn = renderLocPageBtn(first, locationByKey);
+  if (!btn) return inner;
+  return `<div class="loc-addr-cell">${inner}${btn}</div>`;
 }
 
-function renderLocMobileHtml(first, locationByKey) {
-  const locNameHtml = first.location_name
-    ? `<span class="loc-name">${first.location_name}</span>`
-    : "";
-  const locAddrHtml = first.address
-    ? `<span class="loc-addr">${first.address}</span>`
-    : "";
-  const inner = `<span class="loc-city">${first.city || "—"}</span>${locNameHtml}${locAddrHtml}`;
-  const href = locationPageUrl(first, locationByKey);
-  if (!href) return inner;
-  return `<a class="loc-page-link" href="${escapeAttr(href)}">${inner}</a>`;
+function renderLocMobileFooterBtn(first, locationByKey) {
+  return renderLocPageBtn(first, locationByKey);
 }
 
 function auditSource(js) {
   const issues = [];
   const required = [
     "buildLocationLookup",
-    "renderLocListHtml",
-    "renderLocGroupHtml",
-    "renderLocMobileHtml",
+    "renderLocAddrCell",
+    "renderLocPageBtn",
     "locationByKey",
     "/rest/v1/locations",
-    'class="loc-page-link"',
+    'class="loc-page-btn"',
     "SITE_ORIGIN",
     "function getFiltered",
     "function getSorted",
@@ -146,6 +143,9 @@ function auditSource(js) {
   ];
   for (const token of required) {
     if (!js.includes(token)) issues.push(`stations.js missing: ${token}`);
+  }
+  if (js.includes('class="loc-page-link"')) {
+    issues.push("stations.js still uses loc-page-link on address (should be loc-page-btn only)");
   }
   return issues;
 }
@@ -188,18 +188,19 @@ async function main() {
   }
 
   for (const spot of SPOT_CHECKS) {
-    const list = renderLocListHtml(spot.station, locationByKey);
-    const group = renderLocGroupHtml(spot.station, locationByKey);
-    const mobile = renderLocMobileHtml(spot.station, locationByKey);
+    const list = renderLocAddrCell(spot.station, locationByKey);
+    const group = renderLocGroupAddrCell(spot.station, [spot.station], locationByKey);
+    const mobile = renderLocMobileFooterBtn(spot.station, locationByKey);
     if (!list.includes(spot.url)) issues.push(`list html missing ${spot.alias}`);
     if (!group.includes(spot.url)) issues.push(`group html missing ${spot.alias}`);
-    if (!mobile.includes(spot.url)) issues.push(`mobile html missing ${spot.alias}`);
+    if (!mobile.includes(spot.url)) issues.push(`mobile btn missing ${spot.alias}`);
+    if (!list.includes("loc-page-btn")) issues.push(`list html missing loc-page-btn ${spot.alias}`);
   }
 
   const malanka = SPOT_CHECKS[0].station;
-  const exampleList = renderLocListHtml(malanka, locationByKey);
-  const exampleGroup = renderLocGroupHtml(malanka, locationByKey);
-  const exampleMobile = renderLocMobileHtml(malanka, locationByKey);
+  const exampleList = renderLocAddrCell(malanka, locationByKey);
+  const exampleGroup = renderLocGroupAddrCell(malanka, [malanka], locationByKey);
+  const exampleMobile = renderLocMobileFooterBtn(malanka, locationByKey);
 
   console.log("=== stations.js source audit ===");
   console.log(issues.length ? "issues pending" : "PASS");
@@ -221,7 +222,7 @@ async function main() {
   console.log("\n=== example Desktop group ===");
   console.log(exampleGroup);
 
-  console.log("\n=== example Mobile card ===");
+  console.log("\n=== example Mobile footer btn ===");
   console.log(exampleMobile);
 
   if (issues.length) {

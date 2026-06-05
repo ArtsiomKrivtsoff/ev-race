@@ -18,6 +18,12 @@ const OP_CLASS = {
   malanka:'op-ma', evika:'op-ev', orange:'op-or', prizma:'op-pr'
   // gto и любые мелкие ИП — без фирменного стиля, фолбэк на op-other
 };
+const OP_COLORS = {
+  batteryfly:'#005EEB', forevo:'#b44fff', zaryadka:'#00cfff',
+  united:'#F5821F', csms:'#FF6B6B', malanka:'#76d275',
+  evika:'#832af5', orange:'#FF6B00', prizma:'#24c3d3'
+};
+const OP_COLOR_FALLBACK = '#00aa2b';
 
 // Операторы-агрегаторы (со своим приложением, принимают чужих).
 // Фильтрация по ним работает по operator==X OR aggregator==X.
@@ -111,7 +117,7 @@ function toggleFx() {
 // =============================================================
 const THEMES = ['arcade','tesla-light','tesla-dark'];
 function setTheme(theme) {
-  document.getElementById('theme-css').href = 'CSS/' + theme + '.css?v=5';
+  document.getElementById('theme-css').href = 'CSS/' + theme + '.css?v=6';
   localStorage.setItem('ev_race_theme', theme);
   document.documentElement.dataset.theme = theme;
   THEMES.forEach(t => {
@@ -182,31 +188,78 @@ function locationPageUrl(s) {
   return SITE_ORIGIN + '/' + encodeURIComponent(loc.operator_slug) + '/' + encodeURIComponent(loc.slug);
 }
 
-function renderLocListHtml(s) {
-  const inner = s.location_name
-    ? '<span class="loc-name">' + s.location_name + '</span><span class="loc-address">' + (s.address || '') + '</span>'
-    : '<span class="loc-address">' + (s.address || '—') + '</span>';
-  const href = locationPageUrl(s);
-  if (!href) return inner;
-  return '<a class="loc-page-link" href="' + escapeAttr(href) + '">' + inner + '</a>';
+function opAccentColor(op) {
+  return OP_COLORS[op] || OP_COLOR_FALLBACK;
 }
 
-function renderLocGroupHtml(first) {
-  const inner = first.location_name
-    ? '<strong style="color:var(--green)">' + first.location_name + '</strong><br><span class="loc-address">' + (first.address || '') + '</span>'
-    : '<span style="color:var(--green)">' + (first.address || '—') + '</span>';
-  const href = locationPageUrl(first);
-  if (!href) return inner;
-  return '<a class="loc-page-link" href="' + escapeAttr(href) + '">' + inner + '</a>';
+function renderLocAddressList(s) {
+  if (s.location_name) {
+    return '<span class="loc-name">' + s.location_name + '</span><span class="loc-address">' + (s.address || '') + '</span>';
+  }
+  return '<span class="loc-address">' + (s.address || '—') + '</span>';
+}
+
+function renderLocAddressGroup(first) {
+  if (first.location_name) {
+    return '<strong style="color:var(--green)">' + first.location_name + '</strong><br><span class="loc-address">' + (first.address || '') + '</span>';
+  }
+  return '<span style="color:var(--green)">' + (first.address || '—') + '</span>';
+}
+
+function renderLocAddressMobile(first) {
+  const locNameHtml = first.location_name ? '<span class="loc-name">' + first.location_name + '</span>' : '';
+  const locAddrHtml = first.address ? '<span class="loc-addr">' + first.address + '</span>' : '';
+  return '<span class="loc-city">' + (first.city || '—') + '</span>' + locNameHtml + locAddrHtml;
+}
+
+function renderLocPageBtn(s, label) {
+  const href = locationPageUrl(s);
+  if (!href) return '';
+  const text = label || 'КАРТОЧКА →';
+  const color = opAccentColor(s.operator);
+  return '<a class="loc-page-btn" href="' + escapeAttr(href) + '" style="border-color:' + color + ';color:' + color + '">' + text + '</a>';
+}
+
+function renderLocPageBtns(stations) {
+  const items = [];
+  const seen = new Set();
+  stations.forEach(s => {
+    const href = locationPageUrl(s);
+    if (!href || seen.has(href)) return;
+    seen.add(href);
+    items.push({ href, station: s });
+  });
+  if (!items.length) return '';
+  const multi = items.length > 1;
+  return items.map(it => {
+    const text = multi ? ((OP_NAMES[it.station.operator] || it.station.operator) + ' →') : 'КАРТОЧКА →';
+    return renderLocPageBtn(it.station, text);
+  }).join('');
+}
+
+function renderLocAddrCell(s) {
+  const btn = renderLocPageBtn(s);
+  if (!btn) return renderLocAddressList(s);
+  return '<div class="loc-addr-cell">' + renderLocAddressList(s) + btn + '</div>';
+}
+
+function renderLocGroupAddrCell(first, stations) {
+  const btns = renderLocPageBtns(stations);
+  if (!btns) return renderLocAddressGroup(first);
+  return '<div class="loc-addr-cell">' + renderLocAddressGroup(first) + btns + '</div>';
+}
+
+// kept for verify script / backward naming
+function renderLocListHtml(s) {
+  return renderLocAddrCell(s);
+}
+
+function renderLocGroupHtml(first, stations) {
+  return renderLocGroupAddrCell(first, stations || [first]);
 }
 
 function renderLocMobileHtml(first) {
-  const locNameHtml = first.location_name ? '<span class="loc-name">' + first.location_name + '</span>' : '';
-  const locAddrHtml = first.address ? '<span class="loc-addr">' + first.address + '</span>' : '';
-  const inner = '<span class="loc-city">' + (first.city || '—') + '</span>' + locNameHtml + locAddrHtml;
-  const href = locationPageUrl(first);
-  if (!href) return inner;
-  return '<a class="loc-page-link" href="' + escapeAttr(href) + '">' + inner + '</a>';
+  return renderLocAddressMobile(first);
 }
 function getCurrentRoundEnd() {
   const now = new Date();
@@ -494,7 +547,7 @@ function renderDesktop(stations) {
 function renderTableRow(s) {
   const locKey = locationKey(s);
   const newBadge = isNew(s.station_date) ? ' <span class="new-badge">NEW</span>' : '';
-  const locHtml = renderLocListHtml(s);
+  const locHtml = renderLocAddrCell(s);
   const dc = s.dc_power || 0, ac = s.ac_power || 0, cnt = s.count || 1;
   let pwrHtml = '—';
   if (dc || ac) {
@@ -538,7 +591,7 @@ function renderGroupRows(group) {
     .filter(s => { const key = s.operator + '|' + (s.aggregator || ''); if (seenOps.has(key)) return false; seenOps.add(key); return true; })
     .map(s => opBadge(s.operator, s.aggregator))
     .join(' ');
-  const locHtml = renderLocGroupHtml(first);
+  const locHtml = renderLocGroupAddrCell(first, group.stations);
 
   let html = '<tr data-loc-id="' + group.key + '" class="' + flash.trim() + '" style="background:rgba(0,255,65,.03)">'
     + '<td>' + opBadges + '</td>'
@@ -603,8 +656,8 @@ function renderMobile(stations) {
       + '</div>'
       + stationsHtml
       + '<div class="loc-footer">'
-        + '<span class="loc-date">' + fmtDate(latestDate) + '</span>'
-        + newBadge
+        + '<div class="loc-footer-left"><span class="loc-date">' + fmtDate(latestDate) + '</span></div>'
+        + '<div class="loc-footer-right">' + newBadge + renderLocPageBtn(first) + '</div>'
       + '</div>'
       + ratingSlot(g.key)
     + '</div>';

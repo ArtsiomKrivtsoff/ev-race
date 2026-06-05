@@ -1588,12 +1588,19 @@ td, th, .cur-round-num, .tmr-val, .new-badge,
   color: var(--fg);
 }
 .loc-footer {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; justify-content: space-between; align-items: flex-start;
   padding-top: var(--s-2);
   border-top: 1px solid var(--hairline-2);
   font-size: 11px;
   color: var(--fg-3);
 }
+.loc-footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.loc-page-btn {
+  display: inline-block; padding: 5px 10px; font-family: var(--font-ui); font-size: 10px;
+  font-weight: 500; text-decoration: none; border: 1px solid var(--hairline); border-radius: var(--r);
+  background: transparent; white-space: nowrap;
+}
+.loc-page-btn:hover { background: var(--surface-2); }
 .loc-date { color: var(--fg-2); font-weight: 500; }
 .loc-card .loc-rating { align-self: flex-start; margin-top: var(--s-2); }
 
