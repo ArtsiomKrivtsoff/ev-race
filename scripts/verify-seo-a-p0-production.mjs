@@ -7,7 +7,7 @@
 const DEFAULT_URLS = [
   "https://evrace.by/zaryadka/minsk-mstislavca-6",
   "https://evrace.by/zaryadka/minsk-inzhenernaya-18",
-  "https://evrace.by/united/minsk-pobediteley-84",
+  "https://evrace.by/orange/minsk-per-rabochiy-6",
 ];
 
 const FORBIDDEN = String.fromCharCode(
