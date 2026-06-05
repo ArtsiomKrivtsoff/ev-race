@@ -123,9 +123,24 @@ export function renderTypeBadge(stationType) {
   return "";
 }
 
+/** DC: CCS, GBT · AC: Type 2, GBT AC (same as home dc-ac-leg). */
+export function connectorGunKind(gunType) {
+  const key = normalizeConnectorKey(gunType);
+  if (key === "type2" || key === "gbt_ac") return "ac";
+  return "dc";
+}
+
 export function renderGunPill(gunType) {
   if (!gunType) return "";
-  return `<span class="gun-pill"><span class="gun-dot"></span>${escapeHtml(gunType)}</span>`;
+  const kind = connectorGunKind(gunType);
+  return `<span class="gun-pill"><span class="gun-dot gun-dot--${kind}"></span>${escapeHtml(gunType)}</span>`;
+}
+
+export function renderStationDcAcLegend() {
+  return `<div class="dc-ac-leg loc-st-dc-ac-leg">
+<div class="leg-item"><span class="leg-dot leg-dot--dc" aria-hidden="true"></span>DC — БЫСТРЫЕ СТАНЦИИ</div>
+<div class="leg-item"><span class="leg-dot leg-dot--ac" aria-hidden="true"></span>AC — МЕДЛЕННЫЕ СТАНЦИИ</div>
+</div>`;
 }
 
 export function stationGunTypes(station) {

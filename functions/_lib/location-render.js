@@ -9,6 +9,7 @@ import {
   formatConnectorLegendLines,
   formatStationPower,
   normalizeConnectorKey,
+  renderStationDcAcLegend,
   renderStationGuns,
   renderTypeBadge,
   stationGunTypes,
@@ -204,7 +205,7 @@ function renderStationList(stations) {
   const rows = expandStationsByCount(stations);
   if (!rows.length) return "";
   const html = rows.map((s, i) => renderStationRow(s, i + 1)).join("");
-  return `<div class="loc-st-list">${html}</div>`;
+  return `<div class="loc-st-list">${html}</div>${renderStationDcAcLegend()}`;
 }
 
 function renderRatingMeta(loc, community) {
