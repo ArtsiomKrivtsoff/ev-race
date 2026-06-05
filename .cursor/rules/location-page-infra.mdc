@@ -20,8 +20,10 @@ Before pushing location infra changes, verify the **middle KPI cell** (connector
 |------|-------|-------|-----------------|
 | 1 | `CCS` | DC | CCS, CCS2 |
 | 2 | `GBT` | DC | GBT (not GBT AC) |
-| 3 | `Type 2` | AC | TYPE2, TYPE 2, Type 2 |
-| 4+ | raw label | AC/other | GBT AC, CHAdeMO, … — alphabetically among “others” |
+| 3 | `CHAdeMO` | DC | CHAdeMO, CHADEMO |
+| 4 | `Type 2` | AC | TYPE2, TYPE 2, Type 2 |
+| 5 | `GBT AC` | AC | GBT AC |
+| 6+ | raw label | — | all others — alphabetically |
 
 Render only types present in the location. Implementation: iterate `CONNECTOR_KPI_FIXED` in order, then append remaining keys.
 

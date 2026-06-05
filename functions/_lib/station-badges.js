@@ -8,18 +8,17 @@ export function escapeHtml(s) {
   );
 }
 
-/** Fixed KPI order: slots 1–3 strict; slot 4+ = any other (GBT AC, CHAdeMO, …). */
+/** Fixed KPI order: slots 1–5 strict; slot 6+ = any other, alphabetically. */
 export const CONNECTOR_KPI_FIXED = [
   { key: "ccs", label: "CCS" },
   { key: "gbt", label: "GBT" },
+  { key: "chademo", label: "CHAdeMO" },
   { key: "type2", label: "Type 2" },
-];
-
-/** @deprecated use CONNECTOR_KPI_FIXED — kept for docs */
-export const CONNECTOR_LEGEND = [
-  ...CONNECTOR_KPI_FIXED,
   { key: "gbt_ac", label: "GBT AC" },
 ];
+
+/** @deprecated use CONNECTOR_KPI_FIXED */
+export const CONNECTOR_LEGEND = [...CONNECTOR_KPI_FIXED];
 
 function normalizeGunToken(raw) {
   return String(raw ?? "")
@@ -43,12 +42,14 @@ export function normalizeConnectorKey(raw) {
     return "ccs";
   }
   if (compact === "GBT" || norm === "GBT") return "gbt";
+  if (compact === "CHADEMO" || norm === "CHA DEMO" || norm.startsWith("CHADEMO")) {
+    return "chademo";
+  }
 
   return `_other:${norm}`;
 }
 
 export function connectorLegendLabel(key) {
-  if (key === "gbt_ac") return "GBT AC";
   const row = CONNECTOR_KPI_FIXED.find((r) => r.key === key);
   if (row) return row.label;
   if (key.startsWith("_other:")) {
@@ -57,6 +58,7 @@ export function connectorLegendLabel(key) {
     if (raw.startsWith("CCS")) return "CCS";
     if (raw === "GBT") return "GBT";
     if (raw === "GBT AC" || raw === "GBTAC") return "GBT AC";
+    if (raw === "CHADEMO" || raw.startsWith("CHADEMO")) return "CHAdeMO";
     return raw;
   }
   return key;
