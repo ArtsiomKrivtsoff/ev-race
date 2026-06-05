@@ -366,14 +366,66 @@
     }
   }
 
+  function innerContentWidth(box) {
+    if (!box) return 0;
+    var s = getComputedStyle(box);
+    return (
+      box.clientWidth -
+      parseFloat(s.paddingLeft || 0) -
+      parseFloat(s.paddingRight || 0)
+    );
+  }
+
+  function fitDcAcLegend() {
+    document.querySelectorAll("[data-fit-legend]").forEach(function (leg) {
+      var items = leg.querySelectorAll(".leg-item");
+      var dots = leg.querySelectorAll(".leg-dot");
+      if (!items.length) return;
+
+      var max = parseFloat(getComputedStyle(items[0]).fontSize) || 8;
+      var min = window.matchMedia("(max-width: 899px)").matches ? 3.5 : 6;
+      var available = innerContentWidth(leg);
+
+      function applySize(size) {
+        var dot = Math.max(3, size * 0.65);
+        items.forEach(function (it) {
+          it.style.fontSize = size + "px";
+        });
+        dots.forEach(function (d) {
+          d.style.width = dot + "px";
+          d.style.height = dot + "px";
+        });
+      }
+
+      items.forEach(function (it) {
+        it.style.fontSize = "";
+      });
+      dots.forEach(function (d) {
+        d.style.width = "";
+        d.style.height = "";
+      });
+      max = parseFloat(getComputedStyle(items[0]).fontSize) || max;
+      applySize(max);
+
+      var guard = 0;
+      while (leg.scrollWidth > available && max > min && guard < 80) {
+        max -= 0.25;
+        applySize(max);
+        guard += 1;
+      }
+    });
+  }
+
   function fitFitLineElements() {
     document.querySelectorAll("[data-fit-line]").forEach(function (el) {
       var box =
+        el.closest(".loc-hero-name") ||
         el.closest(".loc-hero-identity") ||
         el.closest(".loc-infra-copy") ||
         el.parentElement;
       if (!box) return;
-      var available = box.clientWidth;
+      var available = innerContentWidth(box);
+      el.style.fontSize = "";
       var max = parseFloat(getComputedStyle(el).fontSize) || 12;
       var min = window.matchMedia("(max-width: 639px)").matches ? 5 : 7;
       var connLines = el.querySelectorAll(".loc-conn-line");
@@ -387,13 +439,14 @@
 
       applySize(max);
       var guard = 0;
-      while (el.scrollWidth > available && max > min && guard < 50) {
+      while (el.scrollWidth > available && max > min && guard < 60) {
         max -= 0.5;
         applySize(max);
         guard += 1;
       }
     });
     fitInfraKpi();
+    fitDcAcLegend();
     document.dispatchEvent(new CustomEvent("evrace:hero-fit"));
   }
 
@@ -429,5 +482,8 @@
     initPhotoPanelOverflow();
     fitFitLineElements();
     window.addEventListener("resize", fitFitLineElements);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(fitFitLineElements);
+    }
   });
 })();

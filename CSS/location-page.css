@@ -277,7 +277,9 @@ body.location-page .blk-hdr {
   text-transform: uppercase;
   white-space: nowrap;
   display: block;
+  min-width: 0;
   max-width: 100%;
+  overflow: hidden;
 }
 .loc-hero-venue {
   font-family: 'Share Tech Mono', monospace;
@@ -647,6 +649,34 @@ body.location-page .loc-st-dc-ac-leg .leg-dot--ac {
 }
 .loc-st-dc-ac-leg {
   border-top: 1px solid var(--home-bdr, var(--border-faint));
+  flex-wrap: nowrap;
+  gap: clamp(8px, 2vw, 16px);
+  overflow: hidden;
+  padding: 6px var(--loc-pad);
+}
+body.location-page .loc-st-dc-ac-leg .leg-item {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: var(--home-text-dim, var(--text-dim));
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
+  gap: 4px;
+}
+body.location-page .loc-st-dc-ac-leg .leg-dot {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+}
+@media (min-width: 900px) {
+  body.location-page .loc-st-dc-ac-leg .leg-item {
+    font-size: 8px;
+  }
+}
+@media (max-width: 899px) {
+  body.location-page .loc-st-dc-ac-leg .leg-item {
+    font-size: 7px;
+  }
 }
 .loc-st-power {
   flex: 0 0 auto;
@@ -1198,6 +1228,19 @@ html[data-theme="tesla-dark"] body.location-page .loc-st-guns .gun-dot--ac,
 html[data-theme="tesla-light"] body.location-page .loc-st-dc-ac-leg .leg-dot--ac,
 html[data-theme="tesla-dark"] body.location-page .loc-st-dc-ac-leg .leg-dot--ac {
   background: var(--ac);
+}
+html[data-theme="tesla-light"] body.location-page .loc-st-dc-ac-leg .leg-item,
+html[data-theme="tesla-dark"] body.location-page .loc-st-dc-ac-leg .leg-item {
+  font-family: var(--font);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+@media (max-width: 899px) {
+  html[data-theme="tesla-light"] body.location-page .loc-st-dc-ac-leg .leg-item,
+  html[data-theme="tesla-dark"] body.location-page .loc-st-dc-ac-leg .leg-item {
+    font-size: 7px;
+  }
 }
 
 html[data-theme="tesla-light"] body.location-page .loc-blk-badge,

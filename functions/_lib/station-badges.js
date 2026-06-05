@@ -139,7 +139,7 @@ export function renderGunPill(gunType) {
 }
 
 export function renderStationDcAcLegend() {
-  return `<div class="dc-ac-leg loc-st-dc-ac-leg">
+  return `<div class="dc-ac-leg loc-st-dc-ac-leg" data-fit-legend>
 <div class="leg-item"><span class="leg-dot leg-dot--dc" aria-hidden="true"></span>DC — БЫСТРЫЕ СТАНЦИИ</div>
 <div class="leg-item"><span class="leg-dot leg-dot--ac" aria-hidden="true"></span>AC — ЗАРЯДКА ПЕРЕМЕННЫМ ТОКОМ</div>
 </div>`;
