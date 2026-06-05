@@ -555,17 +555,6 @@ body.location-page .blk-hdr {
 .loc-infra-val--edge {
   font-size: clamp(9px, 1.05vw, 12px);
 }
-.loc-infra-sub {
-  display: block;
-  margin-top: 6px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: clamp(7px, 0.85vw, 9px);
-  line-height: 1.4;
-  color: var(--cyan);
-  text-transform: uppercase;
-  text-align: center;
-  white-space: nowrap;
-}
 .loc-infra-cell--conn .loc-infra-copy {
   align-items: flex-start;
 }

@@ -96,16 +96,15 @@ node scripts/check-ac-terminology.mjs  →  exit 0
 
 ---
 
-### P0-3. Power semantics alignment
+### P0-3. Power semantics
 
 | Слой | Модель | Пример |
 |------|--------|--------|
-| **SEO** | до **X** кВт (max одного поста) | до 160 кВт |
-| **Infra (UI)** | sum + контекст | 4 станции · 8 авто · **320 кВт суммарно** |
+| **SEO** (meta, JSON-LD `max_power_kw`) | до **X** кВт (max одного поста) | до 160 кВт |
+| **UI infra KPI** (блок «Станций в локации») | **sum** — как в согласованном макете | **320 КВТ** |
+| **JSON-LD** | `max_power_kw` + `total_installed_kw` | 160 / 320 |
 
-Без конфликтов между Description, JSON-LD и UI primary KPI.
-
-**JSON-LD `additionalProperty`:** `max_power_kw` = max post; sum — `total_installed_kw` (или эквивалент) для infra.
+SEO и UI **намеренно различаются**: description/JSON-LD max для поиска; UI sum — масштаб локации по макету. **Не** показывать «ДО … / СУММАРНО» в публичном infra-блоке.
 
 ---
 
@@ -131,7 +130,7 @@ Intro — только в `description`.
 | 1 | validator.schema.org 0/0 на AC-MST, MIX-ZAR, DC-ORG (**LocalBusiness**, Phase A) | — | ⏳ blocked on migration |
 | 2 | EVCS `mainEntityOfPage`; нет `WebPage.mainEntity` | ✅ | ⏳ |
 | 3 | `check-ac-terminology.mjs` → 0 (репо + prod HTML) | ✅ | ⏳ |
-| 4 | Power: Description = UI primary = `max_power_kw`; UI secondary = sum; JSON-LD оба | ✅ | ⏳ |
+| 4 | Power: SEO max = JSON-LD max; UI infra = sum (макет); без «ДО/СУММАРНО» в UI | ✅ | ⏳ |
 | 5 | JSON-LD name нейтральный | ✅ | ⏳ |
 | 6 | Single H1 (regression) | ✅ | ⏳ |
 | 7 | Description contract + коннекторы | ✅ | ⏳ |

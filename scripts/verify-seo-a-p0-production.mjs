@@ -22,8 +22,12 @@ function parseMaxKwFromDescription(description) {
   return m ? Number(m[1]) : null;
 }
 
-function parseUiMaxKw(html) {
-  const m = html.match(/ДО\s+([\d\s]+)\s*КВТ/i);
+function parseUiInfraTotalKw(html) {
+  const grid = html.match(/loc-infra-grid[\s\S]*?<\/div>\s*<\/div>/i)?.[0];
+  if (!grid) return null;
+  const m = grid.match(
+    /loc-infra-val--edge">([\d\s]+)\s*КВТ/i,
+  );
   if (!m) return null;
   return Number(m[1].replace(/\s/g, ""));
 }
@@ -125,17 +129,20 @@ async function verifyUrl(url) {
   );
   const description = descMatch?.[1] || "";
   const seoMaxKw = parseMaxKwFromDescription(description);
-  const uiMaxKw = parseUiMaxKw(html);
+  const uiTotalKw = parseUiInfraTotalKw(html);
 
-  report.checks.power_alignment = {
+  report.checks.power_semantics = {
     pass:
       seoMaxKw != null &&
-      uiMaxKw != null &&
-      seoMaxKw === uiMaxKw &&
-      report.checks.json_ld_power?.max_power_kw === seoMaxKw,
+      uiTotalKw != null &&
+      report.checks.json_ld_power?.max_power_kw === seoMaxKw &&
+      report.checks.json_ld_power?.total_installed_kw === uiTotalKw &&
+      !html.includes("КВТ СУММАРНО") &&
+      !/loc-infra[^>]*>[\s\S]*?ДО\s+[\d\s]+\s*КВТ/i.test(html),
     seo_max_kw: seoMaxKw,
-    ui_max_kw: uiMaxKw,
+    ui_total_kw: uiTotalKw,
     json_ld_max_kw: report.checks.json_ld_power?.max_power_kw,
+    json_ld_total_kw: report.checks.json_ld_power?.total_installed_kw,
   };
 
   report.checks.ac_legend = {
