@@ -88,6 +88,7 @@ function auditGraph(graph, pageUrl) {
     },
     parent_org_link_ok:
       localBusiness?.parentOrganization?.["@id"] === organization?.["@id"],
+    no_provider: !localBusiness?.provider,
   };
 }
 
@@ -105,7 +106,7 @@ function passAudit(audit) {
     audit.organization.present &&
     audit.organization.id_matches &&
     audit.parent_org_link_ok &&
-    !localBusiness?.provider &&
+    audit.no_provider &&
     audit.local_business.additional_property_names.includes("max_power_kw") &&
     audit.local_business.additional_property_names.includes(
       "total_installed_kw",
