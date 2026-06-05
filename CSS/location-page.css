@@ -413,6 +413,9 @@ body.location-page .blk-hdr {
   min-height: 112px;
   background: #0a120a;
 }
+.loc-hero-map .leaflet-control-attribution {
+  display: none !important;
+}
 
 @media (min-width: 900px) {
   .loc-hero {

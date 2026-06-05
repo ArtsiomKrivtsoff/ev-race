@@ -56,15 +56,11 @@
 
   var map = L.map(mapEl, {
     zoomControl: true,
-    attributionControl: true,
+    attributionControl: false,
     scrollWheelZoom: false,
   }).setView([lat, lng], 15);
 
-  var tileLayer = L.tileLayer(tileUrlForTheme(), {
-    maxZoom: 19,
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-  });
+  var tileLayer = L.tileLayer(tileUrlForTheme(), { maxZoom: 19 });
   tileLayer.addTo(map);
 
   L.marker([lat, lng], { icon: makeIcon(operator, aggregator) }).addTo(map);

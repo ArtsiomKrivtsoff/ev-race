@@ -139,6 +139,7 @@ html, body { height: 100%; overflow: hidden; margin: 0; padding: 0; }
 .leaflet-popup-content       { margin: 0 !important; }
 .leaflet-popup-tip-container { display: none !important; }
 .leaflet-popup-close-button  { color: var(--text-dim) !important; font-size: 18px !important; top: 6px !important; right: 8px !important; }
+.leaflet-control-attribution { display: none !important; }
 
 .popup-wrap     { padding: var(--s-3) 14px; min-width: 200px; max-width: 280px; }
 .popup-op-row   { margin-bottom: var(--s-2); padding-bottom: 7px; border-bottom: 1px solid var(--border-dim); }
@@ -506,11 +507,8 @@ let activeType  = null;
 // =============================================================
 // ИНИЦИАЛИЗАЦИЯ КАРТЫ
 // =============================================================
-const map = L.map('map', { center: [53.7, 28.0], zoom: 7, zoomControl: false, scrollWheelZoom: true });
-let tileLayer = L.tileLayer(TILES['arcade'], {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-  maxZoom: 19
-}).addTo(map);
+const map = L.map('map', { center: [53.7, 28.0], zoom: 7, zoomControl: false, scrollWheelZoom: true, attributionControl: false });
+let tileLayer = L.tileLayer(TILES['arcade'], { maxZoom: 19 }).addTo(map);
 const clusterGroup = L.markerClusterGroup({
   maxClusterRadius: 50,
   spiderfyOnMaxZoom: true,
