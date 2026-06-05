@@ -232,7 +232,6 @@ function renderRatingCard(loc, community, { compact, linkHref }) {
       ? `<div class="loc-rating-cta">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</div>`
       : "";
     inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
-<span class="loc-rating-val loc-rating-val--placeholder" aria-hidden="true">X.X</span>
 <span class="loc-rating-stars loc-rating-stars--empty" aria-hidden="true">☆☆☆☆☆</span>
 <span class="loc-rating-meta">ОТЗЫВОВ ПОКА НЕТ</span>
 ${cta}`;
@@ -499,6 +498,16 @@ export function renderNearbyBlock(nearby, city) {
 </div>`;
 }
 
+/** Title + optional subtitle; без названия — одна строка (адрес), без дубля. */
+function nearbyDisplayLines(item) {
+  const name = (item.location_name || "").trim();
+  const addr = (item.address || "").trim();
+  if (name && name.toLowerCase() !== addr.toLowerCase()) {
+    return { title: name, sub: addr || null };
+  }
+  return { title: addr || "—", sub: null };
+}
+
 export function renderNearby(nearby) {
   if (!nearby?.length) {
     return `<p class="loc-nearby-empty">Других локаций в этом городе пока нет в реестре.</p>`;
@@ -506,18 +515,21 @@ export function renderNearby(nearby) {
   return nearby
     .slice(0, 8)
     .map((n) => {
-      const title = n.location_name || n.address;
+      const { title, sub } = nearbyDisplayLines(n);
       const href = `/${escapeHtml(n.operator_slug)}/${escapeHtml(n.slug)}`;
       const rating =
         n.cached_review_count > 0 && n.cached_avg_rating
           ? `<span class="loc-nearby-rating">★ ${escapeHtml(String(n.cached_avg_rating))}</span>`
           : "";
       const dist = `<span class="loc-nearby-dist">${escapeHtml(String(n.distance_km))} км</span>`;
+      const subLine = sub
+        ? `<span class="loc-nearby-addr">${escapeHtml(sub)}</span>`
+        : "";
       return `<a class="loc-nearby-item" href="${href}">
 <span class="op-filter-btn ${opClass(n.operator_slug)}">${escapeHtml(n.operator)}</span>
-<span class="loc-nearby-body">
+<span class="loc-nearby-body${sub ? "" : " loc-nearby-body--solo"}">
 <span class="loc-nearby-title">${escapeHtml(title)}</span>
-<span class="loc-nearby-addr">${escapeHtml(n.address)}</span>
+${subLine}
 </span>
 <span class="loc-nearby-meta">${rating}${dist}</span>
 </a>`;
