@@ -11,26 +11,23 @@ alwaysApply: false
 Before pushing location infra changes, verify the **middle KPI cell** (connectors):
 
 1. Lines are **left-aligned** in the cell (not centered).
-2. Only **existing** types are shown; order is **fixed legend order**, not sorted by count.
-3. Labels match the canonical set exactly (see below).
-4. Format per line: `{label} ×{count}` (space before ×).
+2. Order is **never** sorted by count or Map insertion order.
+3. Format per line: `{label} ×{count}` (space before ×).
 
-## Canonical connector legend
+## Canonical order (strict)
 
-Always this order (skip missing types):
+| Slot | Label | DC/AC | Normalizes from |
+|------|-------|-------|-----------------|
+| 1 | `CCS` | DC | CCS, CCS2 |
+| 2 | `GBT` | DC | GBT (not GBT AC) |
+| 3 | `Type 2` | AC | TYPE2, TYPE 2, Type 2 |
+| 4+ | raw label | AC/other | GBT AC, CHAdeMO, … — alphabetically among “others” |
 
-| Order | Label   | Normalizes from (examples)      |
-|-------|---------|----------------------------------|
-| 1     | `CCS`   | CCS, CCS2                        |
-| 2     | `GBT`   | GBT                              |
-| 3     | `Type 2`| TYPE2, TYPE 2, Type 2            |
-| 4     | `GBT AC`| GBT AC, GBTAC                    |
+Render only types present in the location. Implementation: iterate `CONNECTOR_KPI_FIXED` in order, then append remaining keys.
 
-Implementation: `CONNECTOR_LEGEND` + `normalizeConnectorKey()` in `functions/_lib/station-badges.js`.
-
-Unknown types may appear **after** legend entries; do not invent new labels without updating this rule.
+Code: `formatConnectorLegendLines()` in `functions/_lib/station-badges.js`.
 
 ## Scope
 
-- **KPI middle cell only** — station row gun pills keep raw DB labels (registry table DNA).
-- Station type badges (DC / AC / AC+DC): keep framed badges with background.
+- **KPI middle cell only** — station row gun pills keep raw DB labels.
+- Station type badges (DC / AC / AC+DC): framed badges with background.

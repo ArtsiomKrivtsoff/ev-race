@@ -8,40 +8,58 @@ export function escapeHtml(s) {
   );
 }
 
-/** Canonical KPI connector legend — order and labels (location infra middle cell). */
-export const CONNECTOR_LEGEND = [
+/** Fixed KPI order: slots 1–3 strict; slot 4+ = any other (GBT AC, CHAdeMO, …). */
+export const CONNECTOR_KPI_FIXED = [
   { key: "ccs", label: "CCS" },
   { key: "gbt", label: "GBT" },
   { key: "type2", label: "Type 2" },
+];
+
+/** @deprecated use CONNECTOR_KPI_FIXED — kept for docs */
+export const CONNECTOR_LEGEND = [
+  ...CONNECTOR_KPI_FIXED,
   { key: "gbt_ac", label: "GBT AC" },
 ];
 
-/** Map raw gun1/2/3 value → legend key. Unknown types sort after legend. */
-export function normalizeConnectorKey(raw) {
-  const norm = String(raw || "")
+function normalizeGunToken(raw) {
+  return String(raw ?? "")
     .trim()
+    .replace(/[\u2010-\u2015\u2212]/g, "-")
+    .replace(/-/g, " ")
     .replace(/\s+/g, " ")
     .toUpperCase();
+}
+
+/** Map raw gun1/2/3 → stable bucket key. */
+export function normalizeConnectorKey(raw) {
+  const norm = normalizeGunToken(raw);
   if (!norm) return null;
-  if (norm === "GBT AC" || norm === "GBT-AC" || norm === "GBTAC") return "gbt_ac";
-  if (norm === "TYPE2" || norm === "TYPE-2" || norm === "TYPE 2") return "type2";
-  if (norm.startsWith("CCS")) return "ccs";
-  if (norm === "GBT") return "gbt";
+  const compact = norm.replace(/\s/g, "");
+
+  // AC before bare GBT (GBT AC must not become gbt)
+  if (compact === "GBTAC" || norm === "GBT AC") return "gbt_ac";
+  if (compact === "TYPE2" || norm === "TYPE 2") return "type2";
+  if (compact === "CCS" || compact === "CCS2" || compact.startsWith("CCS")) {
+    return "ccs";
+  }
+  if (compact === "GBT" || norm === "GBT") return "gbt";
+
   return `_other:${norm}`;
 }
 
 export function connectorLegendLabel(key) {
-  const row = CONNECTOR_LEGEND.find((r) => r.key === key);
+  if (key === "gbt_ac") return "GBT AC";
+  const row = CONNECTOR_KPI_FIXED.find((r) => r.key === key);
   if (row) return row.label;
   if (key.startsWith("_other:")) {
-    return key.slice(7).replace(/\bTYPE 2\b/i, "Type 2");
+    const raw = key.slice(7);
+    if (raw === "TYPE 2" || raw === "TYPE2") return "Type 2";
+    if (raw.startsWith("CCS")) return "CCS";
+    if (raw === "GBT") return "GBT";
+    if (raw === "GBT AC" || raw === "GBTAC") return "GBT AC";
+    return raw;
   }
   return key;
-}
-
-export function connectorLegendSortIndex(key) {
-  const idx = CONNECTOR_LEGEND.findIndex((r) => r.key === key);
-  return idx >= 0 ? idx : CONNECTOR_LEGEND.length + 1;
 }
 
 /** Aggregate gun counts by legend key × station count. */
@@ -60,14 +78,29 @@ export function aggregateConnectorLegendCounts(stations) {
 
 export function formatConnectorLegendLines(counts) {
   if (!counts?.size) return [];
-  return [...counts.entries()]
-    .sort((a, b) => {
-      const ai = connectorLegendSortIndex(a[0]);
-      const bi = connectorLegendSortIndex(b[0]);
-      if (ai !== bi) return ai - bi;
-      return a[0].localeCompare(b[0]);
-    })
-    .map(([key, n]) => ({ label: connectorLegendLabel(key), count: n }));
+
+  const lines = [];
+  const used = new Set();
+
+  for (const { key, label } of CONNECTOR_KPI_FIXED) {
+    const n = counts.get(key);
+    if (!n) continue;
+    lines.push({ label, count: n });
+    used.add(key);
+  }
+
+  const rest = [...counts.entries()]
+    .filter(([key]) => !used.has(key))
+    .map(([key, count]) => ({ label: connectorLegendLabel(key), count, key }))
+    .sort((a, b) =>
+      a.label.localeCompare(b.label, "ru", { sensitivity: "base" }),
+    );
+
+  for (const { label, count } of rest) {
+    lines.push({ label, count });
+  }
+
+  return lines;
 }
 
 export function powerSum(station) {

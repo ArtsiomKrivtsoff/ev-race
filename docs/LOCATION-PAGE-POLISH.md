@@ -190,11 +190,11 @@ grid-template-columns: minmax(0, 13fr) auto minmax(180px, 8fr);
 
 | Правило | Значение |
 |---------|----------|
-| **Порядок строк** | фиксированный: **CCS → GBT → Type 2 → GBT AC** (только существующие) |
-| **Подписи** | ровно: `CCS`, `GBT`, `Type 2`, `GBT AC` (CCS2 → `CCS`) |
+| **Порядок строк** | **строго:** 1 `CCS` → 2 `GBT` → 3 `Type 2` → 4+ прочие (GBT AC, …) |
+| **Подписи** | CCS2 → `CCS`; Type 2 не UPPERCASE |
 | **Формат** | `{label} ×{count}` на строку |
-| **Выравнивание** | **по левому краю** контейнера, не по центру |
-| **Сортировка** | **не** по количеству × |
+| **Выравнивание** | **по левому краю** контейнера |
+| **Сортировка** | **запрещена** по count / Map — только `CONNECTOR_KPI_FIXED` + others |
 
 Код: `formatConnectorLegendLines()` / `normalizeConnectorKey()` в `station-badges.js`.
 
