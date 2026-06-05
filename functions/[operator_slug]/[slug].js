@@ -186,7 +186,7 @@ ${renderSiteFooter()}
 </div>
 </div>
 <script src="/JS/location-page.js?v=8"></script>
-<script src="/JS/route-nav.js?v=1"></script>
+<script src="/JS/route-nav.js?v=2"></script>
 ${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=2"></script>' : ""}
 </body>
 </html>`;

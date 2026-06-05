@@ -35,32 +35,6 @@
           "&dirflg=d",
       },
       {
-        id: "2gis",
-        name: "2GIS",
-        url:
-          "https://2gis.ru/routeSearch/rsType/car/to/" + lng + "," + lat,
-      },
-      {
-        id: "waze",
-        name: "Waze",
-        url:
-          "https://waze.com/ul?ll=" +
-          lat +
-          "," +
-          lng +
-          "&navigate=yes",
-      },
-      {
-        id: "petal",
-        name: "Petal Maps (Huawei)",
-        url:
-          "petalmaps://navigation?daddr=" +
-          lat +
-          "," +
-          lng +
-          "&language=ru-RU&type=drive",
-      },
-      {
         id: "geo",
         name: "Другой навигатор…",
         hint: "системный выбор",
