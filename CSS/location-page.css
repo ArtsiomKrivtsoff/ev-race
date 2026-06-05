@@ -16,10 +16,6 @@ html:has(body.location-page) {
   overflow-x: clip;
 }
 
-body.location-page .container {
-  max-width: 100%;
-}
-
 body.location-page .loc-main-grid,
 body.location-page .loc-main-grid .blk {
   min-width: 0;
