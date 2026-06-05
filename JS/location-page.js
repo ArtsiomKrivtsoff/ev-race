@@ -382,12 +382,15 @@
       var dots = leg.querySelectorAll(".leg-dot");
       if (!items.length) return;
 
-      var max = parseFloat(getComputedStyle(items[0]).fontSize) || 8;
-      var min = window.matchMedia("(max-width: 899px)").matches ? 3.5 : 6;
+      var isMobile = window.matchMedia("(max-width: 899px)").matches;
+      var minSize = isMobile ? 5.5 : 6;
+      var maxSize = isMobile ? 11 : 8;
       var available = innerContentWidth(leg);
+      if (available <= 0) return;
 
-      function applySize(size) {
-        var dot = Math.max(3, size * 0.65);
+      function applySize(size, gapPx) {
+        var dot = Math.max(4, Math.round(size * 0.62 * 10) / 10);
+        if (gapPx != null) leg.style.gap = gapPx + "px";
         items.forEach(function (it) {
           it.style.fontSize = size + "px";
         });
@@ -404,14 +407,35 @@
         d.style.width = "";
         d.style.height = "";
       });
-      max = parseFloat(getComputedStyle(items[0]).fontSize) || max;
-      applySize(max);
+      leg.style.gap = "";
 
-      var guard = 0;
-      while (leg.scrollWidth > available && max > min && guard < 80) {
-        max -= 0.25;
-        applySize(max);
-        guard += 1;
+      var cssBase = parseFloat(getComputedStyle(items[0]).fontSize) || minSize;
+      maxSize = Math.max(maxSize, cssBase);
+
+      // Largest font that still fits on one line (grow to fill row, shrink only if needed).
+      var best = minSize;
+      var step = 0.25;
+      for (var size = minSize; size <= maxSize + 0.001; size += step) {
+        applySize(size);
+        if (leg.scrollWidth <= available + 1) best = size;
+        else break;
+      }
+      applySize(best);
+
+      // Use leftover width via gap (left-aligned items, full row).
+      if (isMobile && items.length > 1) {
+        var slack = available - leg.scrollWidth;
+        if (slack > 2) {
+          var gapMax = Math.min(24, slack / (items.length - 1));
+          var gapMin = 6;
+          var gapBest = gapMin;
+          for (var gap = gapMin; gap <= gapMax + 0.5; gap += 1) {
+            applySize(best, gap);
+            if (leg.scrollWidth <= available + 1) gapBest = gap;
+            else break;
+          }
+          applySize(best, gapBest);
+        }
       }
     });
   }

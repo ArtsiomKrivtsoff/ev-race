@@ -648,6 +648,11 @@ body.location-page .loc-st-dc-ac-leg .leg-dot--ac {
   background: var(--cyan);
 }
 .loc-st-dc-ac-leg {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
   border-top: 1px solid var(--home-bdr, var(--border-faint));
   flex-wrap: nowrap;
   gap: clamp(8px, 2vw, 16px);
@@ -659,8 +664,7 @@ body.location-page .loc-st-dc-ac-leg .leg-item {
   font-size: 8px;
   color: var(--home-text-dim, var(--text-dim));
   white-space: nowrap;
-  flex-shrink: 1;
-  min-width: 0;
+  flex-shrink: 0;
   gap: 4px;
 }
 body.location-page .loc-st-dc-ac-leg .leg-dot {
@@ -674,8 +678,11 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
   }
 }
 @media (max-width: 899px) {
+  body.location-page .loc-st-dc-ac-leg {
+    gap: 8px;
+  }
   body.location-page .loc-st-dc-ac-leg .leg-item {
-    font-size: 7px;
+    font-size: 8px;
   }
 }
 .loc-st-power {
@@ -1239,7 +1246,7 @@ html[data-theme="tesla-dark"] body.location-page .loc-st-dc-ac-leg .leg-item {
 @media (max-width: 899px) {
   html[data-theme="tesla-light"] body.location-page .loc-st-dc-ac-leg .leg-item,
   html[data-theme="tesla-dark"] body.location-page .loc-st-dc-ac-leg .leg-item {
-    font-size: 7px;
+    font-size: 8px;
   }
 }
 
