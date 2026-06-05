@@ -306,6 +306,66 @@
     );
   }
 
+  function fitInfraKpi() {
+    var grid = document.querySelector(".loc-infra-grid");
+    if (!grid) return;
+
+    var edgeVals = grid.querySelectorAll(".loc-infra-val--edge");
+    var centerWrap = grid.querySelector(".loc-infra-val--center");
+    var isMobile = window.matchMedia("(max-width: 639px)").matches;
+    var minEdge = isMobile ? 7 : 9;
+    var minCenter = isMobile ? 5 : 7;
+
+    function shrinkToFit(el, box, minSize) {
+      var max = parseFloat(getComputedStyle(el).fontSize) || 12;
+      el.style.fontSize = max + "px";
+      var guard = 0;
+      while (el.scrollWidth > box.clientWidth && max > minSize && guard < 60) {
+        max -= 0.5;
+        el.style.fontSize = max + "px";
+        guard += 1;
+      }
+      return max;
+    }
+
+    var edgeSizes = [];
+    edgeVals.forEach(function (el) {
+      el.style.fontSize = "";
+      var box = el.closest(".loc-infra-copy");
+      if (!box) return;
+      edgeSizes.push(shrinkToFit(el, box, minEdge));
+    });
+
+    if (edgeSizes.length) {
+      var sync = Math.min.apply(null, edgeSizes);
+      edgeVals.forEach(function (el) {
+        el.style.fontSize = sync + "px";
+      });
+    }
+
+    if (!centerWrap) return;
+    centerWrap.style.fontSize = "";
+    var centerBox = centerWrap.closest(".loc-infra-copy");
+    if (!centerBox) return;
+    var connLines = centerWrap.querySelectorAll(".loc-conn-line");
+    var cMax = parseFloat(getComputedStyle(centerWrap).fontSize) || 10;
+
+    function applyCenter(size) {
+      centerWrap.style.fontSize = size + "px";
+      connLines.forEach(function (line) {
+        line.style.fontSize = size + "px";
+      });
+    }
+
+    applyCenter(cMax);
+    var g = 0;
+    while (centerWrap.scrollWidth > centerBox.clientWidth && cMax > minCenter && g < 60) {
+      cMax -= 0.5;
+      applyCenter(cMax);
+      g += 1;
+    }
+  }
+
   function fitFitLineElements() {
     document.querySelectorAll("[data-fit-line]").forEach(function (el) {
       var box =
@@ -333,6 +393,7 @@
         guard += 1;
       }
     });
+    fitInfraKpi();
     document.dispatchEvent(new CustomEvent("evrace:hero-fit"));
   }
 

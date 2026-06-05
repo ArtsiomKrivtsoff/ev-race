@@ -3,6 +3,14 @@
  * Design tokens: home-v2.css + location-page.css
  */
 
+import {
+  escapeHtml,
+  expandStationsByCount,
+  formatStationPower,
+  renderStationGuns,
+  renderTypeBadge,
+} from "./station-badges.js";
+
 export const OP_NAMES = {
   batteryfly: "BatteryFly",
   forevo: "forEVo",
@@ -41,11 +49,7 @@ const NEGATIVE_TAG_HINTS = [
   "очеред",
 ];
 
-export function escapeHtml(s) {
-  return String(s ?? "").replace(/[&<>"']/g, (c) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
-  );
-}
+export { escapeHtml };
 
 export function opClass(slug) {
   return OP_CLASS[slug] || "op-other";
@@ -150,14 +154,6 @@ function starsHtml(rating) {
   return s.replace(/⯨/g, "★");
 }
 
-function formatBreakdown(map) {
-  if (!map?.size) return "—";
-  return [...map.entries()]
-    .sort((a, b) => b[0] - a[0])
-    .map(([kw, n]) => `${kw}×${n}`)
-    .join(", ");
-}
-
 function formatConnectorLabel(type) {
   const raw = String(type || "").trim();
   const norm = raw.replace(/\s+/g, "").toUpperCase();
@@ -166,7 +162,9 @@ function formatConnectorLabel(type) {
 }
 
 function formatConnectorsStack(counts) {
-  if (!counts?.size) return "—";
+  if (!counts?.size) {
+    return `<span class="loc-infra-val loc-infra-val--center">—</span>`;
+  }
   const lines = [...counts.entries()]
     .sort((a, b) => b[1] - a[1])
     .map(
@@ -174,7 +172,7 @@ function formatConnectorsStack(counts) {
         `<span class="loc-conn-line">${escapeHtml(formatConnectorLabel(t))} ×${n}</span>`,
     )
     .join("");
-  return `<span class="loc-infra-val-stack">${lines}</span>`;
+  return `<span class="loc-infra-val-stack loc-infra-val--center">${lines}</span>`;
 }
 
 function tagPolarity(tag) {
@@ -186,16 +184,29 @@ const ICON_POWER = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" 
 const ICON_CONN = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M6 8h12v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/></svg>`;
 const ICON_CAR = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>`;
 
-function renderInfraCell(icon, label, valueHtml, cellMod = "", fitLine = true) {
+function renderInfraKpiCell(icon, valueHtml, cellMod = "") {
   const modCls = cellMod ? ` ${cellMod}` : "";
-  const fitAttr = fitLine ? " data-fit-line" : "";
   return `<div class="loc-infra-cell${modCls}">
 <span class="loc-infra-ico">${icon}</span>
-<div class="loc-infra-copy">
-<span class="loc-infra-label">${escapeHtml(label)}</span>
-<span class="loc-infra-val${fitLine ? "" : " loc-infra-val--multiline"}"${fitAttr}>${valueHtml}</span>
-</div>
+<div class="loc-infra-copy">${valueHtml}</div>
 </div>`;
+}
+
+function renderStationRow(station, index) {
+  const power = formatStationPower(station);
+  return `<div class="loc-st-row">
+<span class="loc-st-num" aria-hidden="true">${index}</span>
+<span class="loc-st-type">${renderTypeBadge(station.station_type)}</span>
+<div class="loc-st-guns">${renderStationGuns(station)}</div>
+<span class="loc-st-power">${escapeHtml(power.toUpperCase())}</span>
+</div>`;
+}
+
+function renderStationList(stations) {
+  const rows = expandStationsByCount(stations);
+  if (!rows.length) return "";
+  const html = rows.map((s, i) => renderStationRow(s, i + 1)).join("");
+  return `<div class="loc-st-list">${html}</div>`;
 }
 
 function renderRatingMeta(loc, community) {
@@ -329,31 +340,21 @@ export function renderInfrastructureBlock(stations, metrics) {
   }
 
   const powerVal = metrics.totalPower
-    ? `${metrics.totalPower.toLocaleString("ru")} кВт`
-    : "—";
+    ? `<span class="loc-infra-val loc-infra-val--edge">${escapeHtml(`${metrics.totalPower.toLocaleString("ru")} кВт`.toUpperCase())}</span>`
+    : `<span class="loc-infra-val loc-infra-val--edge">—</span>`;
   const connVal = formatConnectorsStack(metrics.connectorCounts);
-  const simVal = metrics.totalSim ? `${metrics.totalSim} АВТО` : "—";
-
-  let breakdown = "";
-  if (metrics.hasDc && metrics.hasAc) {
-    breakdown = `<div class="loc-infra-breakdown loc-infra-breakdown--split">
-<div class="loc-infra-breakdown-col"><span class="loc-infra-breakdown-lbl">DC:</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.dcBreakdown)}</span></div>
-<div class="loc-infra-breakdown-col"><span class="loc-infra-breakdown-lbl">AC:</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.acBreakdown)}</span></div>
-</div>`;
-  } else if (metrics.hasDc) {
-    breakdown = `<div class="loc-infra-breakdown"><span class="loc-infra-breakdown-lbl">DC:</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.dcBreakdown)}</span></div>`;
-  } else if (metrics.hasAc) {
-    breakdown = `<div class="loc-infra-breakdown"><span class="loc-infra-breakdown-lbl">AC:</span><span class="loc-infra-breakdown-val">${formatBreakdown(metrics.acBreakdown)}</span></div>`;
-  }
+  const simVal = metrics.totalSim
+    ? `<span class="loc-infra-val loc-infra-val--edge">${escapeHtml(`${metrics.totalSim} АВТО`)}</span>`
+    : `<span class="loc-infra-val loc-infra-val--edge">—</span>`;
 
   return `<div class="blk loc-infra-blk loc-grid-main">
 <div class="blk-hdr"><span class="blk-title">СТАНЦИЙ В ЛОКАЦИИ</span>${renderBadge(metrics.stationCount)}</div>
 <div class="loc-infra-grid">
-${renderInfraCell(ICON_POWER, "Мощность локации", escapeHtml(powerVal.toUpperCase()))}
-${renderInfraCell(ICON_CONN, "Коннекторы", connVal, "loc-infra-cell--conn", false)}
-${renderInfraCell(ICON_CAR, "Одновременно", escapeHtml(simVal.toUpperCase()))}
+${renderInfraKpiCell(ICON_POWER, powerVal)}
+${renderInfraKpiCell(ICON_CONN, connVal, "loc-infra-cell--conn")}
+${renderInfraKpiCell(ICON_CAR, simVal)}
 </div>
-${breakdown}
+${renderStationList(stations)}
 </div>`;
 }
 

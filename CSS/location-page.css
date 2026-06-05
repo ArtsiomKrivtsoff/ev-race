@@ -1,5 +1,5 @@
 /* ============================================================
-   Location page v12 — review CTA sizing + Tesla L3 palette
+   Location page v13 — infra KPI + station island rows
    Depends: arcade.css, operator.css, home-v2.css (.blk)
    ============================================================ */
 
@@ -448,7 +448,7 @@ body.location-page .blk-hdr {
   .loc-grid-side { grid-column: 2; }
   .loc-infra-blk.loc-grid-main,
   .loc-photos-blk.loc-grid-side {
-    align-self: stretch;
+    align-self: start;
   }
   .loc-photos-blk .loc-photo-panel {
     min-height: 100%;
@@ -457,17 +457,18 @@ body.location-page .blk-hdr {
   }
 }
 
-/* ── Infrastructure (ss-cell pattern) ── */
+/* ── Infrastructure ── */
 .loc-infra-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
   padding: 0;
+  min-height: 72px;
 }
 .loc-infra-cell {
   display: flex;
-  align-items: stretch;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
   padding: 14px 10px;
   border-right: 1px solid var(--home-bdr, var(--border-faint));
   min-width: 0;
@@ -479,7 +480,6 @@ body.location-page .blk-hdr {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  align-self: stretch;
   color: var(--green);
   line-height: 0;
   filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.85));
@@ -490,108 +490,119 @@ body.location-page .blk-hdr {
   height: 26px;
 }
 .loc-infra-copy {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 8px;
+  align-items: stretch;
   min-width: 0;
-}
-.loc-infra-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--home-text-dim, var(--text-dim));
-  line-height: 1.25;
 }
 .loc-infra-val {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(7px, 0.85vw, 11px);
+  font-size: clamp(10px, 1.15vw, 14px);
   line-height: 1.45;
   color: var(--green);
   text-transform: uppercase;
   text-shadow: 0 0 8px rgba(0, 255, 65, 0.45);
   white-space: nowrap;
-}
-.loc-infra-val--multiline {
-  white-space: normal;
+  text-align: center;
 }
 .loc-infra-val-stack {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  align-items: flex-start;
+  gap: 4px;
+  align-items: center;
   max-width: 100%;
   min-width: 0;
 }
 .loc-conn-line {
   display: block;
-  font-family: 'Press Start 2P', monospace;
+  font-family: inherit;
   font-size: inherit;
   line-height: 1.4;
-  color: var(--green);
+  color: inherit;
   text-transform: uppercase;
-  text-shadow: 0 0 8px rgba(0, 255, 65, 0.45);
+  text-shadow: inherit;
   white-space: nowrap;
   max-width: 100%;
 }
-.loc-infra-cell--conn .loc-infra-copy {
-  gap: 6px;
+.loc-infra-cell--conn .loc-infra-val--center {
+  font-size: clamp(8px, 0.95vw, 12px);
 }
-.loc-infra-breakdown {
-  padding: var(--loc-pad);
+
+/* Station rows (stations.html badges + gun-pill) */
+.loc-st-list {
   border-top: 1px solid var(--home-bdr, var(--border-faint));
-  font-size: 11px;
-  color: var(--home-text-mid, var(--text-dim));
 }
-.loc-infra-breakdown--split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
+.loc-st-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px var(--loc-pad);
+  border-bottom: 1px solid var(--home-bdr, var(--border-faint));
+  min-width: 0;
 }
-.loc-infra-breakdown-col {
-  padding: 0 var(--loc-pad);
+.loc-st-row:last-child {
+  border-bottom: none;
 }
-.loc-infra-breakdown-col:first-child {
-  border-right: 1px solid var(--home-bdr, var(--border-faint));
-  padding-left: 0;
-}
-.loc-infra-breakdown-col:last-child {
-  padding-right: 0;
-}
-.loc-infra-breakdown-lbl {
-  display: inline;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-right: 6px;
-  color: var(--home-text-dim, var(--text-dim));
-}
-.loc-infra-breakdown-col .loc-infra-breakdown-lbl {
-  display: block;
-  margin-bottom: 6px;
-}
-.loc-infra-breakdown-val {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: var(--home-text, var(--text));
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.loc-infra-breakdown:not(.loc-infra-breakdown--split) .loc-infra-breakdown-val {
+.loc-st-num {
+  flex: 0 0 auto;
+  min-width: 1.75em;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(14px, 2.8vw, 20px);
+  font-weight: 700;
+  line-height: 1;
   color: var(--green);
-  text-shadow: 0 0 8px rgba(0, 255, 65, 0.35);
+  text-align: center;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.35);
 }
-.loc-infra-footer {
-  padding: var(--loc-pad);
-  border-top: 1px solid var(--home-bdr, var(--border-faint));
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--home-text-dim, var(--text-dim));
+.loc-st-type {
+  flex: 0 0 auto;
 }
+.loc-st-guns {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+}
+.loc-st-guns .gun-pill {
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.loc-st-power {
+  flex: 0 0 auto;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(8px, 1vw, 11px);
+  color: var(--yellow, var(--dc));
+  white-space: nowrap;
+  text-align: right;
+}
+
+@media (min-width: 900px) {
+  .loc-infra-grid {
+    min-height: 88px;
+  }
+  .loc-infra-val {
+    font-size: clamp(14px, 1.4vw, 24px);
+  }
+  .loc-infra-cell--conn .loc-infra-val--center {
+    font-size: clamp(10px, 1vw, 16px);
+  }
+  .loc-st-num {
+    font-size: clamp(16px, 1.5vw, 22px);
+  }
+  .loc-st-power {
+    font-size: clamp(9px, 0.85vw, 12px);
+  }
+}
+
 @media (max-width: 639px) {
   .loc-infra-blk .loc-blk-badge {
     font-family: 'Press Start 2P', monospace;
@@ -604,33 +615,16 @@ body.location-page .blk-hdr {
     gap: 10px;
   }
   .loc-infra-cell {
-    padding: 10px 5px;
+    padding: 10px 6px;
     gap: 5px;
   }
   .loc-infra-ico svg {
     width: 22px;
     height: 22px;
   }
-  .loc-infra-copy {
-    gap: 10px;
-  }
-  .loc-infra-label {
-    font-size: 6px;
-    letter-spacing: 0.04em;
-    line-height: 1.2;
-  }
-  .loc-infra-val {
-    font-size: 7px;
-    line-height: 1.35;
-  }
-}
-@media (min-width: 640px) and (max-width: 899px) {
-  .loc-infra-cell {
-    padding: 14px 10px;
-    gap: 10px;
-  }
-  .loc-infra-val {
-    font-size: 9px;
+  .loc-st-row {
+    gap: 6px;
+    padding: 8px var(--loc-pad);
   }
 }
 
@@ -1077,14 +1071,6 @@ html[data-theme="tesla-dark"] body.location-page .loc-infra-ico {
   color: var(--accent);
   filter: none;
 }
-html[data-theme="tesla-light"] body.location-page .loc-infra-label,
-html[data-theme="tesla-dark"] body.location-page .loc-infra-label,
-html[data-theme="tesla-light"] body.location-page .loc-infra-breakdown-lbl,
-html[data-theme="tesla-dark"] body.location-page .loc-infra-breakdown-lbl {
-  font-family: var(--font);
-  font-weight: 600;
-  text-shadow: none;
-}
 html[data-theme="tesla-light"] body.location-page .loc-infra-val,
 html[data-theme="tesla-dark"] body.location-page .loc-infra-val,
 html[data-theme="tesla-light"] body.location-page .loc-conn-line,
@@ -1095,16 +1081,19 @@ html[data-theme="tesla-dark"] body.location-page .loc-conn-line {
   color: var(--fg);
   text-shadow: none;
 }
-html[data-theme="tesla-light"] body.location-page .loc-infra-breakdown-val,
-html[data-theme="tesla-dark"] body.location-page .loc-infra-breakdown-val {
-  font-family: var(--font);
-  font-weight: 500;
-  text-shadow: none;
-  color: var(--fg-2);
-}
-html[data-theme="tesla-light"] body.location-page .loc-infra-breakdown:not(.loc-infra-breakdown--split) .loc-infra-breakdown-val,
-html[data-theme="tesla-dark"] body.location-page .loc-infra-breakdown:not(.loc-infra-breakdown--split) .loc-infra-breakdown-val {
+html[data-theme="tesla-light"] body.location-page .loc-st-num,
+html[data-theme="tesla-dark"] body.location-page .loc-st-num {
+  font-family: var(--font-num);
+  font-weight: 700;
   color: var(--fg);
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-st-power,
+html[data-theme="tesla-dark"] body.location-page .loc-st-power {
+  font-family: var(--font-num);
+  font-weight: 600;
+  color: var(--fg);
+  text-shadow: none;
 }
 
 html[data-theme="tesla-light"] body.location-page .loc-blk-badge,
