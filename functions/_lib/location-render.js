@@ -232,6 +232,7 @@ function renderRatingCard(loc, community, { compact, linkHref }) {
       ? `<div class="loc-rating-cta">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</div>`
       : "";
     inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
+<span class="loc-rating-val loc-rating-val--placeholder" aria-hidden="true">X.X</span>
 <span class="loc-rating-stars loc-rating-stars--empty" aria-hidden="true">☆☆☆☆☆</span>
 <span class="loc-rating-meta">ОТЗЫВОВ ПОКА НЕТ</span>
 ${cta}`;
