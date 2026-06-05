@@ -329,11 +329,13 @@ export function renderHero(loc, community, opts) {
   const mapInset = renderMapInset(mapBlock);
 
   return `<section class="loc-hero" aria-labelledby="loc-title">
-<div class="loc-hero-grid">
-<div class="loc-hero-cell loc-hero-cell--identity blk">${identity}</div>
-<div class="loc-hero-cell loc-hero-cell--rating-desktop">${ratingDesktop}</div>
-<div class="loc-hero-cell loc-hero-cell--rating-mobile blk">${ratingMobile}</div>
-<div class="loc-hero-cell loc-hero-cell--map">${mapInset}</div>
+<div class="loc-hero-shell">
+${identity}
+${ratingDesktop}
+${mapInset}
+</div>
+<div class="loc-hero-mobile-row">
+<div class="loc-hero-mobile-rating">${ratingMobile}</div>
 </div>
 </section>`;
 }

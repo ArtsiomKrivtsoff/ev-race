@@ -158,32 +158,43 @@ body.location-page .blk-hdr {
 
 /* ── Hero ── */
 .loc-hero {
-  margin-bottom: var(--loc-gap);
-}
-.loc-hero-grid {
   display: grid;
-  grid-template-columns: 3fr 2fr;
   gap: var(--loc-gap);
+  grid-template-columns: 3fr 2fr;
+  grid-template-areas: "identity rating-m";
   align-items: stretch;
   min-width: 0;
+  margin-bottom: var(--loc-gap);
 }
-.loc-hero-cell--identity,
-.loc-hero-cell--rating-mobile {
+.loc-hero-shell,
+.loc-hero-mobile-row {
+  display: contents;
+}
+.loc-hero-identity {
+  grid-area: identity;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding: var(--loc-pad);
+  background: var(--home-card, var(--card-bg));
+  border: 1px solid var(--home-bdr, var(--border-faint));
+  border-radius: 5px;
+  overflow: hidden;
+}
+.loc-hero-mobile-rating {
+  grid-area: rating-m;
   margin: 0;
   padding: var(--loc-pad);
   min-width: 0;
   overflow: hidden;
+  background: var(--home-card, var(--card-bg));
+  border: 1px solid var(--home-bdr, var(--border-faint));
+  border-radius: 5px;
 }
-.loc-hero-cell--identity .loc-hero-identity {
-  height: 100%;
-}
-.loc-hero-cell--rating-desktop {
-  display: none;
-}
-.loc-hero-cell--map {
-  display: none;
-}
-.loc-hero-cell--rating-mobile .loc-hero-rating {
+.loc-hero-mobile-rating .loc-hero-rating {
   height: 100%;
   border: none;
   background: transparent;
@@ -191,12 +202,15 @@ body.location-page .blk-hdr {
   padding: 0;
   justify-content: center;
 }
-
-.loc-hero-identity {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-2);
-  min-width: 0;
+.loc-hero-shell > .loc-hero-inset.loc-hero-rating,
+.loc-hero-shell > .loc-hero-inset.loc-hero-map-wrap {
+  display: none;
+}
+.loc-hero-shell > .loc-hero-inset.loc-hero-rating {
+  grid-area: rating;
+}
+.loc-hero-shell > .loc-hero-inset.loc-hero-map-wrap {
+  grid-area: map;
 }
 .loc-hero-operator { margin-bottom: 4px; }
 .loc-hero-operator .loc-hero-op {
@@ -289,12 +303,12 @@ body.location-page .blk-hdr {
   gap: var(--s-2);
   margin-top: var(--s-2);
 }
-.loc-hero-cell--identity .loc-hero-actions {
+.loc-hero-identity .loc-hero-actions {
   flex-wrap: nowrap;
   width: 100%;
   margin-top: auto;
 }
-.loc-hero-cell--identity .loc-hero-actions .loc-btn {
+.loc-hero-identity .loc-hero-actions .loc-btn {
   flex: 1 1 50%;
   min-width: 0;
   font-size: clamp(10px, 2.5vw, 12px);
@@ -398,28 +412,27 @@ body.location-page .blk-hdr {
 }
 
 @media (min-width: 900px) {
-  .loc-hero-grid {
+  .loc-hero {
     grid-template-columns: minmax(0, 13fr) auto minmax(140px, 8fr);
+    grid-template-areas: "identity rating map";
     padding: var(--loc-pad);
     background: var(--home-card, var(--card-bg));
     border: 1px solid var(--home-bdr, var(--border-faint));
     border-radius: 5px;
   }
-  .loc-hero-cell--identity,
-  .loc-hero-cell--rating-mobile {
+  .loc-hero-identity {
     padding: 0;
     border: none;
     background: transparent;
-    margin: 0;
+    border-radius: 0;
+    overflow: visible;
   }
-  .loc-hero-cell--rating-mobile {
+  .loc-hero-mobile-rating {
     display: none;
   }
-  .loc-hero-cell--rating-desktop {
-    display: block;
-  }
-  .loc-hero-cell--map {
-    display: block;
+  .loc-hero-shell > .loc-hero-inset.loc-hero-rating,
+  .loc-hero-shell > .loc-hero-inset.loc-hero-map-wrap {
+    display: flex;
   }
   .loc-hero-h1 { font-size: clamp(18px, 2vw, 26px); }
   .loc-hero-city { font-size: clamp(18px, 2vw, 26px); }
@@ -1346,7 +1359,7 @@ html[data-theme="tesla-dark"] body.location-page .loc-btn-accent:focus-visible {
 
 /* Tesla Light desktop — слабый контраст surface vs bg (#fff / #fafafb / #f4f4f6) */
 @media (min-width: 900px) {
-  html[data-theme="tesla-light"] body.location-page .loc-hero-grid,
+  html[data-theme="tesla-light"] body.location-page .loc-hero,
   html[data-theme="tesla-light"] body.location-page .loc-main-grid .blk {
     border-color: var(--hairline);
     box-shadow: var(--shadow-2);

@@ -115,7 +115,7 @@ report.checks.open_graph = {
 };
 
 report.checks.deploy_markers = {
-  pass: html.includes("@graph") && html.includes("loc-hero-grid"),
+  pass: html.includes("@graph") && html.includes("loc-hero-shell"),
 };
 
 const allPass = Object.values(report.checks).every((c) => c.pass !== false);
