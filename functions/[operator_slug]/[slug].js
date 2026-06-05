@@ -134,7 +134,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=5">
-<link rel="stylesheet" href="/CSS/location-page.css?v=10">
+<link rel="stylesheet" href="/CSS/location-page.css?v=12">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="/CSS/tesla-dark.css?v=5">
 ${hasCoords ? '<link rel="stylesheet" href="/CSS/vendor/leaflet.css?v=1">' : ""}
@@ -184,7 +184,7 @@ ${renderSiteFooter()}
 <p class="loc-lightbox-counter"></p>
 </div>
 </div>
-<script src="/JS/location-page.js?v=6"></script>
+<script src="/JS/location-page.js?v=7"></script>
 ${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=2"></script>' : ""}
 </body>
 </html>`;

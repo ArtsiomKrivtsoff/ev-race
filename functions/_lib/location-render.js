@@ -219,7 +219,7 @@ function renderRatingCard(loc, community, { compact, linkHref }) {
   let inner;
   if (!hasRating) {
     const cta = compact
-      ? `<div class="loc-rating-cta">${renderReviewCta("loc-review-cta--block", "ОЦЕНИТЬ", "plain")}</div>`
+      ? `<div class="loc-rating-cta">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</div>`
       : "";
     inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
 <span class="loc-rating-val loc-rating-val--placeholder" aria-hidden="true">X.X</span>
@@ -228,7 +228,7 @@ function renderRatingCard(loc, community, { compact, linkHref }) {
 ${cta}`;
   } else {
     const cta = compact
-      ? `<div class="loc-rating-cta">${renderReviewCta("loc-review-cta--block", "ОЦЕНИТЬ", "plain")}</div>`
+      ? `<div class="loc-rating-cta">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</div>`
       : "";
     inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
 <span class="loc-rating-val">${escapeHtml(String(loc.cached_avg_rating))}</span>

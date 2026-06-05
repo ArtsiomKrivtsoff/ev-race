@@ -308,16 +308,28 @@
 
   function fitFitLineElements() {
     document.querySelectorAll("[data-fit-line]").forEach(function (el) {
-      var box = el.closest(".loc-hero-identity") || el.parentElement;
+      var box =
+        el.closest(".loc-hero-identity") ||
+        el.closest(".loc-infra-copy") ||
+        el.parentElement;
       if (!box) return;
       var available = box.clientWidth;
       var max = parseFloat(getComputedStyle(el).fontSize) || 12;
       var min = window.matchMedia("(max-width: 639px)").matches ? 5 : 7;
-      el.style.fontSize = max + "px";
+      var connLines = el.querySelectorAll(".loc-conn-line");
+
+      function applySize(size) {
+        el.style.fontSize = size + "px";
+        connLines.forEach(function (line) {
+          line.style.fontSize = size + "px";
+        });
+      }
+
+      applySize(max);
       var guard = 0;
       while (el.scrollWidth > available && max > min && guard < 50) {
         max -= 0.5;
-        el.style.fontSize = max + "px";
+        applySize(max);
         guard += 1;
       }
     });
