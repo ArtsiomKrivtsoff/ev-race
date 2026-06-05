@@ -34,7 +34,7 @@
   --summer: #ff44aa;        /* лето — неон */
   --autumn: #ffaa00;        /* осень — янтарь */
   --dc:     var(--yellow);  /* DC: жёлтый — сильнее */
-  --ac:     #00cfff;        /* AC: голубой — медленнее */
+  --ac:     #00cfff;        /* AC: голубой — переменный ток */
   --bg: #0a0a0a;
   --card-bg: #0d1f0d;
   --text: var(--green);

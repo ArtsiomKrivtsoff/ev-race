@@ -14,6 +14,7 @@ import {
   renderTypeBadge,
   stationGunTypes,
 } from "./station-badges.js";
+import { computeSeoMaxPostKw, computeSeoStationStats } from "./location-seo.js";
 
 export const OP_NAMES = {
   batteryfly: "BatteryFly",
@@ -123,6 +124,7 @@ export function computeLocationMetrics(stations) {
     stationCount,
     totalPower,
     totalSim,
+    maxPostKw: computeSeoMaxPostKw(computeSeoStationStats(stations)),
     connectorCounts,
     dcBreakdown,
     acBreakdown,
@@ -344,6 +346,24 @@ ${mapInset}
 </section>`;
 }
 
+function renderInfraPowerCell(metrics) {
+  if (!metrics.maxPostKw) {
+    return `<span class="loc-infra-val loc-infra-val--edge">—</span>`;
+  }
+  const primary = escapeHtml(
+    `ДО ${metrics.maxPostKw.toLocaleString("ru")} КВТ`.toUpperCase(),
+  );
+  const showSum =
+    metrics.totalPower > 0 && metrics.totalPower !== metrics.maxPostKw;
+  if (!showSum) {
+    return `<span class="loc-infra-val loc-infra-val--edge">${primary}</span>`;
+  }
+  const secondary = escapeHtml(
+    `${metrics.totalPower.toLocaleString("ru")} КВТ СУММАРНО`,
+  );
+  return `<span class="loc-infra-val loc-infra-val--edge">${primary}</span><span class="loc-infra-sub">${secondary}</span>`;
+}
+
 export function renderInfrastructureBlock(stations, metrics) {
   if (!stations.length) {
     return `<div class="blk loc-infra-blk loc-grid-main">
@@ -352,9 +372,7 @@ export function renderInfrastructureBlock(stations, metrics) {
 </div>`;
   }
 
-  const powerVal = metrics.totalPower
-    ? `<span class="loc-infra-val loc-infra-val--edge">${escapeHtml(`${metrics.totalPower.toLocaleString("ru")} кВт`.toUpperCase())}</span>`
-    : `<span class="loc-infra-val loc-infra-val--edge">—</span>`;
+  const powerVal = renderInfraPowerCell(metrics);
   const connVal = formatConnectorsStack(metrics.connectorCounts);
   const simVal = metrics.totalSim
     ? `<span class="loc-infra-val loc-infra-val--edge">${escapeHtml(`${metrics.totalSim} АВТО`)}</span>`

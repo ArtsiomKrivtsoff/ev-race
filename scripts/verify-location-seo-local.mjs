@@ -37,8 +37,19 @@ const seo = buildLocationSeo(loc, stations, "Zaryadka");
 const graph = buildLocationJsonLdGraph(seo, loc, canonical);
 const nodes = graph["@graph"];
 
+const webPage = nodes.find((n) => n["@type"] === "WebPage");
 const evcs = nodes.find((n) => n["@type"] === "ElectricVehicleChargingStation");
 const crumbs = nodes.find((n) => n["@type"] === "BreadcrumbList");
+
+console.assert(!webPage?.mainEntity, "WebPage must not have mainEntity");
+console.assert(
+  evcs?.mainEntityOfPage?.["@id"] === canonical,
+  "EVCS must have mainEntityOfPage",
+);
+console.assert(
+  evcs?.additionalProperty?.some((p) => p.name === "total_installed_kw"),
+  "EVCS must have total_installed_kw",
+);
 
 console.log("metaDescription:", seo.metaDescription);
 console.log("ogImage:", seo.ogImage);

@@ -106,6 +106,7 @@ export function computeSeoStationStats(stations) {
   let maxAcKw = 0;
   let stationCount = 0;
   let totalSim = 0;
+  let totalInstalledKw = 0;
   const connectorLabels = collectConnectorDisplayLabels(stations);
   const chargeKind = getLocationChargeKind(stations);
 
@@ -113,6 +114,7 @@ export function computeSeoStationStats(stations) {
     const cnt = s.count || 1;
     stationCount += cnt;
     totalSim += (s.simultaneous_charge || 0) * cnt;
+    totalInstalledKw += ((s.dc_power || 0) + (s.ac_power || 0)) * cnt;
     if (s.dc_power) maxDcKw = Math.max(maxDcKw, s.dc_power);
     if (s.ac_power) maxAcKw = Math.max(maxAcKw, s.ac_power);
   }
@@ -122,6 +124,7 @@ export function computeSeoStationStats(stations) {
     maxAcKw,
     stationCount,
     totalSim,
+    totalInstalledKw,
     connectorLabels,
     chargeKind,
   };
@@ -139,6 +142,14 @@ function formatPowerPhrase(kind, maxDcKw, maxAcKw) {
     return `Зарядка электромобилей до ${maxAcKw} кВт`;
   }
   return "";
+}
+
+/** @param {ReturnType<computeSeoStationStats>} stats */
+export function computeSeoMaxPostKw(stats) {
+  if (stats.chargeKind === "ac" && stats.maxAcKw > 0) return stats.maxAcKw;
+  if (stats.maxDcKw > 0) return stats.maxDcKw;
+  if (stats.maxAcKw > 0) return stats.maxAcKw;
+  return 0;
 }
 
 /** @param {object} loc @param {string} operatorName @param {ReturnType<computeSeoStationStats>} stats */
@@ -213,6 +224,7 @@ export function buildLocationJsonLdGraph(seo, loc, canonical) {
   const evcs = {
     "@type": "ElectricVehicleChargingStation",
     "@id": evcsId,
+    mainEntityOfPage: { "@id": canonical },
     name: seo.jsonLdName,
     description: seo.metaDescription,
     url: canonical,
@@ -276,6 +288,13 @@ export function buildLocationJsonLdGraph(seo, loc, canonical) {
       "@type": "PropertyValue",
       name: "max_power_kw",
       value: maxPowerKw,
+    });
+  }
+  if (stats.totalInstalledKw > 0) {
+    additionalProperty.push({
+      "@type": "PropertyValue",
+      name: "total_installed_kw",
+      value: stats.totalInstalledKw,
     });
   }
   if (stats.stationCount > 0) {
@@ -346,7 +365,6 @@ export function buildLocationJsonLdGraph(seo, loc, canonical) {
       url: `${SITE_ORIGIN}/`,
     },
     breadcrumb: { "@id": breadcrumbId },
-    mainEntity: { "@id": evcsId },
   };
 
   return {
