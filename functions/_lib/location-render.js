@@ -128,14 +128,14 @@ function renderBadge(n) {
   return `<span class="loc-blk-badge">${escapeHtml(String(num))}</span>`;
 }
 
-function renderReviewCta(className, label = "ОЦЕНИТЬ ЛОКАЦИЮ", style = "accent") {
+function renderReviewCta(className, label = "ОЦЕНИТЬ ЛОКАЦИЮ", style = "community") {
   const extra = className ? ` ${className}` : "";
   const btnCls =
     style === "plain"
-      ? "loc-btn"
+      ? "loc-btn loc-btn-community"
       : style === "primary"
         ? "loc-btn loc-btn-primary"
-        : "loc-btn loc-btn-accent";
+        : "loc-btn loc-btn-community";
   return `<a class="${btnCls} loc-review-cta${extra}" href="#review-form">${escapeHtml(label)}</a>`;
 }
 
@@ -273,8 +273,8 @@ ${titleBlock}
 ${aggregatorLine}
 <div class="loc-hero-actions">
 ${routeBtn}
-<button class="loc-btn" type="button" id="loc-share-btn" onclick="shareLocation()">ПОДЕЛИТЬСЯ</button>
-<span class="loc-hero-actions-desktop">${renderReviewCta("", "ОЦЕНИТЬ", "accent")}</span>
+<button class="loc-btn loc-btn-secondary" type="button" id="loc-share-btn" onclick="shareLocation()">ПОДЕЛИТЬСЯ</button>
+<span class="loc-hero-actions-desktop">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</span>
 </div>
 </div>`;
 }

@@ -134,7 +134,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=5">
-<link rel="stylesheet" href="/CSS/location-page.css?v=9">
+<link rel="stylesheet" href="/CSS/location-page.css?v=10">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="/CSS/tesla-dark.css?v=5">
 ${hasCoords ? '<link rel="stylesheet" href="/CSS/vendor/leaflet.css?v=1">' : ""}

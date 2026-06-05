@@ -504,9 +504,9 @@ grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); /* ≈67% / 33% */
 
 ---
 
-## Desktop + mobile — следующий батч (⏳ не делать)
+## Desktop + mobile — следующий батч
 
-**Статус:** обсуждение 2026-06-05. Код **не трогать** до команды «ДЕЛАЙ» (desktop + mobile в одном батче или по частям — уточнить).
+**Статус:** hero/infra v9 **залито** (`5558793`). Ниже — backlog для следующих батчей (theme, buttons).
 
 ---
 
@@ -687,5 +687,134 @@ grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); /* ≈67% / 33% */
 | D10 | Кнопки 3×1/3, «ОЦЕНИТЬ», крупный шрифт | ✅ |
 | D11 | Infra breakdown DC/AC, без даты | ✅ |
 | D12 | `6 АВТО` без «ДО» | ✅ |
+
+---
+
+## Theme system — контракт (2026-06-05) ✅
+
+### Философия (не ломаем)
+
+| Слой | Роль |
+|------|------|
+| `arcade.css` | глобальный chrome, legacy-база |
+| `home-v2.css` | **уточнённая Arcade** (`.blk`, `--home-*`, чуть иные radius vs голый arcade.css) |
+| `location-page.css` | та же Arcade-философия, перенесённая с главной (v9) |
+
+Остальные страницы **подтягиваем** под home-v2 Arcade, не под сырой `arcade.css`.
+
+### Tesla Light / Dark = **только skin** ✅
+
+При `html[data-theme="tesla-light|tesla-dark"]` **не меняются:**
+
+- компоновка, grid, flex (50/50, 3×1/3, main+sidebar…)
+- расположение блоков
+- **размеры шрифтов** (`clamp`, `cqh`, px — как в Arcade-базе)
+- отступы `--loc-gap` / `--loc-pad`
+- поведение (fit-text, empty rating, hero density)
+
+**Меняется только краска:** цвета, `font-family` (PS2P → Inter при **тех же px**), `text-shadow`/glow off, border/background/fill, скрытие FX-toggle.
+
+Реализация: remapping `--home-*` + блок `html[data-theme="tesla-*"] body.location-page { … }` — **без** override layout/font-size.
+
+Legacy location-блок в `tesla-light.css` / `tesla-dark.css` (Stage 2.2) — **удалить** при батче theme.
+
+**Статус:** ✅ Tesla skin location v10 (`location-page.css`). Legacy location в `tesla-*.css` — ⏸ cleanup позже.
+
+---
+
+## Action Button System — L1 / L2 / L3 (2026-06-05) ✅
+
+**Источник:** GPT spec + обсуждение с автором.
+
+**Принцип:** три уровня визуального веса — задачи разные, **не все CTA одинаковые**. На странице **одна L1** (hero МАРШРУТ).
+
+| Уровень | Класс (целевой) | Пример | Задача |
+|---------|-----------------|--------|--------|
+| **L1 Primary** | `.loc-btn-primary` | МАРШРУТ | навигация на локацию |
+| **L2 Secondary** | `.loc-btn-secondary` | ПОДЕЛИТЬСЯ | сервис (ссылка) |
+| **L3 Community** | `.loc-btn-community` | ОЦЕНИТЬ | отзыв / рейтинг / фото |
+
+> Переименовать `.loc-btn-accent` → `.loc-btn-community` при батче (семантика; не путать с `--accent` Tesla).
+
+### Размеры — правило автора ✅
+
+| Контекст | Размеры |
+|----------|---------|
+| **Hero mobile** — 2×50% в ряд | **как v9:** full width row, `clamp`, **единая высота** с соседней карточкой |
+| **Hero desktop** — 3×1/3 | **как v9:** full width identity, `clamp(11px, 1vw, 14px)`, weight 600 |
+| **ОЦЕНИТЬ** в card рейтинга (100%) | **та же высота**, что hero row-кнопки на mobile |
+| **Одиночные / block CTA** (empty фото, теги, `#review-form`, не в tight row) | **GPT:** h 48 desktop / 44 mobile, font 14px w600, radius **6px**, letter-spacing 0.03em |
+
+**Не** навязывать 48px на hero row — там приоритет **вписывания в 50/50 и 3×1/3**.
+
+### Interaction ✅
+
+- `cursor: pointer`
+- `transition: 150ms ease`
+- hover — **по уровню** (не общий зелёный на все `.loc-btn`!)
+- `:active` — `scale(0.98)`
+- **Запрет:** пульсация, мигание, бесконечные анимации, auto-glow
+- Glow L1/L3 — **off** при `body.reduced-fx` / «ЧЁТКО»
+
+### Arcade — цвета ✅
+
+**L1 МАРШРУТ**
+
+| | |
+|---|---|
+| default | border + text `#00FF66`, bg transparent |
+| hover | bg `#00FF66`, text `#041006`, glow `0 0 12px rgba(0,255,102,.45)` |
+
+**L2 ПОДЕЛИТЬСЯ**
+
+| | |
+|---|---|
+| default | border `rgba(255,255,255,.18)`, text `rgba(255,255,255,.85)`, bg transparent |
+| hover | border `#00FF66`, text `#00FF66`, bg `rgba(0,255,102,.05)` |
+| copied | `.is-copied` — зелёный feedback (как сейчас) |
+
+**L3 ОЦЕНИТЬ**
+
+| | |
+|---|---|
+| default | border + text `#FFD500` (`--yellow`), bg transparent |
+| hover | bg `#FFD500`, text `#111`, glow `0 0 12px rgba(255,213,0,.35)` |
+
+**UX-семантика Arcade:** зелёная = ехать · серая = сервис · **жёлтая = участие (community)**.
+
+### Tesla — skin (те же классы L1/L2/L3) ✅
+
+Размеры **не трогаем** — только fill/border/text.
+
+**L3 Community в Tesla — решение (2026-06-05):** **красный fill** (не жёлтый) — лучше ложится на Tesla-приборку; семантика **уровня L3** сохраняется, цвет theme-dependent.
+
+| | Tesla Light | Tesla Dark |
+|---|-------------|------------|
+| **L1** | bg `#111`, text `#fff` | bg `#fff`, text `#111` |
+| **L2** | border `#D0D0D0`, text `#555` | border `#555`, text `#BDBDBD` |
+| **L3** | bg `#D32F2F`, text `#fff` | bg `#FF3B30`, text `#fff` |
+
+Hover L2/L3 — уточнить при «ДЕЛАЙ theme» (лёгкое затемнение / opacity, без glow).
+
+### Где какой уровень на location page
+
+| Место | L |
+|-------|---|
+| Hero МАРШРУТ | L1 |
+| Hero ПОДЕЛИТЬСЯ | L2 |
+| Hero / card ОЦЕНИТЬ | L3 |
+| Empty фото / теги CTA | L3 block |
+| `#review-form` ОЦЕНИТЬ ЛОКАЦИЮ | L3 block |
+| Telegram | **вне системы** (brand blue `.loc-btn-tg`) |
+
+### Код — батч ⏳
+
+1. Fix: убрать глобальный `.loc-btn:hover { green }` — hover **per-level**
+2. `.loc-btn-accent` → `.loc-btn-community` (+ render)
+3. Mobile card «ОЦЕНИТЬ» — **L3**, не plain `.loc-btn`
+4. Block CTA — GPT dimensions где не hero row
+5. Tesla overrides — переменные L1/L2/L3 в theme-блоке
+
+**Статус:** ✅ Arcade L1/L2/L3 в v10; Tesla skin location в `location-page.css` (⏳ push).
 
 ---

@@ -1,5 +1,5 @@
 /* ============================================================
-   Location page v9 — hero density, empty rating, infra polish
+   Location page v10 — Tesla skin + action button levels
    Depends: arcade.css, operator.css, home-v2.css (.blk)
    ============================================================ */
 
@@ -72,34 +72,87 @@ body.location-page .blk-hdr {
   background: transparent;
   color: var(--home-text, var(--text));
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+.loc-btn:active {
+  transform: scale(0.98);
 }
 .loc-btn-primary {
-  border-color: var(--green);
-  color: var(--green);
+  border-color: #00ff66;
+  color: #00ff66;
 }
+.loc-btn-primary:hover,
+.loc-btn-primary:focus-visible {
+  background: #00ff66;
+  border-color: #00ff66;
+  color: #041006;
+  box-shadow: 0 0 12px rgba(0, 255, 102, 0.45);
+  outline: none;
+}
+.loc-btn-secondary {
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.85);
+  background: transparent;
+}
+.loc-btn-secondary:hover,
+.loc-btn-secondary:focus-visible {
+  border-color: #00ff66;
+  color: #00ff66;
+  background: rgba(0, 255, 102, 0.05);
+  outline: none;
+}
+.loc-btn-community,
 .loc-btn-accent {
-  border-color: var(--yellow);
-  color: var(--yellow);
+  border-color: #ffd500;
+  color: #ffd500;
+  background: transparent;
+}
+.loc-btn-community:hover,
+.loc-btn-community:focus-visible,
+.loc-btn-accent:hover,
+.loc-btn-accent:focus-visible {
+  background: #ffd500;
+  border-color: #ffd500;
+  color: #111;
+  box-shadow: 0 0 12px rgba(255, 213, 0, 0.35);
+  outline: none;
 }
 .loc-btn-tg {
   width: 100%;
   border-color: #2aabee;
   color: #2aabee;
 }
-.loc-btn:hover,
-.loc-btn:focus-visible {
-  border-color: var(--green);
-  color: var(--green);
+.loc-btn-tg:hover,
+.loc-btn-tg:focus-visible {
+  border-color: #2aabee;
+  color: #2aabee;
+  background: rgba(42, 171, 238, 0.08);
+  box-shadow: none;
   outline: none;
 }
 .loc-btn.is-copied {
-  border-color: var(--green);
-  color: var(--green);
+  border-color: #00ff66;
+  color: #00ff66;
+  background: rgba(0, 255, 102, 0.05);
 }
 .loc-review-cta--block {
   width: 100%;
   text-align: center;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 6px;
+}
+@media (min-width: 900px) {
+  .loc-review-cta--block {
+    min-height: 48px;
+  }
 }
 
 /* ── Hero ── */
@@ -912,9 +965,293 @@ body.location-page .blk-hdr {
 .loc-lightbox-prev { left: 16px; top: 50%; transform: translateY(-50%); }
 .loc-lightbox-next { right: 16px; top: 50%; transform: translateY(-50%); }
 
-/* ── Reduced FX ── */
+body.reduced-fx .loc-btn-primary:hover,
+body.reduced-fx .loc-btn-primary:focus-visible,
+body.reduced-fx .loc-btn-community:hover,
+body.reduced-fx .loc-btn-community:focus-visible,
+body.reduced-fx .loc-btn-accent:hover,
+body.reduced-fx .loc-btn-accent:focus-visible {
+  box-shadow: none;
+}
 body.reduced-fx .loc-rating-val:not(.loc-rating-val--placeholder),
 body.reduced-fx .loc-infra-val,
+body.reduced-fx .loc-infra-breakdown:not(.loc-infra-breakdown--split) .loc-infra-breakdown-val,
+body.reduced-fx .loc-conn-line,
 body.reduced-fx .loc-tag-agg-count {
   text-shadow: none;
+}
+
+/* ============================================================
+   TESLA LIGHT / DARK — location page skin only
+   Layout, font-size, grid — без изменений (см. backlog).
+   ============================================================ */
+
+html[data-theme="tesla-light"] body.location-page,
+html[data-theme="tesla-dark"] body.location-page {
+  --loc-inset-glow: transparent;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-breadcrumbs,
+html[data-theme="tesla-dark"] body.location-page .loc-breadcrumbs {
+  font-family: var(--font);
+  color: var(--fg-3);
+}
+html[data-theme="tesla-light"] body.location-page .loc-breadcrumbs a,
+html[data-theme="tesla-dark"] body.location-page .loc-breadcrumbs a {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-hero-city,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-city,
+html[data-theme="tesla-light"] body.location-page .loc-hero-street,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-street {
+  font-family: var(--font);
+  font-weight: 700;
+  text-shadow: none;
+  color: var(--fg);
+}
+html[data-theme="tesla-light"] body.location-page .loc-hero-venue,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-venue {
+  font-family: var(--font);
+  font-weight: 500;
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-hero-inset,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-inset {
+  border-color: var(--hairline);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-1);
+}
+html[data-theme="tesla-light"] body.location-page .loc-inset-lbl,
+html[data-theme="tesla-dark"] body.location-page .loc-inset-lbl,
+html[data-theme="tesla-light"] body.location-page .loc-rating-meta,
+html[data-theme="tesla-dark"] body.location-page .loc-rating-meta {
+  font-family: var(--font);
+  font-weight: 600;
+  text-shadow: none;
+  color: var(--fg-3);
+}
+html[data-theme="tesla-light"] body.location-page .loc-rating-val,
+html[data-theme="tesla-dark"] body.location-page .loc-rating-val {
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-rating-stars,
+html[data-theme="tesla-dark"] body.location-page .loc-rating-stars {
+  color: var(--dc);
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-rating-stars--empty,
+html[data-theme="tesla-dark"] body.location-page .loc-rating-stars--empty {
+  color: var(--fg-3);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-hero-map,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-map,
+html[data-theme="tesla-light"] body.location-page .loc-hero-map .leaflet-container,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-map .leaflet-container {
+  background: var(--surface-3);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-infra-ico,
+html[data-theme="tesla-dark"] body.location-page .loc-infra-ico {
+  color: var(--accent);
+  filter: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-infra-label,
+html[data-theme="tesla-dark"] body.location-page .loc-infra-label,
+html[data-theme="tesla-light"] body.location-page .loc-infra-breakdown-lbl,
+html[data-theme="tesla-dark"] body.location-page .loc-infra-breakdown-lbl {
+  font-family: var(--font);
+  font-weight: 600;
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-infra-val,
+html[data-theme="tesla-dark"] body.location-page .loc-infra-val,
+html[data-theme="tesla-light"] body.location-page .loc-conn-line,
+html[data-theme="tesla-dark"] body.location-page .loc-conn-line {
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-infra-breakdown-val,
+html[data-theme="tesla-dark"] body.location-page .loc-infra-breakdown-val {
+  font-family: var(--font);
+  font-weight: 500;
+  text-shadow: none;
+  color: var(--fg-2);
+}
+html[data-theme="tesla-light"] body.location-page .loc-infra-breakdown:not(.loc-infra-breakdown--split) .loc-infra-breakdown-val,
+html[data-theme="tesla-dark"] body.location-page .loc-infra-breakdown:not(.loc-infra-breakdown--split) .loc-infra-breakdown-val {
+  color: var(--fg);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-blk-badge,
+html[data-theme="tesla-dark"] body.location-page .loc-blk-badge {
+  font-family: var(--font-num);
+  font-weight: 600;
+  text-shadow: none;
+  color: var(--fg);
+  border-color: var(--hairline);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-tag-agg-cell--positive,
+html[data-theme="tesla-dark"] body.location-page .loc-tag-agg-cell--positive {
+  border-color: rgba(30, 156, 74, 0.35);
+  color: var(--ok);
+}
+html[data-theme="tesla-light"] body.location-page .loc-tag-agg-count,
+html[data-theme="tesla-dark"] body.location-page .loc-tag-agg-count {
+  font-family: var(--font-num);
+  font-weight: 600;
+  text-shadow: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-review-tag--positive,
+html[data-theme="tesla-dark"] body.location-page .loc-review-tag--positive {
+  border-color: rgba(30, 156, 74, 0.35);
+  color: var(--ok);
+}
+html[data-theme="tesla-light"] body.location-page .loc-review-stars,
+html[data-theme="tesla-dark"] body.location-page .loc-review-stars {
+  color: var(--dc);
+}
+html[data-theme="tesla-light"] body.location-page .loc-review-photo-mark,
+html[data-theme="tesla-dark"] body.location-page .loc-review-photo-mark {
+  color: var(--accent);
+}
+html[data-theme="tesla-light"] body.location-page .loc-review-card,
+html[data-theme="tesla-dark"] body.location-page .loc-review-card {
+  background: var(--surface-2);
+}
+html[data-theme="tesla-light"] body.location-page .loc-reviews-more,
+html[data-theme="tesla-dark"] body.location-page .loc-reviews-more {
+  font-family: var(--font);
+  font-weight: 500;
+  color: var(--accent);
+}
+html[data-theme="tesla-light"] body.location-page .loc-reviews-more:hover,
+html[data-theme="tesla-dark"] body.location-page .loc-reviews-more:hover {
+  border-color: var(--accent);
+}
+html[data-theme="tesla-light"] body.location-page .loc-nearby-item:hover,
+html[data-theme="tesla-dark"] body.location-page .loc-nearby-item:hover {
+  background: var(--surface-2);
+}
+html[data-theme="tesla-light"] body.location-page .loc-nearby-rating,
+html[data-theme="tesla-dark"] body.location-page .loc-nearby-rating {
+  color: var(--dc);
+}
+html[data-theme="tesla-light"] body.location-page .loc-photo-more,
+html[data-theme="tesla-dark"] body.location-page .loc-photo-more {
+  font-family: var(--font-num);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-btn,
+html[data-theme="tesla-dark"] body.location-page .loc-btn {
+  font-family: var(--font);
+  text-shadow: none;
+  box-shadow: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-btn-primary {
+  border-color: transparent;
+  background: #111111;
+  color: #ffffff;
+}
+html[data-theme="tesla-light"] body.location-page .loc-btn-primary:hover,
+html[data-theme="tesla-light"] body.location-page .loc-btn-primary:focus-visible {
+  background: #333333;
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-btn-secondary {
+  border-color: #d0d0d0;
+  color: #555555;
+  background: transparent;
+}
+html[data-theme="tesla-light"] body.location-page .loc-btn-secondary:hover,
+html[data-theme="tesla-light"] body.location-page .loc-btn-secondary:focus-visible {
+  border-color: #999999;
+  color: #333333;
+  background: var(--surface-3);
+  box-shadow: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-btn-secondary.is-copied {
+  border-color: var(--ok);
+  color: var(--ok);
+  background: rgba(30, 156, 74, 0.08);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-btn-community,
+html[data-theme="tesla-light"] body.location-page .loc-btn-accent {
+  border-color: transparent;
+  background: #d32f2f;
+  color: #ffffff;
+}
+html[data-theme="tesla-light"] body.location-page .loc-btn-community:hover,
+html[data-theme="tesla-light"] body.location-page .loc-btn-community:focus-visible,
+html[data-theme="tesla-light"] body.location-page .loc-btn-accent:hover,
+html[data-theme="tesla-light"] body.location-page .loc-btn-accent:focus-visible {
+  background: #b71c1c;
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+html[data-theme="tesla-dark"] body.location-page .loc-btn-primary {
+  border-color: transparent;
+  background: #ffffff;
+  color: #111111;
+}
+html[data-theme="tesla-dark"] body.location-page .loc-btn-primary:hover,
+html[data-theme="tesla-dark"] body.location-page .loc-btn-primary:focus-visible {
+  background: #e4e4e4;
+  border-color: transparent;
+  color: #111111;
+  box-shadow: none;
+}
+
+html[data-theme="tesla-dark"] body.location-page .loc-btn-secondary {
+  border-color: #555555;
+  color: #bdbdbd;
+  background: transparent;
+}
+html[data-theme="tesla-dark"] body.location-page .loc-btn-secondary:hover,
+html[data-theme="tesla-dark"] body.location-page .loc-btn-secondary:focus-visible {
+  border-color: #888888;
+  color: #f3f4f6;
+  background: var(--surface-3);
+  box-shadow: none;
+}
+html[data-theme="tesla-dark"] body.location-page .loc-btn-secondary.is-copied {
+  border-color: var(--ok);
+  color: var(--ok);
+  background: rgba(52, 199, 89, 0.12);
+}
+
+html[data-theme="tesla-dark"] body.location-page .loc-btn-community,
+html[data-theme="tesla-dark"] body.location-page .loc-btn-accent {
+  border-color: transparent;
+  background: #ff3b30;
+  color: #ffffff;
+}
+html[data-theme="tesla-dark"] body.location-page .loc-btn-community:hover,
+html[data-theme="tesla-dark"] body.location-page .loc-btn-community:focus-visible,
+html[data-theme="tesla-dark"] body.location-page .loc-btn-accent:hover,
+html[data-theme="tesla-dark"] body.location-page .loc-btn-accent:focus-visible {
+  background: #e0352b;
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: none;
 }
