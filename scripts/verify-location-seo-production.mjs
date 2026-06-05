@@ -46,18 +46,31 @@ if (graph) {
   );
   const crumbs = nodes.find((n) => n["@type"] === "BreadcrumbList");
 
+  const connectorTypes = evcs?.additionalProperty?.find(
+    (p) => p.name === "connector_types",
+  )?.value;
+  const maxPowerKw = evcs?.additionalProperty?.find(
+    (p) => p.name === "max_power_kw",
+  )?.value;
+
   report.checks.evcs_present = {
-    pass: Boolean(evcs),
+    pass:
+      Boolean(evcs) &&
+      Boolean(evcs.name) &&
+      Boolean(evcs?.address?.streetAddress) &&
+      Boolean(evcs?.geo?.latitude && evcs?.geo?.longitude) &&
+      Boolean(evcs?.url) &&
+      Boolean(evcs?.operator?.name) &&
+      Boolean(connectorTypes) &&
+      maxPowerKw != null,
     name: evcs?.name,
-    has_address: Boolean(evcs?.address?.streetAddress),
-    has_geo: Boolean(evcs?.geo?.latitude && evcs?.geo?.longitude),
-    has_url: Boolean(evcs?.url),
-    has_operator: Boolean(evcs?.operator?.name),
-    connector_types: evcs?.additionalProperty?.find(
-      (p) => p.name === "connector_types",
+    connector_types: connectorTypes,
+    max_power_kw: maxPowerKw,
+    station_count: evcs?.additionalProperty?.find(
+      (p) => p.name === "station_count",
     )?.value,
-    max_power_kw: evcs?.additionalProperty?.find(
-      (p) => p.name === "max_power_kw",
+    simultaneous_charging_count: evcs?.additionalProperty?.find(
+      (p) => p.name === "simultaneous_charging_count",
     )?.value,
   };
 
@@ -96,8 +109,13 @@ report.checks.connector_coverage = {
 report.checks.open_graph = {
   pass:
     html.includes('property="og:type" content="website"') &&
-    html.includes('property="og:site_name" content="EV RACE"'),
+    html.includes('property="og:site_name" content="EV RACE"') &&
+    /og-map\.png/i.test(html),
   og_image: html.match(/property="og:image" content="([^"]*)"/i)?.[1],
+};
+
+report.checks.deploy_markers = {
+  pass: html.includes("@graph") && html.includes("loc-hero-grid"),
 };
 
 const allPass = Object.values(report.checks).every((c) => c.pass !== false);
