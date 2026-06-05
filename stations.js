@@ -5,6 +5,7 @@
 
 const SURL = 'https://uvrboxrddqlasgrnnnne.supabase.co';
 const SKEY = 'sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y';
+const SITE_ORIGIN = 'https://evrace.by';
 
 const OP_NAMES = {
   batteryfly:'BatteryFly', forevo:'forEVo', zaryadka:'Zaryadka',
@@ -42,6 +43,7 @@ const STATE = {
 };
 
 let allStations = [];
+let locationByKey = {};
 let firstRender = true;         // флаг для NEW-flash
 
 // =============================================================
@@ -109,7 +111,7 @@ function toggleFx() {
 // =============================================================
 const THEMES = ['arcade','tesla-light','tesla-dark'];
 function setTheme(theme) {
-  document.getElementById('theme-css').href = 'CSS/' + theme + '.css?v=4';
+  document.getElementById('theme-css').href = 'CSS/' + theme + '.css?v=5';
   localStorage.setItem('ev_race_theme', theme);
   document.documentElement.dataset.theme = theme;
   THEMES.forEach(t => {
@@ -147,6 +149,64 @@ function locationKey(s) {
   // Приоритет — координаты (если есть в схеме). Иначе город+адрес.
   if (s.lat != null && s.lng != null) return Number(s.lat).toFixed(5) + ',' + Number(s.lng).toFixed(5);
   return ((s.city || '').toLowerCase() + '|' + (s.address || '').toLowerCase()).trim();
+}
+
+function normalizeIdentityPart(p) {
+  return String(p ?? '').trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+function stationLocationKey(s) {
+  return normalizeIdentityPart(s.operator) + '|' + normalizeIdentityPart(s.city) + '|' + normalizeIdentityPart(s.address);
+}
+
+function buildLocationLookup(locations) {
+  const map = {};
+  (locations || []).forEach(loc => {
+    const k = normalizeIdentityPart(loc.operator) + '|' + normalizeIdentityPart(loc.city) + '|' + normalizeIdentityPart(loc.address);
+    map[k] = loc;
+  });
+  return map;
+}
+
+function escapeAttr(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function locationPageUrl(s) {
+  const loc = locationByKey[stationLocationKey(s)];
+  if (!loc?.operator_slug || !loc?.slug) return null;
+  return SITE_ORIGIN + '/' + encodeURIComponent(loc.operator_slug) + '/' + encodeURIComponent(loc.slug);
+}
+
+function renderLocListHtml(s) {
+  const inner = s.location_name
+    ? '<span class="loc-name">' + s.location_name + '</span><span class="loc-address">' + (s.address || '') + '</span>'
+    : '<span class="loc-address">' + (s.address || '—') + '</span>';
+  const href = locationPageUrl(s);
+  if (!href) return inner;
+  return '<a class="loc-page-link" href="' + escapeAttr(href) + '">' + inner + '</a>';
+}
+
+function renderLocGroupHtml(first) {
+  const inner = first.location_name
+    ? '<strong style="color:var(--green)">' + first.location_name + '</strong><br><span class="loc-address">' + (first.address || '') + '</span>'
+    : '<span style="color:var(--green)">' + (first.address || '—') + '</span>';
+  const href = locationPageUrl(first);
+  if (!href) return inner;
+  return '<a class="loc-page-link" href="' + escapeAttr(href) + '">' + inner + '</a>';
+}
+
+function renderLocMobileHtml(first) {
+  const locNameHtml = first.location_name ? '<span class="loc-name">' + first.location_name + '</span>' : '';
+  const locAddrHtml = first.address ? '<span class="loc-addr">' + first.address + '</span>' : '';
+  const inner = '<span class="loc-city">' + (first.city || '—') + '</span>' + locNameHtml + locAddrHtml;
+  const href = locationPageUrl(first);
+  if (!href) return inner;
+  return '<a class="loc-page-link" href="' + escapeAttr(href) + '">' + inner + '</a>';
 }
 function getCurrentRoundEnd() {
   const now = new Date();
@@ -434,9 +494,7 @@ function renderDesktop(stations) {
 function renderTableRow(s) {
   const locKey = locationKey(s);
   const newBadge = isNew(s.station_date) ? ' <span class="new-badge">NEW</span>' : '';
-  const locHtml = s.location_name
-    ? '<span class="loc-name">' + s.location_name + '</span><span class="loc-address">' + (s.address || '') + '</span>'
-    : '<span class="loc-address">' + (s.address || '—') + '</span>';
+  const locHtml = renderLocListHtml(s);
   const dc = s.dc_power || 0, ac = s.ac_power || 0, cnt = s.count || 1;
   let pwrHtml = '—';
   if (dc || ac) {
@@ -480,9 +538,7 @@ function renderGroupRows(group) {
     .filter(s => { const key = s.operator + '|' + (s.aggregator || ''); if (seenOps.has(key)) return false; seenOps.add(key); return true; })
     .map(s => opBadge(s.operator, s.aggregator))
     .join(' ');
-  const locHtml = first.location_name
-    ? '<strong style="color:var(--green)">' + first.location_name + '</strong><br><span class="loc-address">' + (first.address || '') + '</span>'
-    : '<span style="color:var(--green)">' + (first.address || '—') + '</span>';
+  const locHtml = renderLocGroupHtml(first);
 
   let html = '<tr data-loc-id="' + group.key + '" class="' + flash.trim() + '" style="background:rgba(0,255,65,.03)">'
     + '<td>' + opBadges + '</td>'
@@ -536,12 +592,9 @@ function renderMobile(stations) {
       return '<div class="station-row"><div class="st-left">' + typeBadge(s.station_type) + '<div class="st-guns">' + gunsHtml + '</div></div><div class="st-right"><span class="st-power">' + pwrHtml + '</span></div></div>';
     }).join('');
 
-    const locNameHtml = first.location_name ? '<span class="loc-name">' + first.location_name + '</span>' : '';
-    const locAddrHtml = first.address       ? '<span class="loc-addr">' + first.address + '</span>'       : '';
-
     return '<div class="loc-card' + flash + '" data-loc-id="' + g.key + '">'
       + '<div class="loc-head">'
-        + '<div class="loc-head-left">' + opBadge(first.operator, first.aggregator) + '<span class="loc-city">' + (first.city || '—') + '</span>' + locNameHtml + locAddrHtml + '</div>'
+        + '<div class="loc-head-left">' + opBadge(first.operator, first.aggregator) + renderLocMobileHtml(first) + '</div>'
         + '<div class="loc-head-right">'
           + '<div class="loc-total-power">' + (totalPower ? totalPower + ' кВт' : '—') + '</div>'
           + '<div class="loc-total-label">ВСЕГО</div>'
@@ -621,11 +674,17 @@ async function init() {
   setView(STATE.view);
 
   try {
-    const res = await fetch(SURL + '/rest/v1/stations?select=*&order=station_date.desc,station_time.desc.nullslast', {
-      headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY }
-    });
-    allStations = await res.json();
+    const headers = { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY };
+    const [stRes, locRes] = await Promise.all([
+      fetch(SURL + '/rest/v1/stations?select=*&order=station_date.desc,station_time.desc.nullslast', { headers }),
+      fetch(SURL + '/rest/v1/locations?select=operator,city,address,operator_slug,slug,location_name&is_active=eq.true', { headers })
+    ]);
+    if (!stRes.ok || !locRes.ok) throw new Error('Supabase fetch failed');
+    allStations = await stRes.json();
+    const locData = await locRes.json();
     if (!Array.isArray(allStations)) allStations = [];
+    if (!Array.isArray(locData)) throw new Error('Locations not array');
+    locationByKey = buildLocationLookup(locData);
     buildMonthFilter(allStations);
     buildCityFilter(allStations);
 

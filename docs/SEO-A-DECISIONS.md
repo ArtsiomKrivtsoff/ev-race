@@ -142,10 +142,12 @@ Smoke: `node scripts/verify-phase-a-schema-production.mjs` + `verify-seo-a-p0-pr
 | P1 | Задача | Статус |
 |----|--------|--------|
 | 1 | **Dynamic sitemap** | **CLOSED** — prod 133 URL, commit `2671277` |
-| 2 | `map.html` → location page | **CLOSED** — commit pending push |
-| 3 | `stations.html` → location page | pending |
+| 2 | `map.html` → location page | **CLOSED** — `19be2b6` |
+| 3 | `stations.html` → location page | **CLOSED** — commit pending push |
 
 **Приёмка SEO-B:** Search Console — sitemap с location URLs; crawl path: home / map / stations → location pages.
+
+**SEO-B статус:** **CLOSED** (P1-1…P1-3 код + verify).
 
 Smoke: **5–10 случайных локаций** разных операторов (не одна ACDC-эталон).
 
@@ -214,11 +216,11 @@ Mobile Performance 85, SEO 100 — приемлемо. Leaflet optimisation — 
 ```text
 Location Pages     ████████████████████  100%
 SEO-A (P0)         ████████████████████  ЗАКРЫТ
-SEO-B (P1)         ░░░░░░░░░░░░░░░░░░░░  NEXT
-  1. Dynamic sitemap
-  2. map.html → location
-  3. stations.html → location
-Platform           ░░░░░░░░░░░░░░░░░░░░  после SEO-B
+SEO-B (P1)         ████████████████████  ЗАКРЫТ
+  1. Dynamic sitemap   ✅
+  2. map → location    ✅
+  3. stations → location ✅
+Platform           ░░░░░░░░░░░░░░░░░░░░  NEXT
   Reviews · Ratings · Photos · Tags · Community
 ```
 

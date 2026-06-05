@@ -890,6 +890,10 @@ table.reg tr:hover td { background: rgba(0,255,65,.03); }
 table.reg td.city  { color: var(--green); font-size: 12px; }
 table.reg td.addr .loc-name    { font-size: 11px; color: var(--green); display:block; }
 table.reg td.addr .loc-address { font-size: 10px; color: var(--text-dim); display:block; margin-top: 2px; }
+a.loc-page-link { color: inherit; text-decoration: none; display: block; }
+a.loc-page-link:hover .loc-address,
+a.loc-page-link:hover .loc-addr { text-decoration: underline; }
+.loc-card a.loc-page-link .loc-city { display: block; }
 table.reg td.addr  { max-width: 220px; }
 table.reg td.power { color: var(--dc); font-family:'Press Start 2P', monospace; font-size: 10px; white-space: nowrap; }
 table.reg td.center{ text-align: center; }
