@@ -10,8 +10,11 @@ import {
   stationGunTypes,
 } from "./station-badges.js";
 
+const SITE_ORIGIN = "https://evrace.by";
 const SITE_BRAND = "EV RACE";
 const STATIONS_PATH = "/stations.html";
+const OG_IMAGE_LOCATION = `${SITE_ORIGIN}/og-map.png`;
+const OG_IMAGE_FALLBACK = `${SITE_ORIGIN}/og.png`;
 
 /** @param {string[]} items */
 export function joinRuList(items) {
@@ -30,6 +33,33 @@ export function buildH1Text(loc) {
   const address = String(loc.address ?? "").trim();
   if (city && address) return `${city}, ${address}`;
   return city || address || "—";
+}
+
+/**
+ * DC / ACDC → fast intro; pure AC location → ac intro.
+ * Mixed DC+AC → fast (any DC/ACDC wins).
+ * @param {object[]} stations
+ * @returns {"fast"|"ac"}
+ */
+export function getLocationChargeKind(stations) {
+  let hasFast = false;
+  let hasAc = false;
+  for (const s of stations || []) {
+    const t = String(s.station_type ?? "").trim().toUpperCase();
+    if (t === "DC" || t === "ACDC") hasFast = true;
+    else if (t === "AC") hasAc = true;
+  }
+  if (hasFast) return "fast";
+  if (hasAc) return "ac";
+  return "fast";
+}
+
+/** @param {"fast"|"ac"} kind @param {string} operatorName @param {string} place */
+export function buildDescriptionIntro(kind, operatorName, place) {
+  if (kind === "ac") {
+    return `Зарядная станция переменного тока ${operatorName} — ${place}.`;
+  }
+  return `Быстрая зарядная станция ${operatorName} — ${place}.`;
 }
 
 /** @param {object} loc @param {string} operatorName */
@@ -59,13 +89,7 @@ function collectConnectorDisplayLabels(stations) {
     }
   }
   const labels = [];
-  for (const { key } of [
-    { key: "ccs" },
-    { key: "gbt" },
-    { key: "chademo" },
-    { key: "type2" },
-    { key: "gbt_ac" },
-  ]) {
+  for (const key of ["ccs", "gbt", "chademo", "type2", "gbt_ac"]) {
     if (seen.has(key)) labels.push(seen.get(key));
   }
   for (const [key, label] of seen) {
@@ -83,6 +107,7 @@ export function computeSeoStationStats(stations) {
   let stationCount = 0;
   let totalSim = 0;
   const connectorLabels = collectConnectorDisplayLabels(stations);
+  const chargeKind = getLocationChargeKind(stations);
 
   for (const s of stations || []) {
     const cnt = s.count || 1;
@@ -92,12 +117,23 @@ export function computeSeoStationStats(stations) {
     if (s.ac_power) maxAcKw = Math.max(maxAcKw, s.ac_power);
   }
 
-  return { maxDcKw, maxAcKw, stationCount, totalSim, connectorLabels };
+  return {
+    maxDcKw,
+    maxAcKw,
+    stationCount,
+    totalSim,
+    connectorLabels,
+    chargeKind,
+  };
 }
 
-function formatPowerPhrase(maxDcKw, maxAcKw) {
+/** @param {"fast"|"ac"} kind @param {number} maxDcKw @param {number} maxAcKw */
+function formatPowerPhrase(kind, maxDcKw, maxAcKw) {
+  if (kind === "ac" && maxAcKw > 0) {
+    return `Зарядка электромобилей до ${maxAcKw} кВт`;
+  }
   if (maxDcKw > 0) {
-    return `Быстрая зарядка электромобилей до ${maxDcKw} кВт`;
+    return `Зарядка электромобилей до ${maxDcKw} кВт`;
   }
   if (maxAcKw > 0) {
     return `Зарядка электромобилей до ${maxAcKw} кВт`;
@@ -110,30 +146,28 @@ export function buildMetaDescription(loc, operatorName, stats) {
   const city = String(loc.city ?? "").trim();
   const address = String(loc.address ?? "").trim();
   const place = [city, address].filter(Boolean).join(", ");
-  const intro = `Зарядная станция ${operatorName} — ${place}.`;
-  const power = formatPowerPhrase(stats.maxDcKw, stats.maxAcKw);
+  const intro = buildDescriptionIntro(stats.chargeKind, operatorName, place);
+  const power = formatPowerPhrase(stats.chargeKind, stats.maxDcKw, stats.maxAcKw);
   const connectors = stats.connectorLabels.length
     ? `Разъёмы ${joinRuList(stats.connectorLabels)}.`
     : "";
-  const tail = "Отзывы, фото и маршрут на EV RACE.";
-  return [intro, power, connectors, tail].filter(Boolean).join(" ");
+  const tail = "Отзывы, фото и маршрут на EV RACE";
+  const parts = [intro];
+  if (power) parts.push(`${power}.`);
+  if (connectors) parts.push(connectors);
+  parts.push(`${tail}.`);
+  return parts.join(" ");
 }
 
 /** @param {object} loc @param {ReturnType<computeSeoStationStats>} stats */
 export function buildOgDescriptionShort(loc, stats) {
   const city = String(loc.city ?? "").trim();
   const address = String(loc.address ?? "").trim();
-  const powerKw = stats.maxDcKw || stats.maxAcKw;
   const parts = [];
-  if (powerKw > 0) {
-    parts.push(
-      stats.maxDcKw > 0
-        ? `Быстрая зарядка до ${stats.maxDcKw} кВт`
-        : `Зарядка до ${stats.maxAcKw} кВт`,
-    );
-  }
+  const power = formatPowerPhrase(stats.chargeKind, stats.maxDcKw, stats.maxAcKw);
+  if (power) parts.push(power);
   if (stats.connectorLabels.length) {
-    parts.push(joinRuList(stats.connectorLabels));
+    parts.push(`Разъёмы ${joinRuList(stats.connectorLabels)}`);
   }
   const place = [city, address].filter(Boolean).join(", ");
   if (place) parts.push(place);
@@ -154,24 +188,33 @@ export function buildLocationSeo(loc, stations, operatorName) {
     ogDescriptionShort: buildOgDescriptionShort(loc, stats),
     jsonLdName: buildJsonLdName(loc, operatorName),
     operatorName,
+    ogImage: OG_IMAGE_LOCATION,
     stats,
   };
 }
 
 /**
- * @param {object} seo from buildLocationSeo
+ * @param {object} seo
  * @param {object} loc
  * @param {string} canonical
  */
-export function buildLocationJsonLd(seo, loc, canonical) {
+export function buildLocationJsonLdGraph(seo, loc, canonical) {
   const city = String(loc.city ?? "").trim();
   const address = String(loc.address ?? "").trim();
   const stats = seo.stats;
+  const breadcrumbLabel =
+    [city, address].filter(Boolean).join(", ") || seo.h1;
+  const maxPowerKw = stats.maxDcKw || stats.maxAcKw || null;
+  const connectorTypes = stats.connectorLabels.join(", ");
+
+  const evcsId = `${canonical}#evcs`;
+  const breadcrumbId = `${canonical}#breadcrumb`;
 
   const evcs = {
-    "@context": "https://schema.org",
     "@type": "ElectricVehicleChargingStation",
+    "@id": evcsId,
     name: seo.jsonLdName,
+    description: seo.metaDescription,
     url: canonical,
     address: {
       "@type": "PostalAddress",
@@ -196,31 +239,59 @@ export function buildLocationJsonLd(seo, loc, canonical) {
     };
   }
 
-  const features = [];
+  const amenityFeature = [];
   if (stats.maxDcKw > 0) {
-    features.push({
+    amenityFeature.push({
       "@type": "LocationFeatureSpecification",
       name: "DC charging",
       value: true,
     });
   }
   if (stats.maxAcKw > 0) {
-    features.push({
+    amenityFeature.push({
       "@type": "LocationFeatureSpecification",
       name: "AC charging",
       value: true,
     });
   }
   for (const label of stats.connectorLabels) {
-    features.push({
+    amenityFeature.push({
       "@type": "LocationFeatureSpecification",
       name: label,
       value: true,
     });
   }
-  if (features.length) evcs.amenityFeature = features;
+  if (amenityFeature.length) evcs.amenityFeature = amenityFeature;
 
   const additionalProperty = [];
+  if (connectorTypes) {
+    additionalProperty.push({
+      "@type": "PropertyValue",
+      name: "connector_types",
+      value: connectorTypes,
+    });
+  }
+  if (maxPowerKw) {
+    additionalProperty.push({
+      "@type": "PropertyValue",
+      name: "max_power_kw",
+      value: maxPowerKw,
+    });
+  }
+  if (stats.stationCount > 0) {
+    additionalProperty.push({
+      "@type": "PropertyValue",
+      name: "station_count",
+      value: stats.stationCount,
+    });
+  }
+  if (stats.totalSim > 0) {
+    additionalProperty.push({
+      "@type": "PropertyValue",
+      name: "simultaneous_charging_count",
+      value: stats.totalSim,
+    });
+  }
   if (stats.maxDcKw > 0) {
     additionalProperty.push({
       "@type": "PropertyValue",
@@ -235,63 +306,59 @@ export function buildLocationJsonLd(seo, loc, canonical) {
       value: stats.maxAcKw,
     });
   }
-  if (stats.stationCount > 0) {
-    additionalProperty.push({
-      "@type": "PropertyValue",
-      name: "station_count",
-      value: stats.stationCount,
-    });
-  }
-  if (stats.totalSim > 0) {
-    additionalProperty.push({
-      "@type": "PropertyValue",
-      name: "simultaneous_vehicles",
-      value: stats.totalSim,
-    });
-  }
   if (additionalProperty.length) evcs.additionalProperty = additionalProperty;
 
   const breadcrumbs = {
-    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": breadcrumbId,
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
         name: "Главная",
-        item: "https://evrace.by/",
+        item: `${SITE_ORIGIN}/`,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Зарядные станции",
-        item: `https://evrace.by${STATIONS_PATH}`,
+        item: `${SITE_ORIGIN}${STATIONS_PATH}`,
       },
       {
         "@type": "ListItem",
         position: 3,
-        name: city || "—",
-      },
-      {
-        "@type": "ListItem",
-        position: 4,
-        name: address || seo.h1,
+        name: breadcrumbLabel,
+        item: canonical,
       },
     ],
   };
 
-  return [evcs, breadcrumbs];
+  const webPage = {
+    "@type": "WebPage",
+    "@id": canonical,
+    url: canonical,
+    name: seo.pageTitle,
+    description: seo.metaDescription,
+    inLanguage: "ru-BY",
+    isPartOf: {
+      "@type": "WebSite",
+      name: SITE_BRAND,
+      url: `${SITE_ORIGIN}/`,
+    },
+    breadcrumb: { "@id": breadcrumbId },
+    mainEntity: { "@id": evcsId },
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [webPage, evcs, breadcrumbs],
+  };
 }
 
 /** @param {object} seo @param {object} loc @param {string} canonical */
 export function renderLocationJsonLd(seo, loc, canonical) {
-  const graphs = buildLocationJsonLd(seo, loc, canonical);
-  return graphs
-    .map(
-      (g) =>
-        `<script type="application/ld+json">${JSON.stringify(g).replace(/</g, "\\u003c")}</script>`,
-    )
-    .join("\n");
+  const graph = buildLocationJsonLdGraph(seo, loc, canonical);
+  return `<script type="application/ld+json">${JSON.stringify(graph).replace(/</g, "\\u003c")}</script>`;
 }
 
-export { escapeHtml };
+export { escapeHtml, OG_IMAGE_LOCATION, OG_IMAGE_FALLBACK };

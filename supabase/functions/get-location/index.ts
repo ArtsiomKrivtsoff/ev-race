@@ -197,17 +197,66 @@ function collectConnectorLabels(stations: StationDto[]): string[] {
   return labels;
 }
 
+function getLocationChargeKind(stations: StationDto[]): "fast" | "ac" {
+  let hasFast = false;
+  let hasAc = false;
+  for (const s of stations) {
+    const t = String(s.station_type ?? "").trim().toUpperCase();
+    if (t === "DC" || t === "ACDC") hasFast = true;
+    else if (t === "AC") hasAc = true;
+  }
+  if (hasFast) return "fast";
+  if (hasAc) return "ac";
+  return "fast";
+}
+
+function buildDescriptionIntro(
+  kind: "fast" | "ac",
+  operatorName: string,
+  place: string,
+): string {
+  if (kind === "ac") {
+    return `Зарядная станция переменного тока ${operatorName} — ${place}.`;
+  }
+  return `Быстрая зарядная станция ${operatorName} — ${place}.`;
+}
+
+function formatPowerPhrase(
+  kind: "fast" | "ac",
+  maxDcKw: number,
+  maxAcKw: number,
+): string {
+  if (kind === "ac" && maxAcKw > 0) {
+    return `Зарядка электромобилей до ${maxAcKw} кВт`;
+  }
+  if (maxDcKw > 0) {
+    return `Зарядка электромобилей до ${maxDcKw} кВт`;
+  }
+  if (maxAcKw > 0) {
+    return `Зарядка электромобилей до ${maxAcKw} кВт`;
+  }
+  return "";
+}
+
 function computeSeoStationStats(stations: StationDto[]) {
   let maxDcKw = 0;
   let maxAcKw = 0;
+  let stationCount = 0;
+  let totalSim = 0;
   for (const s of stations) {
+    const cnt = s.count || 1;
+    stationCount += cnt;
+    totalSim += (s.simultaneous_charge || 0) * cnt;
     if (s.dc_power) maxDcKw = Math.max(maxDcKw, s.dc_power);
     if (s.ac_power) maxAcKw = Math.max(maxAcKw, s.ac_power);
   }
   return {
     maxDcKw,
     maxAcKw,
+    stationCount,
+    totalSim,
     connectorLabels: collectConnectorLabels(stations),
+    chargeKind: getLocationChargeKind(stations),
   };
 }
 
@@ -235,28 +284,31 @@ function buildSeoMeta(location: LocationRow, stations: StationDto[]) {
   const place = [city, address].filter(Boolean).join(", ");
   const stats = computeSeoStationStats(stations);
 
-  const intro = `Зарядная станция ${operatorName} — ${place}.`;
-  const power =
-    stats.maxDcKw > 0
-      ? `Быстрая зарядка электромобилей до ${stats.maxDcKw} кВт`
-      : stats.maxAcKw > 0
-        ? `Зарядка электромобилей до ${stats.maxAcKw} кВт`
-        : "";
+  const intro = buildDescriptionIntro(stats.chargeKind, operatorName, place);
+  const power = formatPowerPhrase(
+    stats.chargeKind,
+    stats.maxDcKw,
+    stats.maxAcKw,
+  );
   const connectors = stats.connectorLabels.length
     ? `Разъёмы ${joinRuList(stats.connectorLabels)}.`
     : "";
-  const tail = "Отзывы, фото и маршрут на EV RACE.";
-  const metaDescription = [intro, power, connectors, tail].filter(Boolean)
-    .join(" ");
+  const tail = "Отзывы, фото и маршрут на EV RACE";
+  const parts = [intro];
+  if (power) parts.push(`${power}.`);
+  if (connectors) parts.push(connectors);
+  parts.push(`${tail}.`);
+  const metaDescription = parts.join(" ");
 
   const ogParts: string[] = [];
-  if (stats.maxDcKw > 0) {
-    ogParts.push(`Быстрая зарядка до ${stats.maxDcKw} кВт`);
-  } else if (stats.maxAcKw > 0) {
-    ogParts.push(`Зарядка до ${stats.maxAcKw} кВт`);
-  }
+  const ogPower = formatPowerPhrase(
+    stats.chargeKind,
+    stats.maxDcKw,
+    stats.maxAcKw,
+  );
+  if (ogPower) ogParts.push(`${ogPower}.`);
   if (stats.connectorLabels.length) {
-    ogParts.push(joinRuList(stats.connectorLabels));
+    ogParts.push(`Разъёмы ${joinRuList(stats.connectorLabels)}`);
   }
   if (place) ogParts.push(place);
   const ogDescriptionShort = `${ogParts.join(". ")}.`;
@@ -270,6 +322,7 @@ function buildSeoMeta(location: LocationRow, stations: StationDto[]) {
     meta_description: metaDescription,
     og_description_short: ogDescriptionShort,
     json_ld_name: `Зарядная станция ${operatorName} — ${place}`,
+    charge_kind: stats.chargeKind,
     og_title: pageTitle,
     og_description: metaDescription,
   };

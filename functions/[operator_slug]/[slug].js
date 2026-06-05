@@ -127,7 +127,7 @@ function renderLocationPage(data, envConfig) {
 <meta property="og:title" content="${escapeHtml(seo.pageTitle)}">
 <meta property="og:description" content="${escapeHtml(seo.ogDescriptionShort)}">
 <meta property="og:url" content="${escapeHtml(canonical)}">
-<meta property="og:image" content="https://evrace.by/og.png">
+<meta property="og:image" content="${escapeHtml(seo.ogImage)}">
 <meta property="og:locale" content="ru_BY">
 <meta property="og:site_name" content="EV RACE">
 ${renderLocationJsonLd(seo, loc, canonical)}
@@ -139,7 +139,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=5">
-<link rel="stylesheet" href="/CSS/location-page.css?v=20">
+<link rel="stylesheet" href="/CSS/location-page.css?v=21">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="/CSS/tesla-dark.css?v=5">
 ${hasCoords ? '<link rel="stylesheet" href="/CSS/vendor/leaflet.css?v=1">' : ""}

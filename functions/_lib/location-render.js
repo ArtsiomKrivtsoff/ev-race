@@ -265,16 +265,19 @@ function renderHeroIdentity(
   opName,
   aggregatorLine,
   routeYandex,
-  { h1Text, heading = "h1", titleId = false } = {},
+  { h1Text, showDesktopReviewCta = true } = {},
 ) {
-  const idAttr = titleId ? ' id="loc-title"' : "";
+  const idAttr = ' id="loc-title"';
   const text = h1Text || buildH1TextFromLoc(loc);
   const fitAttr = !loc.location_name?.trim() ? " data-fit-line" : "";
-  const tag = heading === "h1" ? "h1" : "p";
-  const titleBlock = `<${tag} class="loc-hero-h1"${idAttr}${fitAttr}>${escapeHtml(text)}</${tag}>`;
+  const titleBlock = `<h1 class="loc-hero-h1"${idAttr}${fitAttr}>${escapeHtml(text)}</h1>`;
 
   const routeBtn = routeYandex
     ? `<a class="loc-btn loc-btn-primary" href="${escapeHtml(routeYandex)}" target="_blank" rel="noopener noreferrer">МАРШРУТ</a>`
+    : "";
+
+  const desktopCta = showDesktopReviewCta
+    ? `<span class="loc-hero-actions-desktop">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</span>`
     : "";
 
   return `<div class="loc-hero-identity">
@@ -284,7 +287,7 @@ ${aggregatorLine}
 <div class="loc-hero-actions">
 ${routeBtn}
 <button class="loc-btn loc-btn-secondary" type="button" id="loc-share-btn" onclick="shareLocation()">ПОДЕЛИТЬСЯ</button>
-<span class="loc-hero-actions-desktop">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</span>
+${desktopCta}
 </div>
 </div>`;
 }
@@ -307,22 +310,13 @@ export function renderHero(loc, community, opts) {
     mapBlock,
     h1Text,
   } = opts;
-  const identityOpts = { h1Text };
-  const identityDesktop = renderHeroIdentity(
+  const identity = renderHeroIdentity(
     loc,
     opCls,
     opName,
     aggregatorLine,
     routeYandex,
-    { ...identityOpts, heading: "h1", titleId: true },
-  );
-  const identityMobile = renderHeroIdentity(
-    loc,
-    opCls,
-    opName,
-    aggregatorLine,
-    routeYandex,
-    { ...identityOpts, heading: "p", titleId: false },
+    { h1Text, showDesktopReviewCta: true },
   );
   const ratingDesktop = renderRatingCard(loc, community, {
     compact: false,
@@ -335,14 +329,11 @@ export function renderHero(loc, community, opts) {
   const mapInset = renderMapInset(mapBlock);
 
   return `<section class="loc-hero" aria-labelledby="loc-title">
-<div class="loc-hero-shell">
-${identityDesktop}
-${ratingDesktop}
-${mapInset}
-</div>
-<div class="loc-hero-mobile-row">
-<div class="loc-hero-mobile-place blk">${identityMobile}</div>
-<div class="loc-hero-mobile-rating blk">${ratingMobile}</div>
+<div class="loc-hero-grid">
+<div class="loc-hero-cell loc-hero-cell--identity blk">${identity}</div>
+<div class="loc-hero-cell loc-hero-cell--rating-desktop">${ratingDesktop}</div>
+<div class="loc-hero-cell loc-hero-cell--rating-mobile blk">${ratingMobile}</div>
+<div class="loc-hero-cell loc-hero-cell--map">${mapInset}</div>
 </div>
 </section>`;
 }

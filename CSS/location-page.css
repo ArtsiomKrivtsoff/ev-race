@@ -160,27 +160,30 @@ body.location-page .blk-hdr {
 .loc-hero {
   margin-bottom: var(--loc-gap);
 }
-.loc-hero-shell {
-  display: none;
-}
-.loc-hero-mobile-row {
+.loc-hero-grid {
   display: grid;
   grid-template-columns: 3fr 2fr;
   gap: var(--loc-gap);
   align-items: stretch;
   min-width: 0;
 }
-.loc-hero-mobile-place,
-.loc-hero-mobile-rating {
+.loc-hero-cell--identity,
+.loc-hero-cell--rating-mobile {
   margin: 0;
   padding: var(--loc-pad);
   min-width: 0;
   overflow: hidden;
 }
-.loc-hero-mobile-place .loc-hero-identity {
+.loc-hero-cell--identity .loc-hero-identity {
   height: 100%;
 }
-.loc-hero-mobile-rating .loc-hero-rating {
+.loc-hero-cell--rating-desktop {
+  display: none;
+}
+.loc-hero-cell--map {
+  display: none;
+}
+.loc-hero-cell--rating-mobile .loc-hero-rating {
   height: 100%;
   border: none;
   background: transparent;
@@ -286,12 +289,12 @@ body.location-page .blk-hdr {
   gap: var(--s-2);
   margin-top: var(--s-2);
 }
-.loc-hero-mobile-place .loc-hero-actions {
+.loc-hero-cell--identity .loc-hero-actions {
   flex-wrap: nowrap;
   width: 100%;
   margin-top: auto;
 }
-.loc-hero-mobile-place .loc-hero-actions .loc-btn {
+.loc-hero-cell--identity .loc-hero-actions .loc-btn {
   flex: 1 1 50%;
   min-width: 0;
   font-size: clamp(10px, 2.5vw, 12px);
@@ -395,17 +398,29 @@ body.location-page .blk-hdr {
 }
 
 @media (min-width: 900px) {
-  .loc-hero-shell {
-    display: grid;
+  .loc-hero-grid {
     grid-template-columns: minmax(0, 13fr) auto minmax(140px, 8fr);
-    gap: var(--loc-gap);
-    align-items: stretch;
     padding: var(--loc-pad);
     background: var(--home-card, var(--card-bg));
     border: 1px solid var(--home-bdr, var(--border-faint));
     border-radius: 5px;
   }
-  .loc-hero-mobile-row { display: none; }
+  .loc-hero-cell--identity,
+  .loc-hero-cell--rating-mobile {
+    padding: 0;
+    border: none;
+    background: transparent;
+    margin: 0;
+  }
+  .loc-hero-cell--rating-mobile {
+    display: none;
+  }
+  .loc-hero-cell--rating-desktop {
+    display: block;
+  }
+  .loc-hero-cell--map {
+    display: block;
+  }
   .loc-hero-h1 { font-size: clamp(18px, 2vw, 26px); }
   .loc-hero-city { font-size: clamp(18px, 2vw, 26px); }
   .loc-hero-street { font-size: clamp(11px, 1.3vw, 17px); }
@@ -1331,7 +1346,7 @@ html[data-theme="tesla-dark"] body.location-page .loc-btn-accent:focus-visible {
 
 /* Tesla Light desktop — слабый контраст surface vs bg (#fff / #fafafb / #f4f4f6) */
 @media (min-width: 900px) {
-  html[data-theme="tesla-light"] body.location-page .loc-hero-shell,
+  html[data-theme="tesla-light"] body.location-page .loc-hero-grid,
   html[data-theme="tesla-light"] body.location-page .loc-main-grid .blk {
     border-color: var(--hairline);
     box-shadow: var(--shadow-2);
