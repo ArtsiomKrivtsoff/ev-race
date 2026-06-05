@@ -1,12 +1,9 @@
 # SEO-A / SEO-B — зафиксированные решения
 
 **Дата:** 2026-06-05  
-**Статус SEO-A:** **IMPLEMENTED, NOT VERIFIED**  
-**Статус документа:** утверждено автором  
-**Коммиты:** `4105b64`, `2464238`  
-**Связанные документы:** `SEO-A-FINAL-AUDIT.md`, `SEO-A-P0-VERIFICATION-REPORT.md`, `LOCATION-PAGE-SEO-FOUNDATION.md`
-
-Код P0 принят. **SEO-A не закрыт** до production PASS по чеклисту ниже. **SEO-B и Stage 3 — не начинать** до закрытия SEO-A.
+**Статус SEO-A:** **ЗАКРЫТ** (production verified 2026-06-05)  
+**Коммиты:** `4105b64` … `8caf522` (`parentOrganization`)  
+**Следующий трек:** **SEO-B** (stations, map, sitemap). Stage 3 — после SEO-B.
 
 ---
 
@@ -122,20 +119,19 @@ Intro — только в `description`.
 
 ### Definition of Done — SEO-A
 
-**Текущий статус: IMPLEMENTED, NOT VERIFIED** (core: terminology + power)  
-**Schema Migration:** Phase A IMPLEMENTED — prod ⏳ ([`PHASE-A-VERIFICATION-REPORT.md`](PHASE-A-VERIFICATION-REPORT.md))
+**Статус: ЗАКРЫТ** (2026-06-05)
 
-| # | Критерий | Local | Production |
-|---|----------|-------|------------|
-| 1 | validator.schema.org 0/0 на AC-MST, MIX-ZAR, DC-ORG (**LocalBusiness**, Phase A) | — | ⏳ blocked on migration |
-| 2 | EVCS `mainEntityOfPage`; нет `WebPage.mainEntity` | ✅ | ⏳ |
-| 3 | `check-ac-terminology.mjs` → 0 (репо + prod HTML) | ✅ | ⏳ |
-| 4 | Power: SEO max = JSON-LD max; UI infra = sum (макет); без «ДО/СУММАРНО» в UI | ✅ | ⏳ |
-| 5 | JSON-LD name нейтральный | ✅ | ⏳ |
-| 6 | Single H1 (regression) | ✅ | ⏳ |
-| 7 | Description contract + коннекторы | ✅ | ⏳ |
+| # | Критерий | Result |
+|---|----------|--------|
+| 1 | LocalBusiness `@graph` + validator-ready (Phase A) | ✅ prod HTML |
+| 2 | `parentOrganization` → Organization `@id` | ✅ `8caf522` |
+| 3 | AC terminology | ✅ prod |
+| 4 | Power: SEO max / UI sum (макет) | ✅ prod |
+| 5 | JSON-LD name нейтральный | ✅ |
+| 6 | Single H1 | ✅ |
+| 7 | Description + коннекторы | ✅ |
 
-**После production PASS по строкам 1–4 → SEO-A = ЗАКРЫТ.**
+Smoke: `node scripts/verify-phase-a-schema-production.mjs` + `verify-seo-a-p0-production.mjs` → PASS 3/3.
 
 ---
 
