@@ -58,9 +58,16 @@ async function verifyUrl(url) {
   if (graph) {
     const nodes = graph["@graph"] || [graph];
     const webPage = nodes.find((n) => n["@type"] === "WebPage");
+    const localBusiness = nodes.find((n) => n["@type"] === "LocalBusiness");
+    const organization = nodes.find((n) => n["@type"] === "Organization");
     const evcs = nodes.find(
       (n) => n["@type"] === "ElectricVehicleChargingStation",
     );
+
+    report.checks.no_evcs = {
+      pass: !evcs,
+      legacy_type: evcs?.["@type"] || null,
+    };
 
     report.checks.schema_no_webpage_main_entity = {
       pass: !webPage?.mainEntity,
@@ -68,21 +75,40 @@ async function verifyUrl(url) {
     };
 
     report.checks.schema_main_entity_of_page = {
-      pass:
-        evcs?.mainEntityOfPage?.["@id"] === url ||
-        evcs?.mainEntityOfPage?.["@id"] === webPage?.["@id"],
-      mainEntityOfPage: evcs?.mainEntityOfPage,
+      pass: localBusiness?.mainEntityOfPage?.["@id"] === url,
+      mainEntityOfPage: localBusiness?.mainEntityOfPage,
     };
 
-    const maxPowerKw = evcs?.additionalProperty?.find(
+    report.checks.schema_graph_types = {
+      pass:
+        Boolean(webPage) &&
+        Boolean(localBusiness) &&
+        Boolean(organization) &&
+        nodes.some((n) => n["@type"] === "BreadcrumbList"),
+      types: nodes.map((n) => n["@type"]),
+    };
+
+    const operatorSlug = url.match(/https:\/\/evrace\.by\/([^/]+)\//)?.[1];
+    const expectedOrgId = operatorSlug
+      ? `https://evrace.by/operator/${operatorSlug}`
+      : null;
+    report.checks.organization_id = {
+      pass:
+        organization?.["@id"] === expectedOrgId &&
+        localBusiness?.provider?.["@id"] === expectedOrgId,
+      expected: expectedOrgId,
+      actual: organization?.["@id"],
+    };
+
+    const maxPowerKw = localBusiness?.additionalProperty?.find(
       (p) => p.name === "max_power_kw",
     )?.value;
-    const totalInstalledKw = evcs?.additionalProperty?.find(
+    const totalInstalledKw = localBusiness?.additionalProperty?.find(
       (p) => p.name === "total_installed_kw",
     )?.value;
 
     report.checks.json_ld_power = {
-      pass: maxPowerKw != null,
+      pass: maxPowerKw != null && totalInstalledKw != null,
       max_power_kw: maxPowerKw,
       total_installed_kw: totalInstalledKw,
     };

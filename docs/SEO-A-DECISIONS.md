@@ -1,10 +1,12 @@
 # SEO-A / SEO-B — зафиксированные решения
 
 **Дата:** 2026-06-05  
-**Статус:** утверждено автором  
-**Связанные документы:** `SEO-A-FINAL-AUDIT.md`, `LOCATION-PAGE-SEO-FOUNDATION.md`
+**Статус SEO-A:** **IMPLEMENTED, NOT VERIFIED**  
+**Статус документа:** утверждено автором  
+**Коммиты:** `4105b64`, `2464238`  
+**Связанные документы:** `SEO-A-FINAL-AUDIT.md`, `SEO-A-P0-VERIFICATION-REPORT.md`, `LOCATION-PAGE-SEO-FOUNDATION.md`
 
-Изменения в коде — **только после отдельного go на реализацию**. Этот документ — источник истины для шаблонов и приёмки.
+Код P0 принят. **SEO-A не закрыт** до production PASS по чеклисту ниже. **SEO-B и Stage 3 — не начинать** до закрытия SEO-A.
 
 ---
 
@@ -36,7 +38,9 @@ SEO-B — **не** «инфраструктурные задачи» в смыс
 
 ### P0-1. Schema fix
 
-**Решение: Вариант A (подтверждено)**
+> **SUPERSEDED (Phase A):** EVCS STOP. Миграция на `LocalBusiness` — [`PHASE-A-VERIFICATION-REPORT.md`](PHASE-A-VERIFICATION-REPORT.md).
+
+~~Schema EVCS~~ → **Schema Migration (Phase A)** — отдельный gate от SEO-A Core.
 
 Убрать с `WebPage`:
 
@@ -119,16 +123,20 @@ Intro — только в `description`.
 
 ### Definition of Done — SEO-A
 
-| # | Критерий |
-|---|----------|
-| 1 | Schema Validator 0/0 (несколько prod URL) |
-| 2 | `node scripts/check-ac-terminology.mjs` → exit 0 |
-| 3 | SEO «до X kW» = UI primary; sum — infra secondary |
-| 4 | JSON-LD name нейтральный |
-| 5 | Single H1 (regression) |
-| 6 | Description contract + коннекторы |
+**Текущий статус: IMPLEMENTED, NOT VERIFIED** (core: terminology + power)  
+**Schema Migration:** Phase A IMPLEMENTED — prod ⏳ ([`PHASE-A-VERIFICATION-REPORT.md`](PHASE-A-VERIFICATION-REPORT.md))
 
-**После этого SEO-A = ЗАКРЫТ.**
+| # | Критерий | Local | Production |
+|---|----------|-------|------------|
+| 1 | validator.schema.org 0/0 на AC-MST, MIX-ZAR, DC-ORG (**LocalBusiness**, Phase A) | — | ⏳ blocked on migration |
+| 2 | EVCS `mainEntityOfPage`; нет `WebPage.mainEntity` | ✅ | ⏳ |
+| 3 | `check-ac-terminology.mjs` → 0 (репо + prod HTML) | ✅ | ⏳ |
+| 4 | Power: Description = UI primary = `max_power_kw`; UI secondary = sum; JSON-LD оба | ✅ | ⏳ |
+| 5 | JSON-LD name нейтральный | ✅ | ⏳ |
+| 6 | Single H1 (regression) | ✅ | ⏳ |
+| 7 | Description contract + коннекторы | ✅ | ⏳ |
+
+**После production PASS по строкам 1–4 → SEO-A = ЗАКРЫТ.**
 
 ---
 

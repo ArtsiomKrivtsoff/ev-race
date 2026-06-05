@@ -41,36 +41,45 @@ if (ldMatch) {
 
 if (graph) {
   const nodes = graph["@graph"] || [graph];
+  const localBusiness = nodes.find((n) => n["@type"] === "LocalBusiness");
+  const organization = nodes.find((n) => n["@type"] === "Organization");
+  const webPage = nodes.find((n) => n["@type"] === "WebPage");
+  const crumbs = nodes.find((n) => n["@type"] === "BreadcrumbList");
   const evcs = nodes.find(
     (n) => n["@type"] === "ElectricVehicleChargingStation",
   );
-  const crumbs = nodes.find((n) => n["@type"] === "BreadcrumbList");
 
-  const connectorTypes = evcs?.additionalProperty?.find(
+  const connectorTypes = localBusiness?.additionalProperty?.find(
     (p) => p.name === "connector_types",
   )?.value;
-  const maxPowerKw = evcs?.additionalProperty?.find(
+  const maxPowerKw = localBusiness?.additionalProperty?.find(
     (p) => p.name === "max_power_kw",
   )?.value;
 
-  report.checks.evcs_present = {
+  report.checks.local_business_present = {
     pass:
-      Boolean(evcs) &&
-      Boolean(evcs.name) &&
-      Boolean(evcs?.address?.streetAddress) &&
-      Boolean(evcs?.geo?.latitude && evcs?.geo?.longitude) &&
-      Boolean(evcs?.url) &&
-      Boolean(evcs?.operator?.name) &&
-      Boolean(connectorTypes) &&
+      !evcs &&
+      Boolean(localBusiness) &&
+      Boolean(localBusiness.name) &&
+      Boolean(localBusiness?.address?.streetAddress) &&
+      Boolean(localBusiness?.geo?.latitude && localBusiness?.geo?.longitude) &&
+      Boolean(localBusiness?.url) &&
+      Boolean(organization?.name) &&
+      localBusiness?.mainEntityOfPage?.["@id"] === url &&
+      !webPage?.mainEntity &&
       maxPowerKw != null,
-    name: evcs?.name,
+    name: localBusiness?.name,
     connector_types: connectorTypes,
     max_power_kw: maxPowerKw,
-    station_count: evcs?.additionalProperty?.find(
+    organization_id: organization?.["@id"],
+    station_count: localBusiness?.additionalProperty?.find(
       (p) => p.name === "station_count",
     )?.value,
-    simultaneous_charging_count: evcs?.additionalProperty?.find(
+    simultaneous_charging_count: localBusiness?.additionalProperty?.find(
       (p) => p.name === "simultaneous_charging_count",
+    )?.value,
+    total_installed_kw: localBusiness?.additionalProperty?.find(
+      (p) => p.name === "total_installed_kw",
     )?.value,
   };
 

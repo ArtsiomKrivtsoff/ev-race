@@ -16,6 +16,17 @@ const STATIONS_PATH = "/stations.html";
 const OG_IMAGE_LOCATION = `${SITE_ORIGIN}/og-map.png`;
 const OG_IMAGE_FALLBACK = `${SITE_ORIGIN}/og.png`;
 
+/**
+ * Stable Organization @id for JSON-LD (immutable after Phase A launch).
+ * Canonical pattern: /operator/{slug}
+ * @param {string} operatorSlug
+ */
+export function buildOperatorOrganizationId(operatorSlug) {
+  const slug = String(operatorSlug ?? "").trim().toLowerCase();
+  if (!slug) return null;
+  return `${SITE_ORIGIN}/operator/${slug}`;
+}
+
 /** @param {string[]} items */
 export function joinRuList(items) {
   const list = items.filter(Boolean);
@@ -205,52 +216,9 @@ export function buildLocationSeo(loc, stations, operatorName) {
 }
 
 /**
- * @param {object} seo
- * @param {object} loc
- * @param {string} canonical
+ * @param {ReturnType<computeSeoStationStats>} stats
  */
-export function buildLocationJsonLdGraph(seo, loc, canonical) {
-  const city = String(loc.city ?? "").trim();
-  const address = String(loc.address ?? "").trim();
-  const stats = seo.stats;
-  const breadcrumbLabel =
-    [city, address].filter(Boolean).join(", ") || seo.h1;
-  const maxPowerKw = stats.maxDcKw || stats.maxAcKw || null;
-  const connectorTypes = stats.connectorLabels.join(", ");
-
-  const evcsId = `${canonical}#evcs`;
-  const breadcrumbId = `${canonical}#breadcrumb`;
-
-  const evcs = {
-    "@type": "ElectricVehicleChargingStation",
-    "@id": evcsId,
-    mainEntityOfPage: { "@id": canonical },
-    name: seo.jsonLdName,
-    description: seo.metaDescription,
-    url: canonical,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: address,
-      addressLocality: city,
-      addressCountry: "BY",
-    },
-  };
-
-  if (loc.lat != null && loc.lng != null) {
-    evcs.geo = {
-      "@type": "GeoCoordinates",
-      latitude: Number(loc.lat),
-      longitude: Number(loc.lng),
-    };
-  }
-
-  if (seo.operatorName) {
-    evcs.operator = {
-      "@type": "Organization",
-      name: seo.operatorName,
-    };
-  }
-
+function buildLocationAmenityFeatures(stats) {
   const amenityFeature = [];
   if (stats.maxDcKw > 0) {
     amenityFeature.push({
@@ -273,8 +241,15 @@ export function buildLocationJsonLdGraph(seo, loc, canonical) {
       value: true,
     });
   }
-  if (amenityFeature.length) evcs.amenityFeature = amenityFeature;
+  return amenityFeature;
+}
 
+/**
+ * @param {ReturnType<computeSeoStationStats>} stats
+ */
+function buildLocationAdditionalProperties(stats) {
+  const maxPowerKw = stats.maxDcKw || stats.maxAcKw || null;
+  const connectorTypes = stats.connectorLabels.join(", ");
   const additionalProperty = [];
   if (connectorTypes) {
     additionalProperty.push({
@@ -325,7 +300,59 @@ export function buildLocationJsonLdGraph(seo, loc, canonical) {
       value: stats.maxAcKw,
     });
   }
-  if (additionalProperty.length) evcs.additionalProperty = additionalProperty;
+  return additionalProperty;
+}
+
+/**
+ * @param {object} seo
+ * @param {object} loc
+ * @param {string} canonical
+ */
+export function buildLocationJsonLdGraph(seo, loc, canonical) {
+  const city = String(loc.city ?? "").trim();
+  const address = String(loc.address ?? "").trim();
+  const stats = seo.stats;
+  const breadcrumbLabel =
+    [city, address].filter(Boolean).join(", ") || seo.h1;
+
+  const businessId = `${canonical}#business`;
+  const breadcrumbId = `${canonical}#breadcrumb`;
+  const operatorOrgId = buildOperatorOrganizationId(loc.operator_slug);
+
+  const localBusiness = {
+    "@type": "LocalBusiness",
+    "@id": businessId,
+    mainEntityOfPage: { "@id": canonical },
+    name: seo.jsonLdName,
+    description: seo.metaDescription,
+    url: canonical,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: address,
+      addressLocality: city,
+      addressCountry: "BY",
+    },
+  };
+
+  if (loc.lat != null && loc.lng != null) {
+    localBusiness.geo = {
+      "@type": "GeoCoordinates",
+      latitude: Number(loc.lat),
+      longitude: Number(loc.lng),
+    };
+  }
+
+  if (operatorOrgId && seo.operatorName) {
+    localBusiness.provider = { "@id": operatorOrgId };
+  }
+
+  const amenityFeature = buildLocationAmenityFeatures(stats);
+  if (amenityFeature.length) localBusiness.amenityFeature = amenityFeature;
+
+  const additionalProperty = buildLocationAdditionalProperties(stats);
+  if (additionalProperty.length) {
+    localBusiness.additionalProperty = additionalProperty;
+  }
 
   const breadcrumbs = {
     "@type": "BreadcrumbList",
@@ -367,9 +394,21 @@ export function buildLocationJsonLdGraph(seo, loc, canonical) {
     breadcrumb: { "@id": breadcrumbId },
   };
 
+  /** @type {object[]} */
+  const graph = [webPage, breadcrumbs, localBusiness];
+
+  if (operatorOrgId && seo.operatorName) {
+    graph.splice(2, 0, {
+      "@type": "Organization",
+      "@id": operatorOrgId,
+      name: seo.operatorName,
+      url: operatorOrgId,
+    });
+  }
+
   return {
     "@context": "https://schema.org",
-    "@graph": [webPage, evcs, breadcrumbs],
+    "@graph": graph,
   };
 }
 
