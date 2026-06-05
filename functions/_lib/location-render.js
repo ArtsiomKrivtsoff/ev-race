@@ -259,18 +259,19 @@ ${mapBlock}
 </div>`;
 }
 
-function renderHeroIdentity(loc, opCls, opName, aggregatorLine, routeYandex, titleId) {
-  const city = escapeHtml(loc.city || "");
-  const address = escapeHtml(loc.address || "");
-  const name = loc.location_name?.trim();
+function renderHeroIdentity(
+  loc,
+  opCls,
+  opName,
+  aggregatorLine,
+  routeYandex,
+  { h1Text, heading = "h1", titleId = false } = {},
+) {
   const idAttr = titleId ? ' id="loc-title"' : "";
-
-  let titleBlock;
-  if (name) {
-    titleBlock = `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${city}</span><span class="loc-hero-street" data-fit-line>${address}</span><span class="loc-hero-venue">${escapeHtml(name)}</span></h1>`;
-  } else {
-    titleBlock = `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${city}</span><span class="loc-hero-street" data-fit-line>${address}</span></h1>`;
-  }
+  const text = h1Text || buildH1TextFromLoc(loc);
+  const fitAttr = !loc.location_name?.trim() ? " data-fit-line" : "";
+  const tag = heading === "h1" ? "h1" : "p";
+  const titleBlock = `<${tag} class="loc-hero-h1"${idAttr}${fitAttr}>${escapeHtml(text)}</${tag}>`;
 
   const routeBtn = routeYandex
     ? `<a class="loc-btn loc-btn-primary" href="${escapeHtml(routeYandex)}" target="_blank" rel="noopener noreferrer">МАРШРУТ</a>`
@@ -288,15 +289,32 @@ ${routeBtn}
 </div>`;
 }
 
+function buildH1TextFromLoc(loc) {
+  const name = loc.location_name?.trim();
+  if (name) return name;
+  const city = String(loc.city ?? "").trim();
+  const address = String(loc.address ?? "").trim();
+  if (city && address) return `${city}, ${address}`;
+  return city || address || "—";
+}
+
 export function renderHero(loc, community, opts) {
-  const { opCls, opName, aggregatorLine, routeYandex, mapBlock } = opts;
+  const {
+    opCls,
+    opName,
+    aggregatorLine,
+    routeYandex,
+    mapBlock,
+    h1Text,
+  } = opts;
+  const identityOpts = { h1Text };
   const identityDesktop = renderHeroIdentity(
     loc,
     opCls,
     opName,
     aggregatorLine,
     routeYandex,
-    false,
+    { ...identityOpts, heading: "h1", titleId: true },
   );
   const identityMobile = renderHeroIdentity(
     loc,
@@ -304,7 +322,7 @@ export function renderHero(loc, community, opts) {
     opName,
     aggregatorLine,
     routeYandex,
-    true,
+    { ...identityOpts, heading: "p", titleId: false },
   );
   const ratingDesktop = renderRatingCard(loc, community, {
     compact: false,

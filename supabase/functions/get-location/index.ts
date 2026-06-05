@@ -143,40 +143,149 @@ function buildCanonicalUrl(operatorSlug: string, slug: string): string {
   return `${SITE_ORIGIN}/${operatorSlug}/${slug}`;
 }
 
-function buildOgTitle(location: LocationRow): string {
-  const place = location.location_name?.trim() ||
-    `${location.city}, ${location.address}`;
-  return `${place} — зарядка`;
+const CONNECTOR_KPI_KEYS = ["ccs", "gbt", "chademo", "type2", "gbt_ac"] as const;
+
+function normalizeConnectorKey(raw: string | null | undefined): string | null {
+  const norm = String(raw ?? "")
+    .trim()
+    .replace(/[\u2010-\u2015\u2212]/g, "-")
+    .replace(/-/g, " ")
+    .replace(/\s+/g, " ")
+    .toUpperCase();
+  if (!norm) return null;
+  const compact = norm.replace(/\s/g, "");
+  if (compact === "GBTAC" || norm === "GBT AC") return "gbt_ac";
+  if (compact === "TYPE2" || norm === "TYPE 2") return "type2";
+  if (compact === "CCS" || compact === "CCS2" || compact.startsWith("CCS")) {
+    return "ccs";
+  }
+  if (compact === "GBT" || norm === "GBT") return "gbt";
+  if (compact === "CHADEMO" || norm.startsWith("CHADEMO")) return "chademo";
+  return `_other:${norm}`;
 }
 
+function connectorLabel(key: string, raw: string): string {
+  const fixed: Record<string, string> = {
+    ccs: "CCS",
+    gbt: "GBT",
+    chademo: "CHAdeMO",
+    type2: "Type 2",
+    gbt_ac: "GBT AC",
+  };
+  if (fixed[key]) return fixed[key];
+  return raw.trim() || key;
+}
+
+function collectConnectorLabels(stations: StationDto[]): string[] {
+  const seen = new Map<string, string>();
+  for (const s of stations) {
+    for (const gun of s.connectors) {
+      const key = normalizeConnectorKey(gun);
+      if (!key || seen.has(key)) continue;
+      seen.set(key, gun.trim() || connectorLabel(key, gun));
+    }
+  }
+  const labels: string[] = [];
+  for (const key of CONNECTOR_KPI_KEYS) {
+    if (seen.has(key)) labels.push(seen.get(key)!);
+  }
+  for (const [key, label] of seen) {
+    if (!CONNECTOR_KPI_KEYS.includes(key as (typeof CONNECTOR_KPI_KEYS)[number])) {
+      labels.push(label);
+    }
+  }
+  return labels;
+}
+
+function computeSeoStationStats(stations: StationDto[]) {
+  let maxDcKw = 0;
+  let maxAcKw = 0;
+  for (const s of stations) {
+    if (s.dc_power) maxDcKw = Math.max(maxDcKw, s.dc_power);
+    if (s.ac_power) maxAcKw = Math.max(maxAcKw, s.ac_power);
+  }
+  return {
+    maxDcKw,
+    maxAcKw,
+    connectorLabels: collectConnectorLabels(stations),
+  };
+}
+
+function joinRuList(items: string[]): string {
+  const list = items.filter(Boolean);
+  if (!list.length) return "";
+  if (list.length === 1) return list[0];
+  if (list.length === 2) return `${list[0]} и ${list[1]}`;
+  return `${list.slice(0, -1).join(", ")} и ${list[list.length - 1]}`;
+}
+
+function buildH1Text(location: LocationRow): string {
+  const name = location.location_name?.trim();
+  if (name) return name;
+  const city = location.city?.trim() ?? "";
+  const address = location.address?.trim() ?? "";
+  if (city && address) return `${city}, ${address}`;
+  return city || address || "—";
+}
+
+function buildSeoMeta(location: LocationRow, stations: StationDto[]) {
+  const operatorName = location.operator?.trim() || location.operator_slug;
+  const city = location.city?.trim() ?? "";
+  const address = location.address?.trim() ?? "";
+  const place = [city, address].filter(Boolean).join(", ");
+  const stats = computeSeoStationStats(stations);
+
+  const intro = `Зарядная станция ${operatorName} — ${place}.`;
+  const power =
+    stats.maxDcKw > 0
+      ? `Быстрая зарядка электромобилей до ${stats.maxDcKw} кВт`
+      : stats.maxAcKw > 0
+        ? `Зарядка электромобилей до ${stats.maxAcKw} кВт`
+        : "";
+  const connectors = stats.connectorLabels.length
+    ? `Разъёмы ${joinRuList(stats.connectorLabels)}.`
+    : "";
+  const tail = "Отзывы, фото и маршрут на EV RACE.";
+  const metaDescription = [intro, power, connectors, tail].filter(Boolean)
+    .join(" ");
+
+  const ogParts: string[] = [];
+  if (stats.maxDcKw > 0) {
+    ogParts.push(`Быстрая зарядка до ${stats.maxDcKw} кВт`);
+  } else if (stats.maxAcKw > 0) {
+    ogParts.push(`Зарядка до ${stats.maxAcKw} кВт`);
+  }
+  if (stats.connectorLabels.length) {
+    ogParts.push(joinRuList(stats.connectorLabels));
+  }
+  if (place) ogParts.push(place);
+  const ogDescriptionShort = `${ogParts.join(". ")}.`;
+
+  const pageTitle =
+    `Зарядная станция ${operatorName} — ${place} | EV RACE`;
+
+  return {
+    h1: buildH1Text(location),
+    page_title: pageTitle,
+    meta_description: metaDescription,
+    og_description_short: ogDescriptionShort,
+    json_ld_name: `Зарядная станция ${operatorName} — ${place}`,
+    og_title: pageTitle,
+    og_description: metaDescription,
+  };
+}
+
+/** @deprecated use buildSeoMeta */
+function buildOgTitle(location: LocationRow): string {
+  return buildSeoMeta(location, []).page_title;
+}
+
+/** @deprecated use buildSeoMeta */
 function buildOgDescription(
   location: LocationRow,
   stations: StationDto[],
 ): string {
-  const parts: string[] = [];
-  let maxDc = 0;
-  let maxAc = 0;
-  const connectorSet = new Set<string>();
-
-  for (const s of stations) {
-    const cnt = s.count || 1;
-    if (s.dc_power) maxDc = Math.max(maxDc, s.dc_power * cnt);
-    if (s.ac_power) maxAc = Math.max(maxAc, s.ac_power * cnt);
-    s.connectors.forEach((c) => connectorSet.add(c));
-  }
-
-  if (maxDc) parts.push(`DC ${maxDc} кВт`);
-  if (maxAc) parts.push(`AC ${maxAc} кВт`);
-  if (connectorSet.size) parts.push([...connectorSet].slice(0, 4).join(", "));
-
-  const rating = location.cached_avg_rating;
-  const reviews = location.cached_review_count ?? 0;
-  if (rating && reviews > 0) {
-    parts.push(`★ ${rating} (${reviews} отзывов)`);
-  }
-
-  parts.push(`${location.city}, ${location.address}`);
-  return parts.join(". ");
+  return buildSeoMeta(location, stations).meta_description;
 }
 
 function pickPrimaryAggregator(stations: StationDto[]): string | null {
@@ -327,6 +436,8 @@ Deno.serve(async (req) => {
   const canonicalPathSlug = location.slug.toLowerCase();
   const canonical_url = buildCanonicalUrl(canonicalSlug, canonicalPathSlug);
 
+  const seo = buildSeoMeta(location, stations);
+
   const response = {
     location: {
       id: location.id,
@@ -353,8 +464,13 @@ Deno.serve(async (req) => {
     },
     meta: {
       canonical_url,
-      og_title: buildOgTitle(location),
-      og_description: buildOgDescription(location, stations),
+      page_title: seo.page_title,
+      meta_description: seo.meta_description,
+      og_description_short: seo.og_description_short,
+      seo_h1: seo.h1,
+      json_ld_name: seo.json_ld_name,
+      og_title: seo.og_title,
+      og_description: seo.og_description,
       station_count: stations.length,
       is_single_station: stations.length === 1,
     },

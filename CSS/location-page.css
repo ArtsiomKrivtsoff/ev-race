@@ -227,6 +227,19 @@ body.location-page .blk-hdr {
   gap: 6px;
   min-width: 0;
 }
+.loc-hero-h1 {
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(14px, 2.4vw, 22px);
+  line-height: 1.35;
+  color: var(--green);
+  text-shadow: 0 0 12px rgba(0, 255, 65, 0.45);
+  text-transform: uppercase;
+  min-width: 0;
+  white-space: nowrap;
+  display: block;
+  max-width: 100%;
+}
 .loc-hero-city {
   font-family: 'Press Start 2P', monospace;
   font-size: clamp(14px, 2.4vw, 22px);
@@ -393,6 +406,7 @@ body.location-page .blk-hdr {
     border-radius: 5px;
   }
   .loc-hero-mobile-row { display: none; }
+  .loc-hero-h1 { font-size: clamp(18px, 2vw, 26px); }
   .loc-hero-city { font-size: clamp(18px, 2vw, 26px); }
   .loc-hero-street { font-size: clamp(11px, 1.3vw, 17px); }
   .loc-hero-actions {
@@ -1041,6 +1055,8 @@ html[data-theme="tesla-dark"] body.location-page .loc-breadcrumbs a {
   font-weight: 500;
 }
 
+html[data-theme="tesla-light"] body.location-page .loc-hero-h1,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-h1,
 html[data-theme="tesla-light"] body.location-page .loc-hero-city,
 html[data-theme="tesla-dark"] body.location-page .loc-hero-city,
 html[data-theme="tesla-light"] body.location-page .loc-hero-street,
