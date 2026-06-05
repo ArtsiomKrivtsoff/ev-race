@@ -3,7 +3,7 @@
 **Дата:** 2026-06-05  
 **Статус SEO-A:** **ЗАКРЫТ** (production verified 2026-06-05)  
 **Коммиты:** `4105b64` … `8caf522` (`parentOrganization`)  
-**Следующий трек:** **SEO-B** (stations, map, sitemap). Stage 3 — после SEO-B.
+**Следующий трек:** **SEO-B** (sitemap → map → stations). **Platform** — после SEO-B.
 
 ---
 
@@ -12,8 +12,8 @@
 | Блок | Содержание |
 |------|------------|
 | **SEO-A** | Карточка локации: Schema, terminology, power, H1, description, JSON-LD |
-| **SEO-B** | Индексация и связность: `stations.html` → location, `map.html` → location, dynamic sitemap |
-| **Stage 3** | Reviews & Ratings (отзывы, UGC) |
+| **SEO-B** | Индексация и связность: dynamic sitemap → `map.html` → location → `stations.html` → location |
+| **Platform** (бывш. Stage 3) | Reviews, Ratings, Photos, Tags, Community — не SEO, а продукт |
 
 SEO-B — **не** «инфраструктурные задачи» в смысле backend. Это **фундаментальная часть SEO и индексации**. Для EV RACE linking + sitemap могут быть **важнее JSON-LD**.
 
@@ -137,29 +137,41 @@ Smoke: `node scripts/verify-phase-a-schema-production.mjs` + `verify-seo-a-p0-pr
 
 ## SEO-B — три P1 (сразу после SEO-A)
 
-| P1 | Задача |
-|----|--------|
-| 1 | `stations.html` → location page |
-| 2 | `map.html` → location page |
-| 3 | Dynamic sitemap (все locations, canonical, lastmod) |
+**Порядок (согласовано 2026-06-05):** sitemap первым — эффект на весь сайт сразу; linking усиливает crawl path после появления sitemap.
 
-**Приёмка SEO-B:** Search Console видит sitemap с location URLs; crawl path: home / stations / map → location pages.
+| P1 | Задача | Статус |
+|----|--------|--------|
+| 1 | **Dynamic sitemap** | **реализовано** — `functions/sitemap.xml.js`, deploy + GSC |
+| 2 | `map.html` → location page | pending |
+| 3 | `stations.html` → location page | pending |
+
+**Приёмка SEO-B:** Search Console — sitemap с location URLs; crawl path: home / map / stations → location pages.
 
 Smoke: **5–10 случайных локаций** разных операторов (не одна ACDC-эталон).
 
-**После SEO-B = ЗАКРЫТ → Stage 3.**
+**После SEO-B = ЗАКРЫТ → Platform.**
 
 ---
 
-## Stage 3
+## Platform (после SEO-B)
 
-Reviews & Ratings — **только после SEO-A + SEO-B**.
+После SEO-B начинается **не SEO**, а **платформа**: EV RACE из каталога зарядок → живая инфраструктурная система.
+
+| Направление | Содержание |
+|-------------|------------|
+| Reviews | UGC, модерация |
+| Ratings | AggregateRating в JSON-LD (freeze снят) |
+| Photos | Галерея локаций |
+| Tags | Социальные / тематические метки |
+| Community | Вовлечение пользователей |
+
+**Gate:** только после **SEO-A + SEO-B** закрыты.
 
 ---
 
 ## Lighthouse — не блокер
 
-Mobile Performance 85, SEO 100 — приемлемо. Leaflet optimisation — **backlog**, не тормозит SEO-A / SEO-B / Stage 3.
+Mobile Performance 85, SEO 100 — приемлемо. Leaflet optimisation — **backlog**, не тормозит SEO-A / SEO-B / Platform.
 
 ---
 
@@ -168,15 +180,46 @@ Mobile Performance 85, SEO 100 — приемлемо. Leaflet optimisation — 
 - Leaflet lazy load / static map preview  
 - 301 lowercase / trailing slash  
 - Twitter cards, geo meta  
+- **Location 404 — красивая заглушка (обязательно, потом)** — см. ниже
+
+---
+
+## Backlog: Location 404 page (P1 polish, после SEO-B sitemap)
+
+**Статус:** отложено. **Приоритет:** обязательно, не блокер SEO-B P1-1.
+
+**Контекст:** после merge дублей (напр. `/forevo/grodno-pr-kleckova-15a`) отдаётся голый HTML без site chrome — см. скрин prod.
+
+**Сейчас:** `render404()` в [`functions/[operator_slug]/[slug].js`](../functions/[operator_slug]/[slug].js) — минимальная разметка, `noindex`, ссылка на `/stations.html`.
+
+**Нужно (DoD):**
+
+| # | Требование |
+|---|------------|
+| 1 | Общий header + footer (`site-chrome.js`, как на location page) |
+| 2 | Стили `arcade.css`, тема light/dark |
+| 3 | HTTP **404** + `<meta name="robots" content="noindex">` — без изменений |
+| 4 | Понятный copy: локация не найдена / возможно переезд URL |
+| 5 | CTA: «Все станции», «Карта», главная |
+| 6 | Без JSON-LD, без canonical на несуществующий URL |
+
+**Не в scope сейчас:** глобальный 404 Cloudflare для всего сайта; 301 redirect table для merged slugs.
+
+**Триггер реализации:** явное **ДЕЛАЙ** от автора (после Dynamic Sitemap или параллельно polish-батч).
 
 ---
 
 ## Roadmap (итог)
 
 ```text
-SEO-A (P0)  →  Schema + AC + Power  →  ЗАКРЫТ
-SEO-B (P1)  →  stations + map + sitemap  →  ЗАКРЫТ
-Stage 3     →  Reviews & Ratings
+Location Pages     ████████████████████  100%
+SEO-A (P0)         ████████████████████  ЗАКРЫТ
+SEO-B (P1)         ░░░░░░░░░░░░░░░░░░░░  NEXT
+  1. Dynamic sitemap
+  2. map.html → location
+  3. stations.html → location
+Platform           ░░░░░░░░░░░░░░░░░░░░  после SEO-B
+  Reviews · Ratings · Photos · Tags · Community
 ```
 
 ---
@@ -187,3 +230,6 @@ Stage 3     →  Reviews & Ratings
 |------|-----------|
 | 2026-06-05 | Первичная фиксация после `SEO-A-FINAL-AUDIT.md` |
 | 2026-06-05 | Переименование SEO-Infra → **SEO-B**; roadmap P0/P1; принцип sitemap перед отзывами |
+| 2026-06-05 | SEO-B порядок: **sitemap → map → stations**; Stage 3 → **Platform** |
+| 2026-06-05 | Backlog: **Location 404** — красивая заглушка (обязательно, после SEO-B sitemap) |
+| 2026-06-05 | **SEO-B P1-1:** dynamic sitemap — `functions/sitemap.xml.js`, baseline 123 locations |
