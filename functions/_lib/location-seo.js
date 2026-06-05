@@ -343,7 +343,7 @@ export function buildLocationJsonLdGraph(seo, loc, canonical) {
   }
 
   if (operatorOrgId && seo.operatorName) {
-    localBusiness.provider = { "@id": operatorOrgId };
+    localBusiness.parentOrganization = { "@id": operatorOrgId };
   }
 
   const amenityFeature = buildLocationAmenityFeatures(stats);

@@ -99,7 +99,7 @@ async function verifyUrl(url) {
     report.checks.organization_id = {
       pass:
         organization?.["@id"] === expectedOrgId &&
-        localBusiness?.provider?.["@id"] === expectedOrgId,
+        localBusiness?.parentOrganization?.["@id"] === expectedOrgId,
       expected: expectedOrgId,
       actual: organization?.["@id"],
     };

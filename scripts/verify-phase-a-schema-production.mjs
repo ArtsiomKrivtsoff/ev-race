@@ -67,7 +67,7 @@ function auditGraph(graph, pageUrl) {
       has_geo:
         localBusiness?.geo?.latitude != null &&
         localBusiness?.geo?.longitude != null,
-      provider_id: localBusiness?.provider?.["@id"] || null,
+      parent_org_id: localBusiness?.parentOrganization?.["@id"] || null,
       amenity_count: localBusiness?.amenityFeature?.length || 0,
       additional_property_names:
         localBusiness?.additionalProperty?.map((p) => p.name) || [],
@@ -86,8 +86,8 @@ function auditGraph(graph, pageUrl) {
       name: organization?.name || null,
       url: organization?.url || null,
     },
-    provider_link_ok:
-      localBusiness?.provider?.["@id"] === organization?.["@id"],
+    parent_org_link_ok:
+      localBusiness?.parentOrganization?.["@id"] === organization?.["@id"],
   };
 }
 
@@ -104,7 +104,8 @@ function passAudit(audit) {
     audit.local_business.has_geo &&
     audit.organization.present &&
     audit.organization.id_matches &&
-    audit.provider_link_ok &&
+    audit.parent_org_link_ok &&
+    !localBusiness?.provider &&
     audit.local_business.additional_property_names.includes("max_power_kw") &&
     audit.local_business.additional_property_names.includes(
       "total_installed_kw",

@@ -57,8 +57,8 @@ console.assert(
   "Organization @id must be /operator/{slug}",
 );
 console.assert(
-  localBusiness?.provider?.["@id"] === organization?.["@id"],
-  "LocalBusiness.provider must link Organization",
+  localBusiness?.parentOrganization?.["@id"] === organization?.["@id"],
+  "LocalBusiness.parentOrganization must link Organization",
 );
 console.assert(
   localBusiness?.additionalProperty?.some((p) => p.name === "total_installed_kw"),
@@ -72,7 +72,7 @@ console.log("Organization:", {
 });
 console.log("LocalBusiness:", {
   id: localBusiness?.["@id"],
-  provider: localBusiness?.provider,
+  parentOrganization: localBusiness?.parentOrganization,
   additionalProperty: localBusiness?.additionalProperty?.map(
     (p) => `${p.name}=${p.value}`,
   ),
