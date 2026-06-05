@@ -243,6 +243,8 @@ body.location-page .blk-hdr {
   flex-direction: column;
   gap: 6px;
   min-width: 0;
+  max-width: 100%;
+  width: 100%;
 }
 .loc-hero-h1 {
   margin: 0;
@@ -253,8 +255,6 @@ body.location-page .blk-hdr {
   text-shadow: 0 0 12px rgba(0, 255, 65, 0.45);
   text-transform: uppercase;
   min-width: 0;
-  white-space: nowrap;
-  display: block;
   max-width: 100%;
 }
 .loc-hero-city {
@@ -264,6 +264,9 @@ body.location-page .blk-hdr {
   color: var(--green);
   text-shadow: 0 0 12px rgba(0, 255, 65, 0.45);
   text-transform: uppercase;
+  display: block;
+  min-width: 0;
+  max-width: 100%;
 }
 .loc-hero-street {
   font-family: 'Press Start 2P', monospace;

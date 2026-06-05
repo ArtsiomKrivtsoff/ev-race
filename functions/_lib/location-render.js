@@ -259,18 +259,31 @@ ${mapBlock}
 </div>`;
 }
 
+function renderHeroTitleBlock(loc) {
+  const idAttr = ' id="loc-title"';
+  const city = escapeHtml(String(loc.city ?? "").trim());
+  const address = escapeHtml(String(loc.address ?? "").trim());
+  const name = loc.location_name?.trim();
+
+  if (name) {
+    return `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${city}</span><span class="loc-hero-street" data-fit-line>${address}</span><span class="loc-hero-venue">${escapeHtml(name)}</span></h1>`;
+  }
+  if (city && address) {
+    return `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${city}</span><span class="loc-hero-street" data-fit-line>${address}</span></h1>`;
+  }
+  const fallback = escapeHtml(city || address || "—");
+  return `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${fallback}</span></h1>`;
+}
+
 function renderHeroIdentity(
   loc,
   opCls,
   opName,
   aggregatorLine,
   routeYandex,
-  { h1Text, showDesktopReviewCta = true } = {},
+  { showDesktopReviewCta = true } = {},
 ) {
-  const idAttr = ' id="loc-title"';
-  const text = h1Text || buildH1TextFromLoc(loc);
-  const fitAttr = !loc.location_name?.trim() ? " data-fit-line" : "";
-  const titleBlock = `<h1 class="loc-hero-h1"${idAttr}${fitAttr}>${escapeHtml(text)}</h1>`;
+  const titleBlock = renderHeroTitleBlock(loc);
 
   const routeBtn = routeYandex
     ? `<a class="loc-btn loc-btn-primary" href="${escapeHtml(routeYandex)}" target="_blank" rel="noopener noreferrer">МАРШРУТ</a>`
@@ -292,15 +305,6 @@ ${desktopCta}
 </div>`;
 }
 
-function buildH1TextFromLoc(loc) {
-  const name = loc.location_name?.trim();
-  if (name) return name;
-  const city = String(loc.city ?? "").trim();
-  const address = String(loc.address ?? "").trim();
-  if (city && address) return `${city}, ${address}`;
-  return city || address || "—";
-}
-
 export function renderHero(loc, community, opts) {
   const {
     opCls,
@@ -316,7 +320,7 @@ export function renderHero(loc, community, opts) {
     opName,
     aggregatorLine,
     routeYandex,
-    { h1Text, showDesktopReviewCta: true },
+    { showDesktopReviewCta: true },
   );
   const ratingDesktop = renderRatingCard(loc, community, {
     compact: false,
