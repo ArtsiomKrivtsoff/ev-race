@@ -141,8 +141,8 @@ Smoke: `node scripts/verify-phase-a-schema-production.mjs` + `verify-seo-a-p0-pr
 
 | P1 | Задача | Статус |
 |----|--------|--------|
-| 1 | **Dynamic sitemap** | **реализовано** — `functions/sitemap.xml.js`, deploy + GSC |
-| 2 | `map.html` → location page | pending |
+| 1 | **Dynamic sitemap** | **CLOSED** — prod 133 URL, commit `2671277` |
+| 2 | `map.html` → location page | **CLOSED** — commit pending push |
 | 3 | `stations.html` → location page | pending |
 
 **Приёмка SEO-B:** Search Console — sitemap с location URLs; crawl path: home / map / stations → location pages.
