@@ -64,15 +64,22 @@ html:has(body.tour-page) {
   text-align: center;
   min-width: 0;
 }
-.chronicle-fact-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: var(--ls-tight);
-  color: var(--home-text-dim);
+.chronicle-fact-label,
+.chronicle-letter-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(8px, 1vw, 10px);
+  letter-spacing: 0.04em;
+  line-height: 1.55;
+  color: #c8a84b;
   text-transform: uppercase;
+}
+.chronicle-fact-label {
   align-self: stretch;
   text-align: left;
   margin-bottom: var(--tour-gap);
+}
+.chronicle-letter-title {
+  margin-bottom: 6px;
 }
 .chronicle-stations {
   display: flex;
@@ -121,15 +128,6 @@ html:has(body.tour-page) {
 }
 .chronicle-letter-head {
   margin-bottom: var(--tour-inset);
-}
-.chronicle-letter-title {
-  font-family: 'Press Start 2P', monospace;
-  font-size: clamp(8px, 1vw, 10px);
-  letter-spacing: 0.04em;
-  line-height: 1.55;
-  color: #c8a84b;
-  text-transform: uppercase;
-  margin-bottom: 6px;
 }
 .chronicle-letter-meta {
   font-family: 'Press Start 2P', monospace;
@@ -409,11 +407,6 @@ html:has(body.tour-page) {
   color: var(--home-text-mid);
 }
 
-/* ── footer bits on tour ── */
-.page-wrap.tour-v2 .big-phrase {
-  margin: var(--s-5) 0 var(--s-4);
-}
-
 /* ── mobile ── */
 @media (max-width: 639px) {
   .tour-meta-grid {
@@ -506,6 +499,8 @@ html[data-theme="tesla-dark"] .tour-bc-cur {
   color: var(--text);
   font-weight: 600;
 }
+html[data-theme="tesla-light"] .chronicle-fact-label,
+html[data-theme="tesla-dark"] .chronicle-fact-label,
 html[data-theme="tesla-light"] .chronicle-letter-title,
 html[data-theme="tesla-dark"] .chronicle-letter-title,
 html[data-theme="tesla-light"] .chronicle-letter-text,

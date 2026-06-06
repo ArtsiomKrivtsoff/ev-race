@@ -72,7 +72,11 @@ export function renderSiteHeader(activeNav) {
 
 export function renderSiteFooter() {
   return `<div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
-<div class="author-section">
+<div class="blk author-blk">
+  <div class="blk-hdr">
+    <span class="blk-title">◈ ОБ АВТОРЕ</span>
+  </div>
+  <div class="site-chrome-in">
   <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank" rel="noopener noreferrer">▶ ОБ АВТОРЕ ◀</a>
   <a class="author-chat-btn" href="https://t.me/evclubb" target="_blank" rel="noopener noreferrer">▶ ЗЕЛЁНЫЙ ЧАТ ◀<span class="chat-sub">крупнейшее электромобильное сообщество в Беларуси</span></a>
   <div class="section-label">▼ TG-КАНАЛЫ #ИМЕЮСКАЗАТЬ ▼</div>
@@ -91,6 +95,7 @@ export function renderSiteFooter() {
   <div class="author-contacts">
     <a class="author-contact-btn" href="tel:+375295170067">📞 +375 29 517-00-67</a>
     <a class="author-contact-btn" href="https://t.me/Krivtsoffag" target="_blank" rel="noopener noreferrer">✈ TELEGRAM</a>
+  </div>
   </div>
 </div>
 <div class="visit-counter">СТРАНИЦУ ПОСМОТРЕЛИ <span id="visit-count">…</span> РАЗ</div>

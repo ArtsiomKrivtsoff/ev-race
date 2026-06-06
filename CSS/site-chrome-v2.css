@@ -1,0 +1,521 @@
+/* ============================================================
+   Site chrome v2 — vote, footer, author (index, tour, location)
+   Requires: arcade.css, home-v2.css (--home-card, --home-bdr, …)
+   ============================================================ */
+
+.page-wrap .site-chrome-in {
+  padding: var(--s-4);
+}
+
+/* ── big phrase ── */
+.page-wrap .big-phrase {
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 2.5vw, 16px);
+  color: var(--yellow);
+  text-shadow: none;
+  line-height: 1.65;
+  padding: var(--s-5) var(--s-4);
+  margin: var(--s-4) 0 var(--s-2);
+  letter-spacing: var(--ls);
+}
+
+/* ── vote (index) ── */
+.page-wrap .vote-blk .vote-question {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--home-text-mid);
+  letter-spacing: var(--ls-tight);
+  line-height: 1.75;
+  margin-bottom: var(--s-3);
+}
+
+.page-wrap .vote-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  gap: var(--s-2);
+  margin-bottom: var(--s-3);
+}
+
+.page-wrap .vote-btn {
+  border: 1px solid var(--home-bdr);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--home-text-mid);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  padding: var(--s-3) 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.page-wrap .vote-btn:hover,
+.page-wrap .vote-btn:active {
+  border-color: var(--green-dim);
+  color: var(--home-text);
+  background: rgba(0, 255, 65, 0.04);
+}
+
+.page-wrap .vote-btn.selected {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(0, 255, 65, 0.06);
+  box-shadow: none;
+}
+
+.page-wrap .vote-btn img {
+  width: 56px;
+  height: 26px;
+  object-fit: contain;
+  background: #0a120a;
+  padding: 3px;
+  border-radius: 2px;
+}
+
+.page-wrap .vote-submit {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--green);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--green);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  padding: 12px;
+  cursor: pointer;
+  letter-spacing: var(--ls);
+  transition: background 0.15s, color 0.15s;
+  margin-top: var(--s-2);
+}
+
+.page-wrap .vote-submit:hover:not(:disabled),
+.page-wrap .vote-submit:active:not(:disabled) {
+  background: rgba(0, 255, 65, 0.1);
+  color: var(--green);
+}
+
+.page-wrap .vote-submit:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.page-wrap .vote-results {
+  display: none;
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--home-bdr);
+}
+
+.page-wrap .vote-message {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--green);
+  text-align: center;
+  margin-bottom: var(--s-3);
+  line-height: 1.75;
+  text-shadow: none;
+}
+
+.page-wrap .vote-result-item {
+  margin-bottom: var(--s-3);
+}
+
+.page-wrap .vote-result-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  margin-bottom: var(--s-1);
+}
+
+.page-wrap .vote-result-top .rname {
+  color: var(--home-text-mid);
+}
+
+.page-wrap .vote-result-top .rpct {
+  color: var(--home-text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+}
+
+.page-wrap .vote-result-bar-wrap {
+  background: #0a120a;
+  height: 8px;
+  border: 1px solid var(--home-bdr);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.page-wrap .vote-result-bar {
+  height: 100%;
+  background: var(--green-dim);
+  transition: width 1s ease;
+  box-shadow: none;
+}
+
+.page-wrap .vote-result-bar.mine {
+  background: var(--green);
+}
+
+.page-wrap .vote-total-players {
+  text-align: center;
+  font-size: 11px;
+  color: var(--home-text-dim);
+  margin-top: var(--s-3);
+  letter-spacing: var(--ls-tight);
+}
+
+/* ── chronicle (index, below big phrase) ── */
+.page-wrap .chronicle-blk {
+  margin: var(--s-2) 0;
+}
+
+.page-wrap .chronicle-blk .upd-block {
+  margin: 0;
+  padding: 0 0 0 var(--s-3);
+  border-left: 3px solid color-mix(in srgb, var(--green) 55%, transparent);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.page-wrap .chronicle-blk .upd-block + .upd-block {
+  margin-top: var(--s-4);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--home-bdr);
+}
+
+.page-wrap .chronicle-blk .upd-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--home-text-dim);
+  letter-spacing: var(--ls);
+  margin-bottom: var(--s-2);
+  text-shadow: none;
+}
+
+.page-wrap .chronicle-blk .upd-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--home-text);
+  line-height: 1.75;
+}
+
+.page-wrap .chronicle-blk .upd-sign {
+  margin-top: var(--s-3);
+  font-size: 11px;
+  color: var(--home-text-dim);
+  border-top: 1px solid var(--home-bdr);
+  padding-top: var(--s-3);
+}
+
+.page-wrap .chronicle-blk .upd-sign span {
+  color: var(--green);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+}
+
+.page-wrap .chronicle-blk .upd-block.upd2 {
+  border-left-color: color-mix(in srgb, var(--yellow) 60%, transparent);
+  background: transparent;
+  box-shadow: none;
+}
+
+.page-wrap .chronicle-blk .upd-block.upd2 .upd-label {
+  color: var(--yellow);
+  text-shadow: none;
+}
+
+.page-wrap .chronicle-blk .upd-block.upd2 .upd-text {
+  color: color-mix(in srgb, var(--yellow) 85%, var(--home-text));
+}
+
+.page-wrap .chronicle-blk .upd-block.upd2 .upd-sign span {
+  color: var(--yellow);
+}
+
+/* ── author ── */
+.page-wrap .author-blk .author-about-btn {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--home-bdr);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--green);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  padding: var(--s-3);
+  cursor: pointer;
+  letter-spacing: var(--ls);
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: var(--s-2);
+  transition: border-color 0.15s, background 0.15s;
+  box-sizing: border-box;
+}
+
+.page-wrap .author-blk .author-about-btn:hover,
+.page-wrap .author-blk .author-about-btn:active {
+  border-color: var(--green-dim);
+  background: rgba(0, 255, 65, 0.05);
+  box-shadow: none;
+}
+
+.page-wrap .author-blk .author-chat-btn {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--home-bdr);
+  border-radius: 3px;
+  background: rgba(0, 255, 65, 0.03);
+  color: var(--green);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  padding: var(--s-3);
+  cursor: pointer;
+  letter-spacing: var(--ls-tight);
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: var(--s-4);
+  transition: border-color 0.15s, background 0.15s;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+
+.page-wrap .author-blk .author-chat-btn:hover,
+.page-wrap .author-blk .author-chat-btn:active {
+  border-color: var(--green-dim);
+  background: rgba(0, 255, 65, 0.07);
+}
+
+.page-wrap .author-blk .author-chat-btn .chat-sub {
+  display: block;
+  font-size: 11px;
+  color: var(--home-text-dim);
+  letter-spacing: var(--ls-tight);
+  margin-top: var(--s-1);
+}
+
+.page-wrap .author-blk .section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  letter-spacing: var(--ls-wide);
+  margin-bottom: var(--s-2);
+  display: block;
+}
+
+.page-wrap .author-blk .author-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+}
+
+.page-wrap .author-blk .author-link-btn {
+  border: 1px solid var(--home-bdr);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--home-text-mid);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  padding: var(--s-3) var(--s-1);
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, color 0.15s;
+  min-height: 44px;
+  box-sizing: border-box;
+  line-height: 1.4;
+}
+
+.page-wrap .author-blk .author-link-btn:hover,
+.page-wrap .author-blk .author-link-btn:active {
+  border-color: var(--green-dim);
+  color: var(--green);
+  background: rgba(0, 255, 65, 0.04);
+}
+
+.page-wrap .author-blk .author-contacts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-2);
+}
+
+.page-wrap .author-blk .author-contact-btn {
+  border: 1px solid var(--home-bdr);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--home-text-mid);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  padding: var(--s-3) 6px;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, color 0.15s;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.page-wrap .author-blk .author-contact-btn:hover,
+.page-wrap .author-blk .author-contact-btn:active {
+  border-color: var(--green-dim);
+  color: var(--green);
+}
+
+/* ── visit / theme / footer ── */
+.page-wrap .visit-counter {
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--home-text-dim);
+  margin: var(--s-4) 0 var(--s-3);
+  letter-spacing: var(--ls-tight);
+  line-height: 1.7;
+}
+
+.page-wrap .visit-counter span {
+  color: var(--green);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+
+.page-wrap .theme-footer-switch {
+  padding: var(--s-2) 0 var(--s-3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.page-wrap .theme-foot-lbl {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--home-text-dim);
+  letter-spacing: var(--ls);
+  margin-right: var(--s-1);
+}
+
+.page-wrap .theme-foot-btn {
+  font-size: 13px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--home-bdr);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--home-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.page-wrap .theme-foot-btn.active {
+  background: rgba(0, 255, 65, 0.08);
+  color: var(--green);
+  border-color: var(--green-dim);
+}
+
+.page-wrap .theme-foot-btn:hover:not(.active) {
+  border-color: var(--green-dim);
+  color: var(--home-text-mid);
+}
+
+.page-wrap .footer {
+  border-top: 1px solid var(--home-bdr);
+  padding: var(--s-4) 0 90px;
+  text-align: center;
+  color: var(--home-text-dim);
+  line-height: 1.75;
+}
+
+.page-wrap .footer-disclaimer {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  line-height: 1.75;
+  margin-bottom: var(--s-2);
+  color: var(--home-text-dim);
+}
+
+.page-wrap .footer-copy {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--home-text-dim);
+  letter-spacing: var(--ls-tight);
+}
+
+/* ── responsive ── */
+@media (max-width: 480px) {
+  .page-wrap .vote-options {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 640px) {
+  .page-wrap .vote-options {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .page-wrap .author-blk .author-links {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .page-wrap .author-blk .author-links,
+  .page-wrap .author-blk .author-contacts {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── tesla themes ── */
+html[data-theme="tesla-light"] .page-wrap .big-phrase,
+html[data-theme="tesla-dark"] .page-wrap .big-phrase {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: clamp(14px, 3vw, 18px);
+  color: var(--fg);
+  letter-spacing: 0.02em;
+}
+
+html[data-theme="tesla-light"] .page-wrap .vote-btn.selected,
+html[data-theme="tesla-dark"] .page-wrap .vote-btn.selected {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+html[data-theme="tesla-light"] .page-wrap .vote-submit,
+html[data-theme="tesla-dark"] .page-wrap .vote-submit {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-family: var(--font);
+  font-weight: 600;
+}
+
+html[data-theme="tesla-light"] .page-wrap .author-blk .author-about-btn,
+html[data-theme="tesla-dark"] .page-wrap .author-blk .author-about-btn,
+html[data-theme="tesla-light"] .page-wrap .author-blk .author-chat-btn,
+html[data-theme="tesla-dark"] .page-wrap .author-blk .author-chat-btn {
+  font-family: var(--font);
+  border-radius: var(--r);
+}
+
+html[data-theme="tesla-light"] .page-wrap .theme-foot-btn,
+html[data-theme="tesla-dark"] .page-wrap .theme-foot-btn {
+  border-radius: var(--r);
+}
+
+body.reduced-fx .page-wrap .big-phrase {
+  text-shadow: none;
+}

@@ -64,7 +64,8 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=2">
 <link rel="stylesheet" href="CSS/operator.css?v=2">
-<link rel="stylesheet" href="CSS/home-v2.css?v=14">
+<link rel="stylesheet" href="CSS/home-v2.css?v=15">
+<link rel="stylesheet" href="CSS/site-chrome-v2.css?v=1">
 <link rel="prefetch" href="CSS/tesla-light.css">
 <link rel="prefetch" href="CSS/tesla-dark.css">
 <!-- styles: CSS/arcade.css + home-v2.css -->
@@ -280,8 +281,11 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 </div>
 
 <!-- ═══ ГОЛОСОВАНИЕ ═══ -->
-<div class="vote-section">
-  <div class="vote-section-label">СДЕЛАЙ СТАВКУ</div>
+<div class="blk vote-blk">
+  <div class="blk-hdr">
+    <span class="blk-title">◈ СДЕЛАЙ СТАВКУ</span>
+  </div>
+  <div class="site-chrome-in">
   <div class="vote-question">КТО УСТАНОВИТ БОЛЬШЕ ВСЕХ СТАНЦИЙ К 31.12.2026?<br>СДЕЛАЙ СВОЮ СТАВКУ — ОДИН ИГРОК, ОДИН ГОЛОС:</div>
   <div class="vote-options" id="vote-options"></div>
   <div class="cf-turnstile" id="vote-turnstile" data-sitekey="0x4AAAAAACtvG988gnpS7YBa" data-theme="dark" data-size="flexible" style="margin-bottom:10px"></div>
@@ -291,11 +295,16 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <div id="vote-bars"></div>
     <div class="vote-total-players" id="vote-total"></div>
   </div>
+  </div>
 </div>
 
 <div class="big-phrase">СТАВКИ СДЕЛАНЫ, ГОСПОДА</div>
 
-<div class="chronicle-blk">
+<div class="blk chronicle-blk">
+  <div class="blk-hdr">
+    <span class="blk-title">◈ ХРОНИКА ПРАВИЛ</span>
+  </div>
+  <div class="site-chrome-in">
   <div class="upd-block upd2">
     <div class="upd-label">► UPD 2 · 16.05.2026</div>
     <div class="upd-text">100 DC станций за полгода. Серьёзно?<br>Окей. Меняю правила — теперь считаю AC тоже.<br>Не потому что так надо. Потому что хочу живой гонки, а не похорон.<br>Вперёд.</div>
@@ -306,9 +315,14 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <div class="upd-text">Великодушие — одно из моих имён! Засчитываю все DC станции с 1 января 2026 года.<br>Это фора, господа операторы. Теперь отмазок нет. Пользуйтесь.</div>
     <div class="upd-sign">Блюститель честного заряда · <span>Artsiom Krivtsoff</span></div>
   </div>
+  </div>
 </div>
 
-<div class="author-section">
+<div class="blk author-blk">
+  <div class="blk-hdr">
+    <span class="blk-title">◈ ОБ АВТОРЕ</span>
+  </div>
+  <div class="site-chrome-in">
   <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank">▶ ОБ АВТОРЕ ◀</a>
   <a class="author-chat-btn" href="https://t.me/evclubb" target="_blank">▶ ЗЕЛЁНЫЙ ЧАТ ◀<span class="chat-sub">крупнейшее электромобильное сообщество в Беларуси</span></a>
   <div class="section-label">▼ TG-КАНАЛЫ #ИМЕЮСКАЗАТЬ ▼</div>
@@ -327,6 +341,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
   <div class="author-contacts">
     <a class="author-contact-btn" href="tel:+375295170067">📞 +375 29 517-00-67</a>
     <a class="author-contact-btn" href="https://t.me/Krivtsoffag" target="_blank">✈ TELEGRAM</a>
+  </div>
   </div>
 </div>
 

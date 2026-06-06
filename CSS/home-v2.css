@@ -828,7 +828,6 @@
 }
 
 /* голосование: в arcade заголовок через ::before — дубль убираем */
-.page-wrap .vote-section-label { display: none; }
 
 .dc-ac-leg {
   padding: var(--s-2) var(--s-4);
