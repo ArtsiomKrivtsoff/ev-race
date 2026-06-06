@@ -1,0 +1,528 @@
+/* ============================================================
+   EV RACE — tour-v2.css (только tour.html)
+   Requires: CSS/arcade.css + CSS/operator.css + CSS/home-v2.css
+   ============================================================ */
+
+body.tour-page {
+  overflow-x: clip;
+  max-width: 100%;
+}
+html:has(body.tour-page) {
+  overflow-x: clip;
+}
+
+.page-wrap.tour-v2 {
+  color: var(--home-text);
+  overflow-x: hidden;
+  --tour-inset: var(--s-4);
+  --tour-gap: var(--s-3);
+}
+
+/* ── breadcrumbs (shell как loc, без JSON-LD) ── */
+.tour-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: var(--ls-tight);
+  color: var(--home-text-dim);
+  margin: var(--s-2) 0 var(--s-3);
+  text-transform: uppercase;
+}
+.tour-breadcrumbs a {
+  color: var(--green);
+  text-decoration: none;
+}
+.tour-breadcrumbs a:hover { text-decoration: underline; }
+.tour-bc-sep { opacity: 0.45; }
+.tour-bc-cur { color: var(--yellow); }
+
+/* ── хроника круга (факт | смысл) ── */
+.tour-chronicle-blk[hidden] { display: none !important; }
+
+.chronicle-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 40%) minmax(0, 60%);
+  align-items: stretch;
+  min-width: 0;
+}
+.chronicle-grid--solo {
+  grid-template-columns: 1fr;
+}
+
+.chronicle-fact {
+  --ch-stripe: var(--ch-accent, var(--green));
+  border-left: 3px solid color-mix(in srgb, var(--ch-stripe) 58%, transparent);
+  border-right: 1px solid var(--home-bdr);
+  padding: var(--tour-inset);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-width: 0;
+}
+.chronicle-fact-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: var(--ls-tight);
+  color: var(--home-text-dim);
+  text-transform: uppercase;
+  align-self: stretch;
+  text-align: left;
+  margin-bottom: var(--tour-gap);
+}
+.chronicle-stations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--tour-gap);
+}
+.chronicle-stations-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(33px, 6vw, 57px);
+  line-height: 1;
+  color: #ffd700;
+}
+.chronicle-stations-unit {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: var(--ls-tight);
+  color: #ffd700;
+  text-transform: uppercase;
+}
+.chronicle-op {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(9px, 1.45vw, 14px);
+  line-height: 1.45;
+  margin-bottom: 2px;
+  text-transform: none;
+}
+.chronicle-achievement {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--home-text-dim);
+  letter-spacing: var(--ls-tight);
+  align-self: stretch;
+  max-width: 100%;
+}
+
+.chronicle-meaning {
+  padding: var(--tour-inset);
+  min-width: 0;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.chronicle-letter-head {
+  margin-bottom: var(--tour-inset);
+}
+.chronicle-letter-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(8px, 1vw, 10px);
+  letter-spacing: 0.04em;
+  line-height: 1.55;
+  color: #c8a84b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.chronicle-letter-meta {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(7px, 0.85vw, 9px);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: #9a7d3a;
+  opacity: 0.38;
+  text-transform: uppercase;
+}
+.chronicle-letter-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  letter-spacing: 0.02em;
+  color: #c8a84b;
+  max-width: 42em;
+}
+
+/* ── hero ── */
+.tour-hero {
+  margin-top: var(--s-2);
+  padding: var(--tour-inset);
+  position: relative;
+  overflow: hidden;
+}
+.tour-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 0%, rgba(0, 255, 65, 0.05) 0%, transparent 55%);
+  pointer-events: none;
+}
+.tour-hero-tag,
+.tour-hero-title,
+.tour-hero-sub {
+  position: relative;
+  z-index: 1;
+}
+.tour-hero-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--home-text-dim);
+  letter-spacing: var(--ls);
+  margin-bottom: 8px;
+}
+.tour-hero-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(14px, 3.2vw, 22px);
+  color: var(--green);
+  line-height: 1.55;
+  margin: 0 0 10px;
+  text-shadow: 0 0 14px var(--home-bg-glow);
+}
+.tour-hero-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--home-text-mid);
+  letter-spacing: var(--ls-tight);
+  line-height: 1.7;
+}
+
+/* ── meta strip ── */
+.tour-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--tour-gap);
+  padding: var(--tour-inset);
+}
+.tour-meta-item {
+  background: rgba(0, 255, 65, 0.03);
+  border: 1px solid var(--home-bdr);
+  border-radius: 3px;
+  padding: var(--tour-gap) 6px;
+  text-align: center;
+}
+.tour-meta-lbl {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  letter-spacing: var(--ls-tight);
+  margin-bottom: 6px;
+}
+.tour-meta-val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(8px, 1.6vw, 11px);
+  color: var(--yellow);
+  line-height: 1.55;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.35);
+}
+
+/* ── unified blk inset (контент ниже разделителя hdr) ── */
+.page-wrap.tour-v2 .blk-hdr {
+  padding: var(--tour-gap) var(--tour-inset);
+}
+
+.tour-blk-body,
+.page-wrap.tour-v2 .standings-wrap,
+.page-wrap.tour-v2 #forecast-wrap,
+.page-wrap.tour-v2 #history-wrap {
+  padding: var(--tour-inset);
+}
+
+.tour-blk-body > .loading {
+  padding: var(--tour-gap) 0;
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--home-text-dim);
+}
+
+.blk-hdr .tour-hdr-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--home-text-dim);
+  letter-spacing: var(--ls-tight);
+  margin-left: auto;
+}
+
+/* ── current round (единый жёлтый blk, без inner-рамки и ::before) ── */
+.page-wrap.tour-v2 .tour-cur-blk {
+  border-color: rgba(255, 215, 0, 0.4);
+  background: rgba(255, 215, 0, 0.05);
+}
+.page-wrap.tour-v2 .tour-cur-blk .blk-hdr {
+  border-bottom-color: rgba(255, 215, 0, 0.22);
+}
+.page-wrap.tour-v2 .tour-cur-blk .blk-title {
+  color: var(--yellow);
+}
+
+.page-wrap.tour-v2 .cur-round {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  position: static;
+}
+.page-wrap.tour-v2 .cur-round::before {
+  content: none;
+  display: none;
+}
+.page-wrap.tour-v2 .cur-round-header {
+  margin-bottom: var(--tour-gap);
+}
+.page-wrap.tour-v2 .cur-round-num {
+  font-size: clamp(14px, 3vw, 20px);
+}
+.page-wrap.tour-v2 .cur-round-dates {
+  color: var(--home-text-mid);
+}
+.page-wrap.tour-v2 .cur-round-table th {
+  border-bottom-color: rgba(255, 215, 0, 0.15);
+  color: var(--home-text-dim);
+}
+.page-wrap.tour-v2 .cur-round-table td {
+  border-bottom-color: var(--home-bdr);
+}
+.page-wrap.tour-v2 .cur-no-data {
+  color: var(--home-text-dim);
+  padding: 0;
+  margin: 0;
+}
+
+/* ── standings ── */
+.page-wrap.tour-v2 .standings {
+  margin-bottom: 0;
+  font-size: 13px;
+}
+.page-wrap.tour-v2 .standings th {
+  color: var(--home-text-dim);
+  border-bottom-color: var(--home-bdr);
+}
+.page-wrap.tour-v2 .standings td {
+  border-bottom-color: var(--home-bdr);
+}
+
+/* ── forecast ── */
+.page-wrap.tour-v2 .forecast-section {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+.page-wrap.tour-v2 .forecast-hint {
+  border-bottom-color: var(--home-bdr);
+  color: var(--home-text-dim);
+}
+
+/* ── history ── */
+.page-wrap.tour-v2 .hist-grid-wrap {
+  padding: 0;
+}
+.page-wrap.tour-v2 .hist-row {
+  border-bottom-color: var(--home-bdr);
+}
+.page-wrap.tour-v2 .hist-toggle-btn {
+  margin: var(--tour-gap) 0 0;
+  width: 100%;
+  border-color: var(--home-bdr);
+  border-radius: 3px;
+}
+
+/* ── round result cards ── */
+.page-wrap.tour-v2 .rounds-legend {
+  padding: var(--tour-inset) var(--tour-inset) 0;
+  color: var(--home-text-dim);
+}
+.page-wrap.tour-v2 #rounds-grid {
+  padding: var(--tour-gap) var(--tour-inset) var(--tour-inset);
+}
+.page-wrap.tour-v2 .rounds-grid {
+  gap: 8px;
+}
+.page-wrap.tour-v2 .round-cell {
+  background: var(--home-card);
+  border: 1px solid var(--home-bdr);
+  border-radius: 3px;
+  padding: 10px 6px 8px;
+  position: relative;
+  overflow: hidden;
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+}
+.page-wrap.tour-v2 .round-cell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--rc-accent, transparent);
+}
+.page-wrap.tour-v2 .round-cell.active {
+  border-color: rgba(0, 255, 65, 0.45);
+  background: rgba(0, 255, 65, 0.05);
+  box-shadow: 0 0 14px rgba(0, 255, 65, 0.06);
+}
+.page-wrap.tour-v2 .round-cell .r-num {
+  color: var(--home-text-mid);
+  margin-bottom: 2px;
+}
+.page-wrap.tour-v2 .round-cell .r-win {
+  font-size: 9px;
+  line-height: 1.45;
+}
+.page-wrap.tour-v2 .round-cell .r-date {
+  color: var(--home-text-dim);
+  margin-top: 2px;
+}
+.page-wrap.tour-v2 .rounds-grid-wrap .rounds-grid-fade,
+.page-wrap.tour-v2 .hist-grid-wrap .hist-grid-fade {
+  background: linear-gradient(transparent, var(--home-card));
+}
+.page-wrap.tour-v2 .rounds-toggle-btn {
+  margin: var(--s-2) 0 0;
+  border-color: var(--home-bdr);
+  border-radius: 3px;
+}
+
+/* ── rules ── */
+.page-wrap.tour-v2 .rules-section {
+  border: none;
+  background: transparent;
+  padding: var(--tour-inset);
+  margin: 0;
+}
+.page-wrap.tour-v2 .rule-h {
+  border-bottom-color: var(--home-bdr);
+  color: var(--green);
+}
+.page-wrap.tour-v2 .rule-t {
+  color: var(--home-text-mid);
+}
+
+/* ── footer bits on tour ── */
+.page-wrap.tour-v2 .big-phrase {
+  margin: var(--s-5) 0 var(--s-4);
+}
+
+/* ── mobile ── */
+@media (max-width: 639px) {
+  .tour-meta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .tour-hero-title {
+    font-size: 13px;
+  }
+  .page-wrap.tour-v2 .rounds-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .page-wrap.tour-v2 .standings {
+    font-size: 11px;
+  }
+  .page-wrap.tour-v2 .standings th {
+    font-size: 8px;
+    padding: 7px 4px;
+  }
+  .page-wrap.tour-v2 .standings td {
+    padding: 8px 4px;
+  }
+  .page-wrap.tour-v2 .cur-round-table {
+    font-size: 11px;
+  }
+  .blk-hdr .tour-hdr-sub {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 2px;
+  }
+  .chronicle-grid {
+    grid-template-columns: 1fr;
+  }
+  .chronicle-fact {
+    border-right: none;
+    border-bottom: 1px solid var(--home-bdr);
+  }
+  .chronicle-meaning {
+    justify-content: flex-start;
+    min-height: 0;
+  }
+  .chronicle-stations-num {
+    font-size: clamp(36px, 13vw, 50px);
+  }
+  .chronicle-op {
+    font-size: clamp(9px, 3.2vw, 12px);
+  }
+  .chronicle-letter-text {
+    max-width: none;
+  }
+}
+
+/* ── TESLA overrides ── */
+html[data-theme="tesla-light"] .page-wrap.tour-v2,
+html[data-theme="tesla-dark"] .page-wrap.tour-v2 {
+  color: var(--text);
+}
+html[data-theme="tesla-light"] .page-wrap.tour-v2 .tour-meta-item,
+html[data-theme="tesla-dark"] .page-wrap.tour-v2 .tour-meta-item {
+  background: rgba(0, 0, 0, 0.02);
+}
+html[data-theme="tesla-light"] .page-wrap.tour-v2 .round-cell.active,
+html[data-theme="tesla-dark"] .page-wrap.tour-v2 .round-cell.active {
+  background: rgba(0, 128, 0, 0.06);
+  box-shadow: none;
+}
+html[data-theme="tesla-light"] .page-wrap.tour-v2 .tour-cur-blk,
+html[data-theme="tesla-dark"] .page-wrap.tour-v2 .tour-cur-blk {
+  border-color: rgba(255, 193, 7, 0.45);
+  background: rgba(255, 193, 7, 0.07);
+}
+html[data-theme="tesla-light"] .page-wrap.tour-v2 .tour-cur-blk .blk-hdr,
+html[data-theme="tesla-dark"] .page-wrap.tour-v2 .tour-cur-blk .blk-hdr {
+  border-bottom-color: rgba(255, 193, 7, 0.25);
+}
+html[data-theme="tesla-light"] .page-wrap.tour-v2 .tour-cur-blk .blk-title,
+html[data-theme="tesla-dark"] .page-wrap.tour-v2 .tour-cur-blk .blk-title {
+  color: var(--text);
+}
+
+html[data-theme="tesla-light"] .tour-breadcrumbs,
+html[data-theme="tesla-dark"] .tour-breadcrumbs {
+  color: var(--text-dim);
+}
+html[data-theme="tesla-light"] .tour-breadcrumbs a,
+html[data-theme="tesla-dark"] .tour-breadcrumbs a {
+  color: var(--text);
+}
+html[data-theme="tesla-light"] .tour-bc-cur,
+html[data-theme="tesla-dark"] .tour-bc-cur {
+  color: var(--text);
+  font-weight: 600;
+}
+html[data-theme="tesla-light"] .chronicle-letter-title,
+html[data-theme="tesla-dark"] .chronicle-letter-title,
+html[data-theme="tesla-light"] .chronicle-letter-text,
+html[data-theme="tesla-dark"] .chronicle-letter-text {
+  color: #9a7b2e;
+}
+html[data-theme="tesla-light"] .chronicle-letter-meta,
+html[data-theme="tesla-dark"] .chronicle-letter-meta {
+  color: #7a6530;
+  opacity: 0.45;
+}
+html[data-theme="tesla-light"] .chronicle-fact,
+html[data-theme="tesla-dark"] .chronicle-fact {
+  border-left-color: color-mix(in srgb, var(--ch-stripe) 45%, transparent);
+}
+
+html[data-theme="tesla-light"] .fx-toggle,
+html[data-theme="tesla-dark"] .fx-toggle {
+  display: none;
+}

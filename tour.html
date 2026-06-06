@@ -22,6 +22,9 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 
 <link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=2">
+<link rel="stylesheet" href="CSS/operator.css?v=2">
+<link rel="stylesheet" href="CSS/home-v2.css?v=14">
+<link rel="stylesheet" href="CSS/tour-v2.css?v=12">
 <link rel="prefetch" href="CSS/tesla-light.css">
 <link rel="prefetch" href="CSS/tesla-dark.css">
 <style>
@@ -32,7 +35,7 @@ body.theme-tesla-light #scroll-top{border-color:#aaa;background:rgba(0,0,0,.08);
 body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255,.1);color:#ccc;}
 </style>
 </head>
-<body>
+<body class="tour-page">
 
 <div class="container">
 
@@ -43,7 +46,17 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
     </button>
     <div class="nav-desktop">
       <a class="nav-link" href="/">ГЛАВНАЯ</a>
-      <a class="nav-link active" href="#">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <div class="nav-dropdown-wrap">
+        <a class="nav-link active" href="/tour.html">ТУРНИРНАЯ ТАБЛИЦА</a>
+        <button class="nav-drop-btn" onclick="toggleDrop(event)" aria-label="Операторы">▾</button>
+        <div class="dropdown-menu" id="dropMenu">
+          <a class="dropdown-item" href="/operators/batteryfly.html"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
+          <a class="dropdown-item" href="/operators/forevo.html"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
+          <a class="dropdown-item" href="/operators/united.html"><span class="d-dot" style="background:#F5821F"></span>United Company</a>
+          <a class="dropdown-item" href="/operators/zaryadka.html"><span class="d-dot" style="background:#00cfff"></span>Zaryadka</a>
+          <a class="dropdown-item" href="/operators/csms.html"><span class="d-dot" style="background:#FF6B6B"></span>ЦСМС</a>
+        </div>
+      </div>
       <a class="nav-link" href="https://evrace.by/stations.html">СТАНЦИИ 2026</a>
       <a class="nav-link" href="https://evrace.by/letters.html">ПИСЬМА</a>
       <a class="nav-link" href="https://evrace.by/map.html">КАРТА</a>
@@ -62,57 +75,105 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
   <!-- МОБИЛЬНОЕ МЕНЮ -->
   <div class="nav-mobile-drop" id="mobileMenu">
     <a class="nav-mobile-link" href="/" onclick="closeBurger()">ГЛАВНАЯ</a>
-    <a class="nav-mobile-link active" href="#" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
+    <div class="mob-nav-row">
+      <a class="nav-mobile-link active" href="/tour.html" onclick="closeBurger()">ТУРНИРНАЯ ТАБЛИЦА</a>
+      <button class="mob-acc-btn open" id="mobAccBtn" onclick="toggleMobAcc()" aria-label="Операторы">▾</button>
+    </div>
+    <div class="mob-acc-list open" id="mobAccList">
+      <a href="/operators/batteryfly.html" onclick="closeBurger()"><span class="d-dot" style="background:#005EEB"></span>BatteryFly</a>
+      <a href="/operators/forevo.html" onclick="closeBurger()"><span class="d-dot" style="background:#b44fff"></span>forEVo</a>
+      <a href="/operators/united.html" onclick="closeBurger()"><span class="d-dot" style="background:#F5821F"></span>United Company</a>
+      <a href="/operators/zaryadka.html" onclick="closeBurger()"><span class="d-dot" style="background:#00cfff"></span>Zaryadka</a>
+      <a href="/operators/csms.html" onclick="closeBurger()"><span class="d-dot" style="background:#FF6B6B"></span>ЦСМС</a>
+    </div>
     <a class="nav-mobile-link" href="https://evrace.by/stations.html" onclick="closeBurger()">СТАНЦИИ 2026</a>
     <a class="nav-mobile-link" href="https://evrace.by/letters.html" onclick="closeBurger()">ПИСЬМА</a>
     <a class="nav-mobile-link" href="https://evrace.by/map.html" onclick="closeBurger()">КАРТА</a>
   </div>
 
-  <div class="page-wrap">
+  <div class="page-wrap tour-v2">
 
-    <!-- HERO -->
-    <div class="hero">
-      <div class="header-subtitle">#ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
-      <div class="hero-title">EV RACE<span class="cursor">_</span></div>
-      <div class="header-year">БЕЛАРУСЬ 2026</div>
+    <nav class="tour-breadcrumbs" aria-label="Навигация">
+      <a href="/">Главная</a><span class="tour-bc-sep">/</span>
+      <span class="tour-bc-cur">Турнирная таблица</span>
+    </nav>
+
+    <div class="blk tour-hero">
+      <div class="tour-hero-tag">[ СЕЗОН 2026 ]</div>
+      <h1 class="tour-hero-title">ТУРНИРНАЯ ТАБЛИЦА</h1>
+      <div class="tour-hero-sub">53 КРУГА · 5 ОПЕРАТОРОВ · ФИНАЛ 31.12.2026</div>
     </div>
 
-    <!-- МЕТА-КАРТОЧКИ -->
-    <div class="meta-row">
-      <div class="meta-card"><div class="meta-label">КРУГ</div><div class="meta-val" id="meta-round">...</div></div>
-      <div class="meta-card"><div class="meta-label">НЕДЕЛЯ</div><div class="meta-val" id="meta-week">...</div></div>
-      <div class="meta-card"><div class="meta-label">ДО ФИНАЛА</div><div class="meta-val" id="meta-days">...</div></div>
-      <div class="meta-card"><div class="meta-label">ФИНАЛ</div><div class="meta-val">31.12.2026</div></div>
+    <div class="blk">
+      <div class="blk-hdr">
+        <span class="blk-title">◈ СЕЗОН</span>
+      </div>
+      <div class="tour-meta-grid">
+        <div class="tour-meta-item"><div class="tour-meta-lbl">КРУГ</div><div class="tour-meta-val" id="meta-round">...</div></div>
+        <div class="tour-meta-item"><div class="tour-meta-lbl">НЕДЕЛЯ</div><div class="tour-meta-val" id="meta-week">...</div></div>
+        <div class="tour-meta-item"><div class="tour-meta-lbl">ДО ФИНАЛА</div><div class="tour-meta-val" id="meta-days">...</div></div>
+        <div class="tour-meta-item"><div class="tour-meta-lbl">ФИНАЛ</div><div class="tour-meta-val">31.12</div></div>
+      </div>
     </div>
 
-    <!-- ТЕКУЩИЙ КРУГ -->
-    <div id="current-round-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+    <div class="blk tour-cur-blk">
+      <div class="blk-hdr">
+        <span class="blk-title">◈ ТЕКУЩИЙ КРУГ</span>
+        <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+      </div>
+      <div class="tour-blk-body" id="current-round-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+    </div>
 
-    <!-- ПРОГНОЗ -->
-    <div class="section-head">▶ ПРОГНОЗ НА ФИНАЛ</div>
-    <div id="forecast-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+    <div class="blk tour-chronicle-blk" id="tour-chronicle-wrap" hidden>
+      <div class="blk-hdr">
+        <span class="blk-title" id="chronicle-hdr">◈ ХРОНИКА КРУГА</span>
+      </div>
+      <div id="chronicle-body"></div>
+    </div>
 
-    <!-- РЕЙТИНГИ -->
-    <div class="section-head">▶ КТО СТАВИТ БОЛЬШЕ СТАНЦИЙ <span class="section-sub">· очки за круг по количеству</span></div>
-    <div class="standings-wrap" id="standings-stations-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+    <div class="blk">
+      <div class="blk-hdr">
+        <span class="blk-title">◈ ПРОГНОЗ НА ФИНАЛ</span>
+      </div>
+      <div id="forecast-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+    </div>
 
-    <div class="section-head">▶ КТО СТАВИТ БОЛЬШЕ МОЩНОСТИ <span class="section-sub">· очки за круг по кВт</span></div>
-    <div class="standings-wrap" id="standings-power-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+    <div class="blk">
+      <div class="blk-hdr">
+        <span class="blk-title">◈ РЕЙТИНГ ПО СТАНЦИЯМ</span>
+        <span class="tour-hdr-sub">очки за круг · 5-4-3-2-1</span>
+      </div>
+      <div class="standings-wrap" id="standings-stations-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+    </div>
 
-    <!-- ИСТОРИЯ -->
-    <div class="section-head">▶ ИСТОРИЯ КРУГОВ</div>
-    <div id="history-wrap"></div>
+    <div class="blk">
+      <div class="blk-hdr">
+        <span class="blk-title">◈ РЕЙТИНГ ПО МОЩНОСТИ</span>
+        <span class="tour-hdr-sub">очки за круг · кВт</span>
+      </div>
+      <div class="standings-wrap" id="standings-power-wrap"><div class="loading">ЗАГРУЗКА...</div></div>
+    </div>
 
-    <!-- СЕТКА СЕЗОНА -->
-    <div class="section-head">▶ ПОБЕДИТЕЛИ КРУГОВ</div>
-    <div class="rounds-legend"><span class="lg-item"><b>★</b> победа по станциям</span><span class="lg-sep">·</span><span class="lg-item"><b>⚡</b> победа по мощности</span></div>
-    <div id="rounds-grid"></div>
+    <div class="blk">
+      <div class="blk-hdr">
+        <span class="blk-title">◈ ИСТОРИЯ КРУГОВ</span>
+      </div>
+      <div id="history-wrap"></div>
+    </div>
 
-    <div style="height:20px"></div>
+    <div class="blk">
+      <div class="blk-hdr">
+        <span class="blk-title">◈ КАРТОЧКИ ИТОГОВ</span>
+      </div>
+      <div class="rounds-legend"><span class="lg-item"><b>★</b> победа по станциям</span><span class="lg-sep">·</span><span class="lg-item"><b>⚡</b> победа по мощности</span></div>
+      <div id="rounds-grid"></div>
+    </div>
 
-    <!-- ПРАВИЛА -->
-    <div class="rules-title">▼ ПРАВИЛА ТУРНИРА ▼</div>
-    <div class="rules-section">
+    <div class="blk">
+      <div class="blk-hdr">
+        <span class="blk-title">◈ ПРАВИЛА ТУРНИРА</span>
+      </div>
+      <div class="rules-section">
       <div class="rule-block">
         <div class="rule-h">► ФОРМАТ</div>
         <div class="rule-t">Сезон 2026 — это <span>53 круга</span>. Один круг = одна неделя (<span>суббота – пятница</span>). Круг 1: 1–2 января (укороченный). Финал: <span>31 декабря 2026</span>.</div>
@@ -148,6 +209,7 @@ body.theme-tesla-dark  #scroll-top{border-color:#444;background:rgba(255,255,255
         <div class="rule-h">► ДАННЫЕ</div>
         <div class="rule-t">Все данные публикуются редакцией проекта на основе открытых источников и официальных заявлений операторов. Время фиксируется по моменту публикации информации о запуске станции в официальных каналах оператора.</div>
       </div>
+    </div>
     </div>
 
     <!-- BIG PHRASE -->
@@ -254,12 +316,22 @@ function closeBurger(){
   document.getElementById('mobileMenu').classList.remove('open');
   document.getElementById('burgerBtn').classList.remove('open');
 }
+function toggleDrop(e){
+  e.preventDefault();e.stopPropagation();
+  document.getElementById('dropMenu').classList.toggle('open');
+}
+function toggleMobAcc(){
+  document.getElementById('mobAccBtn').classList.toggle('open');
+  document.getElementById('mobAccList').classList.toggle('open');
+}
 document.addEventListener('click',function(e){
   const menu=document.getElementById('mobileMenu');
   const btn=document.getElementById('burgerBtn');
   if(menu&&menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target)){
     menu.classList.remove('open');btn.classList.remove('open');
   }
+  const dm=document.getElementById('dropMenu');
+  if(dm&&dm.classList.contains('open')&&!dm.closest('.nav-dropdown-wrap').contains(e.target)) dm.classList.remove('open');
 });
 
 function getRoundForDate(dateStr){
@@ -291,7 +363,21 @@ function fmtDateLong(ds){
 }
 function daysToFinal(){return Math.max(0,Math.ceil((FINAL-new Date())/86400000));}
 
+const MS_SHORT=['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'];
+function fmtRoundRange(startStr,endStr,rn){
+  if(startStr&&endStr){
+    const s=new Date(startStr+'T12:00:00'),e=new Date(endStr+'T12:00:00');
+    const sm=MS_SHORT[s.getMonth()],em=MS_SHORT[e.getMonth()];
+    return sm===em?`${s.getDate()}–${e.getDate()} ${sm}`:`${s.getDate()} ${sm} – ${e.getDate()} ${em}`;
+  }
+  return getRoundDates(rn).label;
+}
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 const STATIONS_CACHE_KEY='ev_race_stations_cache_v2';
+const CHRONICLE_CACHE_KEY='ev_race_tour_chronicle_v1';
 const STATIONS_CACHE_TTL=90*1000;
 async function fetchStations(){
   try{
@@ -306,6 +392,65 @@ async function fetchStations(){
   const data=await r.json();
   if(Array.isArray(data)){try{localStorage.setItem(STATIONS_CACHE_KEY,JSON.stringify({t:Date.now(),d:data}));}catch(e){}}
   return data;
+}
+async function sbFetch(path){
+  const r=await fetch(SURL+path,{headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}});
+  if(!r.ok)throw new Error('fetch '+path);
+  return r.json();
+}
+async function fetchDisplayChronicle(){
+  try{
+    const raw=localStorage.getItem(CHRONICLE_CACHE_KEY);
+    if(raw){
+      const o=JSON.parse(raw);
+      if(o&&o.t&&(Date.now()-o.t)<STATIONS_CACHE_TTL)return o.d;
+    }
+  }catch(e){}
+  const letters=await sbFetch('/rest/v1/weekly_letters?is_published=eq.true&select=round_number,round_start_date,round_end_date,final_text,selected_text&order=round_number.desc&limit=1');
+  if(!Array.isArray(letters)||!letters.length)return null;
+  const letter=letters[0];
+  const winners=await sbFetch('/rest/v1/round_winners?round_number=eq.'+letter.round_number+'&select=operator,stations_count,achievement_line');
+  const winner=Array.isArray(winners)&&winners.length?winners[0]:null;
+  const payload={letter,winner};
+  try{localStorage.setItem(CHRONICLE_CACHE_KEY,JSON.stringify({t:Date.now(),d:payload}));}catch(e){}
+  return payload;
+}
+function chronicleStationsHtml(n){
+  return `<div class="chronicle-stations"><span class="chronicle-stations-num">${n}</span><span class="chronicle-stations-unit">СТАНЦИЙ</span></div>`;
+}
+function chronicleFactHtml(winner){
+  const c=opColor(winner.operator);
+  return `<div class="chronicle-fact" style="--ch-accent:${c}"><div class="chronicle-fact-label">ПОБЕДИТЕЛЬ</div>${chronicleStationsHtml(winner.stations_count)}<div class="chronicle-op" style="color:${c}">${opName(winner.operator)}</div><div class="chronicle-achievement">${escHtml(winner.achievement_line)}</div></div>`;
+}
+function chronicleMeaningHtml(rn,dates,text){
+  return `<div class="chronicle-meaning"><div class="chronicle-letter-head"><div class="chronicle-letter-title">ПИСЬМО НЕДЕЛИ</div><div class="chronicle-letter-meta">КРУГ #${rn} · ${dates}</div></div><div class="chronicle-letter-text">${escHtml(text)}</div></div>`;
+}
+function chronicleGridHtml(winner,rn,dates,text){
+  const solo=!winner;
+  const fact=winner?chronicleFactHtml(winner):'';
+  return `<div class="chronicle-grid${solo?' chronicle-grid--solo':''}">${fact}${chronicleMeaningHtml(rn,dates,text)}</div>`;
+}
+function renderChronicle(chronicle){
+  const wrap=document.getElementById('tour-chronicle-wrap');
+  const body=document.getElementById('chronicle-body');
+  const hdr=document.getElementById('chronicle-hdr');
+  if(!chronicle||!chronicle.letter){
+    wrap.hidden=true;
+    body.innerHTML='';
+    return;
+  }
+  const{letter,winner}=chronicle;
+  const rn=letter.round_number;
+  const dates=fmtRoundRange(letter.round_start_date,letter.round_end_date,rn);
+  const text=letter.final_text||letter.selected_text;
+  if(!text){
+    wrap.hidden=true;
+    body.innerHTML='';
+    return;
+  }
+  wrap.hidden=false;
+  hdr.textContent='◈ ХРОНИКА КРУГА #'+rn;
+  body.innerHTML=chronicleGridHtml(winner,rn,dates,text);
 }
 function processData(stations){
   const byRound={};
@@ -513,26 +658,29 @@ function renderRoundsGrid(data){
     const cls=isAct?'active':'';
     const res=roundResults[i];
     let wH='';
+    let accent='';
     if(isAct){
-      // Live-лидер текущего круга: кто сейчас впереди по станциям
       const cur=byRound[i]||{};
       const sortedCur=Object.entries(cur).sort((a,b)=>b[1].stations-a[1].stations);
       const leader=sortedCur[0];
       if(leader && leader[1].stations>0){
-        wH=`<div class="r-win r-live">★ <span style="color:${opColor(leader[0])}">${opName(leader[0])}</span> ${leader[1].stations} ст.</div><div class="r-win r-idet">ИДЁТ</div>`;
+        accent=opColor(leader[0]);
+        wH=`<div class="r-win r-live">★ <span style="color:${accent}">${opName(leader[0])}</span> ${leader[1].stations} ст.</div><div class="r-win r-idet">ИДЁТ</div>`;
       } else {
         wH=`<div class="r-win" style="color:var(--text-dim)">никто не ставил</div><div class="r-win r-idet">ИДЁТ</div>`;
       }
     } else if(isPast&&res){
       const winSt=res.byStations&&res.byStations[0];
       const winPw=res.byPower&&res.byPower[0];
+      if(winSt && winSt.stations>0) accent=opColor(winSt.op);
       const stLine=(winSt && winSt.stations>0)?`<div class="r-win">★ <span style="color:${opColor(winSt.op)}">${opName(winSt.op)}</span> ${winSt.stations} ст.</div>`:'<div class="r-win r-empty">— никто не поставил</div>';
       const pwLine=winPw&&winPw.power>0?`<div class="r-win">⚡ <span style="color:${opColor(winPw.op)}">${opName(winPw.op)}</span> ${winPw.power} кВт</div>`:'';
       wH=stLine+pwLine;
     } else {
       wH='<div class="r-win r-empty">—</div>';
     }
-    html+=`<div class="round-cell ${cls}"><div class="r-num">КРУГ ${String(i).padStart(2,'0')}</div>${wH}<div class="r-date">${d.label}</div></div>`;
+    const accentStyle=accent?` style="--rc-accent:${accent}"`:'';
+    html+=`<div class="round-cell round-card ${cls}"${accentStyle}><div class="r-num">КРУГ ${String(i).padStart(2,'0')}</div>${wH}<div class="r-date">${d.label}</div></div>`;
   }
   const gridWrap=document.createElement('div');
   gridWrap.className='rounds-grid-wrap';
@@ -588,7 +736,7 @@ function renderForecast(data){
 function renderHistory(data){
   const{roundResults,curRound}=data;
   const comp=Object.keys(roundResults).map(Number).filter(r=>r<curRound).sort((a,b)=>b-a);
-  if(!comp.length){document.getElementById('history-wrap').innerHTML='<div class="loading" style="color:#333">ЗАВЕРШЁННЫХ КРУГОВ ЕЩЁ НЕТ</div>';return;}
+  if(!comp.length){document.getElementById('history-wrap').innerHTML='<div class="loading">ЗАВЕРШЁННЫХ КРУГОВ ЕЩЁ НЕТ</div>';return;}
   const SHOW=5;
   let html='';
   comp.forEach(rn=>{
@@ -630,11 +778,14 @@ async function trackVisit(){
 }
 async function init(){
   const curRound=getCurrentRound();renderMeta(curRound);
+  const chronicleP=fetchDisplayChronicle().catch(()=>null);
   try{
-    const stations=await fetchStations();if(!Array.isArray(stations))throw new Error('No data');
+    const [stations,chronicle]=await Promise.all([fetchStations(),chronicleP]);
+    if(!Array.isArray(stations))throw new Error('No data');
     const data=processData(stations);
-    renderCurrentRound(data);renderStandings(data);renderForecast(data);renderRoundsGrid(data);renderHistory(data);
+    renderCurrentRound(data);renderChronicle(chronicle);renderStandings(data);renderForecast(data);renderRoundsGrid(data);renderHistory(data);
   }catch(e){
+    renderChronicle(await chronicleP.catch(()=>null));
     console.log('Error:',e);
     document.getElementById('current-round-wrap').innerHTML='<div class="loading" style="color:#333">ОШИБКА ЗАГРУЗКИ</div>';
     document.getElementById('standings-stations-wrap').innerHTML='<div class="loading" style="color:#333">ОШИБКА ЗАГРУЗКИ</div>';
