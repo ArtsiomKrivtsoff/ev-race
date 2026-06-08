@@ -175,7 +175,7 @@
   function updateHeroRating(avg, count) {
     document.querySelectorAll(".loc-rating-val").forEach(function (el) {
       if (avg != null && count > 0) {
-        el.textContent = Number(avg).toFixed(1).replace(".", ",");
+        el.textContent = Number(avg).toFixed(1);
       }
     });
     document.querySelectorAll(".loc-rating-count").forEach(function (el) {

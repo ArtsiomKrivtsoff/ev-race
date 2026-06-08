@@ -149,6 +149,12 @@ function renderReviewCta(className, label = "ОЦЕНИТЬ ЛОКАЦИЮ", sty
   return `<a class="${btnCls} loc-review-cta${extra}" href="#review-form">${escapeHtml(label)}</a>`;
 }
 
+function formatRatingDisplay(rating) {
+  const n = Number(rating);
+  if (!Number.isFinite(n)) return "0.0";
+  return n.toFixed(1);
+}
+
 function starsHtml(rating) {
   const r = Math.max(0, Math.min(5, Number(rating) || 0));
   const full = Math.floor(r);
@@ -241,7 +247,7 @@ ${cta}`;
       ? `<div class="loc-rating-cta">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</div>`
       : "";
     inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
-<span class="loc-rating-val">${escapeHtml(String(loc.cached_avg_rating))}</span>
+<span class="loc-rating-val">${escapeHtml(formatRatingDisplay(loc.cached_avg_rating))}</span>
 <span class="loc-rating-stars" aria-hidden="true">${starsHtml(loc.cached_avg_rating)}</span>
 ${renderRatingMeta(loc, community)}
 ${cta}`;
@@ -533,7 +539,7 @@ export function renderNearby(nearby) {
       const href = `/${escapeHtml(n.operator_slug)}/${escapeHtml(n.slug)}`;
       const rating =
         n.cached_review_count > 0 && n.cached_avg_rating
-          ? `<span class="loc-nearby-rating">★ ${escapeHtml(String(n.cached_avg_rating))}</span>`
+          ? `<span class="loc-nearby-rating">★ ${escapeHtml(formatRatingDisplay(n.cached_avg_rating))}</span>`
           : "";
       const dist = `<span class="loc-nearby-dist">${escapeHtml(String(n.distance_km))} км</span>`;
       const subLine = sub
