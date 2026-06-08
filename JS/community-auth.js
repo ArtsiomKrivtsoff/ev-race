@@ -137,7 +137,7 @@
         '<p class="loc-form-tg-intro">Войти через Telegram</p>' +
         '<p class="loc-form-tg-why">Так мы знаем, что ты живой человек, а не бот с пятой звездой.</p>' +
         '<div id="tg-login-mount" class="loc-tg-widget"></div>' +
-        '<p class="loc-privacy-note">🔒 Telegram нужен только чтобы отличить тебя от ботов. Имя в БД не храним — только анонимный hash.</p>' +
+        '<p class="loc-privacy-note">🔒 Telegram нужен только чтобы отличить тебя от ботов. Username и фото в БД не храним — только анонимный hash.</p>' +
         '<p class="loc-form-meta">Быстро · Честно · Одна оценка на локацию</p>';
       mountTelegramWidget(document.getElementById("tg-login-mount"));
     },

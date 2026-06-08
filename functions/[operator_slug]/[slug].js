@@ -196,8 +196,8 @@ ${renderSiteFooter()}
 <p class="loc-lightbox-counter"></p>
 </div>
 </div>
-<script src="/JS/community-auth.js?v=1"></script>
-<script src="/JS/review-form.js?v=1"></script>
+<script src="/JS/community-auth.js?v=2"></script>
+<script src="/JS/review-form.js?v=2"></script>
 <script src="/JS/location-page.js?v=11"></script>
 <script src="/JS/route-nav.js?v=2"></script>
 ${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=3"></script>' : ""}

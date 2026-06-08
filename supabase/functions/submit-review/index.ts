@@ -136,9 +136,7 @@ Deno.serve(async (req) => {
     return json({ error: "location_not_found" }, 404);
   }
 
-  const authorDisplay = body.author_display != null
-    ? String(body.author_display).slice(0, 64)
-    : "Водитель EV RACE";
+  const authorDisplay = "Водитель EV RACE";
 
   const { data: existing } = await supabase
     .from("reviews")

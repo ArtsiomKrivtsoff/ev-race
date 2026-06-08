@@ -83,12 +83,8 @@
 
     var data = pageData();
     var tags = data.form_tags || [];
-    var name = auth.displayName(session);
-
     root.innerHTML =
-      '<div class="loc-logged-in-bar"><span class="loc-logged-in-name">Привет, ' +
-      escapeHtml(name) +
-      '</span><button type="button" class="loc-logout-btn" type="button">Выйти</button></div>' +
+      '<div class="loc-logged-in-bar"><span class="loc-logged-in-name">Вы вошли</span><button type="button" class="loc-logout-btn" type="button">Выйти</button></div>' +
       renderStarsInput() +
       renderTagsInput(tags) +
       '<label class="loc-comment-field"><span class="loc-field-label">Расскажи, если есть что добавить</span>' +
@@ -232,7 +228,6 @@
           comment: comment,
           visit_date: visitDate,
           turnstile_token: token,
-          author_display: auth.displayName(session),
         }),
       });
 
