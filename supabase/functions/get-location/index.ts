@@ -1,15 +1,18 @@
 /**
- * get-location — Infrastructure Platform aggregate (Stage 2.1)
+ * get-location — Infrastructure Platform aggregate (Stage 3.0)
  * GET /functions/v1/get-location?operator_slug={slug}&slug={slug}
  *
- * Structured JSON only. No reviews/auth/R2/race layer.
+ * Returns location + stations + nearby + community (reviews, photos, tags).
  * HTML escaping happens in Pages Function renderer — not here.
  */
 
 import { createClient } from "npm:@supabase/supabase-js@2.49.1";
 
 const NEARBY_LIMIT = 8;
+const REVIEWS_LIMIT = 20;
+const PHOTOS_LIMIT = 12;
 const SITE_ORIGIN = "https://evrace.by";
+const DEFAULT_PHOTOS_CDN = "https://photos.evrace.by";
 
 const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
@@ -29,6 +32,7 @@ type LocationRow = {
   slug: string;
   cached_avg_rating: number | null;
   cached_review_count: number | null;
+  cached_photo_count: number | null;
 };
 
 type StationRow = {
@@ -348,6 +352,243 @@ function pickPrimaryAggregator(stations: StationDto[]): string | null {
   return null;
 }
 
+type ReviewRow = {
+  id: number;
+  rating: number;
+  comment: string | null;
+  author_display: string | null;
+  visit_date: string | null;
+  helpful_count: number;
+  created_at: string;
+};
+
+type TagRow = {
+  key: string;
+  label_ru: string;
+  polarity: string;
+};
+
+type PhotoRow = {
+  id: number;
+  comment: string | null;
+  r2_key_main: string;
+  r2_key_thumb: string;
+  created_at: string;
+};
+
+type ReviewTagJoin = {
+  review_id: number;
+  tag_id: number;
+  tags: TagRow | TagRow[] | null;
+};
+
+type CommunityReviewDto = {
+  id: number;
+  rating: number;
+  comment: string;
+  author: string;
+  time_ago: string;
+  visit_date: string | null;
+  helpful_count: number;
+  tags: { key: string; label: string; polarity: string }[];
+};
+
+type CommunityPhotoDto = {
+  id: number;
+  thumb_url: string;
+  main_url: string;
+  comment: string;
+  author: string;
+  time_ago: string;
+};
+
+type CommunityTagDto = {
+  key: string;
+  label: string;
+  count: number;
+  polarity: "positive" | "negative";
+};
+
+function photosCdnBase(): string {
+  const base = Deno.env.get("PHOTOS_CDN_BASE") || DEFAULT_PHOTOS_CDN;
+  return base.replace(/\/+$/, "");
+}
+
+function photoPublicUrl(key: string): string {
+  return `${photosCdnBase()}/${key.replace(/^\//, "")}`;
+}
+
+function formatTimeAgoRu(iso: string): string {
+  const then = new Date(iso).getTime();
+  const diffSec = Math.max(0, Math.floor((Date.now() - then) / 1000));
+  if (diffSec < 60) return "только что";
+  const mins = Math.floor(diffSec / 60);
+  if (mins < 60) return `${mins} мин назад`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours} ч назад`;
+  const days = Math.floor(hours / 24);
+  if (days === 1) return "вчера";
+  if (days < 7) return `${days} дн назад`;
+  const weeks = Math.floor(days / 7);
+  if (weeks < 5) return `${weeks} нед назад`;
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "numeric",
+    month: "short",
+  }).format(new Date(iso));
+}
+
+async function fetchCommunity(
+  supabase: ReturnType<typeof createClient>,
+  locationId: number,
+  cachedReviewCount: number,
+  cachedPhotoCount: number,
+): Promise<{
+  reviews: CommunityReviewDto[];
+  photos: CommunityPhotoDto[];
+  tags: CommunityTagDto[];
+  form_tags: { id: number; key: string; label: string; polarity: string }[];
+  review_count: number;
+  photo_count: number;
+}> {
+  const empty = {
+    reviews: [] as CommunityReviewDto[],
+    photos: [] as CommunityPhotoDto[],
+    tags: [] as CommunityTagDto[],
+    form_tags: [] as { id: number; key: string; label: string; polarity: string }[],
+    review_count: cachedReviewCount,
+    photo_count: cachedPhotoCount,
+  };
+
+  const { data: reviewRows, error: revErr } = await supabase
+    .from("reviews")
+    .select(
+      "id, rating, comment, author_display, visit_date, helpful_count, created_at",
+    )
+    .eq("location_id", locationId)
+    .is("deleted_at", null)
+    .eq("moderation_status", "published")
+    .order("created_at", { ascending: false })
+    .limit(REVIEWS_LIMIT);
+
+  if (revErr) {
+    console.error("reviews query:", revErr.message);
+    empty.form_tags = await fetchFormTags(supabase);
+    return empty;
+  }
+
+  const reviewsRaw = (reviewRows || []) as ReviewRow[];
+  const reviewIds = reviewsRaw.map((r) => r.id);
+
+  const tagsByReview = new Map<number, { key: string; label: string; polarity: string }[]>();
+
+  if (reviewIds.length) {
+    const { data: rtRows, error: rtErr } = await supabase
+      .from("review_tags")
+      .select("review_id, tag_id, tags(key, label_ru, polarity)")
+      .in("review_id", reviewIds);
+
+    if (rtErr) {
+      console.error("review_tags query:", rtErr.message);
+    } else {
+      for (const row of (rtRows || []) as ReviewTagJoin[]) {
+        const tag = Array.isArray(row.tags) ? row.tags[0] : row.tags;
+        if (!tag) continue;
+        const list = tagsByReview.get(row.review_id) || [];
+        list.push({
+          key: tag.key,
+          label: tag.label_ru,
+          polarity: tag.polarity,
+        });
+        tagsByReview.set(row.review_id, list);
+      }
+    }
+  }
+
+  const tagAgg = new Map<string, CommunityTagDto>();
+  for (const tags of tagsByReview.values()) {
+    for (const t of tags) {
+      const prev = tagAgg.get(t.key);
+      if (prev) prev.count += 1;
+      else {
+        tagAgg.set(t.key, {
+          key: t.key,
+          label: t.label,
+          count: 1,
+          polarity: t.polarity === "negative" ? "negative" : "positive",
+        });
+      }
+    }
+  }
+
+  const reviews: CommunityReviewDto[] = reviewsRaw.map((r) => ({
+    id: r.id,
+    rating: r.rating,
+    comment: r.comment || "",
+    author: r.author_display || "Водитель EV RACE",
+    time_ago: formatTimeAgoRu(r.created_at),
+    visit_date: r.visit_date,
+    helpful_count: r.helpful_count ?? 0,
+    tags: tagsByReview.get(r.id) || [],
+  }));
+
+  const { data: photoRows, error: photoErr } = await supabase
+    .from("photos")
+    .select("id, comment, r2_key_main, r2_key_thumb, created_at")
+    .eq("location_id", locationId)
+    .is("deleted_at", null)
+    .eq("moderation_status", "approved")
+    .order("created_at", { ascending: false })
+    .limit(PHOTOS_LIMIT);
+
+  if (photoErr) {
+    console.error("photos query:", photoErr.message);
+  }
+
+  const photos: CommunityPhotoDto[] = ((photoRows || []) as PhotoRow[]).map(
+    (p) => ({
+      id: p.id,
+      thumb_url: photoPublicUrl(p.r2_key_thumb),
+      main_url: photoPublicUrl(p.r2_key_main),
+      comment: p.comment || "",
+      author: "Водитель EV RACE",
+      time_ago: formatTimeAgoRu(p.created_at),
+    }),
+  );
+
+  const tags = [...tagAgg.values()].sort((a, b) => b.count - a.count);
+
+  return {
+    reviews,
+    photos,
+    tags,
+    form_tags: await fetchFormTags(supabase),
+    review_count: cachedReviewCount,
+    photo_count: cachedPhotoCount,
+  };
+}
+
+async function fetchFormTags(
+  supabase: ReturnType<typeof createClient>,
+): Promise<{ id: number; key: string; label: string; polarity: string }[]> {
+  const { data, error } = await supabase
+    .from("tags")
+    .select("id, key, label_ru, polarity, sort_order")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  if (error) {
+    console.error("form tags:", error.message);
+    return [];
+  }
+
+  return (data || []).map((t) => ({
+    id: t.id,
+    key: t.key,
+    label: t.label_ru,
+    polarity: t.polarity,
+  }));
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -386,7 +627,7 @@ Deno.serve(async (req) => {
   const { data: locRow, error: locError } = await supabase
     .from("locations")
     .select(
-      "id, operator, operator_slug, city, address, location_name, lat, lng, slug, cached_avg_rating, cached_review_count",
+      "id, operator, operator_slug, city, address, location_name, lat, lng, slug, cached_avg_rating, cached_review_count, cached_photo_count",
     )
     .eq("operator_slug", operatorSlug)
     .eq("slug", slug)
@@ -491,6 +732,15 @@ Deno.serve(async (req) => {
 
   const seo = buildSeoMeta(location, stations);
 
+  const reviewCount = location.cached_review_count ?? 0;
+  const photoCount = location.cached_photo_count ?? 0;
+  const community = await fetchCommunity(
+    supabase,
+    location.id,
+    reviewCount,
+    photoCount,
+  );
+
   const response = {
     location: {
       id: location.id,
@@ -503,18 +753,13 @@ Deno.serve(async (req) => {
       lng: originLng,
       slug: canonicalPathSlug,
       cached_avg_rating: parseNum(location.cached_avg_rating),
-      cached_review_count: location.cached_review_count ?? 0,
+      cached_review_count: reviewCount,
+      cached_photo_count: photoCount,
       aggregator: pickPrimaryAggregator(stations),
     },
     stations,
     nearby,
-    community: {
-      reviews: [],
-      photos: [],
-      tags: [],
-      review_count: location.cached_review_count ?? 0,
-      photo_count: 0,
-    },
+    community,
     meta: {
       canonical_url,
       page_title: seo.page_title,

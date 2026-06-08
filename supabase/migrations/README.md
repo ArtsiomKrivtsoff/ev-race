@@ -74,6 +74,36 @@ See `SMOKE_CHECKLIST.md`.
 
 ---
 
+## Stage 3.0 Foundation (UGC schema)
+
+Apply **after** Stage 1 migrations (001–005).
+
+| Step | File |
+|------|------|
+| 6 | `006_stage3_users.sql` |
+| 7 | `007_stage3_tags.sql` |
+| 8 | `008_stage3_reviews.sql` |
+| 9 | `009_stage3_photos.sql` |
+| 10 | `010_stage3_user_activity.sql` |
+| 11 | `011_stage3_triggers.sql` |
+
+Post-check: `post_validation_stage3.sql` (tags=8, no `is_visible`, `view_count` columns).
+
+Edge Functions:
+
+- `telegram-auth` — POST, validates TG Login → `user_hash`
+- `get-location` — extended `community` read path
+
+Secrets (Supabase Dashboard → Edge Functions):
+
+- `TELEGRAM_BOT_TOKEN`
+- `USER_HASH_SALT` (random string, never commit)
+- `PHOTOS_CDN_BASE` (optional)
+
+Docs: [`STAGE-3-ARCHITECTURE.md`](../docs/STAGE-3-ARCHITECTURE.md), [`STAGE-3-COPYWRITING.md`](../docs/STAGE-3-COPYWRITING.md) (**FROZEN**), [`STAGE-3-PHASE-3.0-SIGNOFF.md`](../docs/STAGE-3-PHASE-3.0-SIGNOFF.md) (apply/deploy + contracts).
+
+---
+
 ## Canonical identity
 
 ```

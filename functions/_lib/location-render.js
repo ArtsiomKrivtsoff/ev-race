@@ -445,15 +445,10 @@ ${renderReviewCta("loc-review-cta--block")}
 
 export function renderReviewFormBlock() {
   return `<div class="blk loc-review-form-blk loc-grid-side" id="review-form">
-<div class="blk-hdr"><span class="blk-title">ОЦЕНИТЬ ЛОКАЦИЮ</span></div>
-<div class="loc-review-form-body">
-<p class="loc-form-sub"><span aria-hidden="true">🔒</span> Войдите через Telegram</p>
-<button type="button" class="loc-btn loc-btn-tg" disabled title="Скоро">ВОЙТИ ЧЕРЕЗ TELEGRAM</button>
-<p class="loc-privacy-note">Не храним и не запрашиваем персональные данные. Telegram — только анонимный hash для одного отзыва на локацию.</p>
-<p class="loc-form-meta">Быстро · Безопасно · Анонимно</p>
-<div class="loc-form-or">или</div>
-${renderReviewCta("loc-review-cta--block")}
-</div>
+<div class="blk-hdr"><span class="blk-title">ОЦЕНИ ЭТУ СТАНЦИЮ</span></div>
+<p class="loc-form-lead">Что скажешь о станции?</p>
+<p class="loc-form-sub-lead">Помоги другим электромобилистам — пару тапов, без простыней текста.</p>
+<div id="review-form-root" class="loc-review-form-body" aria-live="polite"></div>
 </div>`;
 }
 

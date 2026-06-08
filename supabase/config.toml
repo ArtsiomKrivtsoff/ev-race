@@ -3,3 +3,21 @@
 
 [functions.get-location]
 verify_jwt = false
+
+[functions.telegram-auth]
+verify_jwt = false
+
+[functions.submit-review]
+verify_jwt = false
+
+[functions.generate-weekly-letter]
+verify_jwt = false
+
+[functions.backfill-weekly-letters]
+verify_jwt = false
+
+[functions.backfill-round-winners]
+verify_jwt = false
+
+[functions.approve-weekly-letter]
+verify_jwt = false

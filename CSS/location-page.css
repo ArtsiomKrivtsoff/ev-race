@@ -865,6 +865,152 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
   color: var(--home-text-dim, var(--text-dim));
   text-transform: uppercase;
 }
+.loc-form-lead {
+  margin: 0;
+  padding: 0 var(--loc-pad);
+  font-size: 13px;
+  font-weight: 600;
+}
+.loc-form-sub-lead {
+  margin: 0;
+  padding: 0 var(--loc-pad);
+  font-size: 11px;
+  color: var(--home-text-dim, var(--text-dim));
+}
+.loc-form-tg-intro {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--home-text-mid, var(--text-dim));
+}
+.loc-form-tg-why {
+  margin: 0;
+  font-size: 11px;
+  color: var(--home-text-dim, var(--text-dim));
+}
+.loc-tg-widget {
+  min-height: 44px;
+}
+.loc-logged-in-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.loc-logged-in-name {
+  font-size: 12px;
+}
+.loc-logout-btn {
+  background: none;
+  border: none;
+  color: var(--home-text-dim, var(--text-dim));
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.loc-field-label {
+  display: block;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+.loc-field-hint {
+  margin: 0 0 8px;
+  font-size: 10px;
+  color: var(--home-text-dim, var(--text-dim));
+}
+.loc-req { color: var(--amber, #f5a623); }
+.loc-star-input {
+  display: flex;
+  gap: 4px;
+}
+.loc-star-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--home-text-dim, var(--text-dim));
+  padding: 0;
+}
+.loc-star-btn.is-on {
+  color: var(--amber, #f5a623);
+}
+.loc-tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.loc-tag-chip {
+  border: 1px solid var(--home-bdr, var(--border));
+  background: transparent;
+  color: inherit;
+  font-size: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.loc-tag-chip.is-on.positive {
+  border-color: #00ff41;
+  color: #00ff41;
+}
+.loc-tag-chip.is-on.negative {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+.loc-comment-input,
+.loc-visit-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--home-bg, var(--bg));
+  border: 1px solid var(--home-bdr, var(--border));
+  color: inherit;
+  font: inherit;
+  padding: 8px;
+}
+.loc-char-count {
+  display: block;
+  text-align: right;
+  font-size: 10px;
+  color: var(--home-text-dim, var(--text-dim));
+}
+.loc-turnstile-wrap {
+  min-height: 65px;
+}
+.loc-submit-review {
+  width: 100%;
+}
+.loc-form-success-title {
+  margin: 0 0 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #00ff41;
+}
+.loc-form-success-body {
+  margin: 0 0 12px;
+  font-size: 12px;
+}
+.loc-form-success-photo {
+  margin: 0 0 12px;
+  font-size: 11px;
+  color: var(--home-text-dim, var(--text-dim));
+}
+.loc-form-done-btn {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: var(--home-text-dim, var(--text-dim));
+  cursor: pointer;
+  font-size: 11px;
+  text-decoration: underline;
+}
+.loc-form-error,
+.loc-form-loading {
+  margin: 0;
+  font-size: 12px;
+  color: var(--home-text-dim, var(--text-dim));
+}
 
 /* ── Reviews ── */
 .loc-reviews-list {
