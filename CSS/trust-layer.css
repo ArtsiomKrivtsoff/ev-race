@@ -1,254 +1,211 @@
-/* EVrace Trust Layer v1 — calm document layout, separate from race UI */
+/* Trust Layer — content styles inside shared site shell (.page-wrap) */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+.page-wrap .trust-page-blk {
+  margin-bottom: var(--s-4, 16px);
 }
 
-html {
-  overflow-x: hidden;
-}
-
-body.trust-page {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background: #f4f5f7;
-  color: #1a1f26;
-  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-}
-
-.trust-wrap {
+.page-wrap .trust-page-in {
   max-width: 720px;
   margin: 0 auto;
-  padding: 24px 20px 48px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.trust-site-hdr {
-  margin-bottom: 32px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #d8dde3;
-}
-
-.trust-site-logo {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: #2c3440;
-  text-decoration: none;
-}
-
-.trust-site-logo:hover {
-  color: #0d6efd;
-}
-
-.trust-main {
-  flex: 1;
 }
 
 /* ── Trust navigation ── */
-.trust-nav {
-  margin-bottom: 28px;
-  padding: 14px 16px;
-  background: #fff;
-  border: 1px solid #d8dde3;
-  border-radius: 6px;
+.page-wrap .trust-nav {
+  margin-bottom: var(--s-4, 16px);
+  padding: var(--s-3, 12px) var(--s-3, 12px);
+  border: 1px solid var(--home-bdr, var(--border-dim, #1c2e1c));
+  background: var(--home-card, var(--card, #090e09));
 }
 
-.trust-nav-label {
+.page-wrap .trust-nav-label {
   display: block;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: var(--ls-tight, 0.08em);
   text-transform: uppercase;
-  color: #5c6773;
-  margin-bottom: 10px;
+  color: var(--home-text-dim, var(--text-dim));
+  margin-bottom: var(--s-2, 8px);
 }
 
-.trust-nav-items {
+.page-wrap .trust-nav-items {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  gap: 8px 14px;
 }
 
-.trust-nav-item {
-  font-size: 14px;
-  color: #0d6efd;
+.page-wrap .trust-nav-item {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px;
+  letter-spacing: var(--ls-tight, 0.06em);
+  color: var(--green-dim, #00cc33);
   text-decoration: none;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
-.trust-nav-item:hover {
+.page-wrap .trust-nav-item:hover {
+  color: var(--green, #00ff41);
   text-decoration: underline;
 }
 
-.trust-nav-item--current {
-  color: #1a1f26;
-  font-weight: 600;
+.page-wrap .trust-nav-item--current {
+  color: var(--home-text, var(--text));
+  font-weight: 700;
   cursor: default;
+  text-decoration: none;
 }
 
 /* ── Page header ── */
-.trust-title {
-  margin: 0 0 12px;
-  font-size: clamp(1.5rem, 4vw, 1.875rem);
-  font-weight: 700;
-  line-height: 1.25;
-  color: #111820;
-}
-
-.trust-updated {
-  margin: 0 0 16px;
-  font-size: 14px;
-  color: #5c6773;
-}
-
-.trust-lead {
-  margin: 0 0 28px;
-  font-size: 17px;
+.page-wrap .trust-title {
+  margin: 0 0 var(--s-3, 12px);
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(11px, 2.8vw, 14px);
   line-height: 1.55;
-  color: #2c3440;
+  color: var(--home-text, var(--green));
+  letter-spacing: 0.04em;
+}
+
+.page-wrap .trust-updated {
+  margin: 0 0 var(--s-3, 12px);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px;
+  color: var(--home-text-dim, var(--text-dim));
+  letter-spacing: var(--ls-tight, 0.06em);
+}
+
+.page-wrap .trust-lead {
+  margin: 0 0 var(--s-4, 16px);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--home-text-mid, var(--text));
 }
 
 /* ── Main content ── */
-.trust-content {
-  font-size: 16px;
-  color: #1a1f26;
+.page-wrap .trust-content {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--home-text-mid, var(--text));
+  letter-spacing: 0.02em;
 }
 
-.trust-content h2 {
-  margin: 32px 0 12px;
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.3;
-  color: #111820;
+.page-wrap .trust-content h2 {
+  margin: var(--s-5, 20px) 0 var(--s-2, 8px);
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  line-height: 1.55;
+  color: var(--home-text, var(--green));
+  letter-spacing: 0.04em;
 }
 
-.trust-content h3 {
-  margin: 24px 0 10px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  line-height: 1.35;
-  color: #1a1f26;
+.page-wrap .trust-content h3 {
+  margin: var(--s-4, 16px) 0 var(--s-2, 8px);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--home-text, var(--text));
 }
 
-.trust-content p {
-  margin: 0 0 16px;
+.page-wrap .trust-content p {
+  margin: 0 0 var(--s-3, 12px);
 }
 
-.trust-content ul,
-.trust-content ol {
-  margin: 0 0 16px;
-  padding-left: 1.4em;
+.page-wrap .trust-content ul,
+.page-wrap .trust-content ol {
+  margin: 0 0 var(--s-3, 12px);
+  padding-left: 1.2em;
 }
 
-.trust-content li {
+.page-wrap .trust-content li {
   margin-bottom: 6px;
 }
 
-.trust-content a {
-  color: #0d6efd;
+.page-wrap .trust-content a {
+  color: var(--green-dim, #00cc33);
   text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
-.trust-content a:hover {
-  color: #0a58ca;
+.page-wrap .trust-content a:hover {
+  color: var(--green, #00ff41);
 }
 
-.trust-content strong {
-  font-weight: 600;
+.page-wrap .trust-content strong {
+  color: var(--home-text, var(--text));
 }
 
 /* ── Related materials ── */
-.trust-related {
-  margin-top: 40px;
-  padding-top: 28px;
-  border-top: 1px solid #d8dde3;
+.page-wrap .trust-related {
+  margin-top: var(--s-5, 20px);
+  padding-top: var(--s-4, 16px);
+  border-top: 1px solid var(--home-bdr, var(--border-dim));
 }
 
-.trust-related-title {
-  margin: 0 0 14px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #111820;
+.page-wrap .trust-related-title {
+  margin: 0 0 var(--s-3, 12px);
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--home-text-dim, var(--text-dim));
+  letter-spacing: 0.04em;
 }
 
-.trust-related-links {
+.page-wrap .trust-related-links {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.trust-related-link {
-  font-size: 15px;
-  color: #0d6efd;
+.page-wrap .trust-related-link {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px;
+  color: var(--green-dim, #00cc33);
   text-decoration: none;
+  letter-spacing: var(--ls-tight, 0.06em);
 }
 
-.trust-related-link:hover {
+.page-wrap .trust-related-link:hover {
+  color: var(--green, #00ff41);
   text-decoration: underline;
 }
 
-/* ── Footer ── */
-.trust-foot {
-  margin-top: 48px;
-  padding-top: 24px;
-  border-top: 1px solid #d8dde3;
+/* Tesla themes — readable trust copy */
+html[data-theme="tesla-light"] .page-wrap .trust-content,
+html[data-theme="tesla-light"] .page-wrap .trust-lead {
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
 }
 
-.footer-trust {
-  margin-bottom: 16px;
-  text-align: center;
+html[data-theme="tesla-light"] .page-wrap .trust-title,
+html[data-theme="tesla-light"] .page-wrap .trust-content h2,
+html[data-theme="tesla-light"] .page-wrap .trust-related-title {
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
-.footer-trust-title {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #5c6773;
-  margin-bottom: 10px;
+html[data-theme="tesla-dark"] .page-wrap .trust-content,
+html[data-theme="tesla-dark"] .page-wrap .trust-lead {
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
 }
 
-.footer-trust-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 16px;
-}
-
-.footer-trust-link {
-  font-size: 13px;
-  color: #0d6efd;
-  text-decoration: none;
-}
-
-.footer-trust-link:hover {
-  text-decoration: underline;
-}
-
-.trust-foot-copy {
-  margin: 0;
-  font-size: 12px;
-  color: #8a939e;
-  text-align: center;
+html[data-theme="tesla-dark"] .page-wrap .trust-title,
+html[data-theme="tesla-dark"] .page-wrap .trust-content h2,
+html[data-theme="tesla-dark"] .page-wrap .trust-related-title {
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 @media (max-width: 480px) {
-  .trust-wrap {
-    padding: 20px 16px 40px;
-  }
-
-  .trust-nav-items {
+  .page-wrap .trust-nav-items {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .page-wrap .trust-title {
+    font-size: 10px;
   }
 }

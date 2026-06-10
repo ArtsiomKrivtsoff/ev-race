@@ -11,7 +11,7 @@
 
 **Контент:** `content/trust/how-data-works.md`, `community-rules.md`, `privacy.md` — единственный источник текста; опциональный YAML frontmatter (`lastUpdated`, `lead`). Шаблон отделён от контента.
 
-**Стили trust-страниц:** `CSS/trust-layer.css` — нейтральный document layout, без race-nav и author-блока.
+**Стили trust-страниц:** `CSS/trust-layer.css` — контент внутри общего shell (`container` + `statusbar` + `page-wrap` + `renderSiteFooter`). Темы: `arcade.css` / tesla через `JS/trust-page.js`.
 
 **Футер «Доверие»:** на всех prod-страницах (index, tour, stations, letters, map sidebar, operators/*, location pages через `site-chrome.js`).
 

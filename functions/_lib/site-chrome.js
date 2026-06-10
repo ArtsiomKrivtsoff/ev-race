@@ -3,7 +3,7 @@
  * Infrastructure location pages only; keep in sync with production templates.
  */
 
-import { renderTrustFooterSection } from "./trust-layer.js";
+import { renderTrustFooterSection } from "./trust-config.js";
 
 export function renderSiteHeader(activeNav) {
   const nav = (id, href, label, mobileHref) => {

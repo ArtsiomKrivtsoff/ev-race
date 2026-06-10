@@ -3,61 +3,10 @@
  * Content source: /content/trust/*.md (body + optional YAML frontmatter).
  */
 
-export const SITE_ORIGIN = "https://evrace.by";
+import { escapeHtml, getTrustPage, SITE_ORIGIN, TRUST_PAGES } from "./trust-config.js";
+import { renderSiteFooter, renderSiteHeader } from "./site-chrome.js";
 
-/** @typedef {{ id: string, path: string, title: string, seoTitle: string, metaDescription: string, navLabel: string, mdPath: string }} TrustPageDef */
-
-/** @type {TrustPageDef[]} */
-export const TRUST_PAGES = [
-  {
-    id: "how-data-works",
-    path: "/how-data-works",
-    title: "Как EVrace работает с данными",
-    seoTitle: "Как EVrace работает с данными | EVrace",
-    metaDescription:
-      "Как EVrace собирает, проверяет и показывает данные о зарядных станциях: источники, модерация и ограничения сервиса.",
-    navLabel: "Как EVrace работает с данными",
-    mdPath: "/content/trust/how-data-works.md",
-  },
-  {
-    id: "community-rules",
-    path: "/community-rules",
-    title: "Правила сообщества EVrace",
-    seoTitle: "Правила сообщества EVrace | EVrace",
-    metaDescription:
-      "Правила сообщества EVrace: отзывы, фото, модерация и условия публикации материалов на сайте.",
-    navLabel: "Правила сообщества",
-    mdPath: "/content/trust/community-rules.md",
-  },
-  {
-    id: "privacy",
-    path: "/privacy",
-    title: "Политика конфиденциальности EVrace",
-    seoTitle: "Политика конфиденциальности EVrace | EVrace",
-    metaDescription:
-      "Политика конфиденциальности EVrace: какие данные собираются при использовании сайта, отзывах и входе через Telegram.",
-    navLabel: "Конфиденциальность",
-    mdPath: "/content/trust/privacy.md",
-  },
-];
-
-/**
- * @param {string} id
- */
-export function getTrustPage(id) {
-  return TRUST_PAGES.find((p) => p.id === id) || null;
-}
-
-/**
- * @param {string} value
- */
-export function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
+export { getTrustPage, TRUST_PAGES };
 
 /**
  * @param {string} raw
@@ -341,20 +290,8 @@ export function renderRelatedMaterials(pageId) {
 </aside>`;
 }
 
-export function renderTrustFooterSection() {
-  const links = TRUST_PAGES.map(
-    (p) =>
-      `<a class="footer-trust-link" href="${escapeHtml(p.path)}">${escapeHtml(p.navLabel)}</a>`,
-  ).join("");
-
-  return `<div class="footer-trust">
-<div class="footer-trust-title">Доверие</div>
-<nav class="footer-trust-links" aria-label="Доверие">${links}</nav>
-</div>`;
-}
-
 /**
- * @param {TrustPageDef} page
+ * @param {import("./trust-config.js").TrustPageDef} page
  * @param {{ lead?: string, lastUpdated?: string, bodyHtml: string }} content
  */
 export function renderTrustPageHtml(page, content) {
@@ -365,12 +302,17 @@ export function renderTrustPageHtml(page, content) {
   const lead = content.lead
     ? `<p class="trust-lead">${escapeHtml(content.lead)}</p>`
     : "";
+  const cfgJson = JSON.stringify({
+    supabaseUrl: "https://uvrboxrddqlasgrnnnne.supabase.co",
+    supabaseKey: "sb_publishable_Tmx9z-PHntDW4cZQrhOTHQ_1R1Bns7Y",
+    visitPage: page.visitPage,
+  });
 
   return `<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>${escapeHtml(page.seoTitle)}</title>
 <meta name="description" content="${escapeHtml(page.metaDescription)}">
 <meta name="robots" content="index, follow">
@@ -380,32 +322,42 @@ export function renderTrustPageHtml(page, content) {
 <meta property="og:description" content="${escapeHtml(page.metaDescription)}">
 <meta property="og:url" content="${escapeHtml(canonical)}">
 <meta property="og:locale" content="ru_BY">
-<meta property="og:site_name" content="EVrace">
+<meta property="og:site_name" content="EV RACE">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="stylesheet" href="/CSS/trust-layer.css?v=2">
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108141830','ym');
 ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
 </script>
+<link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=6">
+<link rel="stylesheet" href="/CSS/operator.css?v=5">
+<link rel="stylesheet" href="/CSS/home-v2.css?v=15">
+<link rel="stylesheet" href="/CSS/site-chrome-v2.css?v=2">
+<link rel="stylesheet" href="/CSS/trust-layer.css?v=3">
+<link rel="stylesheet" href="/CSS/route-nav.css?v=1">
+<link rel="prefetch" href="/CSS/tesla-light.css?v=5">
+<link rel="prefetch" href="/CSS/tesla-dark.css?v=5">
+<script>window.__EVRACE__=${cfgJson};</script>
 </head>
 <body class="trust-page">
-<div class="trust-wrap">
-<header class="trust-site-hdr">
-<a class="trust-site-logo" href="/">EVrace</a>
-</header>
-<main class="trust-main">
+<div class="container">
+${renderSiteHeader("")}
+<div class="page-wrap">
+<div class="blk trust-page-blk">
+<div class="blk-hdr"><span class="blk-title">◈ ДОВЕРИЕ</span></div>
+<div class="site-chrome-in trust-page-in">
 ${renderTrustNav(page.id, page.path)}
 <h1 class="trust-title">${escapeHtml(page.title)}</h1>
 ${lastUpdated}
 ${lead}
 <div class="trust-content">${content.bodyHtml}</div>
 ${renderRelatedMaterials(page.id)}
-</main>
-<footer class="trust-foot">
-${renderTrustFooterSection()}
-<p class="trust-foot-copy">© 2026 EVrace</p>
-</footer>
 </div>
+</div>
+${renderSiteFooter()}
+</div>
+</div>
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх" aria-label="Наверх">↑</button>
+<script src="/JS/trust-page.js?v=1"></script>
 </body>
 </html>`;
 }
