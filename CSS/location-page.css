@@ -487,20 +487,37 @@ body.location-page .blk-hdr {
 
 /* ── Main grid ── */
 .loc-main-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: var(--loc-gap);
+}
+/* Mobile — flatten wrappers so block order can be controlled */
+@media (max-width: 899px) {
+  .loc-main-col,
+  .loc-sidebar {
+    display: contents;
+  }
+  .loc-infra-blk { order: 1; }
+  .loc-cs-agg-blk { order: 2; }
+  .loc-cs-form-blk { order: 3; }
+  .loc-reviews-blk { order: 4; }
+  .loc-photos-blk { order: 5; }
+  .loc-nearby-blk { order: 6; }
 }
 @media (min-width: 900px) {
   .loc-main-grid {
+    display: grid;
     grid-template-columns: 2fr 1fr;
     column-gap: var(--loc-gap);
-    row-gap: var(--loc-gap);
     align-items: start;
   }
-  .loc-grid-main { grid-column: 1; }
-  .loc-grid-side { grid-column: 2; }
-  /* Sidebar — row 1 col 2, stacked inside (no shared-row height with main column) */
+  .loc-main-col {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--loc-gap);
+    min-width: 0;
+  }
   .loc-sidebar {
     grid-column: 2;
     grid-row: 1;
@@ -510,11 +527,8 @@ body.location-page .blk-hdr {
     align-self: start;
     min-width: 0;
   }
-  .loc-infra-blk.loc-grid-main {
-    grid-column: 1;
-    grid-row: 1;
-    align-self: start;
-  }
+  .loc-grid-main { grid-column: 1; }
+  .loc-grid-side { grid-column: 2; }
   .loc-photos-blk .loc-photo-panel {
     display: flex;
     flex-direction: column;

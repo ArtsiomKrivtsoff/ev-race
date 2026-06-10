@@ -150,7 +150,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=15">
-<link rel="stylesheet" href="/CSS/location-page.css?v=37">
+<link rel="stylesheet" href="/CSS/location-page.css?v=39">
 <link rel="stylesheet" href="/CSS/site-chrome-v2.css?v=1">
 <link rel="stylesheet" href="/CSS/route-nav.css?v=1">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
@@ -182,13 +182,15 @@ ${renderHero(loc, community, {
 })}
 
 <div class="loc-main-grid">
+<div class="loc-main-col">
 ${renderInfrastructureBlock(stations, metrics)}
+${renderCommunitySignalsBlock(community)}
+${renderReviewsBlock(community)}
+</div>
 <aside class="loc-sidebar">
 ${renderPhotosBlock(community)}
 ${renderNearbyBlock(data.nearby, loc.city)}
 </aside>
-${renderCommunitySignalsBlock(community)}
-${renderReviewsBlock(community)}
 </div>
 
 ${renderSiteFooter()}
