@@ -17,9 +17,7 @@ import {
   renderHero,
   renderInfrastructureBlock,
   renderPhotosBlock,
-  renderTagsBlock,
-  renderReviewFormBlock,
-  renderPhotoUploadBlock,
+  renderCommunitySignalsBlock,
   renderReviewsBlock,
   renderNearbyBlock,
 } from "../_lib/location-render.js";
@@ -120,7 +118,11 @@ function renderLocationPage(data, envConfig) {
     location_id: loc.id,
     operator_slug: loc.operator_slug,
     slug: loc.slug,
-    form_tags: community.form_tags || [],
+  });
+
+  const signalsDataJson = safeJsonForScript({
+    location_id: loc.id,
+    form_signals: community.form_signals || [],
   });
 
   return `<!DOCTYPE html>
@@ -148,7 +150,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=15">
-<link rel="stylesheet" href="/CSS/location-page.css?v=30">
+<link rel="stylesheet" href="/CSS/location-page.css?v=31">
 <link rel="stylesheet" href="/CSS/site-chrome-v2.css?v=1">
 <link rel="stylesheet" href="/CSS/route-nav.css?v=1">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
@@ -156,6 +158,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 ${hasCoords ? '<link rel="stylesheet" href="/CSS/vendor/leaflet.css?v=1">' : ""}
 <script>window.__EVRACE__=${cfgJson};</script>
 <script type="application/json" id="loc-page-data">${pageDataJson}</script>
+<script type="application/json" id="loc-signals-data">${signalsDataJson}</script>
 <script type="application/json" id="loc-community-data">${communityJson}</script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
@@ -180,11 +183,9 @@ ${renderHero(loc, community, {
 
 <div class="loc-main-grid">
 ${renderInfrastructureBlock(stations, metrics)}
-${renderPhotosBlock(community)}
-${renderPhotoUploadBlock()}
-${renderTagsBlock(community)}
-${renderReviewFormBlock()}
+${renderCommunitySignalsBlock(community)}
 ${renderReviewsBlock(community)}
+${renderPhotosBlock(community)}
 ${renderNearbyBlock(data.nearby, loc.city)}
 </div>
 
@@ -202,8 +203,7 @@ ${renderSiteFooter()}
 <p class="loc-lightbox-counter"></p>
 </div>
 </div>
-<script src="/JS/community-auth.js?v=2"></script>
-<script src="/JS/review-form.js?v=4"></script>
+<script src="/JS/community-signals.js?v=1"></script>
 <script src="/JS/location-page.js?v=11"></script>
 <script src="/JS/route-nav.js?v=2"></script>
 ${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=3"></script>' : ""}

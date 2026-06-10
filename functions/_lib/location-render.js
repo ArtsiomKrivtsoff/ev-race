@@ -417,6 +417,44 @@ ${renderReviewCta("loc-review-cta--block")}
 </div>`;
 }
 
+function csSentimentKey(sentiment) {
+  if (sentiment === "negative") return "neg";
+  if (sentiment === "warning") return "warn";
+  return "pos";
+}
+
+export function renderCommunitySignalsBlock(community) {
+  const signals = (community?.signals || []).filter((s) => (s.count || 0) > 0);
+
+  let areaA;
+  if (!signals.length) {
+    areaA = `<div class="cs-agg-body" id="community-signals-agg">
+<p class="cs-agg-empty">Станция ждёт первое наблюдение сообщества.</p>
+</div>`;
+  } else {
+    const chips = signals
+      .map((s) => {
+        const pol = csSentimentKey(s.sentiment);
+        return `<div class="cs-agg-chip cs-agg-chip--${pol}" data-signal-slug="${escapeHtml(s.slug)}">
+<span class="cs-agg-label">${escapeHtml(s.label)}</span>
+<span class="cs-agg-count">×${escapeHtml(String(s.count))}</span>
+</div>`;
+      })
+      .join("");
+    areaA = `<div class="cs-agg-body" id="community-signals-agg">
+<div class="cs-agg-chips">${chips}</div>
+</div>`;
+  }
+
+  return `<div class="blk loc-cs-blk loc-grid-main" id="community-signals">
+<div class="blk-hdr"><span class="blk-title">Что говорят о локации</span></div>
+${areaA}
+<div class="cs-form-section" id="community-signals-form" aria-live="polite">
+<p class="cs-form-loading">Загрузка…</p>
+</div>
+</div>`;
+}
+
 export function renderTagsBlock(community) {
   const raw = community?.tags || [];
   const tags = raw.filter((t) => (t.count || 0) > 0);

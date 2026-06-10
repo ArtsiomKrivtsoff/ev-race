@@ -447,14 +447,19 @@ async function fetchCommunity(
   photos: CommunityPhotoDto[];
   tags: CommunityTagDto[];
   form_tags: { id: number; key: string; label: string; polarity: string }[];
+  signals: CommunitySignalAggDto[];
+  form_signals: CommunityFormSignalDto[];
   review_count: number;
   photo_count: number;
 }> {
+  const signalData = await fetchCommunitySignals(supabase, locationId);
   const empty = {
     reviews: [] as CommunityReviewDto[],
     photos: [] as CommunityPhotoDto[],
     tags: [] as CommunityTagDto[],
     form_tags: [] as { id: number; key: string; label: string; polarity: string }[],
+    signals: signalData.signals,
+    form_signals: signalData.form_signals,
     review_count: cachedReviewCount,
     photo_count: cachedPhotoCount,
   };
@@ -562,9 +567,93 @@ async function fetchCommunity(
     photos,
     tags,
     form_tags: await fetchFormTags(supabase),
+    signals: signalData.signals,
+    form_signals: signalData.form_signals,
     review_count: cachedReviewCount,
     photo_count: cachedPhotoCount,
   };
+}
+
+type CommunitySignalAggDto = {
+  slug: string;
+  label: string;
+  sentiment: string;
+  count: number;
+};
+
+type CommunityFormSignalDto = {
+  slug: string;
+  label: string;
+  sentiment: string;
+};
+
+async function fetchCommunitySignals(
+  supabase: ReturnType<typeof createClient>,
+  locationId: number,
+): Promise<{
+  signals: CommunitySignalAggDto[];
+  form_signals: CommunityFormSignalDto[];
+}> {
+  const empty = {
+    signals: [] as CommunitySignalAggDto[],
+    form_signals: [] as CommunityFormSignalDto[],
+  };
+
+  const { data: dictRows, error: dictErr } = await supabase
+    .from("community_signals")
+    .select("id, slug, label_ru, sentiment, sort_order")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  if (dictErr) {
+    console.error("community_signals dict:", dictErr.message);
+    return empty;
+  }
+
+  const dictionary = dictRows || [];
+  if (!dictionary.length) return empty;
+
+  const { data: countRows, error: countErr } = await supabase
+    .from("location_signal_counts")
+    .select("signal_id, count")
+    .eq("location_id", locationId);
+
+  if (countErr) {
+    console.error("location_signal_counts:", countErr.message);
+  }
+
+  const countMap = new Map<number, number>();
+  for (const row of countRows || []) {
+    countMap.set(row.signal_id, row.count ?? 0);
+  }
+
+  const form_signals: CommunityFormSignalDto[] = dictionary.map((s) => ({
+    slug: s.slug,
+    label: s.label_ru,
+    sentiment: s.sentiment,
+  }));
+
+  const signals: CommunitySignalAggDto[] = dictionary
+    .map((s) => ({
+      slug: s.slug,
+      label: s.label_ru,
+      sentiment: s.sentiment,
+      count: countMap.get(s.id) ?? 0,
+      sort_order: s.sort_order ?? 0,
+    }))
+    .filter((s) => s.count > 0)
+    .sort((a, b) =>
+      b.count - a.count || (a.sort_order ?? 0) - (b.sort_order ?? 0) ||
+      a.slug.localeCompare(b.slug)
+    )
+    .map(({ slug, label, sentiment, count }) => ({
+      slug,
+      label,
+      sentiment,
+      count,
+    }));
+
+  return { signals, form_signals };
 }
 
 async function fetchFormTags(
