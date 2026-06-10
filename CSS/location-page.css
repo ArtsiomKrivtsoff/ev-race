@@ -500,12 +500,20 @@ body.location-page .blk-hdr {
   }
   .loc-grid-main { grid-column: 1; }
   .loc-grid-side { grid-column: 2; }
+  /* Sidebar at top — not after all main-column rows */
+  .loc-photos-blk.loc-grid-side {
+    grid-row: 1;
+    align-self: start;
+  }
+  .loc-nearby-blk.loc-grid-side {
+    grid-row: 2;
+    align-self: start;
+  }
   .loc-infra-blk.loc-grid-main,
   .loc-photos-blk.loc-grid-side {
     align-self: start;
   }
   .loc-photos-blk .loc-photo-panel {
-    min-height: 100%;
     display: flex;
     flex-direction: column;
   }
