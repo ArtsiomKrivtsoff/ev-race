@@ -3,6 +3,9 @@
    Depends: arcade.css, operator.css, home-v2.css (.blk)
    ============================================================ */
 
+/* Community Signals chip labels — trial; Cyrillic falls back to Share Tech Mono */
+@import url("https://fonts.cdnfonts.com/css/isabel");
+
 body.location-page {
   --loc-map-min: 180px;
   --loc-inset-glow: rgba(0, 255, 65, 0.1);
@@ -835,48 +838,80 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
 }
 
 /* ── Community Signals — two independent blocks ── */
+body.location-page {
+  --cs-chip-font: "Isabel", "Share Tech Mono", monospace;
+  --cs-chip-size-agg: 11px;
+  --cs-chip-size-form: 10px;
+  --cs-chip-size-success: 10px;
+  --cs-chip-lh: 1.32;
+  --cs-chip-min: 9.25rem;
+}
+
 .loc-cs-agg-blk .cs-agg-body {
   padding: var(--loc-pad);
 }
 .loc-cs-agg-blk .cs-agg-empty {
   margin: 0;
-  font-size: 15px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px;
+  line-height: var(--cs-chip-lh);
   color: var(--muted, #888);
-  line-height: 1.55;
 }
 .loc-cs-agg-blk .cs-agg-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
+  align-items: stretch;
 }
 .loc-cs-agg-blk .cs-agg-chip {
-  display: inline-flex;
+  box-sizing: border-box;
+  display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
+  justify-content: space-between;
+  gap: 8px;
+  flex: 1 1 var(--cs-chip-min);
+  max-width: 100%;
+  min-height: 44px;
+  padding: 9px 11px;
   border-radius: 4px;
-  font-size: 16px;
+  border: 1px solid var(--home-bdr, var(--border-faint));
+  background: rgba(0, 0, 0, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.loc-cs-agg-blk .cs-agg-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--cs-chip-font);
+  font-size: var(--cs-chip-size-agg);
   font-weight: 600;
-  border: 1px solid var(--hairline, #333);
-  background: var(--surface-2, #1a1a1a);
+  line-height: var(--cs-chip-lh);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-break: break-word;
+  hyphens: auto;
 }
 .loc-cs-agg-blk .cs-agg-chip--pos {
-  border-color: rgba(0, 255, 65, 0.5);
+  border-color: rgba(0, 255, 65, 0.38);
   color: var(--green, #00ff41);
-  box-shadow: 0 0 16px rgba(0, 255, 65, 0.12);
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.1);
 }
 .loc-cs-agg-blk .cs-agg-chip--neg,
 .loc-cs-agg-blk .cs-agg-chip--warn {
-  border-color: rgba(255, 80, 80, 0.5);
+  border-color: rgba(255, 80, 80, 0.38);
   color: #ff6b6b;
-  box-shadow: 0 0 16px rgba(255, 80, 80, 0.12);
+  box-shadow: 0 0 12px rgba(255, 80, 80, 0.1);
 }
 .loc-cs-agg-blk .cs-agg-count {
-  font-family: var(--font-num, 'Share Tech Mono', monospace);
-  font-size: 22px;
-  font-weight: 400;
-  min-width: 2ch;
-  text-align: right;
+  flex: 0 0 auto;
+  align-self: center;
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  line-height: 1;
+  text-shadow: 0 0 8px currentColor;
+  white-space: nowrap;
 }
 
 .loc-cs-form-blk {
@@ -898,33 +933,51 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
 }
 .cs-form-loading {
   margin: 0;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted, #888);
   text-align: center;
 }
 .cs-form-counter {
-  margin: 0 0 12px;
-  font-size: 12px;
+  margin: 0 0 10px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--muted, #888);
 }
 .cs-form-chips,
 .cs-success-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 14px;
+  gap: 6px;
+  margin-bottom: 12px;
+  align-items: stretch;
 }
 .cs-form-chip {
+  box-sizing: border-box;
+  flex: 1 1 calc(var(--cs-chip-min) - 0.5rem);
+  max-width: 100%;
   min-height: 44px;
-  padding: 9px 12px;
+  padding: 8px 10px;
   border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
+  font-family: var(--cs-chip-font);
+  font-size: var(--cs-chip-size-form);
+  font-weight: 600;
+  line-height: var(--cs-chip-lh);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.28);
   color: inherit;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-break: break-word;
+  hyphens: auto;
 }
 .cs-form-chip--pos.is-on {
   border-color: rgba(0, 255, 65, 0.6);
@@ -952,23 +1005,33 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
 }
 .cs-success-title {
   margin: 0 0 6px;
-  font-size: 16px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px;
   font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--green, #00ff41);
 }
 .cs-success-lead {
-  margin: 0 0 14px;
-  font-size: 14px;
+  margin: 0 0 12px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
   color: var(--muted, #888);
 }
 .cs-success-chip {
+  box-sizing: border-box;
+  flex: 1 1 calc(var(--cs-chip-min) - 0.5rem);
   display: inline-flex;
   align-items: center;
   min-height: 36px;
-  padding: 8px 12px;
+  padding: 7px 10px;
   border-radius: 4px;
-  font-size: 13px;
-  font-weight: 500;
+  font-family: var(--cs-chip-font);
+  font-size: var(--cs-chip-size-success);
+  font-weight: 600;
+  line-height: var(--cs-chip-lh);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   border: 1px solid var(--hairline, #333);
 }
 .cs-success-chip--pos.is-on {
@@ -1411,6 +1474,9 @@ body.reduced-fx .loc-infra-val,
 body.reduced-fx .loc-infra-breakdown:not(.loc-infra-breakdown--split) .loc-infra-breakdown-val,
 body.reduced-fx .loc-conn-line,
 body.reduced-fx .loc-tag-agg-count {
+  text-shadow: none;
+}
+body.reduced-fx .loc-cs-agg-blk .cs-agg-count {
   text-shadow: none;
 }
 

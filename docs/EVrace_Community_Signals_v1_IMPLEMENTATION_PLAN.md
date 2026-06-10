@@ -537,6 +537,65 @@ Embed in SSR:
 
 ---
 
+## 13.1 Mobile UX — collapsed form (PO, 2026-06)
+
+**Scope:** mobile only (`max-width: 899px`). Desktop unchanged — form always expanded.
+
+### Default (mobile)
+
+Compact card:
+
+| Element | Copy |
+|---------|------|
+| Title | Добавить наблюдение |
+| Lead | Поделитесь своим опытом на этой локации |
+| CTA | Добавить наблюдение |
+
+Aggregated block fully visible above — primary reading surface.
+
+### Expanded (mobile)
+
+After tap CTA:
+
+- All 10 signal chips
+- Hint: «Выберите до 4 наблюдений»
+- Counter: «Выбрано X из 4»
+- Turnstile + «Учесть наблюдение»
+
+### After submit (mobile)
+
+Form **collapses** to compact success:
+
+| Element | Copy |
+|---------|------|
+| Title | ✓ Наблюдение учтено |
+| Body | Спасибо за вклад в EVrace |
+| Recap | Selected chips (read-only) |
+| CTA | Оставить отзыв — «Для публикации отзыва потребуется Telegram» |
+
+**Note:** supersedes prior D8 «no review CTA after signals» **on mobile only**.
+
+### Implementation status
+
+| Layer | Status |
+|-------|--------|
+| Chip typography (Isabel trial, flex wrap, 2-line clamp) | CSS v33 |
+| Mobile collapse / expand / success compact | **Planned** — requires SSR shell + JS |
+| Mockup | Update `docs/mockups/` when implementing mobile |
+
+### UX risks (desktop vs mobile split)
+
+| Risk | Mitigation |
+|------|------------|
+| User on mobile doesn’t discover input | Clear teaser card + single CTA; agg block first |
+| Different success copy desktop/mobile | Accept intentional; document in copy deck |
+| Review CTA only on mobile re-opens TG scope | Link to `#reviews-list` or future review form; label Telegram requirement |
+| Already-voted on load shows expanded form on desktop, collapsed success on mobile | JS reads `submitted` + `matchMedia` |
+| Turnstile inside collapsed panel — widget init on expand | Render Turnstile only after expand (lazy) |
+| CF HTML cache hides fresh agg counts | Client refresh via `/api/community-signals-status` (done) |
+
+---
+
 ## 14. Future Phases (reference only)
 
 | Phase | System |
