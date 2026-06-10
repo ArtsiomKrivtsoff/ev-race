@@ -1,6 +1,7 @@
 (function () {
   var TURNSTILE_SITE_KEY = "0x4AAAAAACtvG988gnpS7YBa";
   var MAX_SIGNALS = 4;
+  var MOBILE_MQ = "(max-width: 899px)";
   var FORBIDDEN_PAIRS = [
     ["power_match", "power_disappointed"],
     ["access_good", "access_bad"],
@@ -14,13 +15,13 @@
     turnstileToken: "",
     formSignals: [],
     locationId: 0,
+    mobileExpanded: false,
   };
 
   function cfg() {
     return window.__EVRACE__ || {};
   }
 
-  /** Same-origin proxy on evrace.by — first-party voter cookie. */
   function statusUrl() {
     return (
       "/api/community-signals-status?location_id=" +
@@ -52,6 +53,25 @@
 
   function aggRoot() {
     return document.getElementById("community-signals-agg");
+  }
+
+  function formBlock() {
+    return document.getElementById("community-signals-input-block");
+  }
+
+  function isMobile() {
+    return window.matchMedia(MOBILE_MQ).matches;
+  }
+
+  function setBlockMode(mode) {
+    var block = formBlock();
+    if (!block) return;
+    block.classList.remove(
+      "cs-mobile-collapsed",
+      "cs-mobile-expanded",
+      "cs-mobile-done"
+    );
+    if (mode) block.classList.add(mode);
   }
 
   function escapeHtml(s) {
@@ -139,7 +159,6 @@
     var emptyEl = root.querySelector(".cs-agg-empty");
     if (emptyEl) {
       root.innerHTML = '<div class="cs-agg-chips"></div>';
-      emptyEl = null;
     }
 
     var chipsWrap = root.querySelector(".cs-agg-chips");
@@ -188,9 +207,11 @@
         prefix +
         "-chip--" +
         pol +
-        ' is-on">' +
+        ' is-on"><span class="' +
+        prefix +
+        '-chip-label">' +
         escapeHtml(s.label) +
-        " ✓</span>";
+        " ✓</span></span>";
     });
     html += "</div>";
     return html;
@@ -199,12 +220,43 @@
   function renderSuccess(selection) {
     var root = formRoot();
     if (!root) return;
+
+    if (isMobile()) {
+      setBlockMode("cs-mobile-done");
+      root.innerHTML =
+        '<div class="cs-success cs-mobile-success">' +
+        '<p class="cs-success-title">✓ Наблюдение учтено</p>' +
+        '<p class="cs-success-lead">Спасибо за вклад в EVrace</p>' +
+        renderRecapChips(selection, "success") +
+        '<a class="loc-btn loc-btn-community" href="#review-form">Оставить отзыв</a>' +
+        '<p class="cs-review-cta-note">Для публикации отзыва потребуется Telegram</p>' +
+        "</div>";
+      return;
+    }
+
+    setBlockMode(null);
     root.innerHTML =
       '<div class="cs-success">' +
       '<p class="cs-success-title">✓ Сигнал учтён</p>' +
       '<p class="cs-success-lead">Спасибо за вклад в EVrace</p>' +
       renderRecapChips(selection, "success") +
       "</div>";
+  }
+
+  function renderMobileTeaser() {
+    var root = formRoot();
+    if (!root) return;
+    setBlockMode("cs-mobile-collapsed");
+    root.innerHTML =
+      '<div class="cs-mobile-teaser">' +
+      '<p class="cs-mobile-teaser-title">Добавить наблюдение</p>' +
+      '<p class="cs-mobile-teaser-lead">Поделитесь своим опытом на этой локации</p>' +
+      '<button type="button" class="loc-btn loc-btn-accent cs-mobile-expand">Добавить наблюдение</button>' +
+      "</div>";
+    root.querySelector(".cs-mobile-expand")?.addEventListener("click", function () {
+      state.mobileExpanded = true;
+      renderForm();
+    });
   }
 
   function renderForm() {
@@ -214,8 +266,20 @@
       return;
     }
 
+    if (isMobile() && !state.mobileExpanded && !state.submitted) {
+      renderMobileTeaser();
+      return;
+    }
+
+    if (isMobile()) {
+      setBlockMode("cs-mobile-expanded");
+    } else {
+      setBlockMode(null);
+    }
+
     var html =
       '<div class="cs-form">' +
+      '<p class="cs-form-hint">Выберите до 4 наблюдений</p>' +
       '<p class="cs-form-counter">Выбрано <span id="cs-selected-count">' +
       state.selected.length +
       "</span> из " +
@@ -232,9 +296,9 @@
         on +
         '" data-slug="' +
         escapeHtml(s.slug) +
-        '">' +
+        '"><span class="cs-form-chip-label">' +
         escapeHtml(s.label) +
-        "</button>";
+        "</span></button>";
     });
 
     html +=
