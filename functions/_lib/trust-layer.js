@@ -256,20 +256,23 @@ export function stripDuplicateTitle(body, pageTitle) {
 
 /**
  * @param {string} pageId
- * @param {string} currentPath
  */
-export function renderTrustNav(pageId, currentPath) {
-  const items = TRUST_PAGES.map((p) => {
-    if (p.id === pageId) {
-      return `<span class="trust-nav-item trust-nav-item--current" aria-current="page">${escapeHtml(p.navLabel)}</span>`;
-    }
-    return `<a class="trust-nav-item" href="${escapeHtml(p.path)}">${escapeHtml(p.navLabel)}</a>`;
+export function renderTrustNav(pageId) {
+  const parts = TRUST_PAGES.map((p, i) => {
+    const sep =
+      i > 0 ? '<span class="footer-trust-sep" aria-hidden="true">|</span>' : "";
+    const label = escapeHtml(p.navLabel.toUpperCase());
+    const item =
+      p.id === pageId
+        ? `<span class="footer-trust-link footer-trust-link--current" aria-current="page">${label}</span>`
+        : `<a class="footer-trust-link" href="${escapeHtml(p.path)}">${label}</a>`;
+    return sep + item;
   }).join("");
 
-  return `<nav class="trust-nav" aria-label="Доверие">
-<span class="trust-nav-label">Доверие</span>
-<div class="trust-nav-items">${items}</div>
-</nav>`;
+  return `<div class="footer-trust trust-top-nav">
+<div class="footer-trust-title">ДОВЕРИЕ</div>
+<nav class="footer-trust-row" aria-label="Доверие">${parts}</nav>
+</div>`;
 }
 
 /**
@@ -332,7 +335,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=15">
 <link rel="stylesheet" href="/CSS/site-chrome-v2.css?v=2">
-<link rel="stylesheet" href="/CSS/trust-layer.css?v=3">
+<link rel="stylesheet" href="/CSS/trust-layer.css?v=4">
 <link rel="stylesheet" href="/CSS/route-nav.css?v=1">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="/CSS/tesla-dark.css?v=5">
@@ -345,7 +348,7 @@ ${renderSiteHeader("")}
 <div class="blk trust-page-blk">
 <div class="blk-hdr"><span class="blk-title">◈ ДОВЕРИЕ</span></div>
 <div class="site-chrome-in trust-page-in">
-${renderTrustNav(page.id, page.path)}
+${renderTrustNav(page.id)}
 <h1 class="trust-title">${escapeHtml(page.title)}</h1>
 ${lastUpdated}
 ${lead}

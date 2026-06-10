@@ -13,7 +13,7 @@
 
 **Стили trust-страниц:** `CSS/trust-layer.css` — контент внутри общего shell (`container` + `statusbar` + `page-wrap` + `renderSiteFooter`). Темы: `arcade.css` / tesla через `JS/trust-page.js`.
 
-**Футер «Доверие»:** на всех prod-страницах (index, tour, stations, letters, map sidebar, operators/*, location pages через `site-chrome.js`).
+**Trust nav (верх):** те же классы и стиль, что футер «Доверие» — `ДОВЕРИЕ` + ссылки через `|`, UPPERCASE.
 
 **Формы:** consent-link на `/community-rules` в `JS/review-form.js` и блок `#add-photo` (`renderPhotoUploadBlock`).
 

@@ -9,51 +9,6 @@
   margin: 0 auto;
 }
 
-/* ── Trust navigation ── */
-.page-wrap .trust-nav {
-  margin-bottom: var(--s-4, 16px);
-  padding: var(--s-3, 12px) var(--s-3, 12px);
-  border: 1px solid var(--home-bdr, var(--border-dim, #1c2e1c));
-  background: var(--home-card, var(--card, #090e09));
-}
-
-.page-wrap .trust-nav-label {
-  display: block;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
-  letter-spacing: var(--ls-tight, 0.08em);
-  text-transform: uppercase;
-  color: var(--home-text-dim, var(--text-dim));
-  margin-bottom: var(--s-2, 8px);
-}
-
-.page-wrap .trust-nav-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 14px;
-}
-
-.page-wrap .trust-nav-item {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 11px;
-  letter-spacing: var(--ls-tight, 0.06em);
-  color: var(--green-dim, #00cc33);
-  text-decoration: none;
-  line-height: 1.45;
-}
-
-.page-wrap .trust-nav-item:hover {
-  color: var(--green, #00ff41);
-  text-decoration: underline;
-}
-
-.page-wrap .trust-nav-item--current {
-  color: var(--home-text, var(--text));
-  font-weight: 700;
-  cursor: default;
-  text-decoration: none;
-}
-
 /* ── Page header ── */
 .page-wrap .trust-title {
   margin: 0 0 var(--s-3, 12px);
@@ -200,11 +155,6 @@ html[data-theme="tesla-dark"] .page-wrap .trust-related-title {
 }
 
 @media (max-width: 480px) {
-  .page-wrap .trust-nav-items {
-    flex-direction: column;
-    gap: 10px;
-  }
-
   .page-wrap .trust-title {
     font-size: 10px;
   }

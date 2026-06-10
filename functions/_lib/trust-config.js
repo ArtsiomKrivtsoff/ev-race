@@ -62,11 +62,11 @@ export function escapeHtml(value) {
 export function renderTrustFooterSection() {
   const links = TRUST_PAGES.map(
     (p) =>
-      `<a class="footer-trust-link" href="${escapeHtml(p.path)}">${escapeHtml(p.navLabel)}</a>`,
-  ).join("");
+      `<a class="footer-trust-link" href="${escapeHtml(p.path)}">${escapeHtml(p.navLabel.toUpperCase())}</a>`,
+  ).join('<span class="footer-trust-sep" aria-hidden="true">|</span>');
 
   return `<div class="footer-trust">
-<div class="footer-trust-title">Доверие</div>
-<nav class="footer-trust-links" aria-label="Доверие">${links}</nav>
+<div class="footer-trust-title">ДОВЕРИЕ</div>
+<nav class="footer-trust-row" aria-label="Доверие">${links}</nav>
 </div>`;
 }
