@@ -386,7 +386,7 @@ export function renderPhotosBlock(community) {
   const count = community?.photo_count ?? photos.length ?? 0;
 
   if (!count) {
-    return `<div class="blk loc-photos-blk loc-grid-side" id="photos">
+    return `<div class="blk loc-photos-blk" id="photos">
 <div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span></div>
 <div class="loc-photos-empty">
 <p class="loc-empty-lead">Фото появляются в отзывах</p>
@@ -409,7 +409,7 @@ ${renderReviewCta("loc-review-cta--block")}
     })
     .join("");
 
-  return `<div class="blk loc-photos-blk loc-grid-side" id="photos">
+  return `<div class="blk loc-photos-blk" id="photos">
 <div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span>${renderBadge(count)}</div>
 <div class="loc-photo-panel">
 <div class="loc-photo-grid">${thumbs}</div>
@@ -558,7 +558,7 @@ export function renderReviewsBlock(community) {
 
 export function renderNearbyBlock(nearby, city) {
   const cityLabel = escapeHtml((city || "").toUpperCase());
-  return `<div class="blk loc-nearby-blk loc-grid-side">
+  return `<div class="blk loc-nearby-blk">
 <div class="blk-hdr"><span class="blk-title">РЯДОМ · ${cityLabel}</span></div>
 <div class="loc-nearby-list">${renderNearby(nearby)}</div>
 </div>`;
