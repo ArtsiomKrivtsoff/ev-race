@@ -458,6 +458,15 @@ export function renderReviewFormBlock() {
 </div>`;
 }
 
+export function renderPhotoUploadBlock() {
+  return `<div class="blk loc-photo-upload-blk loc-grid-side" id="add-photo">
+<div class="blk-hdr"><span class="blk-title">📷 ПОКАЖИ СТАНЦИЮ</span></div>
+<div id="photo-upload-root" class="loc-photo-upload-body" aria-live="polite">
+<p class="loc-form-consent">Загружая фотографии, вы соглашаетесь с <a href="/community-rules">Правилами сообщества</a>.</p>
+</div>
+</div>`;
+}
+
 function renderReviewCard(review, index) {
   const photoN = review.photo_count || (review.photos?.length ?? 0);
   const photoMark =

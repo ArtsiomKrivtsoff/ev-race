@@ -3,6 +3,8 @@
  * Infrastructure location pages only; keep in sync with production templates.
  */
 
+import { renderTrustFooterSection } from "./trust-layer.js";
+
 export function renderSiteHeader(activeNav) {
   const nav = (id, href, label, mobileHref) => {
     const cls = activeNav === id ? " active" : "";
@@ -106,6 +108,7 @@ export function renderSiteFooter() {
   <button class="theme-foot-btn" id="foot-tesla-dark" title="Tesla Dark" onclick="setTheme('tesla-dark')">◑</button>
 </div>
 <div class="footer">
+  ${renderTrustFooterSection()}
   <div class="footer-disclaimer">Эта страница создана в развлекательных и информационных целях.<br>Все данные об установленных станциях носят информационный характер и не являются официальной статистикой.<br>Страница не запрашивает и не хранит ваши личные данные.</div>
   <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
 </div>`;

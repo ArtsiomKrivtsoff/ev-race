@@ -93,6 +93,10 @@ html, body { height: 100%; overflow: hidden; margin: 0; padding: 0; }
   .sidebar-utils .heat-mode-seg  { width: 100%; display: flex; }
   .sidebar-utils .heat-seg-btn   { flex: 1; text-align: center; }
   .sidebar-caption { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: var(--ls-tight); color: var(--border-dim); line-height: 1.6; margin-top: auto; padding-top: var(--s-2); border-top: 1px solid var(--border-dim); }
+  .sidebar-trust { margin-top: var(--s-2); padding-top: var(--s-2); border-top: 1px solid var(--border-dim); }
+  .sidebar-trust-links { display: flex; flex-direction: column; gap: 6px; }
+  .sidebar-trust-link { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: var(--ls-tight); color: var(--green-dim); text-decoration: none; line-height: 1.5; }
+  .sidebar-trust-link:hover { color: var(--green); text-decoration: underline; }
 }
 
 /* ── Радио-точки для DC/AC/ACDC ── */
@@ -367,6 +371,14 @@ body.theme-tesla-dark .marker-cluster-large div { background-color: rgba(0,188,2
         <button class="map-util-btn reset" id="resetBtn-d" onclick="resetFilters()" style="display:none;">&#x2715; СБРОСИТЬ</button>
       </div>
       <div class="sidebar-caption">На карте — DC и AC зарядные станции Беларуси, запущенные в 2026 году, с типами разъёмов CCS2, GBT и CHAdeMO. Данные из открытых источников, возможны неточности.</div>
+      <div class="sidebar-section sidebar-trust">
+        <div class="sidebar-label">ДОВЕРИЕ</div>
+        <nav class="sidebar-trust-links" aria-label="Доверие">
+          <a class="sidebar-trust-link" href="/how-data-works">Как EVrace работает с данными</a>
+          <a class="sidebar-trust-link" href="/community-rules">Правила сообщества</a>
+          <a class="sidebar-trust-link" href="/privacy">Конфиденциальность</a>
+        </nav>
+      </div>
     </div>
 
     <!-- ── ВЕРХНЯЯ ПАНЕЛЬ (мобиль) ── -->

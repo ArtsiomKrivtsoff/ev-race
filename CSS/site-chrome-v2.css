@@ -439,6 +439,40 @@
   line-height: 1.75;
 }
 
+.page-wrap .footer-trust {
+  margin-bottom: var(--s-3);
+}
+
+.page-wrap .footer-trust-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: var(--ls-tight);
+  text-transform: uppercase;
+  color: var(--home-text-dim);
+  margin-bottom: var(--s-2);
+}
+
+.page-wrap .footer-trust-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  margin-bottom: var(--s-2);
+}
+
+.page-wrap .footer-trust-link {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--green-dim, #00cc33);
+  text-decoration: none;
+  letter-spacing: var(--ls-tight);
+}
+
+.page-wrap .footer-trust-link:hover {
+  color: var(--green, #00ff41);
+  text-decoration: underline;
+}
+
 .page-wrap .footer-disclaimer {
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px;

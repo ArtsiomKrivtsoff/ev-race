@@ -98,6 +98,7 @@
       '<button type="button" class="loc-btn loc-btn-community loc-submit-review">' +
       (state.isEdit ? "ОБНОВИТЬ" : "ОТПРАВИТЬ") +
       "</button>" +
+      '<p class="loc-form-consent">Отправляя отзыв, вы соглашаетесь с <a href="/community-rules">Правилами сообщества</a>.</p>' +
       '<p class="loc-privacy-note">🔒 Без спама. Без продажи данных. Один человек — одна оценка на точку.</p>';
 
     root.querySelector(".loc-logout-btn")?.addEventListener("click", function () {

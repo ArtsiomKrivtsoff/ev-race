@@ -50,6 +50,21 @@ export const STATIC_SITEMAP_ENTRIES = [
     changefreq: "weekly",
     priority: "0.6",
   },
+  {
+    loc: `${SITE_ORIGIN}/how-data-works`,
+    changefreq: "monthly",
+    priority: "0.5",
+  },
+  {
+    loc: `${SITE_ORIGIN}/community-rules`,
+    changefreq: "monthly",
+    priority: "0.5",
+  },
+  {
+    loc: `${SITE_ORIGIN}/privacy`,
+    changefreq: "monthly",
+    priority: "0.5",
+  },
 ];
 
 /**

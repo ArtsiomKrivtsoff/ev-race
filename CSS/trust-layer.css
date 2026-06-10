@@ -1,0 +1,254 @@
+/* EVrace Trust Layer v1 — calm document layout, separate from race UI */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body.trust-page {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: #f4f5f7;
+  color: #1a1f26;
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.trust-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.trust-site-hdr {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #d8dde3;
+}
+
+.trust-site-logo {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #2c3440;
+  text-decoration: none;
+}
+
+.trust-site-logo:hover {
+  color: #0d6efd;
+}
+
+.trust-main {
+  flex: 1;
+}
+
+/* ── Trust navigation ── */
+.trust-nav {
+  margin-bottom: 28px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid #d8dde3;
+  border-radius: 6px;
+}
+
+.trust-nav-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5c6773;
+  margin-bottom: 10px;
+}
+
+.trust-nav-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.trust-nav-item {
+  font-size: 14px;
+  color: #0d6efd;
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.trust-nav-item:hover {
+  text-decoration: underline;
+}
+
+.trust-nav-item--current {
+  color: #1a1f26;
+  font-weight: 600;
+  cursor: default;
+}
+
+/* ── Page header ── */
+.trust-title {
+  margin: 0 0 12px;
+  font-size: clamp(1.5rem, 4vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #111820;
+}
+
+.trust-updated {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #5c6773;
+}
+
+.trust-lead {
+  margin: 0 0 28px;
+  font-size: 17px;
+  line-height: 1.55;
+  color: #2c3440;
+}
+
+/* ── Main content ── */
+.trust-content {
+  font-size: 16px;
+  color: #1a1f26;
+}
+
+.trust-content h2 {
+  margin: 32px 0 12px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #111820;
+}
+
+.trust-content h3 {
+  margin: 24px 0 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #1a1f26;
+}
+
+.trust-content p {
+  margin: 0 0 16px;
+}
+
+.trust-content ul,
+.trust-content ol {
+  margin: 0 0 16px;
+  padding-left: 1.4em;
+}
+
+.trust-content li {
+  margin-bottom: 6px;
+}
+
+.trust-content a {
+  color: #0d6efd;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.trust-content a:hover {
+  color: #0a58ca;
+}
+
+.trust-content strong {
+  font-weight: 600;
+}
+
+/* ── Related materials ── */
+.trust-related {
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid #d8dde3;
+}
+
+.trust-related-title {
+  margin: 0 0 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111820;
+}
+
+.trust-related-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trust-related-link {
+  font-size: 15px;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.trust-related-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Footer ── */
+.trust-foot {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #d8dde3;
+}
+
+.footer-trust {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.footer-trust-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5c6773;
+  margin-bottom: 10px;
+}
+
+.footer-trust-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 16px;
+}
+
+.footer-trust-link {
+  font-size: 13px;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.footer-trust-link:hover {
+  text-decoration: underline;
+}
+
+.trust-foot-copy {
+  margin: 0;
+  font-size: 12px;
+  color: #8a939e;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .trust-wrap {
+    padding: 20px 16px 40px;
+  }
+
+  .trust-nav-items {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
