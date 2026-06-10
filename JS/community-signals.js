@@ -243,40 +243,7 @@
       "</div>";
   }
 
-  function renderMobileTeaser() {
-    var root = formRoot();
-    if (!root) return;
-    setBlockMode("cs-mobile-collapsed");
-    root.innerHTML =
-      '<div class="cs-mobile-teaser">' +
-      '<p class="cs-mobile-teaser-title">Добавить наблюдение</p>' +
-      '<p class="cs-mobile-teaser-lead">Поделитесь своим опытом на этой локации</p>' +
-      '<button type="button" class="loc-btn loc-btn-accent cs-mobile-expand">Добавить наблюдение</button>' +
-      "</div>";
-    root.querySelector(".cs-mobile-expand")?.addEventListener("click", function () {
-      state.mobileExpanded = true;
-      renderForm();
-    });
-  }
-
-  function renderForm() {
-    var root = formRoot();
-    if (!root || !state.formSignals.length) {
-      if (root) root.innerHTML = "";
-      return;
-    }
-
-    if (isMobile() && !state.mobileExpanded && !state.submitted) {
-      renderMobileTeaser();
-      return;
-    }
-
-    if (isMobile()) {
-      setBlockMode("cs-mobile-expanded");
-    } else {
-      setBlockMode(null);
-    }
-
+  function buildFormHtml() {
     var html =
       '<div class="cs-form">' +
       '<p class="cs-form-hint">Выберите до 4 наблюдений</p>' +
@@ -307,8 +274,63 @@
       '<div class="cs-turnstile" id="cs-turnstile"></div>' +
       '<button type="button" class="loc-btn loc-btn-accent cs-submit" id="cs-submit" disabled>Учесть наблюдение</button>' +
       "</div>";
+    return html;
+  }
 
-    root.innerHTML = html;
+  function bindMobileExpand(shell) {
+    var btn = shell.querySelector(".cs-mobile-expand");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      if (state.mobileExpanded) return;
+      state.mobileExpanded = true;
+      setBlockMode("cs-mobile-expanded");
+      shell.classList.add("cs-mobile-shell--expanded");
+      btn.setAttribute("aria-expanded", "true");
+      window.setTimeout(function () {
+        mountTurnstile();
+        updateSubmitState();
+      }, 80);
+    });
+  }
+
+  function renderMobileShell() {
+    var root = formRoot();
+    if (!root) return;
+    setBlockMode("cs-mobile-collapsed");
+    root.innerHTML =
+      '<div class="cs-mobile-shell">' +
+      '<div class="cs-mobile-teaser">' +
+      '<p class="cs-mobile-teaser-title">Добавить наблюдение</p>' +
+      '<p class="cs-mobile-teaser-lead">Поделитесь своим опытом на этой локации</p>' +
+      '<button type="button" class="loc-btn loc-btn-accent cs-mobile-expand" aria-expanded="false">Добавить наблюдение</button>' +
+      "</div>" +
+      '<div class="cs-form-panel"><div class="cs-form-panel-inner">' +
+      buildFormHtml() +
+      "</div></div></div>";
+    bindMobileExpand(root.querySelector(".cs-mobile-shell"));
+    bindFormEvents();
+    updateSubmitState();
+  }
+
+  function renderForm() {
+    var root = formRoot();
+    if (!root || !state.formSignals.length) {
+      if (root) root.innerHTML = "";
+      return;
+    }
+
+    if (isMobile() && !state.mobileExpanded && !state.submitted) {
+      renderMobileShell();
+      return;
+    }
+
+    if (isMobile()) {
+      setBlockMode("cs-mobile-expanded");
+    } else {
+      setBlockMode(null);
+    }
+
+    root.innerHTML = buildFormHtml();
     mountTurnstile();
     bindFormEvents();
     updateSubmitState();

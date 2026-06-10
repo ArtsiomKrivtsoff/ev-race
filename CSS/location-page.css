@@ -1085,9 +1085,52 @@ body.location-page {
   .loc-cs-form-blk > .blk-hdr {
     display: none;
   }
+  .cs-mobile-shell {
+    display: flex;
+    flex-direction: column;
+  }
+  .cs-form-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .cs-mobile-shell--expanded .cs-form-panel {
+    grid-template-rows: 1fr;
+  }
+  .cs-form-panel-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+  .cs-form-panel-inner .cs-form {
+    padding-top: 2px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.45s ease 0.1s,
+      transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.08s;
+  }
+  .cs-mobile-shell--expanded .cs-form-panel-inner .cs-form {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .cs-mobile-teaser {
     text-align: center;
     padding: 4px 0 2px;
+    max-height: 220px;
+    opacity: 1;
+    overflow: hidden;
+    transition:
+      opacity 0.35s ease,
+      max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      padding 0.45s ease,
+      margin 0.45s ease;
+  }
+  .cs-mobile-shell--expanded .cs-mobile-teaser {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+    pointer-events: none;
   }
   .cs-mobile-teaser-title {
     margin: 0 0 8px;
@@ -1128,6 +1171,18 @@ body.location-page {
     width: 100%;
     margin-top: 12px;
     min-height: 44px;
+  }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  .cs-form-panel,
+  .cs-form-panel-inner .cs-form,
+  .cs-mobile-teaser {
+    transition: none;
+  }
+  .cs-form-panel-inner .cs-form {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -1586,6 +1641,359 @@ body.reduced-fx .loc-cs-agg-blk .cs-agg-count {
 html[data-theme="tesla-light"] body.location-page,
 html[data-theme="tesla-dark"] body.location-page {
   --loc-inset-glow: transparent;
+  --home-text: var(--fg);
+  --home-text-mid: var(--fg-2);
+  --home-text-dim: var(--fg-3);
+  --home-card: var(--surface);
+  --home-bdr: var(--hairline);
+  --home-bg: var(--bg);
+  --home-bg-glow: transparent;
+  --cs-chip-font: var(--font);
+  --muted: var(--fg-3);
+}
+
+html[data-theme="tesla-light"] body.location-page .page-wrap,
+html[data-theme="tesla-dark"] body.location-page .page-wrap {
+  color: var(--fg);
+}
+
+html[data-theme="tesla-light"] body.location-page .page-wrap .blk,
+html[data-theme="tesla-dark"] body.location-page .page-wrap .blk {
+  background: var(--surface);
+  border-color: var(--hairline);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-1);
+}
+
+html[data-theme="tesla-light"] body.location-page .page-wrap .blk-hdr,
+html[data-theme="tesla-dark"] body.location-page .page-wrap .blk-hdr {
+  border-bottom-color: var(--hairline);
+}
+
+html[data-theme="tesla-light"] body.location-page .page-wrap .blk-title,
+html[data-theme="tesla-dark"] body.location-page .page-wrap .blk-title {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-hero-identity,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-identity,
+html[data-theme="tesla-light"] body.location-page .loc-hero-mobile-rating,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-mobile-rating {
+  border-radius: var(--r);
+  box-shadow: var(--shadow-1);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-hero-operator .loc-hero-op,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-operator .loc-hero-op {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: clamp(0.75rem, 1.1vw, 0.875rem);
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-hero-venue,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-venue,
+html[data-theme="tesla-light"] body.location-page .loc-hero-addr-meta,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-addr-meta {
+  font-family: var(--font);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--fg-2);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-hero-agg,
+html[data-theme="tesla-dark"] body.location-page .loc-hero-agg {
+  font-family: var(--font);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--accent);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-empty,
+html[data-theme="tesla-dark"] body.location-page .loc-empty,
+html[data-theme="tesla-light"] body.location-page .loc-empty-lead,
+html[data-theme="tesla-dark"] body.location-page .loc-empty-lead {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--fg-2);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-infra-cell,
+html[data-theme="tesla-dark"] body.location-page .loc-infra-cell,
+html[data-theme="tesla-light"] body.location-page .loc-st-row,
+html[data-theme="tesla-dark"] body.location-page .loc-st-row,
+html[data-theme="tesla-light"] body.location-page .loc-st-dc-ac-leg,
+html[data-theme="tesla-dark"] body.location-page .loc-st-dc-ac-leg {
+  border-color: var(--hairline);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-nearby-item,
+html[data-theme="tesla-dark"] body.location-page .loc-nearby-item {
+  border-bottom-color: var(--hairline);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-nearby-title,
+html[data-theme="tesla-dark"] body.location-page .loc-nearby-title {
+  font-family: var(--font);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-nearby-addr,
+html[data-theme="tesla-dark"] body.location-page .loc-nearby-addr,
+html[data-theme="tesla-light"] body.location-page .loc-nearby-empty,
+html[data-theme="tesla-dark"] body.location-page .loc-nearby-empty {
+  font-family: var(--font);
+  text-transform: none;
+  color: var(--fg-2);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-nearby-dist,
+html[data-theme="tesla-dark"] body.location-page .loc-nearby-dist {
+  font-family: var(--font-num);
+  font-weight: 500;
+  color: var(--fg-3);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-tag-agg-cell--negative,
+html[data-theme="tesla-dark"] body.location-page .loc-tag-agg-cell--negative {
+  border-color: rgba(216, 71, 56, 0.35);
+  color: var(--err);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-review-tag--negative,
+html[data-theme="tesla-dark"] body.location-page .loc-review-tag--negative {
+  border-color: rgba(216, 71, 56, 0.35);
+  color: var(--err);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-review-helpful,
+html[data-theme="tesla-dark"] body.location-page .loc-review-helpful,
+html[data-theme="tesla-light"] body.location-page .loc-review-more,
+html[data-theme="tesla-dark"] body.location-page .loc-review-more {
+  font-family: var(--font);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Community Signals — flat Tesla chips (no CRT / glow) */
+html[data-theme="tesla-light"] body.location-page .loc-cs-form-blk,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-form-blk {
+  background: var(--surface);
+  border-color: var(--hairline);
+  box-shadow: var(--shadow-1);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-cs-form-blk .blk-hdr,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-form-blk .blk-hdr {
+  border-bottom-color: var(--hairline);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-cs-form-blk .blk-title,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-form-blk .blk-title {
+  color: var(--fg-3);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-empty,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-empty {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--fg-2);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-chip,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-chip {
+  background: var(--surface-2);
+  border-radius: var(--r-s);
+  box-shadow: none;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-chip--pos,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-chip--pos {
+  border-color: rgba(30, 156, 74, 0.35);
+  color: var(--ok);
+  box-shadow: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-chip--neg,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-chip--neg,
+html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-chip--warn,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-chip--warn {
+  border-color: rgba(216, 71, 56, 0.35);
+  color: var(--err);
+  box-shadow: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-label,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-label {
+  font-family: var(--font);
+  font-weight: 600;
+  text-transform: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-count,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-count {
+  font-family: var(--font-num);
+  font-weight: 600;
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .cs-form-counter,
+html[data-theme="tesla-dark"] body.location-page .cs-form-counter,
+html[data-theme="tesla-light"] body.location-page .cs-form-hint,
+html[data-theme="tesla-dark"] body.location-page .cs-form-hint,
+html[data-theme="tesla-light"] body.location-page .cs-form-loading,
+html[data-theme="tesla-dark"] body.location-page .cs-form-loading,
+html[data-theme="tesla-light"] body.location-page .cs-mobile-teaser-title,
+html[data-theme="tesla-dark"] body.location-page .cs-mobile-teaser-title,
+html[data-theme="tesla-light"] body.location-page .cs-mobile-teaser-lead,
+html[data-theme="tesla-dark"] body.location-page .cs-mobile-teaser-lead,
+html[data-theme="tesla-light"] body.location-page .cs-success-lead,
+html[data-theme="tesla-dark"] body.location-page .cs-success-lead,
+html[data-theme="tesla-light"] body.location-page .cs-review-cta-note,
+html[data-theme="tesla-dark"] body.location-page .cs-review-cta-note {
+  font-family: var(--font);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--fg-2);
+}
+
+html[data-theme="tesla-light"] body.location-page .cs-form-chip,
+html[data-theme="tesla-dark"] body.location-page .cs-form-chip,
+html[data-theme="tesla-light"] body.location-page .cs-success-chip,
+html[data-theme="tesla-dark"] body.location-page .cs-success-chip {
+  background: var(--surface-2);
+  border-color: var(--hairline);
+  border-radius: var(--r-s);
+  font-family: var(--font);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html[data-theme="tesla-light"] body.location-page .cs-form-chip--pos.is-on,
+html[data-theme="tesla-dark"] body.location-page .cs-form-chip--pos.is-on {
+  border-color: rgba(30, 156, 74, 0.5);
+  color: var(--ok);
+  background: rgba(30, 156, 74, 0.08);
+}
+
+html[data-theme="tesla-light"] body.location-page .cs-form-chip--neg.is-on,
+html[data-theme="tesla-dark"] body.location-page .cs-form-chip--neg.is-on,
+html[data-theme="tesla-light"] body.location-page .cs-form-chip--warn.is-on,
+html[data-theme="tesla-dark"] body.location-page .cs-form-chip--warn.is-on {
+  border-color: rgba(216, 71, 56, 0.5);
+  color: var(--err);
+  background: rgba(216, 71, 56, 0.08);
+}
+
+html[data-theme="tesla-light"] body.location-page .cs-success-title,
+html[data-theme="tesla-dark"] body.location-page .cs-success-title {
+  font-family: var(--font);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ok);
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .cs-success-chip--pos.is-on,
+html[data-theme="tesla-dark"] body.location-page .cs-success-chip--pos.is-on {
+  border-color: rgba(30, 156, 74, 0.35);
+  color: var(--ok);
+}
+
+html[data-theme="tesla-light"] body.location-page .cs-success-chip--neg.is-on,
+html[data-theme="tesla-dark"] body.location-page .cs-success-chip--neg.is-on,
+html[data-theme="tesla-light"] body.location-page .cs-success-chip--warn.is-on,
+html[data-theme="tesla-dark"] body.location-page .cs-success-chip--warn.is-on {
+  border-color: rgba(216, 71, 56, 0.35);
+  color: var(--err);
+}
+
+html[data-theme="tesla-light"] body.location-page .cs-form-error,
+html[data-theme="tesla-dark"] body.location-page .cs-form-error {
+  color: var(--err);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-form-sub,
+html[data-theme="tesla-dark"] body.location-page .loc-form-sub,
+html[data-theme="tesla-light"] body.location-page .loc-form-lead,
+html[data-theme="tesla-dark"] body.location-page .loc-form-lead,
+html[data-theme="tesla-light"] body.location-page .loc-form-sub-lead,
+html[data-theme="tesla-dark"] body.location-page .loc-form-sub-lead,
+html[data-theme="tesla-light"] body.location-page .loc-field-label,
+html[data-theme="tesla-dark"] body.location-page .loc-field-label,
+html[data-theme="tesla-light"] body.location-page .loc-field-hint,
+html[data-theme="tesla-dark"] body.location-page .loc-field-hint,
+html[data-theme="tesla-light"] body.location-page .loc-form-consent,
+html[data-theme="tesla-dark"] body.location-page .loc-form-consent,
+html[data-theme="tesla-light"] body.location-page .loc-privacy-note,
+html[data-theme="tesla-dark"] body.location-page .loc-privacy-note {
+  font-family: var(--font);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--fg-2);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-form-success-title,
+html[data-theme="tesla-dark"] body.location-page .loc-form-success-title {
+  font-family: var(--font);
+  font-weight: 600;
+  color: var(--ok);
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-tag-chip.is-on.positive,
+html[data-theme="tesla-dark"] body.location-page .loc-tag-chip.is-on.positive {
+  border-color: rgba(30, 156, 74, 0.5);
+  color: var(--ok);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-tag-chip.is-on.negative,
+html[data-theme="tesla-dark"] body.location-page .loc-tag-chip.is-on.negative {
+  border-color: rgba(216, 71, 56, 0.5);
+  color: var(--err);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-tag-chip,
+html[data-theme="tesla-dark"] body.location-page .loc-tag-chip {
+  font-family: var(--font);
+  border-radius: var(--r-s);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-comment-input,
+html[data-theme="tesla-dark"] body.location-page .loc-comment-input,
+html[data-theme="tesla-light"] body.location-page .loc-visit-input,
+html[data-theme="tesla-dark"] body.location-page .loc-visit-input {
+  background: var(--surface-2);
+  border-color: var(--hairline);
+  border-radius: var(--r-s);
+  font-family: var(--font);
+}
+
+html[data-theme="tesla-light"] body.location-page .loc-hero,
+html[data-theme="tesla-dark"] body.location-page .loc-hero {
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 html[data-theme="tesla-light"] body.location-page .loc-breadcrumbs,
@@ -1886,9 +2294,10 @@ html[data-theme="tesla-dark"] body.location-page .loc-btn-accent:focus-visible {
   box-shadow: none;
 }
 
-/* Tesla Light desktop — слабый контраст surface vs bg (#fff / #fafafb / #f4f4f6) */
+/* Tesla Light desktop — контраст карточек на светлом фоне */
 @media (min-width: 900px) {
-  html[data-theme="tesla-light"] body.location-page .loc-hero,
+  html[data-theme="tesla-light"] body.location-page .loc-hero-identity,
+  html[data-theme="tesla-light"] body.location-page .loc-hero-mobile-rating,
   html[data-theme="tesla-light"] body.location-page .loc-main-grid .blk {
     border-color: var(--hairline);
     box-shadow: var(--shadow-2);
