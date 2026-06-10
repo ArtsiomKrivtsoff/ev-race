@@ -426,11 +426,9 @@ function csSentimentKey(sentiment) {
 export function renderCommunitySignalsBlock(community) {
   const signals = (community?.signals || []).filter((s) => (s.count || 0) > 0);
 
-  let areaA;
+  let aggInner;
   if (!signals.length) {
-    areaA = `<div class="cs-agg-body" id="community-signals-agg">
-<p class="cs-agg-empty">Станция ждёт первое наблюдение сообщества.</p>
-</div>`;
+    aggInner = `<p class="cs-agg-empty">Станция ждёт первое наблюдение сообщества.</p>`;
   } else {
     const chips = signals
       .map((s) => {
@@ -441,14 +439,15 @@ export function renderCommunitySignalsBlock(community) {
 </div>`;
       })
       .join("");
-    areaA = `<div class="cs-agg-body" id="community-signals-agg">
-<div class="cs-agg-chips">${chips}</div>
-</div>`;
+    aggInner = `<div class="cs-agg-chips">${chips}</div>`;
   }
 
-  return `<div class="blk loc-cs-blk loc-grid-main" id="community-signals">
-<div class="blk-hdr"><span class="blk-title">Что говорят о локации</span></div>
-${areaA}
+  return `<div class="blk loc-cs-agg-blk loc-grid-main" id="community-signals-agg-block">
+<div class="blk-hdr"><span class="blk-title">Агрегированные сигналы сообщества</span></div>
+<div class="cs-agg-body" id="community-signals-agg">${aggInner}</div>
+</div>
+<div class="blk loc-cs-form-blk loc-grid-main" id="community-signals-input-block">
+<div class="blk-hdr"><span class="blk-title">Добавить своё наблюдение</span></div>
 <div class="cs-form-section" id="community-signals-form" aria-live="polite">
 <p class="cs-form-loading">Загрузка…</p>
 </div>

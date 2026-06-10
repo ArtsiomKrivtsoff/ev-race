@@ -9,17 +9,12 @@ import {
   validateSignalSlugs,
 } from "../_shared/signal-validation.ts";
 import { verifyTurnstile } from "../_shared/turnstile.ts";
+import { corsHeadersFor } from "../_shared/cors.ts";
 import {
   resolveVoterCookie,
   voterKeyFromCookie,
   withVoterCookie,
 } from "../_shared/voter.ts";
-
-const corsHeaders: Record<string, string> = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
 
 type SubmitBody = {
   location_id?: number;
@@ -28,11 +23,16 @@ type SubmitBody = {
   cf_token?: string;
 };
 
-function json(body: unknown, status = 200, extraHeaders: Record<string, string> = {}): Response {
+function json(
+  req: Request,
+  body: unknown,
+  status = 200,
+  extraHeaders: Record<string, string> = {},
+): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
-      ...corsHeaders,
+      ...corsHeadersFor(req),
       ...extraHeaders,
       "Content-Type": "application/json; charset=utf-8",
     },
@@ -41,11 +41,11 @@ function json(body: unknown, status = 200, extraHeaders: Record<string, string> 
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: corsHeadersFor(req) });
   }
 
   if (req.method !== "POST") {
-    return json({ error: "method_not_allowed" }, 405);
+    return json(req, { error: "method_not_allowed" }, 405);
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -53,31 +53,31 @@ Deno.serve(async (req) => {
   const voterSalt = Deno.env.get("VOTER_KEY_SALT");
 
   if (!supabaseUrl || !serviceKey || !voterSalt) {
-    return json({ error: "server_misconfigured" }, 500);
+    return json(req,{ error: "server_misconfigured" }, 500);
   }
 
   let body: SubmitBody;
   try {
     body = await req.json();
   } catch {
-    return json({ error: "invalid_json" }, 400);
+    return json(req,{ error: "invalid_json" }, 400);
   }
 
   const turnstileToken = body.turnstile_token || body.cf_token;
   const remoteIp = req.headers.get("cf-connecting-ip");
   if (!(await verifyTurnstile(turnstileToken, remoteIp))) {
-    return json({ error: "turnstile_failed" }, 403);
+    return json(req,{ error: "turnstile_failed" }, 403);
   }
 
   const locationId = Number(body.location_id);
   if (!Number.isFinite(locationId) || locationId <= 0) {
-    return json({ error: "invalid_location" }, 400);
+    return json(req,{ error: "invalid_location" }, 400);
   }
 
   const slugs = normalizeSignalSlugs(body.signal_slugs);
   const slugError = validateSignalSlugs(slugs);
   if (slugError) {
-    return json({ error: slugError }, 400);
+    return json(req,{ error: slugError }, 400);
   }
 
   const supabase = createClient(supabaseUrl, serviceKey);
@@ -90,7 +90,7 @@ Deno.serve(async (req) => {
     .maybeSingle();
 
   if (!locRow) {
-    return json({ error: "location_not_found" }, 404);
+    return json(req,{ error: "location_not_found" }, 404);
   }
 
   const { data: signalRows, error: sigErr } = await supabase
@@ -101,12 +101,12 @@ Deno.serve(async (req) => {
 
   if (sigErr) {
     console.error("signals lookup:", sigErr.message);
-    return json({ error: "db_error" }, 500);
+    return json(req,{ error: "db_error" }, 500);
   }
 
   const validSignals = mapValidSignals(slugs, signalRows || []);
   if (validSignals.length !== slugs.length) {
-    return json({ error: "invalid_payload" }, 400);
+    return json(req,{ error: "invalid_payload" }, 400);
   }
 
   const { cookieValue, setCookie } = await resolveVoterCookie(
@@ -123,7 +123,7 @@ Deno.serve(async (req) => {
     .maybeSingle();
 
   if (existing) {
-    return json({ error: "already_submitted" }, 409, responseHeaders);
+    return json(req,{ error: "already_submitted" }, 409, responseHeaders);
   }
 
   const { data: inserted, error: insErr } = await supabase
@@ -134,10 +134,10 @@ Deno.serve(async (req) => {
 
   if (insErr || !inserted) {
     if (insErr?.code === "23505") {
-      return json({ error: "already_submitted" }, 409, responseHeaders);
+      return json(req,{ error: "already_submitted" }, 409, responseHeaders);
     }
     console.error("submission insert:", insErr?.message);
-    return json({ error: "db_error" }, 500, responseHeaders);
+    return json(req,{ error: "db_error" }, 500, responseHeaders);
   }
 
   const itemRows = validSignals.map((s) => ({
@@ -152,7 +152,7 @@ Deno.serve(async (req) => {
   if (itemsErr) {
     console.error("submission items:", itemsErr.message);
     await supabase.from("community_signal_submissions").delete().eq("id", inserted.id);
-    return json({ error: "db_error" }, 500, responseHeaders);
+    return json(req,{ error: "db_error" }, 500, responseHeaders);
   }
 
   const countsDelta: Record<string, number> = {};
@@ -190,6 +190,7 @@ Deno.serve(async (req) => {
   }));
 
   return json(
+    req,
     {
       success: true,
       submission_id: inserted.id,

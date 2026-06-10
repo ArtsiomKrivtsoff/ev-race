@@ -198,7 +198,6 @@
 
     var html =
       '<div class="cs-form">' +
-      '<p class="cs-form-lead">Что заметили на станции?</p>' +
       '<p class="cs-form-counter">Выбрано <span id="cs-selected-count">' +
       state.selected.length +
       "</span> из " +
@@ -329,6 +328,10 @@
 
   async function onSubmit() {
     if (state.submitting) return;
+    if (!apiBase()) {
+      showError("Не удалось отправить. Обнови страницу и попробуй снова.");
+      return;
+    }
     state.submitting = true;
     updateSubmitState();
     showError("");
