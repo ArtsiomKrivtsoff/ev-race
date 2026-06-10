@@ -20,18 +20,20 @@
     return window.__EVRACE__ || {};
   }
 
-  function apiBase() {
-    var url = cfg().supabaseUrl || "";
-    return url.replace(/\/$/, "") + "/functions/v1";
+  /** Same-origin proxy on evrace.by — first-party voter cookie. */
+  function statusUrl() {
+    return (
+      "/api/community-signals-status?location_id=" +
+      encodeURIComponent(String(state.locationId))
+    );
   }
 
-  function apiHeaders() {
-    var key = cfg().supabaseKey || "";
-    return {
-      apikey: key,
-      Authorization: "Bearer " + key,
-      "Content-Type": "application/json",
-    };
+  function submitUrl() {
+    return "/api/submit-community-signals";
+  }
+
+  function postHeaders() {
+    return { "Content-Type": "application/json" };
   }
 
   function readJson(id) {
@@ -100,6 +102,22 @@
       escapeHtml(String(count)) +
       "</span></div>"
     );
+  }
+
+  function renderAreaAFromSignals(signals) {
+    var root = aggRoot();
+    if (!root) return;
+    if (!signals || !signals.length) {
+      root.innerHTML =
+        '<p class="cs-agg-empty">Станция ждёт первое наблюдение сообщества.</p>';
+      return;
+    }
+    var chips = signals
+      .map(function (s) {
+        return renderAggChip(s, s.count || 0);
+      })
+      .join("");
+    root.innerHTML = '<div class="cs-agg-chips">' + chips + "</div>";
   }
 
   function patchAreaA(countsDelta, selection) {
@@ -328,19 +346,15 @@
 
   async function onSubmit() {
     if (state.submitting) return;
-    if (!apiBase()) {
-      showError("Не удалось отправить. Обнови страницу и попробуй снова.");
-      return;
-    }
     state.submitting = true;
     updateSubmitState();
     showError("");
 
     try {
-      var res = await fetch(apiBase() + "/submit-community-signals", {
+      var res = await fetch(submitUrl(), {
         method: "POST",
-        headers: apiHeaders(),
-        credentials: "include",
+        headers: postHeaders(),
+        credentials: "same-origin",
         body: JSON.stringify({
           location_id: state.locationId,
           signal_slugs: state.selected,
@@ -378,7 +392,11 @@
 
       state.submitted = true;
       state.selection = data.selection || [];
-      patchAreaA(data.counts_delta, state.selection);
+      if (data.signals) {
+        renderAreaAFromSignals(data.signals);
+      } else {
+        patchAreaA(data.counts_delta, state.selection);
+      }
       renderSuccess(state.selection);
     } catch (err) {
       showError("Сеть недоступна. Попробуйте позже.");
@@ -390,20 +408,18 @@
   async function loadStatus() {
     if (!state.locationId) return;
     try {
-      var res = await fetch(
-        apiBase() +
-          "/community-signals-status?location_id=" +
-          encodeURIComponent(String(state.locationId)),
-        {
-          headers: apiHeaders(),
-          credentials: "include",
-        },
-      );
+      var res = await fetch(statusUrl(), {
+        credentials: "same-origin",
+      });
       var data = {};
       try {
         data = await res.json();
       } catch (e) {
         data = {};
+      }
+
+      if (data.signals) {
+        renderAreaAFromSignals(data.signals);
       }
 
       if (data.submitted && data.selection && data.selection.length) {

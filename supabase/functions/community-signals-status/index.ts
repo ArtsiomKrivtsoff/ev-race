@@ -1,10 +1,11 @@
 /**
  * GET /functions/v1/community-signals-status?location_id=
- * Returns whether this voter already submitted for the location.
+ * Returns voter status + aggregated signals (count > 0) for client refresh.
  */
 
 import { createClient } from "npm:@supabase/supabase-js@2.49.1";
 import { corsHeadersFor } from "../_shared/cors.ts";
+import { fetchAggregatedSignals } from "../_shared/signals-aggregate.ts";
 import {
   resolveVoterCookie,
   voterKeyFromCookie,
@@ -63,6 +64,8 @@ Deno.serve(async (req) => {
     return json(req, { error: "location_not_found" }, 404);
   }
 
+  const signals = await fetchAggregatedSignals(supabase, locationId);
+
   const { cookieValue, setCookie } = await resolveVoterCookie(
     req.headers.get("Cookie"),
   );
@@ -79,7 +82,7 @@ Deno.serve(async (req) => {
   if (!submission) {
     return json(
       req,
-      { voter_ready: true, submitted: false, selection: [] },
+      { voter_ready: true, submitted: false, selection: [], signals },
       200,
       responseHeaders,
     );
@@ -108,6 +111,7 @@ Deno.serve(async (req) => {
       submitted: true,
       selection,
       submitted_at: submission.created_at,
+      signals,
     },
     200,
     responseHeaders,

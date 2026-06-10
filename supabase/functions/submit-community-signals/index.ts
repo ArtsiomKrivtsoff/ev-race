@@ -10,6 +10,7 @@ import {
 } from "../_shared/signal-validation.ts";
 import { verifyTurnstile } from "../_shared/turnstile.ts";
 import { corsHeadersFor } from "../_shared/cors.ts";
+import { fetchAggregatedSignals } from "../_shared/signals-aggregate.ts";
 import {
   resolveVoterCookie,
   voterKeyFromCookie,
@@ -189,6 +190,8 @@ Deno.serve(async (req) => {
     sentiment: s.sentiment,
   }));
 
+  const signals = await fetchAggregatedSignals(supabase, locationId);
+
   return json(
     req,
     {
@@ -196,6 +199,7 @@ Deno.serve(async (req) => {
       submission_id: inserted.id,
       selection,
       counts_delta: countsDelta,
+      signals,
     },
     200,
     responseHeaders,
