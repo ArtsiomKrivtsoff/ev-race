@@ -501,8 +501,7 @@ body.location-page .blk-hdr {
   .loc-cs-agg-blk { order: 2; }
   .loc-cs-form-blk { order: 3; }
   .loc-photos-blk { order: 4; }
-  .loc-photo-upload-blk { order: 5; }
-  .loc-nearby-blk { order: 6; }
+  .loc-nearby-blk { order: 5; }
 }
 @media (min-width: 900px) {
   .loc-main-grid {
@@ -855,28 +854,95 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
   opacity: 0.6;
   cursor: wait;
 }
-.loc-empty-sub {
-  margin-top: 8px;
-  font-size: 12px;
-  line-height: 1.5;
-  opacity: 0.85;
+.loc-photos-cta-wrap {
+  padding: 0 var(--loc-pad) var(--loc-pad);
 }
-.loc-empty-add-photo {
-  margin: 12px 0 0;
-}
-.loc-add-photo-link {
-  color: var(--yellow);
-  font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-.loc-add-photo-link:hover {
-  text-decoration: underline;
+.loc-photos-add-btn {
+  width: 100%;
+  min-height: 44px;
 }
 
-/* ── Photo upload (Phase 4B) ── */
+/* ── Photo upload modal (Gallery First UX) ── */
+body.loc-upload-modal-open {
+  overflow: hidden;
+}
+.loc-upload-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.loc-upload-modal[hidden] {
+  display: none !important;
+}
+.loc-upload-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+}
+.loc-upload-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 420px);
+  max-height: min(92vh, 720px);
+  overflow: auto;
+  border: 1px solid var(--home-bdr, var(--border-faint));
+  border-radius: 6px;
+  background: var(--home-card, #090e09);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+.loc-upload-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--yellow);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.loc-upload-modal-title {
+  margin: 0;
+  padding: 16px 44px 0 16px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  color: var(--yellow);
+  text-transform: uppercase;
+}
+.loc-upload-success {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+}
+.loc-upload-success-title {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--green);
+}
+.loc-upload-success-body {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--home-text-mid, var(--text-dim));
+}
+.loc-upload-success-close {
+  width: 100%;
+  min-height: 44px;
+}
+
+/* ── Photo upload form (modal content) ── */
 .loc-photo-upload-body {
   padding: var(--loc-pad);
   display: flex;

@@ -358,18 +358,26 @@ function renderPhotoThumb(p, index) {
 </button>`;
 }
 
+function renderPhotoAddCta() {
+  return `<div class="loc-photos-cta-wrap">
+<button type="button" class="loc-btn loc-btn-community loc-photos-add-btn" id="loc-photos-add-btn">ДОБАВИТЬ ФОТО</button>
+</div>`;
+}
+
 export function renderPhotosBlock(community) {
   const photos = community?.photos || [];
   const count = community?.photo_count ?? photos.length ?? 0;
   const nextCursor = community?.photos_next_cursor || "";
   const hasMore = Boolean(nextCursor);
+  const cta = renderPhotoAddCta();
 
   if (!count && !photos.length) {
     return `<div class="blk loc-photos-blk" id="photos">
 <div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span></div>
 <div class="loc-photos-empty">
-<p class="loc-empty-lead">Пока нет фото этой локации</p>
+<p class="loc-empty-lead">Пока никто не добавил фотографии этой локации.</p>
 </div>
+${cta}
 </div>`;
   }
 
@@ -384,6 +392,7 @@ export function renderPhotosBlock(community) {
 <div class="loc-photo-grid">${thumbs}</div>
 ${loadMore}
 </div>
+${cta}
 </div>`;
 }
 
@@ -464,11 +473,13 @@ export function renderReviewFormBlock() {
 </div>`;
 }
 
-export function renderPhotoUploadBlock() {
-  return `<div class="blk loc-photo-upload-blk loc-grid-side" id="add-photo">
-<div class="blk-hdr"><span class="blk-title">📷 ПОКАЖИ СТАНЦИЮ</span></div>
-<div id="photo-upload-root" class="loc-photo-upload-body" aria-live="polite">
-<p class="loc-upload-loading">Загрузка…</p>
+export function renderPhotoUploadModal() {
+  return `<div class="loc-upload-modal" id="loc-upload-modal" hidden role="dialog" aria-modal="true" aria-labelledby="loc-upload-modal-title">
+<div class="loc-upload-modal-backdrop" data-upload-dismiss tabindex="-1"></div>
+<div class="loc-upload-modal-panel">
+<button type="button" class="loc-upload-modal-close" id="loc-upload-modal-close" aria-label="Закрыть">×</button>
+<h2 class="loc-upload-modal-title" id="loc-upload-modal-title">Покажите станцию сообществу EVrace</h2>
+<div id="photo-upload-root" class="loc-photo-upload-body" aria-live="polite"></div>
 </div>
 </div>`;
 }

@@ -4,6 +4,7 @@
   var TURNSTILE_SITE_KEY = "0x4AAAAAACtvG988gnpS7YBa";
   var MAX_FILES = 3;
   var MAX_BYTES = 10 * 1024 * 1024;
+  var SUCCESS_AUTO_CLOSE_MS = 2000;
 
   var state = {
     status: null,
@@ -14,7 +15,14 @@
     banner: "",
     bannerKind: "",
     turnstileWidgetId: null,
+    modalOpen: false,
+    successView: false,
   };
+
+  var modalEl = null;
+  var panelEl = null;
+  var lastFocusEl = null;
+  var successTimer = null;
 
   function pageData() {
     var el = document.getElementById("loc-page-data");
@@ -28,6 +36,10 @@
 
   function rootEl() {
     return document.getElementById("photo-upload-root");
+  }
+
+  function addBtn() {
+    return document.getElementById("loc-photos-add-btn");
   }
 
   function escapeHtml(s) {
@@ -92,7 +104,8 @@
       state.files.length > 0 &&
       !!state.turnstileToken &&
       !state.submitting &&
-      !state.statusLoading
+      !state.statusLoading &&
+      !state.successView
     );
   }
 
@@ -140,9 +153,36 @@
     updateSubmitButton();
   }
 
-  function renderForm() {
+  function renderSuccessView() {
     var root = rootEl();
     if (!root) return;
+    state.successView = true;
+    destroyTurnstile();
+    root.innerHTML =
+      '<div class="loc-upload-success">' +
+      '<p class="loc-upload-success-title">Фото отправлены на модерацию.</p>' +
+      '<p class="loc-upload-success-body">Спасибо за вклад в сообщество EVrace.</p>' +
+      '<button type="button" class="loc-btn loc-btn-community loc-upload-success-close" id="loc-upload-success-close">Закрыть</button>' +
+      "</div>";
+    root.querySelector("#loc-upload-success-close")?.addEventListener("click", function () {
+      closeModal(true);
+    });
+    clearSuccessTimer();
+    successTimer = setTimeout(function () {
+      closeModal(true);
+    }, SUCCESS_AUTO_CLOSE_MS);
+  }
+
+  function clearSuccessTimer() {
+    if (successTimer) {
+      clearTimeout(successTimer);
+      successTimer = null;
+    }
+  }
+
+  function renderForm() {
+    var root = rootEl();
+    if (!root || state.successView) return;
 
     var blocked = state.status && !state.status.can_upload;
     var bannerHtml = state.banner
@@ -187,15 +227,49 @@
       '<p class="loc-form-consent">Загружая фотографии, вы соглашаетесь с <a href="/community-rules">Правилами сообщества</a>.</p>';
 
     bindEvents(root);
-    mountTurnstile();
+    if (!blocked && !(state.statusLoading && !state.status)) {
+      mountTurnstile();
+    }
+  }
+
+  function destroyTurnstile() {
+    state.turnstileToken = "";
+    if (window.turnstile && state.turnstileWidgetId != null) {
+      try {
+        window.turnstile.remove(state.turnstileWidgetId);
+      } catch (_e) {
+        /* ignore */
+      }
+    }
+    state.turnstileWidgetId = null;
+  }
+
+  function resetTurnstileWidget() {
+    state.turnstileToken = "";
+    updateSubmitButton();
+    if (window.turnstile && state.turnstileWidgetId != null) {
+      try {
+        window.turnstile.reset(state.turnstileWidgetId);
+      } catch (_e) {
+        destroyTurnstile();
+        mountTurnstile();
+      }
+    }
   }
 
   function mountTurnstile() {
+    if (!state.modalOpen || state.successView) return;
     if (!state.status || !state.status.can_upload) return;
     var box = document.getElementById("loc-upload-turnstile");
-    if (!box || !window.turnstile) return;
+    if (!box) return;
+    if (!window.turnstile) {
+      setTimeout(mountTurnstile, 200);
+      return;
+    }
+
+    destroyTurnstile();
     box.innerHTML = "";
-    state.turnstileToken = "";
+
     try {
       state.turnstileWidgetId = window.turnstile.render(box, {
         sitekey: TURNSTILE_SITE_KEY,
@@ -206,16 +280,17 @@
           updateSubmitButton();
         },
         "expired-callback": function () {
-          state.turnstileToken = "";
-          updateSubmitButton();
+          resetTurnstileWidget();
+        },
+        "timeout-callback": function () {
+          resetTurnstileWidget();
         },
         "error-callback": function () {
-          state.turnstileToken = "";
-          updateSubmitButton();
+          resetTurnstileWidget();
         },
       });
     } catch (_e) {
-      /* turnstile not ready yet */
+      setTimeout(mountTurnstile, 300);
     }
   }
 
@@ -224,17 +299,6 @@
     if (!btn) return;
     btn.disabled = !canSubmit();
     btn.textContent = state.submitting ? "Отправка…" : "ОТПРАВИТЬ НА МОДЕРАЦИЮ";
-  }
-
-  function resetTurnstile() {
-    state.turnstileToken = "";
-    if (window.turnstile && state.turnstileWidgetId != null) {
-      try {
-        window.turnstile.reset(state.turnstileWidgetId);
-      } catch (_e) {
-        /* ignore */
-      }
-    }
   }
 
   function bindEvents(root) {
@@ -271,16 +335,6 @@
         else updateFileListDom(root);
       });
     }
-
-    root.querySelectorAll(".loc-upload-file-remove").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var idx = parseInt(btn.dataset.fileIndex, 10);
-        state.files = state.files.filter(function (_f, i) {
-          return i !== idx;
-        });
-        updateFileListDom(root);
-      });
-    });
 
     root.querySelector("#loc-upload-submit")?.addEventListener("click", submitUpload);
   }
@@ -353,39 +407,128 @@
         state.submitting = false;
         if (result.status === 200) {
           state.files = [];
-          state.banner = result.body.message || "Фото отправлены на модерацию";
-          state.bannerKind = "success";
-          resetTurnstile();
-          return fetchStatus(false);
+          state.banner = "";
+          renderSuccessView();
+          return;
         }
         var code = result.body.error || "server_error";
         state.banner = errorMessage(code, result.body);
         state.bannerKind = "error";
-        resetTurnstile();
+        resetTurnstileWidget();
         renderForm();
       })
       .catch(function () {
         state.submitting = false;
         state.banner = "Не удалось отправить. Проверьте связь и попробуйте снова.";
         state.bannerKind = "error";
-        resetTurnstile();
+        resetTurnstileWidget();
         renderForm();
       });
   }
 
+  function focusableInPanel() {
+    if (!panelEl) return [];
+    return Array.prototype.slice.call(
+      panelEl.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    );
+  }
+
+  function trapFocus(e) {
+    if (!state.modalOpen || e.key !== "Tab" || !panelEl) return;
+    var nodes = focusableInPanel();
+    if (!nodes.length) return;
+    var first = nodes[0];
+    var last = nodes[nodes.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  function requestClose() {
+    if (state.submitting) {
+      if (!window.confirm("Прервать загрузку?")) return;
+      state.submitting = false;
+    }
+    closeModal(true);
+  }
+
+  function openModal() {
+    if (!modalEl || state.modalOpen) return;
+    state.modalOpen = true;
+    state.successView = false;
+    state.files = [];
+    state.banner = "";
+    state.bannerKind = "";
+    lastFocusEl = document.activeElement;
+    modalEl.hidden = false;
+    document.body.classList.add("loc-upload-modal-open");
+    fetchStatus(false).then(function () {
+      var nodes = focusableInPanel();
+      if (nodes.length) nodes[0].focus();
+    });
+  }
+
+  function closeModal(force) {
+    if (!modalEl || !state.modalOpen) return;
+    if (state.submitting && !force) {
+      requestClose();
+      return;
+    }
+    clearSuccessTimer();
+    destroyTurnstile();
+    state.modalOpen = false;
+    state.successView = false;
+    state.files = [];
+    state.submitting = false;
+    state.banner = "";
+    modalEl.hidden = true;
+    document.body.classList.remove("loc-upload-modal-open");
+    var root = rootEl();
+    if (root) root.innerHTML = "";
+    if (lastFocusEl && typeof lastFocusEl.focus === "function") {
+      lastFocusEl.focus();
+    } else {
+      addBtn()?.focus();
+    }
+  }
+
+  function onKeyDown(e) {
+    if (!state.modalOpen) return;
+    if (e.key === "Escape") {
+      e.preventDefault();
+      requestClose();
+    }
+    trapFocus(e);
+  }
+
+  function initModalChrome() {
+    modalEl = document.getElementById("loc-upload-modal");
+    panelEl = modalEl?.querySelector(".loc-upload-modal-panel");
+    if (!modalEl) return;
+
+    addBtn()?.addEventListener("click", openModal);
+
+    modalEl.querySelector("#loc-upload-modal-close")?.addEventListener("click", requestClose);
+    modalEl.querySelectorAll("[data-upload-dismiss]").forEach(function (el) {
+      el.addEventListener("click", requestClose);
+    });
+
+    document.addEventListener("keydown", onKeyDown);
+
+    if (window.location.hash === "#add-photo") {
+      openModal();
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
-    if (!rootEl()) return;
-    fetchStatus(false);
-    if (window.turnstile) return;
-    var waited = 0;
-    var timer = setInterval(function () {
-      waited += 200;
-      if (window.turnstile) {
-        clearInterval(timer);
-        mountTurnstile();
-      } else if (waited > 10000) {
-        clearInterval(timer);
-      }
-    }, 200);
+    if (!document.getElementById("loc-photos-add-btn")) return;
+    initModalChrome();
   });
 })();
