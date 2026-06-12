@@ -228,8 +228,6 @@
         '<p class="cs-success-title">✓ Наблюдение учтено</p>' +
         '<p class="cs-success-lead">Спасибо за вклад в EVrace</p>' +
         renderRecapChips(selection, "success") +
-        '<a class="loc-btn loc-btn-community" href="#review-form">Оставить отзыв</a>' +
-        '<p class="cs-review-cta-note">Для публикации отзыва потребуется Telegram</p>' +
         "</div>";
       return;
     }

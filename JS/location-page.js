@@ -147,52 +147,12 @@
 
   function readCommunityData() {
     var el = document.getElementById("loc-community-data");
-    if (!el) return { photos: [], reviews: [] };
+    if (!el) return { photos: [] };
     try {
       return JSON.parse(el.textContent || "{}");
     } catch (e) {
-      return { photos: [], reviews: [] };
+      return { photos: [] };
     }
-  }
-
-  function initReviewAnchors() {
-    document.querySelectorAll('a[href="#review-form"]').forEach(function (a) {
-      a.addEventListener("click", function (e) {
-        var target = document.getElementById("review-form");
-        if (!target) return;
-        e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-        history.replaceState(null, "", "#review-form");
-      });
-    });
-  }
-
-  function initReviewsPagination() {
-    var list = document.querySelector(".loc-reviews-list");
-    var btn = document.querySelector(".loc-reviews-more");
-    if (!list || !btn) return;
-
-    var cards = list.querySelectorAll(".loc-review-card");
-    var pageSize = parseInt(list.dataset.pageSize, 10) || 3;
-    if (cards.length <= pageSize) return;
-
-    for (var i = pageSize; i < cards.length; i++) {
-      cards[i].hidden = true;
-    }
-    btn.hidden = false;
-
-    btn.addEventListener("click", function () {
-      var hidden = list.querySelectorAll(".loc-review-card[hidden]");
-      var shown = 0;
-      hidden.forEach(function (card) {
-        if (shown >= pageSize) return;
-        card.hidden = false;
-        shown++;
-      });
-      if (!list.querySelector(".loc-review-card[hidden]")) {
-        btn.hidden = true;
-      }
-    });
   }
 
   function initPhotoLightbox() {
@@ -202,13 +162,10 @@
         url: p.url || p.main_url || p.thumb_url || "",
         approved_at: p.approved_at,
         is_review_photo: Boolean(p.is_review_photo),
-        review_id: p.review_id,
-        review_anchor: p.review_anchor || "#reviews-list",
         author: p.author,
         time_ago: p.time_ago,
       };
     });
-    var reviews = data.reviews || [];
     var box = document.getElementById("loc-lightbox");
     if (!box) return;
 
@@ -229,8 +186,7 @@
 
     function captionFor(photo) {
       if (photo.is_review_photo) {
-        var anchor = photo.review_anchor || "#reviews-list";
-        return 'Фото из отзыва · <a href="' + anchor + '">К отзывам</a>';
+        return "Фото из отзыва";
       }
       if (photo.approved_at) {
         return "Опубликовано · " + formatApprovedAt(photo.approved_at);
@@ -297,8 +253,6 @@
           url: p.url || "",
           approved_at: p.approved_at,
           is_review_photo: Boolean(p.is_review_photo),
-          review_id: p.review_id,
-          review_anchor: p.review_anchor || "#reviews-list",
         };
       });
       if (!box.hidden) {
@@ -307,20 +261,6 @@
         renderSlide();
       }
       bindThumbButtons();
-    });
-
-    document.querySelectorAll("[data-review-photo]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var ri = parseInt(btn.dataset.reviewPhoto, 10);
-        var review = reviews[ri];
-        var set = (review && review.photos) || [];
-        if (!set.length && review && review.photo_urls) {
-          set = review.photo_urls.map(function (url) {
-            return { url: url, author: review.author, time_ago: review.time_ago };
-          });
-        }
-        if (set.length) openAt(set, 0);
-      });
     });
 
     closeBtn?.addEventListener("click", closeBox);
@@ -554,8 +494,6 @@
     syncStatusbarHeight();
     window.addEventListener("resize", syncStatusbarHeight);
     trackVisit();
-    initReviewAnchors();
-    initReviewsPagination();
     initPhotoLightbox();
     initPhotoPanelOverflow();
     fitFitLineElements();

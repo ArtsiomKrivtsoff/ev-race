@@ -138,17 +138,6 @@ function renderBadge(n) {
   return `<span class="loc-blk-badge">${escapeHtml(String(num))}</span>`;
 }
 
-function renderReviewCta(className, label = "ОЦЕНИТЬ ЛОКАЦИЮ", style = "community") {
-  const extra = className ? ` ${className}` : "";
-  const btnCls =
-    style === "plain"
-      ? "loc-btn loc-btn-community"
-      : style === "primary"
-        ? "loc-btn loc-btn-primary"
-        : "loc-btn loc-btn-community";
-  return `<a class="${btnCls} loc-review-cta${extra}" href="#review-form">${escapeHtml(label)}</a>`;
-}
-
 function formatRatingDisplay(rating) {
   const n = Number(rating);
   if (!Number.isFinite(n)) return "0.0";
@@ -234,23 +223,15 @@ function renderRatingCard(loc, community, { compact, linkHref }) {
 
   let inner;
   if (!hasRating) {
-    const cta = compact
-      ? `<div class="loc-rating-cta">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</div>`
-      : "";
     inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
 <span class="loc-rating-val loc-rating-val--placeholder" aria-hidden="true">X.X</span>
 <span class="loc-rating-stars loc-rating-stars--empty" aria-hidden="true">☆☆☆☆☆</span>
-<span class="loc-rating-meta">ОТЗЫВОВ ПОКА НЕТ</span>
-${cta}`;
+<span class="loc-rating-meta">ОТЗЫВОВ ПОКА НЕТ</span>`;
   } else {
-    const cta = compact
-      ? `<div class="loc-rating-cta">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</div>`
-      : "";
     inner = `<span class="loc-inset-lbl">РЕЙТИНГ ЛОКАЦИИ</span>
 <span class="loc-rating-val">${escapeHtml(formatRatingDisplay(loc.cached_avg_rating))}</span>
 <span class="loc-rating-stars" aria-hidden="true">${starsHtml(loc.cached_avg_rating)}</span>
-${renderRatingMeta(loc, community)}
-${cta}`;
+${renderRatingMeta(loc, community)}`;
   }
 
   if (linkHref && !compact && hasRating) {
@@ -282,13 +263,7 @@ function renderHeroTitleBlock(loc) {
   return `<h1 class="loc-hero-name"${idAttr}><span class="loc-hero-city">${fallback}</span></h1>`;
 }
 
-function renderHeroIdentity(
-  loc,
-  opCls,
-  opName,
-  aggregatorLine,
-  { showDesktopReviewCta = true } = {},
-) {
+function renderHeroIdentity(loc, opCls, opName, aggregatorLine) {
   const titleBlock = renderHeroTitleBlock(loc);
   const lat = loc.lat;
   const lng = loc.lng;
@@ -301,10 +276,6 @@ function renderHeroIdentity(
     ? `<button class="loc-btn loc-btn-primary route-nav-btn" type="button" data-route-lat="${escapeHtml(String(lat))}" data-route-lng="${escapeHtml(String(lng))}" data-route-label="${escapeHtml(routeLabel)}">МАРШРУТ</button>`
     : "";
 
-  const desktopCta = showDesktopReviewCta
-    ? `<span class="loc-hero-actions-desktop">${renderReviewCta("", "ОЦЕНИТЬ", "plain")}</span>`
-    : "";
-
   return `<div class="loc-hero-identity">
 <div class="loc-hero-operator"><span class="loc-hero-op ${opCls}">${escapeHtml(opName)}</span></div>
 ${titleBlock}
@@ -312,7 +283,6 @@ ${aggregatorLine}
 <div class="loc-hero-actions">
 ${routeBtn}
 <button class="loc-btn loc-btn-secondary" type="button" id="loc-share-btn" onclick="shareLocation()">ПОДЕЛИТЬСЯ</button>
-${desktopCta}
 </div>
 </div>`;
 }
@@ -325,16 +295,10 @@ export function renderHero(loc, community, opts) {
     mapBlock,
     h1Text,
   } = opts;
-  const identity = renderHeroIdentity(
-    loc,
-    opCls,
-    opName,
-    aggregatorLine,
-    { showDesktopReviewCta: true },
-  );
+  const identity = renderHeroIdentity(loc, opCls, opName, aggregatorLine);
   const ratingDesktop = renderRatingCard(loc, community, {
     compact: false,
-    linkHref: "#reviews-list",
+    linkHref: null,
   });
   const ratingMobile = renderRatingCard(loc, community, {
     compact: true,
@@ -405,9 +369,6 @@ export function renderPhotosBlock(community) {
 <div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span></div>
 <div class="loc-photos-empty">
 <p class="loc-empty-lead">Пока нет фото этой локации</p>
-<p class="loc-empty-sub">Фото можно добавить анонимно — после модерации они появятся здесь.</p>
-<p class="loc-empty-add-photo"><a href="#add-photo" class="loc-add-photo-link">Добавить фото ↓</a></p>
-${renderReviewCta("loc-review-cta--block")}
 </div>
 </div>`;
   }
@@ -472,7 +433,6 @@ export function renderTagsBlock(community) {
 <div class="blk-hdr"><span class="blk-title">ТЕГИ (НА ОСНОВЕ ОТЗЫВОВ)</span></div>
 <div class="loc-tags-empty">
 <p class="loc-empty-lead">Теги появятся после отзывов сообщества</p>
-${renderReviewCta("loc-review-cta--block")}
 </div>
 </div>`;
   }

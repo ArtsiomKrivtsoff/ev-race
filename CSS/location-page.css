@@ -500,10 +500,9 @@ body.location-page .blk-hdr {
   .loc-infra-blk { order: 1; }
   .loc-cs-agg-blk { order: 2; }
   .loc-cs-form-blk { order: 3; }
-  .loc-reviews-blk { order: 4; }
-  .loc-photos-blk { order: 5; }
-  .loc-photo-upload-blk { order: 6; }
-  .loc-nearby-blk { order: 7; }
+  .loc-photos-blk { order: 4; }
+  .loc-photo-upload-blk { order: 5; }
+  .loc-nearby-blk { order: 6; }
 }
 @media (min-width: 900px) {
   .loc-main-grid {
