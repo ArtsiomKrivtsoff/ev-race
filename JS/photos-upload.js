@@ -148,7 +148,7 @@
         '<p class="loc-upload-hint loc-upload-hint--sub">Через Telegram ваши публикации останутся за вами и смогут участвовать в будущих активностях и программах сообщества EVrace.</p>' +
         '<label class="loc-upload-file-label">' +
         '<span class="loc-upload-file-btn">Выбрать фото (до 3)</span>' +
-        '<input type="file" class="loc-upload-file-input" accept="image/*" capture="environment" multiple />' +
+        '<input type="file" class="loc-upload-file-input" accept="image/*" multiple />' +
         "</label>" +
         renderFileList() +
         '<div class="loc-upload-turnstile" id="loc-upload-turnstile"></div>' +
