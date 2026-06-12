@@ -118,6 +118,28 @@
     return '<ul class="loc-upload-file-list">' + items + "</ul>";
   }
 
+  function updateFileListDom(root) {
+    if (!root) root = rootEl();
+    if (!root) return;
+    var label = root.querySelector(".loc-upload-file-label");
+    if (!label) return;
+    var old = root.querySelector(".loc-upload-file-list");
+    if (old) old.remove();
+    var html = renderFileList();
+    if (html) label.insertAdjacentHTML("afterend", html);
+    root.querySelectorAll(".loc-upload-file-remove").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var idx = parseInt(btn.dataset.fileIndex, 10);
+        state.files = state.files.filter(function (_f, i) {
+          return i !== idx;
+        });
+        updateFileListDom(root);
+        updateSubmitButton();
+      });
+    });
+    updateSubmitButton();
+  }
+
   function renderForm() {
     var root = rootEl();
     if (!root) return;
@@ -245,7 +267,8 @@
           state.bannerKind = "warn";
         }
         input.value = "";
-        renderForm();
+        if (rejected) renderForm();
+        else updateFileListDom(root);
       });
     }
 
@@ -255,7 +278,7 @@
         state.files = state.files.filter(function (_f, i) {
           return i !== idx;
         });
-        renderForm();
+        updateFileListDom(root);
       });
     });
 

@@ -241,7 +241,7 @@ ${renderSiteFooter()}
 </div>
 <script src="/JS/community-signals.js?v=5"></script>
 <script src="/JS/photos-gallery.js?v=1"></script>
-<script src="/JS/photos-upload.js?v=2"></script>
+<script src="/JS/photos-upload.js?v=3"></script>
 <script src="/JS/location-page.js?v=12"></script>
 <script src="/JS/route-nav.js?v=2"></script>
 ${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=3"></script>' : ""}
