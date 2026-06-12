@@ -461,7 +461,7 @@ async function fetchCommunity(
     signals: signalData.signals,
     form_signals: signalData.form_signals,
     review_count: cachedReviewCount,
-    photo_count: cachedPhotoCount,
+    photo_count: 0,
   };
 
   const { data: reviewRows, error: revErr } = await supabase
@@ -536,29 +536,8 @@ async function fetchCommunity(
     tags: tagsByReview.get(r.id) || [],
   }));
 
-  const { data: photoRows, error: photoErr } = await supabase
-    .from("photos")
-    .select("id, comment, r2_key_main, r2_key_thumb, created_at")
-    .eq("location_id", locationId)
-    .is("deleted_at", null)
-    .eq("moderation_status", "approved")
-    .order("created_at", { ascending: false })
-    .limit(PHOTOS_LIMIT);
-
-  if (photoErr) {
-    console.error("photos query:", photoErr.message);
-  }
-
-  const photos: CommunityPhotoDto[] = ((photoRows || []) as PhotoRow[]).map(
-    (p) => ({
-      id: p.id,
-      thumb_url: photoPublicUrl(p.r2_key_thumb),
-      main_url: photoPublicUrl(p.r2_key_main),
-      comment: p.comment || "",
-      author: "Водитель EV RACE",
-      time_ago: formatTimeAgoRu(p.created_at),
-    }),
-  );
+  // Legacy cloud photos table — deprecated; gallery served from BY (Phase 4A SSR).
+  const photos: CommunityPhotoDto[] = [];
 
   const tags = [...tagAgg.values()].sort((a, b) => b.count - a.count);
 
@@ -570,7 +549,7 @@ async function fetchCommunity(
     signals: signalData.signals,
     form_signals: signalData.form_signals,
     review_count: cachedReviewCount,
-    photo_count: cachedPhotoCount,
+    photo_count: 0,
   };
 }
 

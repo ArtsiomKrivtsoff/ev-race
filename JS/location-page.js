@@ -197,10 +197,20 @@
 
   function initPhotoLightbox() {
     var data = readCommunityData();
-    var photos = data.photos || [];
+    var photos = (data.photos || []).map(function (p) {
+      return {
+        url: p.url || p.main_url || p.thumb_url || "",
+        approved_at: p.approved_at,
+        is_review_photo: Boolean(p.is_review_photo),
+        review_id: p.review_id,
+        review_anchor: p.review_anchor || "#reviews-list",
+        author: p.author,
+        time_ago: p.time_ago,
+      };
+    });
     var reviews = data.reviews || [];
     var box = document.getElementById("loc-lightbox");
-    if (!box || !photos.length) return;
+    if (!box) return;
 
     var img = box.querySelector(".loc-lightbox-img");
     var cap = box.querySelector(".loc-lightbox-cap");
@@ -212,30 +222,48 @@
     var index = 0;
     var touchX = null;
 
+    function formatApprovedAt(iso) {
+      if (window.__evraceFormatPhotoDate) return window.__evraceFormatPhotoDate(iso);
+      return iso ? String(iso).slice(0, 10) : "";
+    }
+
     function captionFor(photo) {
-      var parts = ["Из отзыва"];
-      if (photo.author) parts.push(photo.author);
-      if (photo.time_ago) parts.push(photo.time_ago);
-      return parts.join(" · ");
+      if (photo.is_review_photo) {
+        var anchor = photo.review_anchor || "#reviews-list";
+        return 'Фото из отзыва · <a href="' + anchor + '">К отзывам</a>';
+      }
+      if (photo.approved_at) {
+        return "Опубликовано · " + formatApprovedAt(photo.approved_at);
+      }
+      if (photo.author || photo.time_ago) {
+        var parts = ["Из отзыва"];
+        if (photo.author) parts.push(photo.author);
+        if (photo.time_ago) parts.push(photo.time_ago);
+        return parts.join(" · ");
+      }
+      return "";
     }
 
     function renderSlide() {
       var p = activeSet[index];
       if (!p) return;
       img.src = p.url || "";
-      cap.textContent = captionFor(p);
+      cap.innerHTML = captionFor(p);
       counter.textContent = index + 1 + " / " + activeSet.length;
       prevBtn.hidden = activeSet.length <= 1;
       nextBtn.hidden = activeSet.length <= 1;
     }
 
     function openAt(set, i) {
-      activeSet = set.length ? set : photos;
+      if (!set || !set.length) return;
+      activeSet = set;
       index = Math.max(0, Math.min(i, activeSet.length - 1));
       renderSlide();
       box.hidden = false;
       document.body.style.overflow = "hidden";
     }
+
+    window.__evraceOpenPhotoLightbox = openAt;
 
     function closeBox() {
       box.hidden = true;
@@ -248,11 +276,37 @@
       renderSlide();
     }
 
-    document.querySelectorAll(".loc-photo-thumb").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var i = parseInt(btn.dataset.photoIndex, 10) || 0;
-        openAt(photos, i);
+    function bindThumbButtons() {
+      document.querySelectorAll(".loc-photo-thumb").forEach(function (btn) {
+        if (btn.dataset.lightboxBound === "1") return;
+        btn.dataset.lightboxBound = "1";
+        btn.addEventListener("click", function () {
+          var i = parseInt(btn.dataset.photoIndex, 10) || 0;
+          openAt(photos, i);
+        });
       });
+    }
+
+    bindThumbButtons();
+
+    document.addEventListener("evrace:photos-updated", function (e) {
+      var next = (e.detail && e.detail.photos) || [];
+      if (!next.length) return;
+      photos = next.map(function (p) {
+        return {
+          url: p.url || "",
+          approved_at: p.approved_at,
+          is_review_photo: Boolean(p.is_review_photo),
+          review_id: p.review_id,
+          review_anchor: p.review_anchor || "#reviews-list",
+        };
+      });
+      if (!box.hidden) {
+        activeSet = photos;
+        if (index >= activeSet.length) index = activeSet.length - 1;
+        renderSlide();
+      }
+      bindThumbButtons();
     });
 
     document.querySelectorAll("[data-review-photo]").forEach(function (btn) {

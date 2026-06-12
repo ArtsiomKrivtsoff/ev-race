@@ -381,38 +381,46 @@ ${renderStationList(stations)}
 </div>`;
 }
 
+function renderPhotoThumb(p, index) {
+  const url = p.url || p.main_url || p.thumb_url || "";
+  const badge = p.is_review_photo
+    ? `<span class="loc-photo-review-badge">Из отзыва</span>`
+    : "";
+  const approvedAt = p.approved_at ? escapeHtml(String(p.approved_at)) : "";
+  const reviewId =
+    p.review_id != null ? ` data-review-id="${escapeHtml(String(p.review_id))}"` : "";
+  return `<button type="button" class="loc-photo-thumb" data-photo-index="${index}" data-photo-id="${escapeHtml(String(p.id || index))}" data-approved-at="${approvedAt}"${reviewId}${p.is_review_photo ? ' data-review-photo="1"' : ""} aria-label="Фото ${index + 1}">
+<img src="${escapeHtml(url)}" alt="" loading="lazy" decoding="async">${badge}
+</button>`;
+}
+
 export function renderPhotosBlock(community) {
   const photos = community?.photos || [];
   const count = community?.photo_count ?? photos.length ?? 0;
+  const nextCursor = community?.photos_next_cursor || "";
+  const hasMore = Boolean(nextCursor);
 
-  if (!count) {
+  if (!count && !photos.length) {
     return `<div class="blk loc-photos-blk" id="photos">
 <div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span></div>
 <div class="loc-photos-empty">
-<p class="loc-empty-lead">Фото появляются в отзывах</p>
+<p class="loc-empty-lead">Пока нет фото этой локации</p>
+<p class="loc-empty-sub">Фото можно добавить анонимно — после модерации они появятся здесь.</p>
 ${renderReviewCta("loc-review-cta--block")}
 </div>
 </div>`;
   }
 
-  const visible = photos.slice(0, 4);
-  const rest = count - visible.length;
-  const thumbs = visible
-    .map((p, i) => {
-      const overlay =
-        i === visible.length - 1 && rest > 0
-          ? `<span class="loc-photo-more">+${rest}</span>`
-          : "";
-      return `<button type="button" class="loc-photo-thumb" data-photo-index="${i}" aria-label="Фото ${i + 1}">
-<img src="${escapeHtml(p.url || "")}" alt="" loading="lazy">${overlay}
-</button>`;
-    })
-    .join("");
+  const thumbs = photos.map((p, i) => renderPhotoThumb(p, i)).join("");
+  const loadMore = hasMore
+    ? `<button type="button" class="loc-photos-load-more" id="loc-photos-load-more">Ещё фото</button>`
+    : "";
 
   return `<div class="blk loc-photos-blk" id="photos">
 <div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span>${renderBadge(count)}</div>
-<div class="loc-photo-panel">
+<div class="loc-photo-panel" id="loc-photos-gallery"${nextCursor ? ` data-next-cursor="${escapeHtml(nextCursor)}"` : ""}>
 <div class="loc-photo-grid">${thumbs}</div>
+${loadMore}
 </div>
 </div>`;
 }

@@ -824,6 +824,47 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
   font-size: 14px;
   color: var(--yellow);
 }
+.loc-photo-review-badge {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.72);
+  color: var(--yellow);
+  font-size: 8px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.loc-photos-load-more {
+  display: block;
+  width: calc(100% - 2 * var(--loc-pad));
+  margin: 10px var(--loc-pad) 0;
+  padding: 10px 12px;
+  border: 1px solid var(--home-bdr, var(--border-faint));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--yellow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  cursor: pointer;
+}
+.loc-photos-load-more:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.loc-empty-sub {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+.loc-lightbox-cap a {
+  color: var(--yellow);
+  text-decoration: underline;
+}
 
 /* ── Tags aggregate ── */
 .loc-tag-agg-grid {

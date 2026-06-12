@@ -70,6 +70,34 @@ function safeJsonForScript(obj) {
   return JSON.stringify(obj).replace(/</g, "\\u003c");
 }
 
+async function fetchByGallery(env, locationId) {
+  const base = String(
+    env.PHOTOS_API_BASE || "https://api.evrace.by/functions/v1",
+  ).replace(/\/$/, "");
+  const key = env.PHOTOS_BY_ANON_KEY || env.PHOTOS_ANON_KEY || "";
+  if (!key || !locationId) return null;
+
+  const url =
+    `${base}/photos-gallery?location_id=${encodeURIComponent(String(locationId))}&limit=12`;
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+      },
+    });
+    if (!res.ok) {
+      console.error("photos-gallery SSR:", res.status);
+      return null;
+    }
+    return await res.json();
+  } catch (err) {
+    console.error("photos-gallery SSR fetch failed:", err);
+    return null;
+  }
+}
+
 function renderLocationPage(data, envConfig) {
   const loc = data.location;
   const stations = data.stations || [];
@@ -112,6 +140,8 @@ function renderLocationPage(data, envConfig) {
     photos: community.photos || [],
     reviews: community.reviews || [],
     form_tags: community.form_tags || [],
+    photo_count: community.photo_count ?? (community.photos || []).length,
+    photos_next_cursor: community.photos_next_cursor || null,
   });
 
   const pageDataJson = safeJsonForScript({
@@ -150,7 +180,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=15">
-<link rel="stylesheet" href="/CSS/location-page.css?v=41">
+<link rel="stylesheet" href="/CSS/location-page.css?v=42">
 <link rel="stylesheet" href="/CSS/site-chrome-v2.css?v=1">
 <link rel="stylesheet" href="/CSS/route-nav.css?v=1">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
@@ -208,7 +238,8 @@ ${renderSiteFooter()}
 </div>
 </div>
 <script src="/JS/community-signals.js?v=5"></script>
-<script src="/JS/location-page.js?v=11"></script>
+<script src="/JS/photos-gallery.js?v=1"></script>
+<script src="/JS/location-page.js?v=12"></script>
 <script src="/JS/route-nav.js?v=2"></script>
 ${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=3"></script>' : ""}
 </body>
@@ -264,6 +295,15 @@ export async function onRequestGet(context) {
   }
 
   if (data.error) return render404();
+
+  const gallery = await fetchByGallery(env, data.location?.id);
+  if (gallery) {
+    data.community = data.community || {};
+    data.community.photos = gallery.photos || [];
+    data.community.photo_count =
+      gallery.total ?? gallery.photos?.length ?? 0;
+    data.community.photos_next_cursor = gallery.next_cursor || null;
+  }
 
   const html = renderLocationPage(data, {
     supabaseUrl: env.SUPABASE_URL,
