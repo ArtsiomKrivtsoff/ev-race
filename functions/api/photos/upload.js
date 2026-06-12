@@ -1,5 +1,6 @@
 import {
   photosApiUrl,
+  photosClientIpHeaders,
   photosForwardHeaders,
   photosWriteProxyResponse,
   resolvePhotosFingerprintCookie,
@@ -20,7 +21,11 @@ export async function onRequestPost(context) {
     });
   }
 
-  const forwardHeaders = photosForwardHeaders(env, cookieValue);
+  const forwardHeaders = photosForwardHeaders(
+    env,
+    cookieValue,
+    photosClientIpHeaders(request),
+  );
   const contentType = request.headers.get("Content-Type");
   if (contentType) forwardHeaders["Content-Type"] = contentType;
 

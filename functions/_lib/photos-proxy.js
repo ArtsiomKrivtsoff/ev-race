@@ -50,6 +50,13 @@ export function photosForwardHeaders(env, fpValue, extra = {}) {
   };
 }
 
+/** Forward visitor IP for Turnstile siteverify on BY (Pages → api.evrace.by). */
+export function photosClientIpHeaders(request) {
+  const clientIp = request.headers.get("CF-Connecting-IP");
+  if (!clientIp) return {};
+  return { "X-Photos-Client-IP": clientIp };
+}
+
 function appendUpstreamSetCookies(upstream, headers) {
   upstream.headers.forEach((value, key) => {
     if (key.toLowerCase() === "set-cookie") headers.append("Set-Cookie", value);
