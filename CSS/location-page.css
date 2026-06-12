@@ -502,7 +502,8 @@ body.location-page .blk-hdr {
   .loc-cs-form-blk { order: 3; }
   .loc-reviews-blk { order: 4; }
   .loc-photos-blk { order: 5; }
-  .loc-nearby-blk { order: 6; }
+  .loc-photo-upload-blk { order: 6; }
+  .loc-nearby-blk { order: 7; }
 }
 @media (min-width: 900px) {
   .loc-main-grid {
@@ -860,6 +861,137 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
   font-size: 12px;
   line-height: 1.5;
   opacity: 0.85;
+}
+.loc-empty-add-photo {
+  margin: 12px 0 0;
+}
+.loc-add-photo-link {
+  color: var(--yellow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.loc-add-photo-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Photo upload (Phase 4B) ── */
+.loc-photo-upload-body {
+  padding: var(--loc-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.loc-upload-loading,
+.loc-upload-blocked {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--home-text-mid, var(--text-dim));
+}
+.loc-upload-hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.loc-upload-hint--sub {
+  opacity: 0.88;
+}
+.loc-upload-file-label {
+  display: block;
+  cursor: pointer;
+}
+.loc-upload-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+.loc-upload-file-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px dashed var(--home-bdr, var(--border-faint));
+  border-radius: 4px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--yellow);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.loc-upload-file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.loc-upload-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--home-bdr, var(--border-faint));
+  border-radius: 4px;
+  font-size: 11px;
+  word-break: break-word;
+}
+.loc-upload-file-remove {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--yellow);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.loc-upload-turnstile {
+  min-height: 65px;
+}
+.loc-upload-submit {
+  width: 100%;
+  min-height: 44px;
+}
+.loc-upload-refresh {
+  align-self: flex-start;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--cyan, #66ddff);
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.loc-upload-banner {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.loc-upload-banner--success {
+  border: 1px solid rgba(0, 255, 65, 0.35);
+  color: var(--green);
+}
+.loc-upload-banner--error,
+.loc-upload-banner--warn {
+  border: 1px solid rgba(255, 200, 0, 0.35);
+  color: var(--yellow);
+}
+.loc-upload-banner--info {
+  border: 1px solid var(--home-bdr, var(--border-faint));
+  color: var(--home-text-mid, var(--text-dim));
 }
 .loc-lightbox-cap a {
   color: var(--yellow);

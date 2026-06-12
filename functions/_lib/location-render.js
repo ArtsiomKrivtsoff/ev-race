@@ -406,6 +406,7 @@ export function renderPhotosBlock(community) {
 <div class="loc-photos-empty">
 <p class="loc-empty-lead">Пока нет фото этой локации</p>
 <p class="loc-empty-sub">Фото можно добавить анонимно — после модерации они появятся здесь.</p>
+<p class="loc-empty-add-photo"><a href="#add-photo" class="loc-add-photo-link">Добавить фото ↓</a></p>
 ${renderReviewCta("loc-review-cta--block")}
 </div>
 </div>`;
@@ -507,7 +508,7 @@ export function renderPhotoUploadBlock() {
   return `<div class="blk loc-photo-upload-blk loc-grid-side" id="add-photo">
 <div class="blk-hdr"><span class="blk-title">📷 ПОКАЖИ СТАНЦИЮ</span></div>
 <div id="photo-upload-root" class="loc-photo-upload-body" aria-live="polite">
-<p class="loc-form-consent">Загружая фотографии, вы соглашаетесь с <a href="/community-rules">Правилами сообщества</a>.</p>
+<p class="loc-upload-loading">Загрузка…</p>
 </div>
 </div>`;
 }

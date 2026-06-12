@@ -1,7 +1,7 @@
 import {
   photosApiUrl,
   photosForwardHeaders,
-  photosProxyResponse,
+  photosWriteProxyResponse,
   resolvePhotosFingerprintCookie,
 } from "../../_lib/photos-proxy.js";
 
@@ -22,14 +22,14 @@ export async function onRequestGet(context) {
   }
 
   const upstream = await fetch(
-    photosApiUrl(env, "photos-gallery", url.search),
+    photosApiUrl(env, "photos-status", url.search),
     {
       method: "GET",
       headers: photosForwardHeaders(env, cookieValue),
     },
   );
 
-  return photosProxyResponse(upstream, setCookie, 300);
+  return photosWriteProxyResponse(upstream, setCookie);
 }
 
 /** @param {import("@cloudflare/workers-types").EventContext} context */

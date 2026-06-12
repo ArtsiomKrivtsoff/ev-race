@@ -1,14 +1,13 @@
 import {
   photosApiUrl,
   photosForwardHeaders,
-  photosProxyResponse,
+  photosWriteProxyResponse,
   resolvePhotosFingerprintCookie,
 } from "../../_lib/photos-proxy.js";
 
 /** @param {import("@cloudflare/workers-types").EventContext} context */
-export async function onRequestGet(context) {
+export async function onRequestPost(context) {
   const { request, env } = context;
-  const url = new URL(request.url);
   const { cookieValue, setCookie } = resolvePhotosFingerprintCookie(
     request.headers.get("Cookie"),
   );
@@ -21,15 +20,17 @@ export async function onRequestGet(context) {
     });
   }
 
-  const upstream = await fetch(
-    photosApiUrl(env, "photos-gallery", url.search),
-    {
-      method: "GET",
-      headers: photosForwardHeaders(env, cookieValue),
-    },
-  );
+  const forwardHeaders = photosForwardHeaders(env, cookieValue);
+  const contentType = request.headers.get("Content-Type");
+  if (contentType) forwardHeaders["Content-Type"] = contentType;
 
-  return photosProxyResponse(upstream, setCookie, 300);
+  const upstream = await fetch(photosApiUrl(env, "photos-upload"), {
+    method: "POST",
+    headers: forwardHeaders,
+    body: request.body,
+  });
+
+  return photosWriteProxyResponse(upstream, setCookie);
 }
 
 /** @param {import("@cloudflare/workers-types").EventContext} context */
@@ -37,7 +38,7 @@ export async function onRequestOptions() {
   return new Response(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "content-type",
     },
   });
