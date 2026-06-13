@@ -402,6 +402,14 @@ function csSentimentKey(sentiment) {
   return "pos";
 }
 
+function signalIconUrl(slug) {
+  return `/assets/icons/community-signals/arcade/${encodeURIComponent(slug)}.svg`;
+}
+
+function renderSignalIcon(slug) {
+  return `<img class="cs-signal-icon" src="${escapeHtml(signalIconUrl(slug))}" alt="" width="20" height="20" decoding="async" loading="lazy">`;
+}
+
 export function renderCommunitySignalsBlock(community) {
   const signals = (community?.signals || []).filter((s) => (s.count || 0) > 0);
 
@@ -413,6 +421,7 @@ export function renderCommunitySignalsBlock(community) {
       .map((s) => {
         const pol = csSentimentKey(s.sentiment);
         return `<div class="cs-agg-chip cs-agg-chip--${pol}" data-signal-slug="${escapeHtml(s.slug)}">
+${renderSignalIcon(s.slug)}
 <span class="cs-agg-label">${escapeHtml(s.label)}</span>
 <span class="cs-agg-count">×${escapeHtml(String(s.count))}</span>
 </div>`;

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect x="3" y="14" width="42" height="20" rx="3.4" fill="#F4C300"></rect>
+  <rect x="3" y="14" width="42" height="20" rx="3.4" fill="none" stroke="#0E1620" stroke-width="2"></rect>
+  <rect x="5.5" y="16.5" width="37" height="15" rx="1.8" fill="none" stroke="#0E1620" stroke-width="1.1" opacity="0.45"></rect>
+  <g transform="translate(24,0) scale(0.74,1) translate(-24,0)">
+    <text x="24" y="30" font-family="Arial Black, Arial, sans-serif" font-size="16.5" font-weight="900" text-anchor="middle" letter-spacing="0.5" fill="#101820">VYH</text>
+  </g>
+</svg>

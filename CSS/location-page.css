@@ -1154,7 +1154,6 @@ body.location-page {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   flex: 1 1 var(--cs-chip-min);
   max-width: 100%;
@@ -1196,6 +1195,7 @@ body.location-page {
 .loc-cs-agg-blk .cs-agg-count {
   flex: 0 0 auto;
   align-self: center;
+  margin-left: auto;
   font-family: "Press Start 2P", monospace;
   font-size: 9px;
   line-height: 1;
@@ -1251,6 +1251,9 @@ body.location-page {
 }
 .cs-form-chip {
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex: 1 1 calc(var(--cs-chip-min) - 0.5rem);
   max-width: 100%;
   min-height: 44px;
@@ -1275,6 +1278,13 @@ body.location-page {
   overflow-wrap: normal;
   hyphens: none;
   -webkit-hyphens: none;
+}
+.cs-signal-icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  pointer-events: none;
 }
 .cs-form-chip-label {
   display: -webkit-box;

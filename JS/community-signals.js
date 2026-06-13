@@ -97,6 +97,20 @@
     return null;
   }
 
+  function signalIconUrl(slug) {
+    return (
+      "/assets/icons/community-signals/arcade/" + encodeURIComponent(slug) + ".svg"
+    );
+  }
+
+  function signalIconHtml(slug) {
+    return (
+      '<img class="cs-signal-icon" src="' +
+      escapeHtml(signalIconUrl(slug)) +
+      '" alt="" width="20" height="20" decoding="async" loading="lazy">'
+    );
+  }
+
   function setAddBtnVisible(visible) {
     var btn = addBtn();
     if (!btn) return;
@@ -111,6 +125,7 @@
       '" data-signal-slug="' +
       escapeHtml(signal.slug) +
       '">' +
+      signalIconHtml(signal.slug) +
       '<span class="cs-agg-label">' +
       escapeHtml(signal.label) +
       "</span>" +
@@ -254,7 +269,9 @@
         on +
         '" data-slug="' +
         escapeHtml(s.slug) +
-        '"><span class="cs-form-chip-label">' +
+        '">' +
+        signalIconHtml(s.slug) +
+        '<span class="cs-form-chip-label">' +
         escapeHtml(s.label) +
         "</span></button>";
     });
