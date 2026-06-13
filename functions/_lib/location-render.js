@@ -407,7 +407,7 @@ export function renderCommunitySignalsBlock(community) {
 
   let aggInner;
   if (!signals.length) {
-    aggInner = `<p class="cs-agg-empty">Станция ждёт первое наблюдение сообщества.</p>`;
+    aggInner = `<p class="cs-agg-empty">СТАНЦИЯ ЖДЁТ ПЕРВОЕ НАБЛЮДЕНИЕ СООБЩЕСТВА</p>`;
   } else {
     const chips = signals
       .map((s) => {

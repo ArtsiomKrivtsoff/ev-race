@@ -129,7 +129,7 @@
     if (!root) return;
     if (!signals || !signals.length) {
       root.innerHTML =
-        '<p class="cs-agg-empty">Станция ждёт первое наблюдение сообщества.</p>';
+        '<p class="cs-agg-empty">СТАНЦИЯ ЖДЁТ ПЕРВОЕ НАБЛЮДЕНИЕ СООБЩЕСТВА</p>';
       return;
     }
     var chips = signals
@@ -275,6 +275,35 @@
     return html;
   }
 
+  function renderFormShell(expanded) {
+    var root = formRoot();
+    if (!root) return;
+    setBlockMode(expanded ? "cs-mobile-expanded" : "cs-mobile-collapsed");
+    var shellCls = "cs-mobile-shell" + (expanded ? " cs-mobile-shell--expanded" : "");
+    root.innerHTML =
+      '<div class="' +
+      shellCls +
+      '">' +
+      '<div class="cs-mobile-teaser">' +
+      '<p class="cs-mobile-teaser-title">Добавить наблюдение</p>' +
+      '<p class="cs-mobile-teaser-lead">Поделитесь своим опытом на этой локации</p>' +
+      '<button type="button" class="loc-btn loc-btn-accent cs-mobile-expand" aria-expanded="' +
+      (expanded ? "true" : "false") +
+      '">Добавить наблюдение</button>' +
+      "</div>" +
+      '<div class="cs-form-panel"><div class="cs-form-panel-inner">' +
+      buildFormHtml() +
+      "</div></div></div>";
+    bindMobileExpand(root.querySelector(".cs-mobile-shell"));
+    bindFormEvents();
+    updateSubmitState();
+    if (expanded) {
+      window.setTimeout(function () {
+        mountTurnstile();
+      }, 80);
+    }
+  }
+
   function bindMobileExpand(shell) {
     var btn = shell.querySelector(".cs-mobile-expand");
     if (!btn) return;
@@ -291,25 +320,6 @@
     });
   }
 
-  function renderMobileShell() {
-    var root = formRoot();
-    if (!root) return;
-    setBlockMode("cs-mobile-collapsed");
-    root.innerHTML =
-      '<div class="cs-mobile-shell">' +
-      '<div class="cs-mobile-teaser">' +
-      '<p class="cs-mobile-teaser-title">Добавить наблюдение</p>' +
-      '<p class="cs-mobile-teaser-lead">Поделитесь своим опытом на этой локации</p>' +
-      '<button type="button" class="loc-btn loc-btn-accent cs-mobile-expand" aria-expanded="false">Добавить наблюдение</button>' +
-      "</div>" +
-      '<div class="cs-form-panel"><div class="cs-form-panel-inner">' +
-      buildFormHtml() +
-      "</div></div></div>";
-    bindMobileExpand(root.querySelector(".cs-mobile-shell"));
-    bindFormEvents();
-    updateSubmitState();
-  }
-
   function renderForm() {
     var root = formRoot();
     if (!root || !state.formSignals.length) {
@@ -317,21 +327,9 @@
       return;
     }
 
-    if (isMobile() && !state.mobileExpanded && !state.submitted) {
-      renderMobileShell();
-      return;
-    }
+    if (state.submitted) return;
 
-    if (isMobile()) {
-      setBlockMode("cs-mobile-expanded");
-    } else {
-      setBlockMode(null);
-    }
-
-    root.innerHTML = buildFormHtml();
-    mountTurnstile();
-    bindFormEvents();
-    updateSubmitState();
+    renderFormShell(state.mobileExpanded);
   }
 
   function mountTurnstile() {
