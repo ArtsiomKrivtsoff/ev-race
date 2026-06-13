@@ -1,0 +1,44 @@
+name: EV RACE Weekly Letter
+
+on:
+  schedule:
+    # 03:00 UTC суббота = 06:00 Минск (UTC+3)
+    - cron: "0 3 * * 6"
+  workflow_dispatch:
+    inputs:
+      round_number:
+        description: "Номер круга (пусто = последний завершённый)"
+        required: false
+        type: string
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger generate-weekly-letter
+        env:
+          ROUND_INPUT: ${{ inputs.round_number }}
+        run: |
+          if [ -n "$ROUND_INPUT" ]; then
+            BODY="{\"round_number\": $ROUND_INPUT}"
+          else
+            BODY="{}"
+          fi
+
+          response=$(curl -s -o response.json -w "%{http_code}" \
+            -X POST \
+            -H "x-cron-secret: ${{ secrets.WEEKLY_LETTER_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d "$BODY" \
+            "${{ secrets.SUPABASE_URL }}/functions/v1/generate-weekly-letter")
+
+          echo "HTTP status: $response"
+          cat response.json
+
+          if [ "$response" = "200" ] || [ "$response" = "409" ]; then
+            echo "OK (200=new letter, 409=already exists)"
+            exit 0
+          fi
+
+          echo "Weekly letter generation failed with status $response"
+          exit 1
