@@ -19,6 +19,7 @@ import {
   renderPhotosBlock,
   renderPhotoUploadModal,
   renderCommunitySignalsBlock,
+  renderCommunitySignalsModal,
   renderNearbyBlock,
 } from "../_lib/location-render.js";
 
@@ -179,7 +180,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <link id="theme-css" rel="stylesheet" href="/CSS/arcade.css?v=5">
 <link rel="stylesheet" href="/CSS/operator.css?v=5">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=15">
-<link rel="stylesheet" href="/CSS/location-page.css?v=46">
+<link rel="stylesheet" href="/CSS/location-page.css?v=47">
 <link rel="stylesheet" href="/CSS/site-chrome-v2.css?v=1">
 <link rel="stylesheet" href="/CSS/route-nav.css?v=1">
 <link rel="prefetch" href="/CSS/tesla-light.css?v=5">
@@ -236,9 +237,10 @@ ${renderSiteFooter()}
 </div>
 </div>
 ${renderPhotoUploadModal()}
-<script src="/JS/community-signals.js?v=7"></script>
+${renderCommunitySignalsModal()}
+<script src="/JS/community-signals.js?v=8"></script>
 <script src="/JS/photos-gallery.js?v=1"></script>
-<script src="/JS/photos-upload.js?v=4"></script>
+<script src="/JS/photos-upload.js?v=5"></script>
 <script src="/JS/location-page.js?v=13"></script>
 <script src="/JS/route-nav.js?v=2"></script>
 ${hasCoords ? '<script src="/JS/vendor/leaflet.js?v=1"></script><script src="/JS/location-map.js?v=3"></script>' : ""}

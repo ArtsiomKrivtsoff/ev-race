@@ -421,14 +421,24 @@ export function renderCommunitySignalsBlock(community) {
     aggInner = `<div class="cs-agg-chips">${chips}</div>`;
   }
 
-  return `<div class="blk loc-cs-agg-blk loc-grid-main" id="community-signals-agg-block">
-<div class="blk-hdr"><span class="blk-title">Агрегированные сигналы сообщества</span></div>
+  const cta = `<div class="loc-cs-cta-wrap">
+<button type="button" class="loc-btn loc-btn-accent loc-cs-add-btn" id="loc-cs-add-btn">ДОБАВИТЬ НАБЛЮДЕНИЕ</button>
+</div>`;
+
+  return `<div class="blk loc-cs-agg-blk loc-grid-main" id="community-signals-block">
+<div class="blk-hdr"><span class="blk-title">ЧТО ГОВОРЯТ О ЛОКАЦИИ</span></div>
 <div class="cs-agg-body" id="community-signals-agg">${aggInner}</div>
-</div>
-<div class="blk loc-cs-form-blk loc-grid-main" id="community-signals-input-block">
-<div class="blk-hdr"><span class="blk-title">Добавить своё наблюдение</span></div>
-<div class="cs-form-section" id="community-signals-form" aria-live="polite">
-<p class="cs-form-loading">Загрузка…</p>
+${cta}
+</div>`;
+}
+
+export function renderCommunitySignalsModal() {
+  return `<div class="loc-action-modal loc-cs-modal" id="loc-cs-modal" hidden role="dialog" aria-modal="true" aria-labelledby="loc-cs-modal-title">
+<div class="loc-action-modal-backdrop" data-modal-dismiss tabindex="-1"></div>
+<div class="loc-action-modal-panel">
+<button type="button" class="loc-action-modal-close" id="loc-cs-modal-close" aria-label="Закрыть">×</button>
+<h2 class="loc-action-modal-title" id="loc-cs-modal-title">Добавить наблюдение</h2>
+<div id="cs-signals-modal-root" class="loc-cs-modal-body" aria-live="polite"></div>
 </div>
 </div>`;
 }
@@ -474,11 +484,11 @@ export function renderReviewFormBlock() {
 }
 
 export function renderPhotoUploadModal() {
-  return `<div class="loc-upload-modal" id="loc-upload-modal" hidden role="dialog" aria-modal="true" aria-labelledby="loc-upload-modal-title">
-<div class="loc-upload-modal-backdrop" data-upload-dismiss tabindex="-1"></div>
-<div class="loc-upload-modal-panel">
-<button type="button" class="loc-upload-modal-close" id="loc-upload-modal-close" aria-label="Закрыть">×</button>
-<h2 class="loc-upload-modal-title" id="loc-upload-modal-title">Покажите станцию сообществу EVrace</h2>
+  return `<div class="loc-action-modal loc-upload-modal" id="loc-upload-modal" hidden role="dialog" aria-modal="true" aria-labelledby="loc-upload-modal-title">
+<div class="loc-action-modal-backdrop" data-modal-dismiss tabindex="-1"></div>
+<div class="loc-action-modal-panel">
+<button type="button" class="loc-action-modal-close" id="loc-upload-modal-close" aria-label="Закрыть">×</button>
+<h2 class="loc-action-modal-title" id="loc-upload-modal-title">Покажите станцию сообществу EVrace</h2>
 <div id="photo-upload-root" class="loc-photo-upload-body" aria-live="polite"></div>
 </div>
 </div>`;

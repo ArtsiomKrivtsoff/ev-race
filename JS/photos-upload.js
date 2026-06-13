@@ -467,7 +467,7 @@
     state.bannerKind = "";
     lastFocusEl = document.activeElement;
     modalEl.hidden = false;
-    document.body.classList.add("loc-upload-modal-open");
+    document.body.classList.add("loc-modal-open");
     fetchStatus(false).then(function () {
       var nodes = focusableInPanel();
       if (nodes.length) nodes[0].focus();
@@ -488,7 +488,7 @@
     state.submitting = false;
     state.banner = "";
     modalEl.hidden = true;
-    document.body.classList.remove("loc-upload-modal-open");
+    document.body.classList.remove("loc-modal-open");
     var root = rootEl();
     if (root) root.innerHTML = "";
     if (lastFocusEl && typeof lastFocusEl.focus === "function") {
@@ -509,13 +509,13 @@
 
   function initModalChrome() {
     modalEl = document.getElementById("loc-upload-modal");
-    panelEl = modalEl?.querySelector(".loc-upload-modal-panel");
+    panelEl = modalEl?.querySelector(".loc-action-modal-panel");
     if (!modalEl) return;
 
     addBtn()?.addEventListener("click", openModal);
 
     modalEl.querySelector("#loc-upload-modal-close")?.addEventListener("click", requestClose);
-    modalEl.querySelectorAll("[data-upload-dismiss]").forEach(function (el) {
+    modalEl.querySelectorAll("[data-modal-dismiss]").forEach(function (el) {
       el.addEventListener("click", requestClose);
     });
 

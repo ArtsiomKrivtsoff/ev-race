@@ -1,7 +1,9 @@
 (function () {
+  "use strict";
+
   var TURNSTILE_SITE_KEY = "0x4AAAAAACtvG988gnpS7YBa";
   var MAX_SIGNALS = 4;
-  var MOBILE_MQ = "(max-width: 899px)";
+  var SUCCESS_AUTO_CLOSE_MS = 2000;
   var FORBIDDEN_PAIRS = [
     ["power_match", "power_disappointed"],
     ["access_good", "access_bad"],
@@ -15,12 +17,15 @@
     turnstileToken: "",
     formSignals: [],
     locationId: 0,
-    mobileExpanded: false,
+    modalOpen: false,
+    successView: false,
+    turnstileWidgetId: null,
   };
 
-  function cfg() {
-    return window.__EVRACE__ || {};
-  }
+  var modalEl = null;
+  var panelEl = null;
+  var lastFocusEl = null;
+  var successTimer = null;
 
   function statusUrl() {
     return (
@@ -48,30 +53,15 @@
   }
 
   function formRoot() {
-    return document.getElementById("community-signals-form");
+    return document.getElementById("cs-signals-modal-root");
   }
 
   function aggRoot() {
     return document.getElementById("community-signals-agg");
   }
 
-  function formBlock() {
-    return document.getElementById("community-signals-input-block");
-  }
-
-  function isMobile() {
-    return window.matchMedia(MOBILE_MQ).matches;
-  }
-
-  function setBlockMode(mode) {
-    var block = formBlock();
-    if (!block) return;
-    block.classList.remove(
-      "cs-mobile-collapsed",
-      "cs-mobile-expanded",
-      "cs-mobile-done"
-    );
-    if (mode) block.classList.add(mode);
+  function addBtn() {
+    return document.getElementById("loc-cs-add-btn");
   }
 
   function escapeHtml(s) {
@@ -105,6 +95,12 @@
       if (state.formSignals[i].slug === slug) return state.formSignals[i];
     }
     return null;
+  }
+
+  function setAddBtnVisible(visible) {
+    var btn = addBtn();
+    if (!btn) return;
+    btn.hidden = !visible;
   }
 
   function renderAggChip(signal, count) {
@@ -195,21 +191,14 @@
     });
   }
 
-  function renderRecapChips(items, mode) {
-    var prefix = mode === "form" ? "cs-form" : "cs-success";
-    var html = '<div class="' + prefix + '-chips">';
+  function renderRecapChips(items) {
+    var html = '<div class="cs-success-chips">';
     items.forEach(function (s) {
       var pol = sentimentKey(s.sentiment);
       html +=
-        '<span class="' +
-        prefix +
-        "-chip " +
-        prefix +
-        "-chip--" +
+        '<span class="cs-success-chip cs-success-chip--' +
         pol +
-        ' is-on"><span class="' +
-        prefix +
-        '-chip-label">' +
+        ' is-on"><span class="cs-success-chip-label">' +
         escapeHtml(s.label) +
         " ✓</span></span>";
     });
@@ -217,28 +206,32 @@
     return html;
   }
 
-  function renderSuccess(selection) {
+  function clearSuccessTimer() {
+    if (successTimer) {
+      clearTimeout(successTimer);
+      successTimer = null;
+    }
+  }
+
+  function renderSuccessView(selection) {
     var root = formRoot();
     if (!root) return;
-
-    if (isMobile()) {
-      setBlockMode("cs-mobile-done");
-      root.innerHTML =
-        '<div class="cs-success cs-mobile-success">' +
-        '<p class="cs-success-title">✓ Наблюдение учтено</p>' +
-        '<p class="cs-success-lead">Спасибо за вклад в EVrace</p>' +
-        renderRecapChips(selection, "success") +
-        "</div>";
-      return;
-    }
-
-    setBlockMode(null);
+    state.successView = true;
+    destroyTurnstile();
     root.innerHTML =
       '<div class="cs-success">' +
-      '<p class="cs-success-title">✓ Сигнал учтён</p>' +
+      '<p class="cs-success-title">✓ Наблюдение учтено</p>' +
       '<p class="cs-success-lead">Спасибо за вклад в EVrace</p>' +
-      renderRecapChips(selection, "success") +
+      renderRecapChips(selection) +
+      '<button type="button" class="loc-btn loc-btn-community cs-success-close" id="cs-success-close">Закрыть</button>' +
       "</div>";
+    root.querySelector("#cs-success-close")?.addEventListener("click", function () {
+      closeModal(true);
+    });
+    clearSuccessTimer();
+    successTimer = setTimeout(function () {
+      closeModal(true);
+    }, SUCCESS_AUTO_CLOSE_MS);
   }
 
   function buildFormHtml() {
@@ -275,86 +268,81 @@
     return html;
   }
 
-  function renderFormShell(expanded) {
-    var root = formRoot();
-    if (!root) return;
-    setBlockMode(expanded ? "cs-mobile-expanded" : "cs-mobile-collapsed");
-    var shellCls = "cs-mobile-shell" + (expanded ? " cs-mobile-shell--expanded" : "");
-    root.innerHTML =
-      '<div class="' +
-      shellCls +
-      '">' +
-      '<div class="cs-mobile-teaser">' +
-      '<p class="cs-mobile-teaser-title">Добавить наблюдение</p>' +
-      '<p class="cs-mobile-teaser-lead">Поделитесь своим опытом на этой локации</p>' +
-      '<button type="button" class="loc-btn loc-btn-accent cs-mobile-expand" aria-expanded="' +
-      (expanded ? "true" : "false") +
-      '">Добавить наблюдение</button>' +
-      "</div>" +
-      '<div class="cs-form-panel"><div class="cs-form-panel-inner">' +
-      buildFormHtml() +
-      "</div></div></div>";
-    bindMobileExpand(root.querySelector(".cs-mobile-shell"));
-    bindFormEvents();
-    updateSubmitState();
-    if (expanded) {
-      window.setTimeout(function () {
-        mountTurnstile();
-      }, 80);
-    }
-  }
-
-  function bindMobileExpand(shell) {
-    var btn = shell.querySelector(".cs-mobile-expand");
-    if (!btn) return;
-    btn.addEventListener("click", function () {
-      if (state.mobileExpanded) return;
-      state.mobileExpanded = true;
-      setBlockMode("cs-mobile-expanded");
-      shell.classList.add("cs-mobile-shell--expanded");
-      btn.setAttribute("aria-expanded", "true");
-      window.setTimeout(function () {
-        mountTurnstile();
-        updateSubmitState();
-      }, 80);
-    });
-  }
-
   function renderForm() {
     var root = formRoot();
-    if (!root || !state.formSignals.length) {
-      if (root) root.innerHTML = "";
+    if (!root || !state.modalOpen || state.successView) return;
+    if (!state.formSignals.length) {
+      root.innerHTML =
+        '<p class="cs-form-loading">Наблюдения для этой локации временно недоступны.</p>';
       return;
     }
+    root.innerHTML = buildFormHtml();
+    bindFormEvents();
+    updateSubmitState();
+    mountTurnstile();
+  }
 
-    if (state.submitted) return;
+  function destroyTurnstile() {
+    state.turnstileToken = "";
+    if (window.turnstile && state.turnstileWidgetId != null) {
+      try {
+        window.turnstile.remove(state.turnstileWidgetId);
+      } catch (_e) {
+        /* ignore */
+      }
+    }
+    state.turnstileWidgetId = null;
+    var box = document.getElementById("cs-turnstile");
+    if (box) box.innerHTML = "";
+  }
 
-    renderFormShell(state.mobileExpanded);
+  function resetTurnstileWidget() {
+    state.turnstileToken = "";
+    updateSubmitState();
+    if (window.turnstile && state.turnstileWidgetId != null) {
+      try {
+        window.turnstile.reset(state.turnstileWidgetId);
+      } catch (_e) {
+        destroyTurnstile();
+        mountTurnstile();
+      }
+    }
   }
 
   function mountTurnstile() {
+    if (!state.modalOpen || state.successView) return;
+    if (!state.formSignals.length) return;
     var box = document.getElementById("cs-turnstile");
-    if (!box || box.dataset.mounted === "1") return;
+    if (!box) return;
     if (!window.turnstile) {
       setTimeout(mountTurnstile, 200);
       return;
     }
-    box.dataset.mounted = "1";
-    window.turnstile.render(box, {
-      sitekey: TURNSTILE_SITE_KEY,
-      callback: function (token) {
-        state.turnstileToken = token;
-        updateSubmitState();
-      },
-      "expired-callback": function () {
-        state.turnstileToken = "";
-        updateSubmitState();
-      },
-      "error-callback": function () {
-        state.turnstileToken = "";
-        updateSubmitState();
-      },
-    });
+
+    destroyTurnstile();
+
+    try {
+      state.turnstileWidgetId = window.turnstile.render(box, {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: "dark",
+        size: "flexible",
+        callback: function (token) {
+          state.turnstileToken = token || "";
+          updateSubmitState();
+        },
+        "expired-callback": function () {
+          resetTurnstileWidget();
+        },
+        "timeout-callback": function () {
+          resetTurnstileWidget();
+        },
+        "error-callback": function () {
+          resetTurnstileWidget();
+        },
+      });
+    } catch (_e) {
+      setTimeout(mountTurnstile, 300);
+    }
   }
 
   function showError(msg) {
@@ -456,17 +444,14 @@
         state.selection = state.selected.map(function (slug) {
           return signalBySlug(slug) || { slug: slug, label: slug, sentiment: "positive" };
         });
-        renderSuccess(state.selection);
+        setAddBtnVisible(false);
+        renderSuccessView(state.selection);
         return;
       }
 
       if (!res.ok) {
         showError(errorMessage(data.error));
-        if (window.turnstile) {
-          var box = document.getElementById("cs-turnstile");
-          if (box) window.turnstile.reset(box);
-        }
-        state.turnstileToken = "";
+        resetTurnstileWidget();
         state.submitting = false;
         updateSubmitState();
         return;
@@ -479,7 +464,9 @@
       } else {
         patchAreaA(data.counts_delta, state.selection);
       }
-      renderSuccess(state.selection);
+      setAddBtnVisible(false);
+      state.submitting = false;
+      renderSuccessView(state.selection);
     } catch (err) {
       showError("Сеть недоступна. Попробуйте позже.");
       state.submitting = false;
@@ -507,22 +494,122 @@
       if (data.submitted && data.selection && data.selection.length) {
         state.submitted = true;
         state.selection = data.selection;
-        renderSuccess(data.selection);
+        setAddBtnVisible(false);
         return;
       }
 
-      renderForm();
+      setAddBtnVisible(state.formSignals.length > 0);
     } catch (err) {
-      renderForm();
+      setAddBtnVisible(state.formSignals.length > 0);
     }
   }
 
-  function init() {
+  function focusableInPanel() {
+    if (!panelEl) return [];
+    return Array.prototype.slice.call(
+      panelEl.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    );
+  }
+
+  function trapFocus(e) {
+    if (!state.modalOpen || e.key !== "Tab" || !panelEl) return;
+    var nodes = focusableInPanel();
+    if (!nodes.length) return;
+    var first = nodes[0];
+    var last = nodes[nodes.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  function requestClose() {
+    if (state.submitting) {
+      if (!window.confirm("Прервать отправку?")) return;
+      state.submitting = false;
+    }
+    closeModal(true);
+  }
+
+  function openModal() {
+    if (!modalEl || state.modalOpen || state.submitted) return;
+    if (!state.formSignals.length) return;
+    state.modalOpen = true;
+    state.successView = false;
+    state.selected = [];
+    state.turnstileToken = "";
+    showError("");
+    lastFocusEl = document.activeElement;
+    modalEl.hidden = false;
+    document.body.classList.add("loc-modal-open");
+    renderForm();
+    var nodes = focusableInPanel();
+    if (nodes.length) nodes[0].focus();
+  }
+
+  function closeModal(force) {
+    if (!modalEl || !state.modalOpen) return;
+    if (state.submitting && !force) {
+      requestClose();
+      return;
+    }
+    clearSuccessTimer();
+    destroyTurnstile();
+    state.modalOpen = false;
+    state.successView = false;
+    state.submitting = false;
+    state.selected = [];
+    modalEl.hidden = true;
+    document.body.classList.remove("loc-modal-open");
+    var root = formRoot();
+    if (root) root.innerHTML = "";
+    if (lastFocusEl && typeof lastFocusEl.focus === "function") {
+      lastFocusEl.focus();
+    } else {
+      addBtn()?.focus();
+    }
+  }
+
+  function onKeyDown(e) {
+    if (!state.modalOpen) return;
+    if (e.key === "Escape") {
+      e.preventDefault();
+      requestClose();
+    }
+    trapFocus(e);
+  }
+
+  function initModalChrome() {
+    modalEl = document.getElementById("loc-cs-modal");
+    panelEl = modalEl?.querySelector(".loc-action-modal-panel");
+    if (!modalEl) return;
+
+    addBtn()?.addEventListener("click", openModal);
+
+    modalEl.querySelector("#loc-cs-modal-close")?.addEventListener("click", requestClose);
+    modalEl.querySelectorAll("[data-modal-dismiss]").forEach(function (el) {
+      el.addEventListener("click", requestClose);
+    });
+
+    document.addEventListener("keydown", onKeyDown);
+  }
+
+  async function init() {
     var data = readJson("loc-signals-data");
     state.locationId = data.location_id || 0;
     state.formSignals = data.form_signals || [];
-    if (!formRoot() || !state.locationId) return;
-    loadStatus();
+    if (!aggRoot() || !state.locationId) return;
+    initModalChrome();
+    await loadStatus();
+    if (window.location.hash === "#add-signal") {
+      openModal();
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
   }
 
   if (document.readyState === "loading") {

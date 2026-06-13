@@ -498,10 +498,9 @@ body.location-page .blk-hdr {
     display: contents;
   }
   .loc-infra-blk { order: 1; }
-  .loc-cs-agg-blk { order: 2; }
-  .loc-cs-form-blk { order: 3; }
-  .loc-photos-blk { order: 4; }
-  .loc-nearby-blk { order: 5; }
+  .loc-photos-blk { order: 2; }
+  .loc-cs-agg-blk { order: 3; }
+  .loc-nearby-blk { order: 4; }
 }
 @media (min-width: 900px) {
   .loc-main-grid {
@@ -862,11 +861,14 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
   min-height: 44px;
 }
 
-/* ── Photo upload modal (Gallery First UX) ── */
+/* ── Action modals (Photos + Community Signals) ── */
+body.loc-modal-open,
 body.loc-upload-modal-open {
   overflow: hidden;
 }
-.loc-upload-modal {
+.loc-action-modal,
+.loc-upload-modal,
+.loc-cs-modal {
   position: fixed;
   inset: 0;
   z-index: 12000;
@@ -875,14 +877,18 @@ body.loc-upload-modal-open {
   justify-content: center;
   padding: 16px;
 }
-.loc-upload-modal[hidden] {
+.loc-action-modal[hidden],
+.loc-upload-modal[hidden],
+.loc-cs-modal[hidden] {
   display: none !important;
 }
+.loc-action-modal-backdrop,
 .loc-upload-modal-backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.72);
 }
+.loc-action-modal-panel,
 .loc-upload-modal-panel {
   position: relative;
   z-index: 1;
@@ -894,6 +900,7 @@ body.loc-upload-modal-open {
   background: var(--home-card, #090e09);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
 }
+.loc-action-modal-close,
 .loc-upload-modal-close {
   position: absolute;
   top: 8px;
@@ -909,6 +916,7 @@ body.loc-upload-modal-open {
   line-height: 1;
   cursor: pointer;
 }
+.loc-action-modal-title,
 .loc-upload-modal-title {
   margin: 0;
   padding: 16px 44px 0 16px;
@@ -1183,22 +1191,29 @@ body.location-page {
   white-space: nowrap;
 }
 
-.loc-cs-form-blk {
-  border-color: rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.18);
-  box-shadow: none;
+.loc-cs-cta-wrap {
+  padding: 0 var(--loc-pad) var(--loc-pad);
 }
-.loc-cs-form-blk .blk-hdr {
-  padding: 12px var(--loc-pad);
-  border-bottom-color: rgba(255, 255, 255, 0.06);
+.loc-cs-add-btn {
+  width: 100%;
+  min-height: 44px;
 }
-.loc-cs-form-blk .blk-title {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--text-dim, #888);
+.loc-cs-add-btn[hidden] {
+  display: none !important;
 }
-.loc-cs-form-blk .cs-form-section {
+.loc-cs-modal-body {
   padding: var(--loc-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cs-form-hint {
+  margin: 0 0 8px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted, #888);
 }
 .cs-form-loading {
   margin: 0;
@@ -1282,6 +1297,12 @@ body.location-page {
   width: 100%;
   min-height: 44px;
 }
+.cs-success {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
 .cs-success-title {
   margin: 0 0 6px;
   font-family: "Share Tech Mono", monospace;
@@ -1296,6 +1317,11 @@ body.location-page {
   font-family: "Share Tech Mono", monospace;
   font-size: 10px;
   color: var(--muted, #888);
+}
+.cs-success-close {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 4px;
 }
 .cs-success-chip {
   box-sizing: border-box;
@@ -1321,110 +1347,6 @@ body.location-page {
 .cs-success-chip--warn.is-on {
   border-color: rgba(255, 80, 80, 0.5);
   color: #ff6b6b;
-}
-
-/* Collapsed observation form accordion — all viewports (§13.1) */
-.loc-cs-form-blk > .blk-hdr {
-  display: none;
-}
-.cs-mobile-shell {
-  display: flex;
-  flex-direction: column;
-}
-.cs-form-panel {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.cs-mobile-shell--expanded .cs-form-panel {
-  grid-template-rows: 1fr;
-}
-.cs-form-panel-inner {
-  overflow: hidden;
-  min-height: 0;
-}
-.cs-form-panel-inner .cs-form {
-  padding-top: 2px;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition:
-    opacity 0.45s ease 0.1s,
-    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.08s;
-}
-.cs-mobile-shell--expanded .cs-form-panel-inner .cs-form {
-  opacity: 1;
-  transform: translateY(0);
-}
-.cs-mobile-teaser {
-  text-align: center;
-  padding: 4px 0 2px;
-  max-height: 220px;
-  opacity: 1;
-  overflow: hidden;
-  transition:
-    opacity 0.35s ease,
-    max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    padding 0.45s ease,
-    margin 0.45s ease;
-}
-.cs-mobile-shell--expanded .cs-mobile-teaser {
-  max-height: 0;
-  opacity: 0;
-  padding: 0;
-  margin: 0;
-  pointer-events: none;
-}
-.cs-mobile-teaser-title {
-  margin: 0 0 8px;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text, #e8e8e8);
-}
-.cs-mobile-teaser-lead {
-  margin: 0 0 14px;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 11px;
-  line-height: 1.45;
-  color: var(--muted, #888);
-}
-.cs-mobile-expand {
-  width: 100%;
-  min-height: 44px;
-}
-.cs-form-hint {
-  margin: 0 0 8px;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--muted, #888);
-}
-.cs-mobile-success .cs-review-cta-note {
-  margin: 14px 0 0;
-  font-size: 10px;
-  line-height: 1.45;
-  color: var(--muted, #888);
-  text-align: center;
-}
-.cs-mobile-success .loc-btn-community {
-  width: 100%;
-  margin-top: 12px;
-  min-height: 44px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cs-form-panel,
-  .cs-form-panel-inner .cs-form,
-  .cs-mobile-teaser {
-    transition: none;
-  }
-  .cs-mobile-shell--expanded .cs-form-panel-inner .cs-form {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 /* ── Review form ── */
@@ -2021,23 +1943,6 @@ html[data-theme="tesla-dark"] body.location-page .loc-review-more {
 }
 
 /* Community Signals — flat Tesla chips (no CRT / glow) */
-html[data-theme="tesla-light"] body.location-page .loc-cs-form-blk,
-html[data-theme="tesla-dark"] body.location-page .loc-cs-form-blk {
-  background: var(--surface);
-  border-color: var(--hairline);
-  box-shadow: var(--shadow-1);
-}
-
-html[data-theme="tesla-light"] body.location-page .loc-cs-form-blk .blk-hdr,
-html[data-theme="tesla-dark"] body.location-page .loc-cs-form-blk .blk-hdr {
-  border-bottom-color: var(--hairline);
-}
-
-html[data-theme="tesla-light"] body.location-page .loc-cs-form-blk .blk-title,
-html[data-theme="tesla-dark"] body.location-page .loc-cs-form-blk .blk-title {
-  color: var(--fg-3);
-}
-
 html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-empty,
 html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-empty {
   font-family: var(--font);
@@ -2091,10 +1996,6 @@ html[data-theme="tesla-light"] body.location-page .cs-form-hint,
 html[data-theme="tesla-dark"] body.location-page .cs-form-hint,
 html[data-theme="tesla-light"] body.location-page .cs-form-loading,
 html[data-theme="tesla-dark"] body.location-page .cs-form-loading,
-html[data-theme="tesla-light"] body.location-page .cs-mobile-teaser-title,
-html[data-theme="tesla-dark"] body.location-page .cs-mobile-teaser-title,
-html[data-theme="tesla-light"] body.location-page .cs-mobile-teaser-lead,
-html[data-theme="tesla-dark"] body.location-page .cs-mobile-teaser-lead,
 html[data-theme="tesla-light"] body.location-page .cs-success-lead,
 html[data-theme="tesla-dark"] body.location-page .cs-success-lead,
 html[data-theme="tesla-light"] body.location-page .cs-review-cta-note,
