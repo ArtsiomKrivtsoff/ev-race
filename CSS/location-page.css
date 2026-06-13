@@ -769,8 +769,20 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
 /* ── Photos ── */
 .loc-photos-empty,
 .loc-tags-empty {
-  padding: var(--loc-pad);
+  padding: var(--loc-pad) var(--loc-pad) 0;
   text-align: center;
+}
+.loc-photos-empty-msg {
+  margin: 0;
+  padding: 12px 8px;
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(7px, 0.78vw, 8px);
+  line-height: 1.55;
+  color: var(--yellow);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.28);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 .loc-photo-panel {
   position: relative;
@@ -1125,7 +1137,7 @@ body.location-page {
   padding: 12px 8px;
   text-align: center;
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(8px, 0.95vw, 10px);
+  font-size: clamp(7px, 0.78vw, 8px);
   line-height: 1.55;
   color: var(--green);
   text-shadow: 0 0 10px rgba(0, 255, 65, 0.35);
@@ -1944,11 +1956,20 @@ html[data-theme="tesla-dark"] body.location-page .loc-review-more {
 
 /* Community Signals — flat Tesla chips (no CRT / glow) */
 html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-empty,
-html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-empty {
+html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-empty,
+html[data-theme="tesla-light"] body.location-page .loc-photos-empty-msg,
+html[data-theme="tesla-dark"] body.location-page .loc-photos-empty-msg {
   font-family: var(--font);
   font-weight: 700;
   text-shadow: none;
+}
+html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-empty,
+html[data-theme="tesla-dark"] body.location-page .loc-cs-agg-blk .cs-agg-empty {
   color: var(--fg);
+}
+html[data-theme="tesla-light"] body.location-page .loc-photos-empty-msg,
+html[data-theme="tesla-dark"] body.location-page .loc-photos-empty-msg {
+  color: var(--fg-2);
 }
 
 html[data-theme="tesla-light"] body.location-page .loc-cs-agg-blk .cs-agg-chip,

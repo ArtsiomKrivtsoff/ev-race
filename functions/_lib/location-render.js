@@ -375,7 +375,7 @@ export function renderPhotosBlock(community) {
     return `<div class="blk loc-photos-blk" id="photos">
 <div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span></div>
 <div class="loc-photos-empty">
-<p class="loc-empty-lead">Пока никто не добавил фотографии этой локации.</p>
+<p class="loc-photos-empty-msg">ПОКА НИКТО НЕ ДОБАВИЛ ФОТОГРАФИИ ЭТОЙ ЛОКАЦИИ</p>
 </div>
 ${cta}
 </div>`;
