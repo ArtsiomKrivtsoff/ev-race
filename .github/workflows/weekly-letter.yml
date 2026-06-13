@@ -14,11 +14,18 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    env:
+      CRON_SECRET: ${{ secrets.WEEKLY_LETTER_SECRET || secrets.SNAPSHOT_CRON_SECRET }}
     steps:
       - name: Trigger generate-weekly-letter
         env:
           ROUND_INPUT: ${{ inputs.round_number }}
         run: |
+          if [ -z "$CRON_SECRET" ]; then
+            echo "Missing GitHub secret: set WEEKLY_LETTER_SECRET or SNAPSHOT_CRON_SECRET"
+            exit 1
+          fi
+
           if [ -n "$ROUND_INPUT" ]; then
             BODY="{\"round_number\": $ROUND_INPUT}"
           else
@@ -27,7 +34,7 @@ jobs:
 
           response=$(curl -s -o response.json -w "%{http_code}" \
             -X POST \
-            -H "x-cron-secret: ${{ secrets.WEEKLY_LETTER_SECRET }}" \
+            -H "x-cron-secret: $CRON_SECRET" \
             -H "Content-Type: application/json" \
             -d "$BODY" \
             "${{ secrets.SUPABASE_URL }}/functions/v1/generate-weekly-letter")
