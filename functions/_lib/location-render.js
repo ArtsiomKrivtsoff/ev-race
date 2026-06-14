@@ -353,9 +353,9 @@ function renderPhotoThumb(p, index) {
   const approvedAt = p.approved_at ? escapeHtml(String(p.approved_at)) : "";
   const reviewId =
     p.review_id != null ? ` data-review-id="${escapeHtml(String(p.review_id))}"` : "";
-  return `<button type="button" class="loc-photo-thumb" data-photo-index="${index}" data-photo-id="${escapeHtml(String(p.id || index))}" data-approved-at="${approvedAt}"${reviewId}${p.is_review_photo ? ' data-review-photo="1"' : ""} aria-label="Фото ${index + 1}">
+  return `<div class="loc-photo-thumb" role="button" tabindex="0" data-photo-index="${index}" data-photo-id="${escapeHtml(String(p.id || index))}" data-approved-at="${approvedAt}"${reviewId}${p.is_review_photo ? ' data-review-photo="1"' : ""} aria-label="Фото ${index + 1}">
 <img src="${escapeHtml(url)}" alt="" loading="lazy" decoding="async">${badge}
-</button>`;
+</div>`;
 }
 
 function renderPhotoAddCta() {
@@ -389,7 +389,11 @@ ${cta}
   return `<div class="blk loc-photos-blk" id="photos">
 <div class="blk-hdr"><span class="blk-title">ФОТО ЛОКАЦИИ</span>${renderBadge(count)}</div>
 <div class="loc-photo-panel" id="loc-photos-gallery"${nextCursor ? ` data-next-cursor="${escapeHtml(nextCursor)}"` : ""}>
+<div class="loc-photo-carousel">
+<span class="loc-photo-carousel-hint loc-photo-carousel-hint--prev" aria-hidden="true">‹</span>
 <div class="loc-photo-grid">${thumbs}</div>
+<span class="loc-photo-carousel-hint loc-photo-carousel-hint--next" aria-hidden="true">›</span>
+</div>
 ${loadMore}
 </div>
 ${cta}
@@ -431,11 +435,7 @@ ${renderSignalIcon(s.slug)}
   }
 
   const cta = `<div class="loc-cs-cta-wrap">
-<div class="cs-my-observations" id="cs-my-observations" hidden>
-<p class="cs-my-obs-title">Мои наблюдения</p>
-<div class="cs-my-obs-chips" id="cs-my-obs-chips"></div>
-<button type="button" class="loc-btn loc-btn-community cs-edit-btn" id="loc-cs-edit-btn">Изменить</button>
-</div>
+<button type="button" class="loc-btn loc-btn-community cs-edit-btn" id="loc-cs-edit-btn" hidden>Изменить</button>
 <button type="button" class="loc-btn loc-btn-accent loc-cs-add-btn" id="loc-cs-add-btn">ДОБАВИТЬ НАБЛЮДЕНИЕ</button>
 </div>`;
 

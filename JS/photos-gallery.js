@@ -55,67 +55,60 @@
   }
 
   function renderThumb(photo, index) {
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "loc-photo-thumb";
-    btn.dataset.photoIndex = String(index);
-    btn.dataset.photoId = String(photo.id || index);
-    if (photo.approved_at) btn.dataset.approvedAt = photo.approved_at;
-    if (photo.is_review_photo) btn.dataset.reviewPhoto = "1";
-    if (photo.review_id != null) btn.dataset.reviewId = String(photo.review_id);
-    btn.setAttribute("aria-label", "Фото " + (index + 1));
+    var el = document.createElement("div");
+    el.className = "loc-photo-thumb";
+    el.setAttribute("role", "button");
+    el.tabIndex = 0;
+    el.dataset.photoIndex = String(index);
+    el.dataset.photoId = String(photo.id || index);
+    if (photo.approved_at) el.dataset.approvedAt = photo.approved_at;
+    if (photo.is_review_photo) el.dataset.reviewPhoto = "1";
+    if (photo.review_id != null) el.dataset.reviewId = String(photo.review_id);
+    el.setAttribute("aria-label", "Фото " + (index + 1));
 
     var img = document.createElement("img");
     img.src = photo.url || "";
     img.alt = "";
     img.loading = "lazy";
     img.decoding = "async";
-    btn.appendChild(img);
+    el.appendChild(img);
 
     if (photo.is_review_photo) {
       var badge = document.createElement("span");
       badge.className = "loc-photo-review-badge";
       badge.textContent = "Из отзыва";
-      btn.appendChild(badge);
+      el.appendChild(badge);
     }
 
-    return btn;
+    return el;
   }
 
-  function initMobileGallerySwipe(grid) {
-    if (!grid || !window.matchMedia("(max-width: 899px)").matches) return;
+  function initMobilePhotoCarousel(galleryRoot) {
+    if (!galleryRoot || !window.matchMedia("(max-width: 899px)").matches) return;
 
-    var startX = 0;
-    var startY = 0;
-    var lockAxis = null;
+    var grid = galleryRoot.querySelector(".loc-photo-grid");
+    if (!grid) return;
 
-    grid.addEventListener(
-      "touchstart",
-      function (e) {
-        if (!e.touches.length) return;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        lockAxis = null;
-      },
-      { passive: true },
-    );
+    function scrollBy(direction) {
+      var amount = Math.max(120, Math.round(grid.clientWidth * 0.72));
+      grid.scrollBy({ left: direction * amount, behavior: "smooth" });
+    }
 
-    grid.addEventListener(
-      "touchmove",
-      function (e) {
-        if (!e.touches.length) return;
-        var dx = e.touches[0].clientX - startX;
-        var dy = e.touches[0].clientY - startY;
-        if (!lockAxis) {
-          if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-          lockAxis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-        }
-        if (lockAxis === "x") {
-          e.preventDefault();
-        }
-      },
-      { passive: false },
-    );
+    galleryRoot.querySelectorAll(".loc-photo-carousel-hint--prev").forEach(function (hint) {
+      hint.style.pointerEvents = "auto";
+      hint.style.cursor = "pointer";
+      hint.addEventListener("click", function () {
+        scrollBy(-1);
+      });
+    });
+
+    galleryRoot.querySelectorAll(".loc-photo-carousel-hint--next").forEach(function (hint) {
+      hint.style.pointerEvents = "auto";
+      hint.style.cursor = "pointer";
+      hint.addEventListener("click", function () {
+        scrollBy(1);
+      });
+    });
   }
 
   function initPhotoPanelOverflow() {
@@ -136,7 +129,7 @@
 
     var grid = galleryRoot.querySelector(".loc-photo-grid");
     var loadBtn = document.getElementById("loc-photos-load-more");
-    initMobileGallerySwipe(grid);
+    initMobilePhotoCarousel(galleryRoot);
     var community = readCommunityData();
     var page = readPageData();
     var photos = (community.photos || []).map(function (p, i) {

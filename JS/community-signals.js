@@ -73,10 +73,6 @@
     return document.getElementById("loc-cs-edit-btn");
   }
 
-  function myObsEl() {
-    return document.getElementById("cs-my-observations");
-  }
-
   function escapeHtml(s) {
     return String(s)
       .replace(/&/g, "&amp;")
@@ -131,11 +127,24 @@
     );
   }
 
-  function renderAggChip(signal, count) {
+  function userSlugSet() {
+    var set = {};
+    state.selection.forEach(function (s) {
+      if (s.slug) set[s.slug] = true;
+    });
+    return set;
+  }
+
+  function renderAggChip(signal, count, isMine) {
     var pol = sentimentKey(signal.sentiment);
+    var mineClass = isMine ? " cs-agg-chip--mine" : "";
+    var mineMark = isMine
+      ? '<span class="cs-agg-mine-mark" title="Ваше наблюдение" aria-label="Ваше наблюдение">✓</span>'
+      : "";
     return (
       '<div class="cs-agg-chip cs-agg-chip--' +
       pol +
+      mineClass +
       '" data-signal-slug="' +
       escapeHtml(signal.slug) +
       '">' +
@@ -143,6 +152,7 @@
       '<span class="cs-agg-label">' +
       escapeHtml(signal.label) +
       "</span>" +
+      mineMark +
       '<span class="cs-agg-count">×' +
       escapeHtml(String(count)) +
       "</span></div>"
@@ -157,42 +167,23 @@
         '<p class="cs-agg-empty">СТАНЦИЯ ЖДЁТ ПЕРВОЕ НАБЛЮДЕНИЕ СООБЩЕСТВА</p>';
       return;
     }
+    var mine = userSlugSet();
     var chips = signals
       .map(function (s) {
-        return renderAggChip(s, s.count || 0);
+        return renderAggChip(s, s.count || 0, Boolean(mine[s.slug]));
       })
       .join("");
     root.innerHTML = '<div class="cs-agg-chips">' + chips + "</div>";
   }
 
-  function renderMyObsChip(signal) {
-    var pol = sentimentKey(signal.sentiment);
-    return (
-      '<span class="cs-my-obs-chip cs-my-obs-chip--' +
-      pol +
-      '">' +
-      signalIconHtml(signal.slug) +
-      "<span>" +
-      escapeHtml(signal.label) +
-      "</span></span>"
-    );
-  }
-
   function updateCtaUI() {
     var add = addBtn();
-    var myObs = myObsEl();
     var edit = editBtn();
 
     if (state.submitted && state.selection.length) {
       if (add) add.hidden = true;
-      if (myObs) {
-        myObs.hidden = false;
-        var chipsEl = document.getElementById("cs-my-obs-chips");
-        if (chipsEl) {
-          chipsEl.innerHTML = state.selection.map(renderMyObsChip).join("");
-        }
-      }
       if (edit) {
+        edit.hidden = false;
         edit.disabled = !state.canEdit;
         edit.title = state.canEdit
           ? ""
@@ -200,7 +191,7 @@
       }
     } else {
       if (add) add.hidden = state.formSignals.length === 0;
-      if (myObs) myObs.hidden = true;
+      if (edit) edit.hidden = true;
     }
   }
 
@@ -412,13 +403,14 @@
     if (!btn) return;
 
     var minSelected = state.isEditing ? 0 : 1;
+    var cooldownBlocked = state.isEditing && !state.canEdit;
     var ok =
+      !cooldownBlocked &&
       state.selected.length >= minSelected &&
       state.selected.length <= MAX_SIGNALS &&
       !hasForbiddenPair(state.selected) &&
       !!state.turnstileToken &&
-      !state.submitting &&
-      state.canEdit;
+      !state.submitting;
     btn.disabled = !ok;
   }
 
@@ -450,7 +442,23 @@
       });
     });
     var submitBtn = document.getElementById("cs-submit");
-    if (submitBtn) submitBtn.addEventListener("click", onSubmit);
+    if (submitBtn) {
+      submitBtn.addEventListener("click", function () {
+        if (submitBtn.disabled) {
+          if (state.isEditing && !state.canEdit) {
+            showError(
+              "Следующее изменение через " + formatCooldown(state.editSecondsRemaining) + ".",
+            );
+          } else if (!state.turnstileToken) {
+            showError("Подождите завершения проверки безопасности.");
+          } else if (!state.isEditing && state.selected.length < 1) {
+            showError("Выбери хотя бы одно наблюдение");
+          }
+          return;
+        }
+        onSubmit();
+      });
+    }
   }
 
   function errorMessage(code, payload) {
@@ -547,6 +555,12 @@
 
       updateCtaUI();
       state.submitting = false;
+
+      if (state.isEditing) {
+        closeModal(true);
+        return;
+      }
+
       renderSuccessView(data.selection || []);
     } catch (err) {
       showError("Сеть недоступна. Попробуйте позже.");
@@ -609,7 +623,7 @@
   function openModal(forEdit) {
     if (!modalEl || state.modalOpen) return;
     if (forEdit) {
-      if (!state.submitted) return;
+      if (!state.submitted || !state.canEdit) return;
       state.isEditing = true;
       state.selected = state.selection.map(function (s) {
         return s.slug;
@@ -678,7 +692,10 @@
       openModal(false);
     });
     editBtn()?.addEventListener("click", function () {
-      openModal(true);
+      loadStatus().then(function () {
+        if (!state.submitted || !state.canEdit) return;
+        openModal(true);
+      });
     });
 
     modalEl.querySelector("#loc-cs-modal-close")?.addEventListener("click", requestClose);

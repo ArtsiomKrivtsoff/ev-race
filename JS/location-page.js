@@ -236,9 +236,47 @@
       document.querySelectorAll(".loc-photo-thumb").forEach(function (btn) {
         if (btn.dataset.lightboxBound === "1") return;
         btn.dataset.lightboxBound = "1";
-        btn.addEventListener("click", function () {
+        var touchMoved = false;
+        var openedViaTouch = false;
+
+        btn.addEventListener(
+          "touchstart",
+          function () {
+            touchMoved = false;
+            openedViaTouch = false;
+          },
+          { passive: true },
+        );
+        btn.addEventListener(
+          "touchmove",
+          function () {
+            touchMoved = true;
+          },
+          { passive: true },
+        );
+
+        function openFromThumb() {
           var i = parseInt(btn.dataset.photoIndex, 10) || 0;
           openAt(photos, i);
+        }
+
+        btn.addEventListener("touchend", function () {
+          if (touchMoved) return;
+          openedViaTouch = true;
+          openFromThumb();
+        });
+        btn.addEventListener("click", function () {
+          if (openedViaTouch) {
+            openedViaTouch = false;
+            return;
+          }
+          openFromThumb();
+        });
+        btn.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            openFromThumb();
+          }
         });
       });
     }
