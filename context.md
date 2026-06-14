@@ -675,6 +675,7 @@ Spec: `docs/IMPLEMENTATION_SPEC.md`. Visual: `docs/location_page_mockup.png`.
 - ~~Cloud: `submit-community-signals`, `community-signals-status`~~ ✅ 2026-06-03
 - ~~BY: `photos-upload`, `photos-status`~~ ✅ 2026-06-03 (`max_files_per_submission: 4` live)
 - ~~CF Pages: JS/CSS/`[slug].js`~~ ✅ commit `ec56ca9` → `main`
+- Hotfix ✅ `051e007` — signals edit save, ✓ in agg, gallery swipe + arrows
 
 ### Known limits (signals v1)
 
