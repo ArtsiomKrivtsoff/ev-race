@@ -850,7 +850,9 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
     touch-action: pan-x;
   }
   .loc-photo-thumb img {
+    width: 100%;
     height: 100%;
+    object-fit: contain;
     pointer-events: none;
   }
 }
@@ -886,7 +888,7 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
 .loc-photo-thumb img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 .loc-photo-more {
