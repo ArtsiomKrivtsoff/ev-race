@@ -102,7 +102,13 @@ Deno.serve(async (req) => {
     return jsonResponse(req, { error: "no_files" }, 400, {}, setCookie);
   }
   if (files.length > MAX_FILES_PER_SUBMISSION) {
-    return jsonResponse(req, { error: "too_many_files" }, 400, {}, setCookie);
+    return jsonResponse(
+      req,
+      { error: "too_many_files", max_files: MAX_FILES_PER_SUBMISSION },
+      400,
+      {},
+      setCookie,
+    );
   }
 
   for (const file of files) {

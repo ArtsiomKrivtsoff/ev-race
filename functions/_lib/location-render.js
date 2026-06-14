@@ -431,6 +431,11 @@ ${renderSignalIcon(s.slug)}
   }
 
   const cta = `<div class="loc-cs-cta-wrap">
+<div class="cs-my-observations" id="cs-my-observations" hidden>
+<p class="cs-my-obs-title">Мои наблюдения</p>
+<div class="cs-my-obs-chips" id="cs-my-obs-chips"></div>
+<button type="button" class="loc-btn loc-btn-community cs-edit-btn" id="loc-cs-edit-btn">Изменить</button>
+</div>
 <button type="button" class="loc-btn loc-btn-accent loc-cs-add-btn" id="loc-cs-add-btn">ДОБАВИТЬ НАБЛЮДЕНИЕ</button>
 </div>`;
 

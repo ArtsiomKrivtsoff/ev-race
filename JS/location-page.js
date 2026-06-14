@@ -469,6 +469,7 @@
   }
 
   function initPhotoPanelOverflow() {
+    if (window.matchMedia("(max-width: 899px)").matches) return;
     var panel = document.querySelector(".loc-photo-panel");
     if (!panel) return;
     requestAnimationFrame(function () {

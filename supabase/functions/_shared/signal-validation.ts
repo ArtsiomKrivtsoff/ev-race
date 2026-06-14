@@ -9,6 +9,7 @@ export const FORBIDDEN_SIGNAL_PAIRS: [string, string][] = [
 
 export const MAX_SIGNALS_PER_SUBMISSION = 4;
 export const MIN_SIGNALS_PER_SUBMISSION = 1;
+export const SIGNAL_EDIT_COOLDOWN_SECONDS = 5 * 60;
 
 export function normalizeSignalSlugs(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
@@ -30,8 +31,12 @@ export function hasForbiddenSignalPair(slugs: string[]): boolean {
   return false;
 }
 
-export function validateSignalSlugs(slugs: string[]): string | null {
-  if (slugs.length < MIN_SIGNALS_PER_SUBMISSION) return "empty_selection";
+export function validateSignalSlugs(
+  slugs: string[],
+  opts?: { allowEmpty?: boolean },
+): string | null {
+  const min = opts?.allowEmpty ? 0 : MIN_SIGNALS_PER_SUBMISSION;
+  if (slugs.length < min) return "empty_selection";
   if (slugs.length > MAX_SIGNALS_PER_SUBMISSION) return "too_many_signals";
   if (hasForbiddenSignalPair(slugs)) return "conflicting_signals";
   return null;

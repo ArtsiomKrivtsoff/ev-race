@@ -3,9 +3,45 @@
 
 ---
 
+## VPS Infrastructure v3.1 FINAL — ЗАВЕРШЁН ✅ (12.06.2026)
+
+**Статус:** принято заказчиком. **Infrastructure Layer production-ready.** Следующий этап (UGC, схема, поллер) — **отдельный проект**, не смешивать с infra.
+
+**ТЗ:** `docs/EVrace — TZ VPS Infrastructure v3.1 FINAL.md`. ТЗ v1 и v2 **аннулированы**.  
+**Handoff:** `infra/HANDOFF-v3.1-COMPLETE.md` · журнал `infra/CHANGELOG.md` · на VPS `/opt/CHANGELOG.md`
+
+### Сервер
+- cloudvps.by · `evrace` · `193.47.42.183` · 4 GB · Ubuntu 24.04
+- SSH: `deploy@193.47.42.183` (ключ only)
+- API: `https://api.evrace.by` (Cloudflare Proxied, Full strict)
+- **Не трогали:** облачный Supabase, сайт evrace.by, фронт
+
+### Что сделано (этапы 1–5)
+1. **Hardening:** UFW, fail2ban, swap, Docker, Caddy, log rotation, `deploy`
+2. **Supabase:** `/opt/supabase/docker`, новые секреты, public **0 таблиц**, Studio только SSH-туннель (`infra/Open-Studio.bat`)
+3. **Cloudflare:** DNS `api` → VPS
+4. **Backup:** cron 03:30 Minsk → `/opt/backups` (14d) + R2 `evrace-backups/db/` (30d), restore test OK, Telegram (бот писем операторам)
+5. **Сдача:** runbooks на `/opt/`, UptimeRobot (401=up), KeePass секреты
+
+### Секреты (KeePass + `/root/evrace-secrets/`)
+`supabase.env`, `r2.env`, `telegram.env` — не в git
+
+### Проверка API (PS 5.1)
+`curl.exe -s -o NUL -w "%{http_code}" https://api.evrace.by/rest/v1/` → **401 OK**
+
+### Боты Telegram (не смешивать)
+- auth bot — только вход на сайте
+- **бот писем операторам** — модерация + **алерты VPS**
+- weekly letters bot — ИИ письма, отдельно
+
+---
+
 ## Trust Layer v1 (10.06.2026)
 
 **Спека:** `docs/TRUST_LAYER_IMPLEMENTATION_SPEC.md`
+
+**Community Identity (LOCKED):** `docs/EVrace_COMMUNITY_IDENTITY_PRINCIPLE.md` — Telegram только для уникальности; публичная сущность = `user_hash`; UGC/community data на BY-инфраструктуре. **Обязательно соблюдать** при любых auth/UGC/community изменениях.
+**Аудит identity (2026-06-12):** `docs/EVrace_TELEGRAM_IDENTITY_AUDIT.md` — текущее состояние, Cloud vs BY, рекомендация B (full BY identity).
 
 **Маршруты (Cloudflare Functions):** `/how-data-works`, `/community-rules`, `/privacy` — SSR из `content/trust/*.md` через `functions/_lib/trust-layer.js`.
 
@@ -156,6 +192,16 @@
 
 Журнал правок главной: **`index.html`** + **`CSS/home-v2.css`**.  
 Журнал турнирной V2: **`tour.html`** + **`CSS/tour-v2.css`**.
+
+---
+
+## 2026-06-11 — Weekly Letter GitHub cron
+
+- **Файл:** `.github/workflows/weekly-letter.yml`
+- **Расписание:** суббота 03:00 UTC (06:00 Минск) → `generate-weekly-letter`
+- **Secrets:** `SUPABASE_URL`, `WEEKLY_LETTER_SECRET` (не `SNAPSHOT_CRON_SECRET`)
+- **Ручной запуск:** Actions → EV RACE Weekly Letter → Run workflow
+- **409** = письмо для круга уже есть (cron не падает)
 
 ---
 
@@ -503,7 +549,7 @@ Spec: `docs/IMPLEMENTATION_SPEC.md`. Visual: `docs/location_page_mockup.png`.
 - Стилистика = **существующий arcade** + паттерны **`home-v2.css`** (`.blk`, `.blk-hdr`, `.blk-title`, `--home-*` токены) для блоков middle
 - Переиспользовать: `.loc-card`, `table.reg`, `.stat-card`, `.section-head`, `.op-badge`, `.gun-pill`, Leaflet/`makeIcon` из `map.html`
 - Карта = Leaflet (не OSM iframe)
-- Tesla — позже; сначала arcade
+- Tesla — **location page:** overrides в `location-page.css` v41 (03.06.2026); главная — `home-v2.css`
 
 **Блок «ОТПРАВИТЬ ОТЧЁТ» (sidebar, Stage 2 placeholder → Stage 3):**
 - Не только большая кнопка Telegram — **два равноправных пути:**
@@ -537,6 +583,100 @@ Spec: `docs/IMPLEMENTATION_SPEC.md`. Visual: `docs/location_page_mockup.png`.
 3. **2.2b — входные ссылки:** slug в станции + `<a>` в реестре + кнопка в popup карты
 4. Sitemap location URLs; slug `-1` у ИстПал
 5. Stage 3: reviews, Telegram, аноним, tags, stars в реестре
+
+---
+
+## 2026-06-03 — Community Signals v1 + location page polish (prod `main`)
+
+**Спека:** `docs/EVrace_Community_Signals_v1_IMPLEMENTATION_PLAN.md` · §13.1 mobile UX
+
+### Backend (Supabase, deployed)
+- Migration `013_community_signals.sql` — `community_signals`, `location_signal_counts`, `community_signal_submissions`, seed 10 сигналов
+- Edge: `community-signals-status`, `submit-community-signals`; расширен `get-location` → `community.signals`, `form_signals`
+- Secret `VOTER_KEY_SALT`; dedupe `UNIQUE(location_id, voter_key)`
+
+### First-party cookie (CF proxy)
+- `/api/community-signals-status`, `/api/submit-community-signals` — `functions/_lib/community-signals-proxy.js`
+- HttpOnly `evrace_voter` на `evrace.by` (не cross-site supabase.co)
+
+### Frontend — два независимых блока
+- **Area A:** `#community-signals-agg` — только `count > 0`; empty: «Станция ждёт первое наблюдение сообщества.»
+- **Area B:** `#community-signals-form` — форма наблюдений (не review tags, не TG)
+- `JS/community-signals.js` v5 · `CSS/location-page.css` v41
+- SSR: `renderCommunitySignalsBlock()` в `functions/_lib/location-render.js`
+
+### Mobile форма (§13.1)
+- Collapsed: teaser + CTA «Добавить наблюдение»
+- Expand: чипы + hint + counter + Turnstile + submit (lazy Turnstile после expand)
+- After submit: compact success + CTA «Оставить отзыв» → `#review-form` (только mobile)
+- **Анимация expand (v5):** `.cs-mobile-shell` + `grid-template-rows 0fr→1fr` ~0.55s; teaser схлопывается; `prefers-reduced-motion` — без анимации
+- **Чипы:** перенос **только целых слов** (`word-break: normal`, без `hyphens: auto`); label в `<span class="cs-form-chip-label">`
+
+### Desktop / mobile layout (sidebar)
+- **Desktop:** `.loc-main-col` (infra → signals → reviews) + `.loc-sidebar` (photos → nearby) — **две независимые flex-колонки**, без shared grid rows (иначе phantom gaps)
+- Sidebar вровень с «СТАНЦИЙ В ЛОКАЦИИ» (col 2, row 1)
+- **Mobile order** (`display: contents` + `order`): infra → signals agg → signals form → reviews → photos → nearby
+
+### Tesla Light / Dark — location page (v41)
+- Overrides в `CSS/location-page.css` (секция `html[data-theme="tesla-light|dark"] body.location-page`)
+- Философия как `home-v2.css`: Inter, hairlines, `--surface`, без PS2P/glow/неона
+- Мост `--home-*` → Tesla tokens; полный skin Community Signals + форма отзывов + `.blk` shell
+- Desktop Tesla Light: `shadow-2` на карточках для контраста на `#f4f4f6`
+
+### Кэш и свежесть сигналов
+- HTML location page: CF cache **600s** (`max-age=600, s-maxage=600`)
+- `/api/community-signals-status`: **`no-store`** — Area A обновляется JS при каждой загрузке
+- После submit: у отправителя сразу; у других — при следующем заходе (не live push)
+- Review tags agg — только SSR, до ~10 мин stale
+
+### Git commits (сессия 03.06, `main` → CF Pages)
+| Commit | Суть |
+|--------|------|
+| `5b07b6f` | cookie proxy + Area A client refresh |
+| `89bd911` | chip typography (Isabel trial, flex-wrap) |
+| `47d7115` | sidebar grid-row pin (superseded) |
+| `caef8bf` | mobile accordion + whole-word wrap |
+| `0d8f729` | sidebar flex wrapper (fix phantom gaps) |
+| `4ebd530` | sidebar row 1 align (superseded) |
+| `71c56c0` | decouple columns + mobile block order |
+| `70c42c4` | Tesla skin + smooth accordion animation |
+
+### Smoke URL
+- `https://evrace.by/batteryfly/vitebsk-pr-frunze-77-2` (location_id 128, есть submissions)
+
+### Known limits v1
+- CF HTML cache 600s (mitigated client refresh signals)
+- Isabel trial — кириллица → Share Tech Mono fallback
+- Rate limits не в коде
+- Review form TG — отдельный блок `#review-form`, out of scope signals
+
+---
+
+## 2026-06-03 — UX Improvements v1.1 (код, без деплоя)
+
+**Scope:** Photos + Community Signals UX only. **Не трогали:** Telegram auth, Community Identity, Reviews v1.
+
+### Community Signals
+- Edit model REPLACE (backend `submit-community-signals`, `community-signals-status`)
+- UX: «Мои наблюдения» + чипы + «Изменить»; modal pre-fill; empty save = remove from agg; cooldown 5 min in modal
+- `JS/community-signals.js` v11
+
+### Photos
+- Thumbnails + «N фото выбрано»; progress steps ending «Готово.»; success screen без auto-close
+- Limit **4** за отправку (`MAX_FILES_PER_SUBMISSION`); `MAX_FILES_TELEGRAM_LINKED=10` reserved, **not wired**
+- Убраны v1.0 TG session checks (`resolve-session`, `community-auth` на location page)
+- `JS/photos-upload.js` v7
+
+### Mobile gallery
+- Horizontal carousel ≤899px; touch lock в `photos-gallery.js` v3; desktop grid unchanged
+- `CSS/location-page.css` v51
+
+### Deploy pending
+- Cloud: `submit-community-signals`, `community-signals-status`
+- BY: `photos-upload`, `photos-status`
+- CF Pages: JS/CSS/`[slug].js`
+
+### Known limits (signals v1)
 
 ### Тестовые URL
 - **Прод (после cutover):** `https://evrace.by/istpal/mozyr-neftestroiteley-26k1-1`

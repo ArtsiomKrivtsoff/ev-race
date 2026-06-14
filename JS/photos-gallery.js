@@ -82,7 +82,44 @@
     return btn;
   }
 
+  function initMobileGallerySwipe(grid) {
+    if (!grid || !window.matchMedia("(max-width: 899px)").matches) return;
+
+    var startX = 0;
+    var startY = 0;
+    var lockAxis = null;
+
+    grid.addEventListener(
+      "touchstart",
+      function (e) {
+        if (!e.touches.length) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        lockAxis = null;
+      },
+      { passive: true },
+    );
+
+    grid.addEventListener(
+      "touchmove",
+      function (e) {
+        if (!e.touches.length) return;
+        var dx = e.touches[0].clientX - startX;
+        var dy = e.touches[0].clientY - startY;
+        if (!lockAxis) {
+          if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+          lockAxis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+        }
+        if (lockAxis === "x") {
+          e.preventDefault();
+        }
+      },
+      { passive: false },
+    );
+  }
+
   function initPhotoPanelOverflow() {
+    if (window.matchMedia("(max-width: 899px)").matches) return;
     var panel = document.querySelector(".loc-photo-panel");
     if (!panel) return;
     requestAnimationFrame(function () {
@@ -99,6 +136,7 @@
 
     var grid = galleryRoot.querySelector(".loc-photo-grid");
     var loadBtn = document.getElementById("loc-photos-load-more");
+    initMobileGallerySwipe(grid);
     var community = readCommunityData();
     var page = readPageData();
     var photos = (community.photos || []).map(function (p, i) {

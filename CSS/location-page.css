@@ -793,6 +793,38 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
   grid-template-columns: repeat(2, 1fr);
   gap: 6px;
 }
+@media (max-width: 899px) {
+  .loc-photo-panel {
+    overflow: hidden;
+  }
+  .loc-photo-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-x;
+    gap: 8px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .loc-photo-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .loc-photo-thumb {
+    flex: 0 0 72%;
+    max-width: 72%;
+    height: 200px;
+    aspect-ratio: unset;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .loc-photo-thumb img {
+    height: 100%;
+  }
+}
 @media (min-width: 900px) {
   .loc-photo-panel::after {
     content: "";
@@ -1010,6 +1042,75 @@ body.loc-upload-modal-open {
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
+.loc-upload-file-count {
+  margin: 10px 0 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--home-text-mid, var(--text-dim));
+}
+.loc-upload-thumb-grid {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 10px;
+}
+.loc-upload-thumb-item {
+  position: relative;
+}
+.loc-upload-thumb {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--home-bdr, var(--border-faint));
+}
+.loc-upload-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.loc-upload-thumb-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.72);
+  color: var(--yellow);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.loc-upload-progress {
+  margin: 4px 0 12px;
+}
+.loc-upload-progress-label {
+  margin: 0 0 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--green, #00ff41);
+}
+.loc-upload-progress-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+.loc-upload-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--green, #00ff41);
+  transition: width 0.35s ease;
+}
 .loc-upload-file-list {
   list-style: none;
   margin: 0;
@@ -1212,6 +1313,60 @@ body.location-page {
 }
 .loc-cs-add-btn[hidden] {
   display: none !important;
+}
+.cs-my-observations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.cs-my-observations[hidden] {
+  display: none !important;
+}
+.cs-my-obs-title {
+  margin: 0;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #888);
+}
+.cs-my-obs-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cs-my-obs-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 255, 65, 0.35);
+  font-size: 11px;
+  line-height: 1.3;
+}
+.cs-my-obs-chip--neg,
+.cs-my-obs-chip--warn {
+  border-color: rgba(255, 80, 80, 0.35);
+  color: #ff6b6b;
+}
+.cs-my-obs-chip--pos {
+  color: var(--green, #00ff41);
+}
+.cs-edit-btn {
+  width: 100%;
+  min-height: 44px;
+}
+.cs-edit-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.cs-form-cooldown {
+  margin: 0 0 10px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted, #888);
 }
 .loc-cs-modal-body {
   padding: var(--loc-pad);

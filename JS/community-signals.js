@@ -20,12 +20,17 @@
     modalOpen: false,
     successView: false,
     turnstileWidgetId: null,
+    canEdit: true,
+    editSecondsRemaining: 0,
+    cooldownSeconds: 300,
+    isEditing: false,
   };
 
   var modalEl = null;
   var panelEl = null;
   var lastFocusEl = null;
   var successTimer = null;
+  var modalTitleEl = null;
 
   function statusUrl() {
     return (
@@ -64,12 +69,27 @@
     return document.getElementById("loc-cs-add-btn");
   }
 
+  function editBtn() {
+    return document.getElementById("loc-cs-edit-btn");
+  }
+
+  function myObsEl() {
+    return document.getElementById("cs-my-observations");
+  }
+
   function escapeHtml(s) {
     return String(s)
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
+  }
+
+  function formatCooldown(seconds) {
+    var s = Math.max(0, parseInt(String(seconds), 10) || 0);
+    if (s < 60) return s + " сек";
+    var m = Math.ceil(s / 60);
+    return m === 1 ? "1 мин" : m + " мин";
   }
 
   function sentimentKey(sentiment) {
@@ -111,12 +131,6 @@
     );
   }
 
-  function setAddBtnVisible(visible) {
-    var btn = addBtn();
-    if (!btn) return;
-    btn.hidden = !visible;
-  }
-
   function renderAggChip(signal, count) {
     var pol = sentimentKey(signal.sentiment);
     return (
@@ -151,59 +165,43 @@
     root.innerHTML = '<div class="cs-agg-chips">' + chips + "</div>";
   }
 
-  function patchAreaA(countsDelta, selection) {
-    var root = aggRoot();
-    if (!root) return;
+  function renderMyObsChip(signal) {
+    var pol = sentimentKey(signal.sentiment);
+    return (
+      '<span class="cs-my-obs-chip cs-my-obs-chip--' +
+      pol +
+      '">' +
+      signalIconHtml(signal.slug) +
+      "<span>" +
+      escapeHtml(signal.label) +
+      "</span></span>"
+    );
+  }
 
-    var existing = {};
-    root.querySelectorAll(".cs-agg-chip[data-signal-slug]").forEach(function (el) {
-      var slug = el.getAttribute("data-signal-slug");
-      var countEl = el.querySelector(".cs-agg-count");
-      var n = 0;
-      if (countEl) {
-        var m = (countEl.textContent || "").match(/(\d+)/);
-        n = m ? parseInt(m[1], 10) : 0;
+  function updateCtaUI() {
+    var add = addBtn();
+    var myObs = myObsEl();
+    var edit = editBtn();
+
+    if (state.submitted && state.selection.length) {
+      if (add) add.hidden = true;
+      if (myObs) {
+        myObs.hidden = false;
+        var chipsEl = document.getElementById("cs-my-obs-chips");
+        if (chipsEl) {
+          chipsEl.innerHTML = state.selection.map(renderMyObsChip).join("");
+        }
       }
-      existing[slug] = { el: el, count: n };
-    });
-
-    var emptyEl = root.querySelector(".cs-agg-empty");
-    if (emptyEl) {
-      root.innerHTML = '<div class="cs-agg-chips"></div>';
-    }
-
-    var chipsWrap = root.querySelector(".cs-agg-chips");
-    if (!chipsWrap) {
-      chipsWrap = document.createElement("div");
-      chipsWrap.className = "cs-agg-chips";
-      root.appendChild(chipsWrap);
-    }
-
-    var slugsToUpdate = Object.keys(countsDelta || {});
-    if (!slugsToUpdate.length && selection) {
-      selection.forEach(function (s) {
-        if (slugsToUpdate.indexOf(s.slug) < 0) slugsToUpdate.push(s.slug);
-      });
-    }
-
-    slugsToUpdate.forEach(function (slug) {
-      var delta = (countsDelta && countsDelta[slug]) || 1;
-      var sig = signalBySlug(slug);
-      if (!sig) {
-        var fromSel = (selection || []).find(function (s) {
-          return s.slug === slug;
-        });
-        if (fromSel) sig = fromSel;
+      if (edit) {
+        edit.disabled = !state.canEdit;
+        edit.title = state.canEdit
+          ? ""
+          : "Можно изменить через " + formatCooldown(state.editSecondsRemaining);
       }
-      if (!sig) return;
-
-      if (existing[slug]) {
-        var next = existing[slug].count + delta;
-        existing[slug].el.querySelector(".cs-agg-count").textContent = "×" + next;
-      } else {
-        chipsWrap.insertAdjacentHTML("beforeend", renderAggChip(sig, delta));
-      }
-    });
+    } else {
+      if (add) add.hidden = state.formSignals.length === 0;
+      if (myObs) myObs.hidden = true;
+    }
   }
 
   function renderRecapChips(items) {
@@ -233,11 +231,17 @@
     if (!root) return;
     state.successView = true;
     destroyTurnstile();
+    var title = state.isEditing ? "✓ Наблюдение обновлено" : "✓ Наблюдение учтено";
+    var bodyHtml = selection.length
+      ? renderRecapChips(selection)
+      : '<p class="cs-success-lead">Ваш вклад убран из агрегации.</p>';
     root.innerHTML =
       '<div class="cs-success">' +
-      '<p class="cs-success-title">✓ Наблюдение учтено</p>' +
+      '<p class="cs-success-title">' +
+      title +
+      "</p>" +
       '<p class="cs-success-lead">Спасибо за вклад в EVrace</p>' +
-      renderRecapChips(selection) +
+      bodyHtml +
       '<button type="button" class="loc-btn loc-btn-community cs-success-close" id="cs-success-close">Закрыть</button>' +
       "</div>";
     root.querySelector("#cs-success-close")?.addEventListener("click", function () {
@@ -249,10 +253,32 @@
     }, SUCCESS_AUTO_CLOSE_MS);
   }
 
+  function setModalTitle() {
+    if (!modalTitleEl) {
+      modalTitleEl = document.getElementById("loc-cs-modal-title");
+    }
+    if (modalTitleEl) {
+      modalTitleEl.textContent = state.isEditing
+        ? "Изменить наблюдение"
+        : "Добавить наблюдение";
+    }
+  }
+
   function buildFormHtml() {
+    var cooldownHint =
+      '<p class="cs-form-cooldown">Изменения можно вносить не чаще одного раза в 5 минут.</p>';
+    var cooldownWait =
+      state.isEditing && !state.canEdit
+        ? '<p class="cs-form-error">Следующее изменение через ' +
+          escapeHtml(formatCooldown(state.editSecondsRemaining)) +
+          ".</p>"
+        : "";
+
     var html =
       '<div class="cs-form">' +
       '<p class="cs-form-hint">Выберите до 4 наблюдений</p>' +
+      cooldownHint +
+      cooldownWait +
       '<p class="cs-form-counter">Выбрано <span id="cs-selected-count">' +
       state.selected.length +
       "</span> из " +
@@ -276,11 +302,15 @@
         "</span></button>";
     });
 
+    var submitLabel = state.isEditing ? "Сохранить" : "Учесть наблюдение";
+
     html +=
       "</div>" +
       '<p class="cs-form-error" id="cs-form-error" hidden></p>' +
       '<div class="cs-turnstile" id="cs-turnstile"></div>' +
-      '<button type="button" class="loc-btn loc-btn-accent cs-submit" id="cs-submit" disabled>Учесть наблюдение</button>' +
+      '<button type="button" class="loc-btn loc-btn-accent cs-submit" id="cs-submit" disabled>' +
+      escapeHtml(submitLabel) +
+      "</button>" +
       "</div>";
     return html;
   }
@@ -293,6 +323,7 @@
         '<p class="cs-form-loading">Наблюдения для этой локации временно недоступны.</p>';
       return;
     }
+    setModalTitle();
     root.innerHTML = buildFormHtml();
     bindFormEvents();
     updateSubmitState();
@@ -379,12 +410,15 @@
     var countEl = document.getElementById("cs-selected-count");
     if (countEl) countEl.textContent = String(state.selected.length);
     if (!btn) return;
+
+    var minSelected = state.isEditing ? 0 : 1;
     var ok =
-      state.selected.length >= 1 &&
+      state.selected.length >= minSelected &&
       state.selected.length <= MAX_SIGNALS &&
       !hasForbiddenPair(state.selected) &&
       !!state.turnstileToken &&
-      !state.submitting;
+      !state.submitting &&
+      state.canEdit;
     btn.disabled = !ok;
   }
 
@@ -419,16 +453,42 @@
     if (submitBtn) submitBtn.addEventListener("click", onSubmit);
   }
 
-  function errorMessage(code) {
+  function errorMessage(code, payload) {
+    payload = payload || {};
+    if (code === "edit_cooldown") {
+      return (
+        "Следующее изменение через " +
+        formatCooldown(payload.edit_seconds_remaining || payload.cooldown_seconds)
+      );
+    }
     var map = {
       conflicting_signals: "Эти наблюдения противоречат друг другу — сними одно.",
       empty_selection: "Выбери хотя бы одно наблюдение",
       too_many_signals: "Можно выбрать не больше 4 сигналов.",
       turnstile_failed: "Проверка не прошла. Обнови страницу и попробуй снова.",
-      already_submitted: "Ты уже учёл наблюдение для этой локации",
       rate_limited: "Слишком много попыток. Попробуй позже.",
     };
     return map[code] || "Не удалось отправить. Попробуйте позже.";
+  }
+
+  function applyStatusData(data) {
+    if (data.signals) {
+      renderAreaAFromSignals(data.signals);
+    }
+
+    state.cooldownSeconds = data.cooldown_seconds || 300;
+    state.canEdit = data.can_edit !== false;
+    state.editSecondsRemaining = data.edit_seconds_remaining || 0;
+
+    if (data.submitted) {
+      state.submitted = true;
+      state.selection = data.selection || [];
+    } else {
+      state.submitted = false;
+      state.selection = [];
+    }
+
+    updateCtaUI();
   }
 
   async function onSubmit() {
@@ -456,34 +516,38 @@
         data = {};
       }
 
-      if (res.status === 409 && data.error === "already_submitted") {
-        state.submitted = true;
-        state.selection = state.selected.map(function (slug) {
-          return signalBySlug(slug) || { slug: slug, label: slug, sentiment: "positive" };
-        });
-        setAddBtnVisible(false);
-        renderSuccessView(state.selection);
-        return;
-      }
-
       if (!res.ok) {
-        showError(errorMessage(data.error));
+        if (data.error === "edit_cooldown") {
+          state.canEdit = false;
+          state.editSecondsRemaining = data.edit_seconds_remaining || 0;
+          updateCtaUI();
+        }
+        showError(errorMessage(data.error, data));
         resetTurnstileWidget();
         state.submitting = false;
         updateSubmitState();
         return;
       }
 
-      state.submitted = true;
-      state.selection = data.selection || [];
       if (data.signals) {
         renderAreaAFromSignals(data.signals);
-      } else {
-        patchAreaA(data.counts_delta, state.selection);
       }
-      setAddBtnVisible(false);
+
+      if (data.removed) {
+        state.submitted = false;
+        state.selection = [];
+        state.canEdit = true;
+        state.editSecondsRemaining = 0;
+      } else {
+        state.submitted = true;
+        state.selection = data.selection || [];
+        state.canEdit = false;
+        state.editSecondsRemaining = state.cooldownSeconds;
+      }
+
+      updateCtaUI();
       state.submitting = false;
-      renderSuccessView(state.selection);
+      renderSuccessView(data.selection || []);
     } catch (err) {
       showError("Сеть недоступна. Попробуйте позже.");
       state.submitting = false;
@@ -504,20 +568,9 @@
         data = {};
       }
 
-      if (data.signals) {
-        renderAreaAFromSignals(data.signals);
-      }
-
-      if (data.submitted && data.selection && data.selection.length) {
-        state.submitted = true;
-        state.selection = data.selection;
-        setAddBtnVisible(false);
-        return;
-      }
-
-      setAddBtnVisible(state.formSignals.length > 0);
+      applyStatusData(data);
     } catch (err) {
-      setAddBtnVisible(state.formSignals.length > 0);
+      updateCtaUI();
     }
   }
 
@@ -553,12 +606,23 @@
     closeModal(true);
   }
 
-  function openModal() {
-    if (!modalEl || state.modalOpen || state.submitted) return;
+  function openModal(forEdit) {
+    if (!modalEl || state.modalOpen) return;
+    if (forEdit) {
+      if (!state.submitted) return;
+      state.isEditing = true;
+      state.selected = state.selection.map(function (s) {
+        return s.slug;
+      });
+    } else {
+      if (state.submitted) return;
+      state.isEditing = false;
+      state.selected = [];
+    }
     if (!state.formSignals.length) return;
+
     state.modalOpen = true;
     state.successView = false;
-    state.selected = [];
     state.turnstileToken = "";
     showError("");
     lastFocusEl = document.activeElement;
@@ -580,6 +644,7 @@
     state.modalOpen = false;
     state.successView = false;
     state.submitting = false;
+    state.isEditing = false;
     state.selected = [];
     modalEl.hidden = true;
     document.body.classList.remove("loc-modal-open");
@@ -587,6 +652,8 @@
     if (root) root.innerHTML = "";
     if (lastFocusEl && typeof lastFocusEl.focus === "function") {
       lastFocusEl.focus();
+    } else if (state.submitted) {
+      editBtn()?.focus();
     } else {
       addBtn()?.focus();
     }
@@ -604,9 +671,15 @@
   function initModalChrome() {
     modalEl = document.getElementById("loc-cs-modal");
     panelEl = modalEl?.querySelector(".loc-action-modal-panel");
+    modalTitleEl = document.getElementById("loc-cs-modal-title");
     if (!modalEl) return;
 
-    addBtn()?.addEventListener("click", openModal);
+    addBtn()?.addEventListener("click", function () {
+      openModal(false);
+    });
+    editBtn()?.addEventListener("click", function () {
+      openModal(true);
+    });
 
     modalEl.querySelector("#loc-cs-modal-close")?.addEventListener("click", requestClose);
     modalEl.querySelectorAll("[data-modal-dismiss]").forEach(function (el) {
@@ -624,7 +697,8 @@
     initModalChrome();
     await loadStatus();
     if (window.location.hash === "#add-signal") {
-      openModal();
+      if (state.submitted) openModal(true);
+      else openModal(false);
       history.replaceState(null, "", window.location.pathname + window.location.search);
     }
   }

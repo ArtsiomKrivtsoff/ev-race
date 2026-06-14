@@ -6,6 +6,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2.49.1";
 import { corsHeadersFor } from "../_shared/cors.ts";
 import { fetchAggregatedSignals } from "../_shared/signals-aggregate.ts";
+import { SIGNAL_EDIT_COOLDOWN_SECONDS } from "../_shared/signal-validation.ts";
 import {
   resolveVoterCookie,
   voterKeyFromCookie,
@@ -82,7 +83,15 @@ Deno.serve(async (req) => {
   if (!submission) {
     return json(
       req,
-      { voter_ready: true, submitted: false, selection: [], signals },
+      {
+        voter_ready: true,
+        submitted: false,
+        can_edit: true,
+        edit_seconds_remaining: 0,
+        cooldown_seconds: SIGNAL_EDIT_COOLDOWN_SECONDS,
+        selection: [],
+        signals,
+      },
       200,
       responseHeaders,
     );
@@ -104,11 +113,21 @@ Deno.serve(async (req) => {
     };
   });
 
+  const lastMs = new Date(submission.created_at).getTime();
+  const elapsed = (Date.now() - lastMs) / 1000;
+  const editSecondsRemaining =
+    elapsed >= SIGNAL_EDIT_COOLDOWN_SECONDS
+      ? 0
+      : Math.ceil(SIGNAL_EDIT_COOLDOWN_SECONDS - elapsed);
+
   return json(
     req,
     {
       voter_ready: true,
       submitted: true,
+      can_edit: editSecondsRemaining === 0,
+      edit_seconds_remaining: editSecondsRemaining,
+      cooldown_seconds: SIGNAL_EDIT_COOLDOWN_SECONDS,
       selection,
       submitted_at: submission.created_at,
       signals,

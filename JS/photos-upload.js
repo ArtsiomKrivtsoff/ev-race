@@ -2,13 +2,21 @@
   "use strict";
 
   var TURNSTILE_SITE_KEY = "0x4AAAAAACtvG988gnpS7YBa";
-  var MAX_FILES = 3;
+  var MAX_FILES = 4;
   var MAX_BYTES = 10 * 1024 * 1024;
-  var SUCCESS_AUTO_CLOSE_MS = 2000;
+
+  var PROGRESS_STEPS = [
+    "Проверка...",
+    "Подготовка фотографий...",
+    "Загрузка фотографий...",
+    "Отправка на модерацию...",
+    "Готово.",
+  ];
 
   var state = {
     status: null,
     files: [],
+    previewUrls: [],
     turnstileToken: "",
     submitting: false,
     statusLoading: false,
@@ -17,12 +25,12 @@
     turnstileWidgetId: null,
     modalOpen: false,
     successView: false,
+    progressStep: -1,
   };
 
   var modalEl = null;
   var panelEl = null;
   var lastFocusEl = null;
-  var successTimer = null;
 
   function pageData() {
     var el = document.getElementById("loc-page-data");
@@ -42,6 +50,13 @@
     return document.getElementById("loc-photos-add-btn");
   }
 
+  function maxFilesLimit() {
+    if (state.status && state.status.max_files_per_submission) {
+      return state.status.max_files_per_submission;
+    }
+    return MAX_FILES;
+  }
+
   function escapeHtml(s) {
     return String(s)
       .replace(/&/g, "&amp;")
@@ -55,6 +70,32 @@
     if (s < 60) return s + " сек";
     var m = Math.ceil(s / 60);
     return m === 1 ? "1 мин" : m + " мин";
+  }
+
+  function filePickerLabel() {
+    return "Выбрать фото (до " + maxFilesLimit() + ")";
+  }
+
+  function revokePreviews() {
+    state.previewUrls.forEach(function (url) {
+      try {
+        URL.revokeObjectURL(url);
+      } catch (_e) {
+        /* ignore */
+      }
+    });
+    state.previewUrls = [];
+  }
+
+  function syncPreviews() {
+    revokePreviews();
+    state.previewUrls = state.files.map(function (file) {
+      try {
+        return URL.createObjectURL(file);
+      } catch (_e) {
+        return "";
+      }
+    });
   }
 
   function errorMessage(code, payload) {
@@ -72,7 +113,10 @@
         " фото на модерации. Дождитесь решения модератора."
       );
     }
-    if (code === "too_many_files") return "Можно отправить не больше 3 фото за раз.";
+    if (code === "too_many_files") {
+      var maxF = payload.max_files || maxFilesLimit();
+      return "Можно отправить не больше " + maxF + " фото за раз.";
+    }
     if (code === "file_too_large") return "Каждый файл — не больше 10 МБ.";
     if (code === "invalid_file_type") return "Поддерживаются только изображения (JPEG, PNG, WebP).";
     if (code === "no_files") return "Выберите хотя бы одно фото.";
@@ -109,44 +153,84 @@
     );
   }
 
-  function renderFileList() {
+  function renderProgressHtml() {
+    if (state.progressStep < 0) return "";
+    var label = PROGRESS_STEPS[state.progressStep] || PROGRESS_STEPS[0];
+    return (
+      '<div class="loc-upload-progress" role="status" aria-live="polite">' +
+      '<p class="loc-upload-progress-label">' +
+      escapeHtml(label) +
+      "</p>" +
+      '<div class="loc-upload-progress-bar"><span class="loc-upload-progress-fill"></span></div>' +
+      "</div>"
+    );
+  }
+
+  function setProgressStep(step) {
+    state.progressStep = step;
+    var root = rootEl();
+    if (!root) return;
+    var existing = root.querySelector(".loc-upload-progress");
+    var html = renderProgressHtml();
+    if (existing) {
+      existing.outerHTML = html;
+    } else if (html) {
+      var submitBtn = root.querySelector("#loc-upload-submit");
+      if (submitBtn) submitBtn.insertAdjacentHTML("beforebegin", html);
+    }
+    var fill = root.querySelector(".loc-upload-progress-fill");
+    if (fill) {
+      var pct = Math.min(100, Math.round(((step + 1) / PROGRESS_STEPS.length) * 100));
+      fill.style.width = pct + "%";
+    }
+  }
+
+  function renderThumbGrid() {
     if (!state.files.length) return "";
+    syncPreviews();
     var items = state.files
       .map(function (file, i) {
-        var kb = Math.max(1, Math.round(file.size / 1024));
+        var url = state.previewUrls[i] || "";
         return (
-          '<li class="loc-upload-file-item">' +
-          "<span>" +
-          escapeHtml(file.name) +
-          " · " +
-          kb +
-          " КБ</span>" +
-          '<button type="button" class="loc-upload-file-remove" data-file-index="' +
+          '<li class="loc-upload-thumb-item">' +
+          '<div class="loc-upload-thumb">' +
+          (url ? '<img src="' + escapeHtml(url) + '" alt="" decoding="async">' : "") +
+          "</div>" +
+          '<button type="button" class="loc-upload-thumb-remove" data-file-index="' +
           i +
-          '" aria-label="Убрать файл">×</button>' +
+          '" aria-label="Убрать фото">×</button>' +
           "</li>"
         );
       })
       .join("");
-    return '<ul class="loc-upload-file-list">' + items + "</ul>";
+    return (
+      '<p class="loc-upload-file-count">' +
+      state.files.length +
+      " фото выбрано</p>" +
+      '<ul class="loc-upload-thumb-grid">' +
+      items +
+      "</ul>"
+    );
   }
 
-  function updateFileListDom(root) {
+  function updateThumbGridDom(root) {
     if (!root) root = rootEl();
     if (!root) return;
     var label = root.querySelector(".loc-upload-file-label");
     if (!label) return;
-    var old = root.querySelector(".loc-upload-file-list");
-    if (old) old.remove();
-    var html = renderFileList();
+    var oldCount = root.querySelector(".loc-upload-file-count");
+    var oldGrid = root.querySelector(".loc-upload-thumb-grid");
+    if (oldCount) oldCount.remove();
+    if (oldGrid) oldGrid.remove();
+    var html = renderThumbGrid();
     if (html) label.insertAdjacentHTML("afterend", html);
-    root.querySelectorAll(".loc-upload-file-remove").forEach(function (btn) {
+    root.querySelectorAll(".loc-upload-thumb-remove").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var idx = parseInt(btn.dataset.fileIndex, 10);
         state.files = state.files.filter(function (_f, i) {
           return i !== idx;
         });
-        updateFileListDom(root);
+        updateThumbGridDom(root);
         updateSubmitButton();
       });
     });
@@ -157,27 +241,18 @@
     var root = rootEl();
     if (!root) return;
     state.successView = true;
+    state.progressStep = -1;
     destroyTurnstile();
+    revokePreviews();
     root.innerHTML =
       '<div class="loc-upload-success">' +
       '<p class="loc-upload-success-title">Фото отправлены на модерацию.</p>' +
-      '<p class="loc-upload-success-body">Спасибо за вклад в сообщество EVrace.</p>' +
+      '<p class="loc-upload-success-body">Ваши фото ожидают проверки модератором.<br>Обычно это занимает от нескольких минут до нескольких часов.</p>' +
       '<button type="button" class="loc-btn loc-btn-community loc-upload-success-close" id="loc-upload-success-close">Закрыть</button>' +
       "</div>";
     root.querySelector("#loc-upload-success-close")?.addEventListener("click", function () {
       closeModal(true);
     });
-    clearSuccessTimer();
-    successTimer = setTimeout(function () {
-      closeModal(true);
-    }, SUCCESS_AUTO_CLOSE_MS);
-  }
-
-  function clearSuccessTimer() {
-    if (successTimer) {
-      clearTimeout(successTimer);
-      successTimer = null;
-    }
   }
 
   function renderForm() {
@@ -192,6 +267,8 @@
         escapeHtml(state.banner) +
         "</p>"
       : "";
+
+    revokePreviews();
 
     var formInner;
     if (state.statusLoading && !state.status) {
@@ -209,10 +286,13 @@
         '<p class="loc-upload-hint">Фото можно добавить анонимно.</p>' +
         '<p class="loc-upload-hint loc-upload-hint--sub">Через Telegram ваши публикации останутся за вами и смогут участвовать в будущих активностях и программах сообщества EVrace.</p>' +
         '<label class="loc-upload-file-label">' +
-        '<span class="loc-upload-file-btn">Выбрать фото (до 3)</span>' +
+        '<span class="loc-upload-file-btn">' +
+        escapeHtml(filePickerLabel()) +
+        "</span>" +
         '<input type="file" class="loc-upload-file-input" accept="image/*" multiple />' +
         "</label>" +
-        renderFileList() +
+        renderThumbGrid() +
+        renderProgressHtml() +
         '<div class="loc-upload-turnstile" id="loc-upload-turnstile"></div>' +
         '<button type="button" class="loc-btn loc-btn-community loc-upload-submit" id="loc-upload-submit"' +
         (canSubmit() ? "" : " disabled") +
@@ -229,6 +309,9 @@
     bindEvents(root);
     if (!blocked && !(state.statusLoading && !state.status)) {
       mountTurnstile();
+    }
+    if (state.progressStep >= 0) {
+      setProgressStep(state.progressStep);
     }
   }
 
@@ -311,6 +394,7 @@
       input.addEventListener("change", function () {
         var picked = Array.prototype.slice.call(input.files || []);
         var merged = state.files.concat(picked);
+        var limit = maxFilesLimit();
         var next = [];
         var rejected = false;
         for (var i = 0; i < merged.length; i++) {
@@ -319,7 +403,7 @@
             rejected = true;
             continue;
           }
-          if (next.length >= MAX_FILES) {
+          if (next.length >= limit) {
             rejected = true;
             continue;
           }
@@ -327,14 +411,25 @@
         }
         state.files = next;
         if (rejected) {
-          state.banner = "Можно выбрать до 3 фото, каждое — не больше 10 МБ.";
+          state.banner =
+            "Можно выбрать до " + limit + " фото, каждое — не больше 10 МБ.";
           state.bannerKind = "warn";
         }
         input.value = "";
         if (rejected) renderForm();
-        else updateFileListDom(root);
+        else updateThumbGridDom(root);
       });
     }
+
+    root.querySelectorAll(".loc-upload-thumb-remove").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var idx = parseInt(btn.dataset.fileIndex, 10);
+        state.files = state.files.filter(function (_f, i) {
+          return i !== idx;
+        });
+        updateThumbGridDom(root);
+      });
+    });
 
     root.querySelector("#loc-upload-submit")?.addEventListener("click", submitUpload);
   }
@@ -347,7 +442,9 @@
     }
     renderForm();
 
-    return fetch("/api/photos/status", { credentials: "same-origin" })
+    return fetch("/api/photos/status", {
+      credentials: "same-origin",
+    })
       .then(function (res) {
         return res.json().then(function (body) {
           return { ok: res.ok, body: body };
@@ -371,7 +468,13 @@
       });
   }
 
-  function submitUpload() {
+  function delay(ms) {
+    return new Promise(function (resolve) {
+      setTimeout(resolve, ms);
+    });
+  }
+
+  async function submitUpload() {
     if (!canSubmit()) return;
     var data = pageData();
     if (!data.location_id) {
@@ -386,6 +489,11 @@
     state.bannerKind = "";
     updateSubmitButton();
 
+    setProgressStep(0);
+    await delay(350);
+    setProgressStep(1);
+    await delay(400);
+
     var form = new FormData();
     form.append("location_id", String(data.location_id));
     form.append("turnstile_token", state.turnstileToken);
@@ -393,37 +501,50 @@
       form.append("files", file, file.name);
     });
 
-    fetch("/api/photos/upload", {
-      method: "POST",
-      credentials: "same-origin",
-      body: form,
-    })
-      .then(function (res) {
-        return res.json().then(function (body) {
-          return { status: res.status, body: body };
-        });
-      })
-      .then(function (result) {
-        state.submitting = false;
-        if (result.status === 200) {
-          state.files = [];
-          state.banner = "";
-          renderSuccessView();
-          return;
-        }
-        var code = result.body.error || "server_error";
-        state.banner = errorMessage(code, result.body);
-        state.bannerKind = "error";
-        resetTurnstileWidget();
-        renderForm();
-      })
-      .catch(function () {
-        state.submitting = false;
-        state.banner = "Не удалось отправить. Проверьте связь и попробуйте снова.";
-        state.bannerKind = "error";
-        resetTurnstileWidget();
-        renderForm();
+    setProgressStep(2);
+
+    try {
+      var res = await fetch("/api/photos/upload", {
+        method: "POST",
+        credentials: "same-origin",
+        body: form,
       });
+
+      setProgressStep(3);
+      await delay(300);
+
+      var result = { status: res.status, body: {} };
+      try {
+        result.body = await res.json();
+      } catch (_e) {
+        result.body = {};
+      }
+
+      state.submitting = false;
+
+      if (result.status === 200) {
+        setProgressStep(4);
+        await delay(500);
+        state.files = [];
+        state.banner = "";
+        renderSuccessView();
+        return;
+      }
+
+      state.progressStep = -1;
+      var code = result.body.error || "server_error";
+      state.banner = errorMessage(code, result.body);
+      state.bannerKind = "error";
+      resetTurnstileWidget();
+      renderForm();
+    } catch (_err) {
+      state.submitting = false;
+      state.progressStep = -1;
+      state.banner = "Не удалось отправить. Проверьте связь и попробуйте снова.";
+      state.bannerKind = "error";
+      resetTurnstileWidget();
+      renderForm();
+    }
   }
 
   function focusableInPanel() {
@@ -454,6 +575,7 @@
     if (state.submitting) {
       if (!window.confirm("Прервать загрузку?")) return;
       state.submitting = false;
+      state.progressStep = -1;
     }
     closeModal(true);
   }
@@ -463,6 +585,7 @@
     state.modalOpen = true;
     state.successView = false;
     state.files = [];
+    state.progressStep = -1;
     state.banner = "";
     state.bannerKind = "";
     lastFocusEl = document.activeElement;
@@ -480,12 +603,13 @@
       requestClose();
       return;
     }
-    clearSuccessTimer();
     destroyTurnstile();
+    revokePreviews();
     state.modalOpen = false;
     state.successView = false;
     state.files = [];
     state.submitting = false;
+    state.progressStep = -1;
     state.banner = "";
     modalEl.hidden = true;
     document.body.classList.remove("loc-modal-open");
