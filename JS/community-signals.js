@@ -73,6 +73,10 @@
     return document.getElementById("loc-cs-edit-btn");
   }
 
+  function mineLegend() {
+    return document.getElementById("loc-cs-mine-legend");
+  }
+
   function escapeHtml(s) {
     return String(s)
       .replace(/&/g, "&amp;")
@@ -127,6 +131,24 @@
     );
   }
 
+  var MINE_MARK_SVG =
+    '<svg class="cs-agg-mine-mark-svg" viewBox="0 0 12 10" width="12" height="10" aria-hidden="true" focusable="false">' +
+    '<path d="M1 5.5 L4.5 9 L11 1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/>' +
+    "</svg>";
+
+  function mineMarkHtml(title) {
+    var label = title || "Ваше наблюдение";
+    return (
+      '<span class="cs-agg-mine-mark" title="' +
+      escapeHtml(label) +
+      '" aria-label="' +
+      escapeHtml(label) +
+      '">' +
+      MINE_MARK_SVG +
+      "</span>"
+    );
+  }
+
   function userSlugSet() {
     var set = {};
     state.selection.forEach(function (s) {
@@ -138,9 +160,7 @@
   function renderAggChip(signal, count, isMine) {
     var pol = sentimentKey(signal.sentiment);
     var mineClass = isMine ? " cs-agg-chip--mine" : "";
-    var mineMark = isMine
-      ? '<span class="cs-agg-mine-mark" title="Ваше наблюдение" aria-label="Ваше наблюдение">✓</span>'
-      : "";
+    var mineMark = isMine ? mineMarkHtml("Ваше наблюдение") : "";
     return (
       '<div class="cs-agg-chip cs-agg-chip--' +
       pol +
@@ -179,8 +199,10 @@
   function updateCtaUI() {
     var add = addBtn();
     var edit = editBtn();
+    var legend = mineLegend();
+    var hasMine = state.submitted && state.selection.length;
 
-    if (state.submitted && state.selection.length) {
+    if (hasMine) {
       if (add) add.hidden = true;
       if (edit) {
         edit.hidden = false;
@@ -189,9 +211,11 @@
           ? ""
           : "Можно изменить через " + formatCooldown(state.editSecondsRemaining);
       }
+      if (legend) legend.hidden = false;
     } else {
       if (add) add.hidden = state.formSignals.length === 0;
       if (edit) edit.hidden = true;
+      if (legend) legend.hidden = true;
     }
   }
 

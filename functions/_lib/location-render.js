@@ -435,6 +435,7 @@ ${renderSignalIcon(s.slug)}
   }
 
   const cta = `<div class="loc-cs-cta-wrap">
+<p class="cs-mine-legend" id="loc-cs-mine-legend" hidden><span class="cs-agg-mine-mark" aria-hidden="true"><svg class="cs-agg-mine-mark-svg" viewBox="0 0 12 10" width="12" height="10" aria-hidden="true" focusable="false"><path d="M1 5.5 L4.5 9 L11 1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/></svg></span><span class="cs-mine-legend-label">Мои наблюдения</span></p>
 <button type="button" class="loc-btn loc-btn-community cs-edit-btn" id="loc-cs-edit-btn" hidden>Изменить</button>
 <button type="button" class="loc-btn loc-btn-accent loc-cs-add-btn" id="loc-cs-add-btn">ДОБАВИТЬ НАБЛЮДЕНИЕ</button>
 </div>`;

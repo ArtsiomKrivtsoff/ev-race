@@ -506,17 +506,6 @@
     document.dispatchEvent(new CustomEvent("evrace:hero-fit"));
   }
 
-  function initPhotoPanelOverflow() {
-    if (window.matchMedia("(max-width: 899px)").matches) return;
-    var panel = document.querySelector(".loc-photo-panel");
-    if (!panel) return;
-    requestAnimationFrame(function () {
-      if (panel.scrollHeight > panel.clientHeight + 8) {
-        panel.classList.add("loc-photo-panel--overflow");
-      }
-    });
-  }
-
   if (localStorage.getItem("ev_race_reduced_fx") === "1") {
     document.body.classList.add("reduced-fx");
     document.addEventListener("DOMContentLoaded", function () {
@@ -534,7 +523,6 @@
     window.addEventListener("resize", syncStatusbarHeight);
     trackVisit();
     initPhotoLightbox();
-    initPhotoPanelOverflow();
     fitFitLineElements();
     window.addEventListener("resize", fitFitLineElements);
     if (document.fonts && document.fonts.ready) {
