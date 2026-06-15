@@ -817,7 +817,8 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   touch-action: pan-x;
-  gap: 0;
+  gap: 4px;
+  background: #000;
   scrollbar-width: none;
 }
 .loc-photo-grid::-webkit-scrollbar {
@@ -911,6 +912,7 @@ body.location-page .loc-st-dc-ac-leg .leg-dot {
 }
 .loc-photos-cta-wrap {
   padding: 0 var(--loc-pad) var(--loc-pad);
+  margin-top: var(--loc-pad);
 }
 .loc-photos-add-btn {
   width: 100%;
@@ -1319,14 +1321,20 @@ body.location-page {
   box-shadow: 0 0 12px rgba(255, 80, 80, 0.1);
 }
 .loc-cs-agg-blk .cs-agg-count {
-  flex: 0 0 auto;
-  align-self: center;
-  margin-left: auto;
   font-family: "Press Start 2P", monospace;
   font-size: 9px;
   line-height: 1;
   text-shadow: 0 0 8px currentColor;
   white-space: nowrap;
+}
+.loc-cs-agg-blk .cs-agg-meta {
+  flex: 0 0 auto;
+  align-self: center;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
 }
 
 .loc-cs-cta-wrap {
@@ -1355,8 +1363,7 @@ body.location-page {
   align-items: center;
   justify-content: center;
   width: 14px;
-  height: 14px;
-  margin-left: 2px;
+  height: 12px;
   color: var(--yellow);
   filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.45));
 }

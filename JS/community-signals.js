@@ -160,7 +160,12 @@
   function renderAggChip(signal, count, isMine) {
     var pol = sentimentKey(signal.sentiment);
     var mineClass = isMine ? " cs-agg-chip--mine" : "";
-    var mineMark = isMine ? mineMarkHtml("Ваше наблюдение") : "";
+    var meta =
+      '<div class="cs-agg-meta"><span class="cs-agg-count">×' +
+      escapeHtml(String(count)) +
+      "</span>";
+    if (isMine) meta += mineMarkHtml("Ваше наблюдение");
+    meta += "</div>";
     return (
       '<div class="cs-agg-chip cs-agg-chip--' +
       pol +
@@ -172,10 +177,8 @@
       '<span class="cs-agg-label">' +
       escapeHtml(signal.label) +
       "</span>" +
-      mineMark +
-      '<span class="cs-agg-count">×' +
-      escapeHtml(String(count)) +
-      "</span></div>"
+      meta +
+      "</div>"
     );
   }
 
