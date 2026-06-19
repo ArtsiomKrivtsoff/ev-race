@@ -165,11 +165,14 @@ function stationLocationKey(s) {
   return normalizeIdentityPart(s.operator) + '|' + normalizeIdentityPart(s.city) + '|' + normalizeIdentityPart(s.address);
 }
 
-function buildLocationLookup(locations) {
+function buildLocationLookup(locations, signalTotalByLocId) {
   const map = {};
+  const totals = signalTotalByLocId || {};
   (locations || []).forEach(loc => {
     const k = normalizeIdentityPart(loc.operator) + '|' + normalizeIdentityPart(loc.city) + '|' + normalizeIdentityPart(loc.address);
-    map[k] = loc;
+    map[k] = Object.assign({}, loc, {
+      signal_total: totals[loc.id] || 0,
+    });
   });
   return map;
 }
@@ -305,9 +308,21 @@ function fmtDate(dateStr) {
 }
 function powerSum(s) { return (s.dc_power || 0) + (s.ac_power || 0); }
 
-// rating-slot — placeholder под народный рейтинг (страница «скоро»)
-function ratingSlot(locKey) {
-  return '<span class="loc-rating" data-loc-id="' + locKey + '" title="Народный рейтинг локаций — скоро"><span class="loc-rating-stars">☆☆☆☆☆</span><span class="loc-rating-soon">СКОРО</span></span>';
+function locationRateHref(s) {
+  const href = locationPageUrl(s);
+  return href ? href + '#reviews-list' : '';
+}
+
+function ratingSlotForStation(s) {
+  const loc = locationByKey[stationLocationKey(s)];
+  const ugc = window.__evraceLocUgcPreview;
+  if (!ugc) return '';
+  const stats = ugc.getStatsFromLoc(loc);
+  return ugc.render(stats, {
+    layout: 'stations',
+    href: locationPageUrl(s) || '',
+    rateHref: locationRateHref(s),
+  });
 }
 
 // =============================================================
@@ -565,7 +580,7 @@ function renderTableRow(s) {
     + '<td class="center">' + gunCell(s.gun3_type) + '</td>'
     + '<td class="power right">' + pwrHtml + '</td>'
     + '<td class="date right">' + fmtDate(s.station_date) + newBadge + '</td>'
-    + '<td class="right">' + ratingSlot(locKey) + '</td>'
+    + '<td class="right">' + ratingSlotForStation(s) + '</td>'
     + '</tr>';
 }
 
@@ -601,7 +616,7 @@ function renderGroupRows(group) {
     + '<td colspan="3" class="center" style="color:var(--text-dim);font-size:10px">' + totalGuns + ' пист. всего</td>'
     + '<td class="power right">' + (totalPower ? totalPower.toLocaleString('ru') + ' кВт' : '—') + '</td>'
     + '<td class="date right">' + fmtDate(latestDate) + newBadge + '</td>'
-    + '<td class="right">' + ratingSlot(group.key) + '</td>'
+    + '<td class="right">' + ratingSlotForStation(group.stations[0]) + '</td>'
     + '</tr>';
   // вложенные строки станций (без рейтинга — он на локацию)
   group.stations.forEach(s => {
@@ -659,7 +674,7 @@ function renderMobile(stations) {
         + '<div class="loc-footer-left"><span class="loc-date">' + fmtDate(latestDate) + '</span></div>'
         + '<div class="loc-footer-right">' + newBadge + renderLocPageBtn(first) + '</div>'
       + '</div>'
-      + ratingSlot(g.key)
+      + ratingSlotForStation(first)
     + '</div>';
   }).join('');
 }
@@ -728,16 +743,25 @@ async function init() {
 
   try {
     const headers = { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY };
-    const [stRes, locRes] = await Promise.all([
+    const locSelect = 'id,operator,city,address,operator_slug,slug,location_name,cached_avg_rating,cached_review_count,cached_photo_count';
+    const [stRes, locRes, sigRes] = await Promise.all([
       fetch(SURL + '/rest/v1/stations?select=*&order=station_date.desc,station_time.desc.nullslast', { headers }),
-      fetch(SURL + '/rest/v1/locations?select=operator,city,address,operator_slug,slug,location_name&is_active=eq.true', { headers })
+      fetch(SURL + '/rest/v1/locations?select=' + encodeURIComponent(locSelect) + '&is_active=eq.true', { headers }),
+      fetch(SURL + '/rest/v1/location_signal_counts?select=location_id,count', { headers }),
     ]);
     if (!stRes.ok || !locRes.ok) throw new Error('Supabase fetch failed');
     allStations = await stRes.json();
     const locData = await locRes.json();
+    let signalTotals = {};
+    if (sigRes.ok) {
+      const sigData = await sigRes.json();
+      if (window.__evraceLocUgcPreview && Array.isArray(sigData)) {
+        signalTotals = window.__evraceLocUgcPreview.buildSignalTotalMap(sigData);
+      }
+    }
     if (!Array.isArray(allStations)) allStations = [];
     if (!Array.isArray(locData)) throw new Error('Locations not array');
-    locationByKey = buildLocationLookup(locData);
+    locationByKey = buildLocationLookup(locData, signalTotals);
     buildMonthFilter(allStations);
     buildCityFilter(allStations);
 

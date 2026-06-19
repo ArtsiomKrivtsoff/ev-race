@@ -38,6 +38,7 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,referrer:document.refe
 <noscript><div><img src="https://mc.yandex.ru/watch/108141830" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 
 <link id="theme-css" rel="stylesheet" href="CSS/arcade.css?v=5">
+<link rel="stylesheet" href="CSS/loc-ugc-preview.css?v=1">
 <link rel="stylesheet" href="CSS/route-nav.css?v=1">
 <link rel="prefetch" href="CSS/tesla-light.css?v=5">
 <link rel="prefetch" href="CSS/tesla-dark.css?v=5">
@@ -445,6 +446,7 @@ body.theme-tesla-dark .marker-cluster-large div { background-color: rgba(0,188,2
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="JS/loc-ugc-preview.js?v=1"></script>
 <script>
 // =============================================================
 // EV RACE — map.html
@@ -572,11 +574,12 @@ function stationLocationKey(s) {
   return normalizeIdentityPart(s.operator) + '|' + normalizeIdentityPart(s.city) + '|' + normalizeIdentityPart(s.address);
 }
 
-function buildLocationLookup(locations) {
+function buildLocationLookup(locations, signalTotalByLocId) {
   const map = {};
+  const totals = signalTotalByLocId || {};
   (locations || []).forEach(loc => {
     const k = normalizeIdentityPart(loc.operator) + '|' + normalizeIdentityPart(loc.city) + '|' + normalizeIdentityPart(loc.address);
-    map[k] = loc;
+    map[k] = Object.assign({}, loc, { signal_total: totals[loc.id] || 0 });
   });
   return map;
 }
@@ -639,6 +642,25 @@ function renderLocAddressHtml(first, stations, addr) {
   return addrRow;
 }
 
+function locationPageUrlFromLoc(loc) {
+  if (!loc?.operator_slug || !loc?.slug) return null;
+  return SITE_ORIGIN + '/' + encodeURIComponent(loc.operator_slug) + '/' + encodeURIComponent(loc.slug);
+}
+
+function renderUgcPreviewForStation(first, stations) {
+  const loc = locationByKey[stationLocationKey(first)];
+  const ugc = window.__evraceLocUgcPreview;
+  if (!ugc) return '';
+  const items = resolveStationLocationItems(stations);
+  const href = items.length === 1 ? items[0].href : locationPageUrlFromLoc(loc);
+  const rateHref = href ? href + '#reviews-list' : '';
+  return ugc.render(ugc.getStatsFromLoc(loc), {
+    layout: 'map',
+    href: href || '',
+    rateHref,
+  });
+}
+
 function renderPopupActions(stations, first, color, opName) {
   const items = resolveStationLocationItems(stations);
   const linkBtns = items.map(it => renderLocationLinkButton(it.href, it.color)).join('');
@@ -676,6 +698,7 @@ function makePopup(stations) {
 
   // Локация — крупно жирно если есть location_name; иначе просто адрес
   const locHtml = renderLocAddressHtml(first, stations, addr);
+  const ugcHtml = renderUgcPreviewForStation(first, stations);
 
   // Список станций (мощность, разъёмы, дата)
   let stationsHtml = '';
@@ -701,7 +724,7 @@ function makePopup(stations) {
 
   const actionsHtml = renderPopupActions(stations, first, color, opName);
 
-  return `<div class="popup-wrap"><div class="popup-op-row">${opBadges}</div>${locHtml}${stationsHtml}${totalStr}${actionsHtml}</div>`;
+  return `<div class="popup-wrap"><div class="popup-op-row">${opBadges}</div>${locHtml}${ugcHtml}${stationsHtml}${totalStr}${actionsHtml}</div>`;
 }
 
 // =============================================================
@@ -907,6 +930,7 @@ function locateMe() {
 function setTheme(theme) {
   document.getElementById('theme-css').href = `CSS/${theme}.css?v=5`;
   localStorage.setItem('ev_race_theme', theme);
+  document.documentElement.dataset.theme = theme;
   ['arcade','tesla-light','tesla-dark'].forEach(t => document.getElementById('btn-' + t)?.classList.toggle('active', t === theme));
   document.body.className = document.body.className.replace(/theme-\S+/g, '').trim();
   document.body.classList.add('theme-' + theme);
@@ -935,17 +959,26 @@ function closeBurger() {
 async function loadStations() {
   try {
     const fields = 'operator,aggregator,station_type,city,address,location_name,count,dc_power,ac_power,gun1_type,gun2_type,gun3_type,station_date,lat,lng';
+    const locSelect = 'id,operator,city,address,operator_slug,slug,location_name,cached_avg_rating,cached_review_count,cached_photo_count';
     const headers = { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY };
-    const [stRes, locRes] = await Promise.all([
+    const [stRes, locRes, sigRes] = await Promise.all([
       fetch(SURL + '/rest/v1/stations?select=' + fields + '&lat=not.is.null', { headers }),
-      fetch(SURL + '/rest/v1/locations?select=operator,city,address,operator_slug,slug,location_name&is_active=eq.true', { headers })
+      fetch(SURL + '/rest/v1/locations?select=' + encodeURIComponent(locSelect) + '&is_active=eq.true', { headers }),
+      fetch(SURL + '/rest/v1/location_signal_counts?select=location_id,count', { headers }),
     ]);
     if (!stRes.ok) { console.error('Supabase stations:', stRes.status); return; }
     const data = await stRes.json();
     if (!Array.isArray(data)) { console.error('Stations not array'); return; }
+    let signalTotals = {};
+    if (sigRes.ok) {
+      const sigData = await sigRes.json();
+      if (window.__evraceLocUgcPreview && Array.isArray(sigData)) {
+        signalTotals = window.__evraceLocUgcPreview.buildSignalTotalMap(sigData);
+      }
+    }
     if (locRes.ok) {
       const locData = await locRes.json();
-      if (Array.isArray(locData)) locationByKey = buildLocationLookup(locData);
+      if (Array.isArray(locData)) locationByKey = buildLocationLookup(locData, signalTotals);
       else console.error('Locations not array');
     } else {
       console.error('Supabase locations:', locRes.status, '(map works without location links)');

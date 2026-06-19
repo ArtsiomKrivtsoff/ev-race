@@ -1,0 +1,168 @@
+/* UGC preview strip — stations list + map popup */
+
+.loc-ugc-preview {
+  box-sizing: border-box;
+}
+
+.loc-ugc-preview--stations {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  max-width: 100%;
+}
+
+.loc-ugc-preview--map {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin: 4px 0 6px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.loc-ugc-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.loc-ugc-line--metrics {
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.loc-rating-stars--filled {
+  color: var(--yellow, #ffd700);
+  letter-spacing: 1px;
+  font-size: 10px;
+  line-height: 1;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.25);
+}
+
+.loc-rating-stars--empty {
+  color: var(--border-dim, #555);
+  opacity: 0.72;
+  letter-spacing: 1px;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.loc-ugc-num {
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  line-height: 1;
+  color: var(--green, #00ff41);
+  font-variant-numeric: tabular-nums;
+}
+
+.loc-ugc-num--rating {
+  color: var(--yellow, #ffd700);
+}
+
+.loc-ugc-map-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.loc-ugc-map-star {
+  color: var(--yellow, #ffd700);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.loc-ugc-metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-dim, #888);
+}
+
+.loc-ugc-ico-svg {
+  display: block;
+  flex: 0 0 auto;
+  color: var(--green, #00ff41);
+}
+
+.loc-ugc-sep {
+  color: var(--text-dim, #666);
+  opacity: 0.55;
+  user-select: none;
+}
+
+.loc-ugc-rate-link {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text-dim, #888);
+  transition: color 0.15s;
+}
+
+.loc-ugc-rate-link:hover {
+  color: var(--green, #00ff41);
+}
+
+.loc-ugc-rate-link--static {
+  opacity: 0.75;
+}
+
+/* stations table + cards */
+td.right .loc-ugc-preview--stations,
+.loc-card .loc-ugc-preview--stations {
+  align-items: flex-end;
+}
+
+.loc-card .loc-ugc-preview--stations {
+  margin-top: var(--s-2, 8px);
+}
+
+/* Tesla themes */
+html[data-theme="tesla-light"] .loc-ugc-preview--map,
+html[data-theme="tesla-dark"] .loc-ugc-preview--map {
+  font-family: var(--font, "Roboto", sans-serif);
+}
+
+html[data-theme="tesla-light"] .loc-ugc-num,
+html[data-theme="tesla-dark"] .loc-ugc-num {
+  font-family: var(--font-num, var(--font, "Roboto", sans-serif));
+  font-weight: 600;
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] .loc-rating-stars--filled,
+html[data-theme="tesla-dark"] .loc-rating-stars--filled,
+html[data-theme="tesla-light"] .loc-ugc-map-star,
+html[data-theme="tesla-dark"] .loc-ugc-map-star {
+  color: var(--warn, #f5a623);
+  text-shadow: none;
+}
+
+html[data-theme="tesla-light"] .loc-ugc-rate-link,
+html[data-theme="tesla-dark"] .loc-ugc-rate-link {
+  font-family: var(--font, "Roboto", sans-serif);
+  font-size: 10px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html[data-theme="tesla-light"] .loc-ugc-ico-svg,
+html[data-theme="tesla-dark"] .loc-ugc-ico-svg {
+  color: var(--fg-2, #888);
+}
+
+html[data-theme="tesla-light"] .loc-ugc-num,
+html[data-theme="tesla-dark"] .loc-ugc-num {
+  color: var(--fg, #111);
+}
+
+html[data-theme="tesla-dark"] .loc-ugc-num {
+  color: var(--fg, #f0f0f0);
+}
