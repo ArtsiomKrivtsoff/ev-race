@@ -308,6 +308,19 @@ function fmtDate(dateStr) {
 }
 function powerSum(s) { return (s.dc_power || 0) + (s.ac_power || 0); }
 
+function hydrateLocationPhotoCounts(done) {
+  var ugc = window.__evraceLocUgcPreview;
+  if (!ugc) {
+    if (done) done();
+    return;
+  }
+  var ids = ugc.collectLocationIds(locationByKey);
+  ugc.hydratePhotoCounts(ids, function (counts) {
+    ugc.applyPhotoCounts(locationByKey, counts);
+    if (done) done();
+  });
+}
+
 function locationRateHref(s) {
   const href = locationPageUrl(s);
   return href ? href + '#reviews-list' : '';
@@ -769,6 +782,9 @@ async function init() {
     document.querySelectorAll('#op-filter span').forEach(el => el.classList.toggle('on', el.dataset.op === STATE.filterOp));
 
     applyFilters();
+    hydrateLocationPhotoCounts(function () {
+      applyFilters();
+    });
   } catch (e) {
     console.log('Error:', e);
     document.getElementById('reg-tbody').innerHTML  = '<tr><td colspan="10" class="loading">ОШИБКА ЗАГРУЗКИ</td></tr>';

@@ -446,7 +446,7 @@ body.theme-tesla-dark .marker-cluster-large div { background-color: rgba(0,188,2
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
-<script src="JS/loc-ugc-preview.js?v=1"></script>
+<script src="JS/loc-ugc-preview.js?v=2"></script>
 <script>
 // =============================================================
 // EV RACE — map.html
@@ -986,7 +986,17 @@ async function loadStations() {
     }
     allStations = data;
     renderMarkers();
+    hydrateMapPhotoCounts();
   } catch (e) { console.error('Load:', e); }
+}
+
+function hydrateMapPhotoCounts() {
+  const ugc = window.__evraceLocUgcPreview;
+  if (!ugc) return;
+  const ids = ugc.collectLocationIds(locationByKey);
+  ugc.hydratePhotoCounts(ids, function (counts) {
+    ugc.applyPhotoCounts(locationByKey, counts);
+  });
 }
 
 async function trackVisit() {

@@ -101,10 +101,15 @@
 
   function getStatsFromLoc(loc) {
     if (!loc) return null;
+    var photoLive = loc.photo_count_live;
+    var photoCount =
+      photoLive != null
+        ? parseInt(String(photoLive), 10) || 0
+        : parseInt(String(loc.cached_photo_count || 0), 10) || 0;
     return {
       avgRating: loc.cached_avg_rating,
       reviewCount: parseInt(String(loc.cached_review_count || 0), 10) || 0,
-      photoCount: parseInt(String(loc.cached_photo_count || 0), 10) || 0,
+      photoCount: photoCount,
       signalTotal: parseInt(String(loc.signal_total || 0), 10) || 0,
     };
   }
@@ -251,5 +256,62 @@
     render: render,
     formatRatingDisplay: formatRatingDisplay,
     starsHtml: starsHtml,
+    collectLocationIds: function (locationByKey) {
+      var ids = [];
+      var seen = {};
+      Object.keys(locationByKey || {}).forEach(function (key) {
+        var loc = locationByKey[key];
+        var id = loc && loc.id;
+        if (!id || seen[id]) return;
+        seen[id] = true;
+        ids.push(id);
+      });
+      return ids;
+    },
+    applyPhotoCounts: function (locationByKey, counts) {
+      if (!locationByKey || !counts) return;
+      Object.keys(locationByKey).forEach(function (key) {
+        var loc = locationByKey[key];
+        if (!loc || loc.id == null) return;
+        var n = counts[String(loc.id)];
+        if (n != null) loc.photo_count_live = n;
+      });
+    },
+    hydratePhotoCounts: function (ids, done) {
+      var list = (ids || []).filter(function (id) {
+        return id != null && parseInt(String(id), 10) > 0;
+      });
+      if (!list.length) {
+        if (done) done({});
+        return;
+      }
+      var merged = {};
+      var chunkSize = 40;
+      var index = 0;
+      function nextChunk() {
+        if (index >= list.length) {
+          if (done) done(merged);
+          return;
+        }
+        var slice = list.slice(index, index + chunkSize);
+        index += chunkSize;
+        fetch("/api/photos/counts?ids=" + encodeURIComponent(slice.join(",")))
+          .then(function (res) {
+            if (!res.ok) throw new Error("counts_fetch_failed");
+            return res.json();
+          })
+          .then(function (payload) {
+            var counts = payload && payload.counts ? payload.counts : {};
+            Object.keys(counts).forEach(function (id) {
+              merged[id] = counts[id];
+            });
+            nextChunk();
+          })
+          .catch(function () {
+            nextChunk();
+          });
+      }
+      nextChunk();
+    },
   };
 })(window);
