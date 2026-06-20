@@ -1,5 +1,69 @@
 # EV RACE 2026 — context.md
 # Правило: перед любым изменением прочитай этот файл. После изменения — **обязательно обнови его**.
+# **Аудиты Cursor:** только `_local/audits/` (в `.gitignore`, не на GitHub). Нормативные спеки — `docs/`.
+
+---
+
+## Принцип простоты EVrace (ACCEPT, июнь 2026)
+
+**Канон:** `docs/EVRACE_SIMPLICITY_PRINCIPLE.md`
+
+Если два решения дают одинаковый пользовательский результат — выбирается технически более простое.
+Сложность оправдана только реальной ценностью для пользователя, не архитектурной красотой.
+
+Предпочтение: меньше состояний · меньше роутов и редиректов · меньше сущностей · очевиднее поддержка · меньше точек ошибки.
+Надёжность, понятность и простота важнее элегантности.
+
+**Развилки:** явные продуктовые/UX-развилки — предупреждать автора, не выбирать молча.
+
+---
+
+## Community Layer — production mock v1 (19.06.2026)
+
+**Источник истины:** `docs/COMMUNITY_ARCHITECTURE_V1.md` · **Community Identity (ACCEPT):** `docs/COMMUNITY_IDENTITY_V1.md` (июнь 2026; superseded: `EVrace_COMMUNITY_IDENTITY_PRINCIPLE.md`, `STAGE-3-IDENTITY-AND-CONSENT.md`)  
+**Закрытый мок (reference, noindex):** `mock/*.html` — эталон UX, не prod URL.
+
+**Prod Community Identity (этап 3, 20.06.2026):**
+
+| URL | Файл | Назначение |
+|-----|------|------------|
+| `/evr-id` | `evr-id.html` | Entry — Telegram → create Identity |
+| `/welcome` | `welcome.html` | Подтверждение EVR ID |
+| `/my` | `my.html` | Community Profile (Verified only) |
+| `/history` | `history.html` | Community History (Verified, empty state) |
+
+**Legacy mock (reference only):**
+
+| URL | Назначение |
+|-----|------------|
+| `mock/evr-id.html` | Entry Layer mock |
+| `mock/welcome.html` | Welcome mock |
+| `mock/contribution.html` | Profile mock |
+| `mock/history.html` | History mock |
+
+**Flow mock:** `evr-id.html` → `welcome.html` → `contribution.html`  
+**Identity (contribution):** EVR ID + иконка копирования (mock toast «Скопировано», без clipboard); псевдоним `EV_DED` (Активный) / hint без псевдонима (Новый); аватар-placeholder — треугольник с глазом; блок «Активности EVrace» — информационный + CSS/SVG art.
+
+**Стили:** `CSS/community-profile.css?v=4` (+ `arcade.css`, `home-v2.css`, `site-chrome-v2.css`). Только ARCADE, theme switcher скрыт. Карта профиля — **Leaflet** + CartoDB dark (как `map.html`), mock-пины вклада.  
+**UX-audit (19.06.2026):** Identity/Activities `1.45fr/1fr`; правая колонка карты — CTA прижат к низу; KPI времени ослаблен; stat-карточки компактнее.  
+**Chrome:** копия prod statusbar + пункт **МОЙ ВКЛАД** только на mock-страницах; `site-chrome.js` / `index.html` не менялись.  
+**Заметки UX:** блок «Наблюдения автора мока» внизу каждой mock-страницы.
+
+**Аудит identity (2026-06-19):** `_local/audits/` — ACCEPT зафиксирован в `docs/COMMUNITY_IDENTITY_V1.md`.  
+**Очередь реализации:** `docs/COMMUNITY_IDENTITY_IMPLEMENTATION_QUEUE.md` (синхронизирована с PLAN, 8 этапов)  
+**Production roadmap:** `docs/COMMUNITY_IDENTITY_IMPLEMENTATION_PLAN.md` (19.06.2026) — BY residency, BLOCKERS B1–B5; старт кода: этапы 1–2 по **ДЕЛАЙ**.  
+**Этап 1:** ✅ deployed на `api.evrace.by` (007 + smoke PASS, 2026-06-19).  
+**Этап 2:** ✅ **V1 user_hash correction** deployed BY (20.06.2026): `009`, functions без salt; smoke HTTP me=401, auth=401. Decision: `docs/COMMUNITY_IDENTITY_USER_HASH_DECISION.md`.  
+**Legacy Cleanup Audit (20.06.2026):** `docs/COMMUNITY_IDENTITY_LEGACY_CLEANUP_AUDIT.md` — полный аудит salt→random перед этапом 3 (только перечисление, без удалений).  
+**Repository Cleanup (20.06.2026):** `docs/COMMUNITY_IDENTITY_REPOSITORY_CLEANUP.md` — STAGE-3 SUPERSEDED, QUEUE/FOUNDATION/deploy hints, stale 007/008, классификация файлов. Prod не трогали.  
+**Сейчас:** этап 3 ✅ frontend cutover (20.06.2026): `/evr-id`, `/welcome`, `/my`, `/history` + BY API в `community-auth.js`. Mock сохранён. Этап 4 не начат.
+
+## Community Layer — production HTML (20.06.2026)
+
+**Файлы (корень):** `evr-id.html`, `welcome.html`, `my.html`, `history.html` — адаптация mock без mock-bar/notes; `data-community-page` на `body`; JS: `community-auth.js?v=3`, `community-chrome.js?v=1`, `community-profile.js?v=1`; `window.__EVRACE__.identityApiUrl` → `https://api.evrace.by/functions/v1`.  
+**Редиректы:** `_redirects` — `/evr-id`, `/welcome`, `/my`, `/history` → соответствующие `.html` (200).  
+**Стили:** `arcade.css?v=6`, `site-chrome-v2.css?v=2`, `community-profile.css?v=5` (+ `home-v2.css`, `operator.css`).  
+**Flow prod:** `/evr-id` (Telegram widget `#tg-login-mount`) → `/welcome` → `/my` → `/history`.
 
 ---
 
@@ -40,7 +104,7 @@
 
 **Спека:** `docs/TRUST_LAYER_IMPLEMENTATION_SPEC.md`
 
-**Community Identity (LOCKED):** `docs/EVrace_COMMUNITY_IDENTITY_PRINCIPLE.md` — Telegram только для уникальности; публичная сущность = `user_hash`; UGC/community data на BY-инфраструктуре. **Обязательно соблюдать** при любых auth/UGC/community изменениях.
+**Community Identity (ACCEPT):** `docs/COMMUNITY_IDENTITY_V1.md` — source of truth (Guest/Verified, EVR ID, Profile, History, Lifecycle). Superseded: `EVrace_COMMUNITY_IDENTITY_PRINCIPLE.md`. UGC/community data на BY-инфраструктуре — без изменений.
 **Аудит identity (2026-06-12):** `docs/EVrace_TELEGRAM_IDENTITY_AUDIT.md` — текущее состояние, Cloud vs BY, рекомендация B (full BY identity).
 
 **Маршруты (Cloudflare Functions):** `/how-data-works`, `/community-rules`, `/privacy` — SSR из `content/trust/*.md` через `functions/_lib/trust-layer.js`.
