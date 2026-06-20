@@ -81,6 +81,72 @@
     });
   }
 
+  function normalizeTelegramUser(user) {
+    if (!user || user.id == null || user.auth_date == null || !user.hash) return null;
+    var out = {
+      id: Number(user.id),
+      auth_date: Number(user.auth_date),
+      hash: String(user.hash),
+    };
+    if (user.first_name) out.first_name = String(user.first_name);
+    if (user.last_name) out.last_name = String(user.last_name);
+    if (user.username) out.username = String(user.username);
+    if (user.photo_url) out.photo_url = String(user.photo_url);
+    return out;
+  }
+
+  function resetTelegramWidget(container) {
+    if (!container) return;
+    delete container.dataset.mounted;
+    container.innerHTML = "";
+  }
+
+  function entryErrorMessage(code, phase) {
+    if (code === "identity_exists") {
+      return "EVR ID уже создан. Переходим в профиль…";
+    }
+    if (code === "invalid_hash" || code === "invalid_payload") {
+      return "Telegram не подтвердил вход. Проверь, что открываешь evrace.by, и попробуй снова.";
+    }
+    if (code === "auth_expired") {
+      return "Сессия Telegram устарела. Нажми кнопку ещё раз.";
+    }
+    if (code === "invalid_session" || code === "invalid_telegram_auth") {
+      return phase === "create"
+        ? "Сессия не подтвердилась. Попробуй снова — войдём через Telegram заново."
+        : "Не удалось подтвердить Telegram. Попробуй снова.";
+    }
+    if (code === "session_failed" || code === "db_error" || code === "evr_id_generation_failed") {
+      return "Сервер временно не отвечает. Попробуй через минуту.";
+    }
+    if (phase === "login") {
+      return "Не удалось войти через Telegram. Попробуй снова.";
+    }
+    return code
+      ? "Не удалось создать EVR ID (" + code + "). Попробуй снова."
+      : "Не удалось создать EVR ID. Попробуй снова.";
+  }
+
+  function showEntryError(container, message, opts) {
+    opts = opts || {};
+    if (!container) return;
+    var html = '<p class="cp-entry-error">' + message + "</p>";
+    if (opts.retry) {
+      html +=
+        '<button type="button" class="cp-entry-retry-btn">Попробовать снова</button>';
+    }
+    container.innerHTML = html;
+    if (opts.retry) {
+      var btn = container.querySelector(".cp-entry-retry-btn");
+      if (btn) {
+        btn.addEventListener("click", function () {
+          resetTelegramWidget(container);
+          mountTelegramWidget(container);
+        });
+      }
+    }
+  }
+
   function mountTelegramWidget(container) {
     if (!container || container.dataset.mounted === "1") return;
     container.dataset.mounted = "1";
@@ -94,13 +160,43 @@
     script.setAttribute("data-onauth", "onTelegramAuth(user)");
     script.setAttribute("data-request-access", "write");
     container.appendChild(script);
+    layoutTelegramWidget(container);
+  }
+
+  function layoutTelegramWidget(container) {
+    if (!container) return;
+    var tries = 0;
+    var timer = setInterval(function () {
+      var iframe = container.querySelector("iframe");
+      tries += 1;
+      if (!iframe && tries < 50) return;
+      clearInterval(timer);
+      if (!iframe) return;
+      iframe.style.display = "block";
+      iframe.style.marginLeft = "auto";
+      iframe.style.marginRight = "auto";
+      var wrapW = container.clientWidth;
+      var iframeW = iframe.getBoundingClientRect().width || 238;
+      if (wrapW > 0 && iframeW > 0 && window.innerWidth <= 640 && wrapW > iframeW + 8) {
+        var scale = wrapW / iframeW;
+        iframe.style.transform = "scale(" + scale + ")";
+        iframe.style.transformOrigin = "top center";
+        container.style.height = Math.ceil((iframe.offsetHeight || 40) * scale) + "px";
+      }
+    }, 80);
   }
 
   async function telegramLogin(user) {
+    var payload = normalizeTelegramUser(user);
+    if (!payload) {
+      var bad = new Error("invalid_payload");
+      bad.code = "invalid_payload";
+      throw bad;
+    }
     var res = await fetch(identityApiBase() + "/telegram-auth", {
       method: "POST",
       headers: identityHeaders(),
-      body: JSON.stringify(user),
+      body: JSON.stringify(payload),
     });
     var data = await res.json().catch(function () {
       return {};
@@ -108,14 +204,17 @@
     if (!res.ok) {
       var err = new Error(data.error || "auth_failed");
       err.code = data.error;
+      err.phase = "login";
       throw err;
     }
     applyAuthPayload(data);
     return data;
   }
 
-  async function createIdentity(pseudonym) {
+  async function createIdentity(pseudonym, telegramUser) {
     var body = { pseudonym: pseudonym || null };
+    var tg = normalizeTelegramUser(telegramUser);
+    if (tg) body.telegram = tg;
     var res = await fetch(identityApiBase() + "/community-identity-create", {
       method: "POST",
       headers: authHeaders(),
@@ -127,6 +226,7 @@
     if (!res.ok) {
       var err = new Error(data.error || "create_failed");
       err.code = data.error;
+      err.phase = "create";
       throw err;
     }
     applyAuthPayload(Object.assign({ is_verified: true }, data));
@@ -202,14 +302,13 @@
           location.href = "/my";
           return;
         }
-        await createIdentity();
+        await createIdentity(null, user);
         location.href = "/welcome";
       } catch (e) {
-        var msg =
-          e.code === "identity_exists"
-            ? "Identity уже создан. Переходим в профиль…"
-            : "Не удалось создать EVR ID. Обнови страницу и попробуй снова.";
-        entryMount.innerHTML = '<p class="cp-entry-error">' + msg + "</p>";
+        var phase = e.phase || "create";
+        var msg = entryErrorMessage(e.code, phase);
+        var canRetry = e.code !== "identity_exists";
+        showEntryError(entryMount, msg, { retry: canRetry });
         if (e.code === "identity_exists") {
           setTimeout(function () {
             location.href = "/my";
@@ -254,6 +353,8 @@
     fetchProfile: fetchProfile,
     contributionHref: contributionHref,
     mountTelegramWidget: mountTelegramWidget,
+    resetTelegramWidget: resetTelegramWidget,
+    normalizeTelegramUser: normalizeTelegramUser,
     renderGuest: function (root) {
       if (!root) return;
       root.innerHTML =

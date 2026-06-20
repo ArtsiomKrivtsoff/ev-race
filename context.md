@@ -60,8 +60,9 @@
 
 ## Community Layer — production HTML (20.06.2026)
 
-**Файлы (корень):** `evr-id.html`, `welcome.html`, `my.html`, `history.html` — адаптация mock без mock-bar/notes; `data-community-page` на `body`; JS: `community-auth.js?v=3`, `community-chrome.js?v=1`, `community-profile.js?v=1`; `window.__EVRACE__.identityApiUrl` → `https://api.evrace.by/functions/v1`.  
+**Файлы (корень):** `evr-id.html`, `welcome.html`, `my.html`, `history.html` — адаптация mock без mock-bar/notes; `data-community-page` на `body`; JS: `community-auth.js?v=4`, `community-chrome.js?v=1`, `community-profile.js?v=1`; `window.__EVRACE__.identityApiUrl` → `https://api.evrace.by/functions/v1`.  
 **Редиректы:** не нужны — Cloudflare Pages сам отдаёт `evr-id.html` как `/evr-id` (pretty URL). Явные правила в `_redirects` вызывали ERR_TOO_MANY_REDIRECTS (20.06.2026 fix).  
+**20.06.2026 fix `/evr-id`:** `community-auth.js` — `createIdentity` шлёт `telegram` payload (fallback если Bearer session не резолвится); нормализация TG id/auth_date; кнопка «Попробовать снова» без reload; `community-profile.css?v=6` — `#tg-login-mount` центр desktop, full-width mobile.  
 **Стили:** `arcade.css?v=6`, `site-chrome-v2.css?v=2`, `community-profile.css?v=5` (+ `home-v2.css`, `operator.css`).  
 **Flow prod:** `/evr-id` (Telegram widget `#tg-login-mount`) → `/welcome` → `/my` → `/history`.
 
