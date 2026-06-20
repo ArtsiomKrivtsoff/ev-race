@@ -106,7 +106,7 @@
       return "EVR ID уже создан. Переходим в профиль…";
     }
     if (code === "invalid_hash" || code === "invalid_payload") {
-      return "Telegram не подтвердил вход. Проверь, что открываешь evrace.by, и попробуй снова.";
+      return "Сервер не принял подпись Telegram (invalid_hash). На VPS должен быть токен @evrace_auth_bot — не бот писем. Также проверь /setdomain evrace.by в @BotFather.";
     }
     if (code === "auth_expired") {
       return "Сессия Telegram устарела. Нажми кнопку ещё раз.";
