@@ -14,7 +14,9 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
 <link rel="stylesheet" href="/CSS/operator.css?v=2">
 <link rel="stylesheet" href="/CSS/home-v2.css?v=15">
 <link rel="stylesheet" href="/CSS/site-chrome-v2.css?v=2">
-<link rel="stylesheet" href="/CSS/community-profile.css?v=7">
+<link rel="stylesheet" href="/CSS/community-profile.css?v=8">
+<link rel="prefetch" href="/CSS/tesla-light.css">
+<link rel="prefetch" href="/CSS/tesla-dark.css">
 </head>
 <body class="community-page" data-community-page="entry">
 <div class="container">
@@ -41,8 +43,10 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
     <a class="nav-link" href="/map.html">КАРТА</a>
     <a class="nav-link active" data-nav-contribution href="/evr-id">МОЙ ВКЛАД</a>
   </div>
-  <div class="theme-seg" aria-hidden="true">
-    <button class="theme-seg-btn active" id="btn-arcade">⬡ ARCADE</button>
+  <div class="theme-seg">
+    <button class="theme-seg-btn active" id="btn-arcade" onclick="setTheme('arcade')">⬡ ARCADE</button>
+    <button class="theme-seg-btn" id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
+    <button class="theme-seg-btn" id="btn-tesla-dark" onclick="setTheme('tesla-dark')">◑ TESLA</button>
   </div>
   <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Сканлайны и свечение">
     <span class="fx-seg fx-on active" data-state="on">ЭФФЕКТЫ</span>
@@ -114,24 +118,14 @@ ym(108141830,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",
   </div>
 </div>
 
-<div class="footer">
-  <div class="footer-trust">
-    <div class="footer-trust-title">ДОВЕРИЕ</div>
-    <nav class="footer-trust-row" aria-label="Доверие">
-      <a class="footer-trust-link" href="/how-data-works">КАК EVRACE РАБОТАЕТ С ДАННЫМИ</a><span class="footer-trust-sep">|</span>
-      <a class="footer-trust-link" href="/community-rules">ПРАВИЛА СООБЩЕСТВА</a><span class="footer-trust-sep">|</span>
-      <a class="footer-trust-link" href="/privacy">КОНФИДЕНЦИАЛЬНОСТЬ</a>
-    </nav>
-  </div>
-  <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
-</div>
+<div id="site-chrome-footer"></div>
 
 </div>
 </div>
 
 <script>window.__EVRACE__={identityApiUrl:"https://api.evrace.by/functions/v1"};</script>
 <script src="/JS/community-auth.js?v=6"></script>
-<script src="/JS/community-chrome.js?v=1"></script>
+<script src="/JS/community-chrome.js?v=2"></script>
 <script src="/JS/community-profile.js?v=1"></script>
 </body>
 </html>

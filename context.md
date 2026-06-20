@@ -63,9 +63,10 @@
 **Файлы (корень):** `evr-id.html`, `welcome.html`, `my.html`, `history.html` — адаптация mock без mock-bar/notes; `data-community-page` на `body`; JS: `community-auth.js?v=4`, `community-chrome.js?v=1`, `community-profile.js?v=1`; `window.__EVRACE__.identityApiUrl` → `https://api.evrace.by/functions/v1`.  
 **Редиректы:** не нужны — Cloudflare Pages сам отдаёт `evr-id.html` как `/evr-id` (pretty URL). Явные правила в `_redirects` вызывали ERR_TOO_MANY_REDIRECTS (20.06.2026 fix).  
 **20.06.2026 fix `/evr-id`:** `community-auth.js` — `createIdentity` шлёт `telegram` payload (fallback если Bearer session не резолвится); нормализация TG id/auth_date; кнопка «Попробовать снова» без reload; `community-profile.css?v=7` — `#tg-login-mount` центр desktop, full-width mobile.  
-**20.06.2026 `invalid_hash`:** виджет `@evrace_auth_bot`, на VPS fallback брал `telegram.env` (бот писем) → HMAC mismatch. Fix: `/root/evrace-secrets/identity.env` с токеном `evrace_auth_bot` + `infra/scripts/reload-identity-bot-env.sh`; `infra/Upload-Identity-Env.ps1`.  
+**20.06.2026 `invalid_hash`:** виджет `@evrace_auth_bot`, на VPS fallback брал `telegram.env` (бот писем) → HMAC mismatch. Fix: `/root/evrace-secrets/identity.env` + `reload-identity-bot-env.sh`.  
+**20.06.2026 create 500:** RPC `community_identity_create_full` — `gen_random_bytes` не в search_path PostgREST; fix на VPS: `fix-pgcrypto-search-path.sql` (`SET search_path = public, extensions`).  
 **Стили:** `arcade.css?v=6`, `site-chrome-v2.css?v=2`, `community-profile.css?v=5` (+ `home-v2.css`, `operator.css`).  
-**Flow prod:** `/evr-id` (Telegram widget `#tg-login-mount`) → `/welcome` → `/my` → `/history`.
+**20.06.2026 chrome:** community pages — site footer от «СТАВКИ СДЕЛАНЫ» (chronicle, author, visit counter, theme switch, disclaimer) через `community-chrome.js?v=2`; nav — 3 темы как index.html + МОЙ ВКЛАД.
 
 ---
 

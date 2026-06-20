@@ -5,9 +5,7 @@
    ============================================================ */
 
 .mock-community .theme-seg,
-.mock-community .theme-footer-switch,
-.community-page .theme-seg,
-.community-page .theme-footer-switch {
+.mock-community .theme-footer-switch {
   display: none !important;
 }
 

@@ -10,7 +10,9 @@
 <link rel="stylesheet" href="/CSS/home-v2.css?v=15">
 <link rel="stylesheet" href="/CSS/site-chrome-v2.css?v=2">
 <link rel="stylesheet" href="/CSS/vendor/leaflet.css?v=1">
-<link rel="stylesheet" href="/CSS/community-profile.css?v=5">
+<link rel="stylesheet" href="/CSS/community-profile.css?v=8">
+<link rel="prefetch" href="/CSS/tesla-light.css">
+<link rel="prefetch" href="/CSS/tesla-dark.css">
 </head>
 <body class="community-page" data-community-page="my">
 <div class="container">
@@ -37,8 +39,10 @@
     <a class="nav-link" href="/map.html">КАРТА</a>
     <a class="nav-link active" data-nav-contribution href="/evr-id">МОЙ ВКЛАД</a>
   </div>
-  <div class="theme-seg" aria-hidden="true">
-    <button class="theme-seg-btn active" id="btn-arcade">⬡ ARCADE</button>
+  <div class="theme-seg">
+    <button class="theme-seg-btn active" id="btn-arcade" onclick="setTheme('arcade')">⬡ ARCADE</button>
+    <button class="theme-seg-btn" id="btn-tesla-light" onclick="setTheme('tesla-light')">☀ TESLA</button>
+    <button class="theme-seg-btn" id="btn-tesla-dark" onclick="setTheme('tesla-dark')">◑ TESLA</button>
   </div>
   <button class="fx-toggle" id="fxToggle" onclick="toggleFx()" title="Сканлайны и свечение">
     <span class="fx-seg fx-on active" data-state="on">ЭФФЕКТЫ</span>
@@ -159,25 +163,7 @@
 
 <p class="cp-thanks">Каждое наблюдение помогает делать карту EVrace точнее.</p>
 
-<div class="blk author-blk">
-  <div class="blk-hdr"><span class="blk-title">◈ ОБ АВТОРЕ</span></div>
-  <div class="site-chrome-in">
-    <a class="author-about-btn" href="https://me.imeyuskazat.by" target="_blank" rel="noopener">▶ ОБ АВТОРЕ ◀</a>
-    <a class="author-chat-btn" href="https://t.me/evclubb" target="_blank" rel="noopener">▶ ЗЕЛЁНЫЙ ЧАТ ◀</a>
-  </div>
-</div>
-
-<div class="footer">
-  <div class="footer-trust">
-    <div class="footer-trust-title">ДОВЕРИЕ</div>
-    <nav class="footer-trust-row" aria-label="Доверие">
-      <a class="footer-trust-link" href="/how-data-works">КАК EVRACE РАБОТАЕТ С ДАННЫМИ</a><span class="footer-trust-sep">|</span>
-      <a class="footer-trust-link" href="/community-rules">ПРАВИЛА СООБЩЕСТВА</a><span class="footer-trust-sep">|</span>
-      <a class="footer-trust-link" href="/privacy">КОНФИДЕНЦИАЛЬНОСТЬ</a>
-    </nav>
-  </div>
-  <div class="footer-copy">© 2026 ARTSIOM KRIVTSOFF | #ИМЕЮСКАЗАТЬ ЗА #ЭЛЕКТРОМОБИЛЬНОЕ</div>
-</div>
+<div id="site-chrome-footer"></div>
 
 </div><!-- /page-wrap -->
 </div><!-- /container -->
@@ -186,8 +172,8 @@
 
 <script>window.__EVRACE__={identityApiUrl:"https://api.evrace.by/functions/v1"};</script>
 <script src="/JS/vendor/leaflet.js?v=1"></script>
-<script src="/JS/community-auth.js?v=3"></script>
-<script src="/JS/community-chrome.js?v=1"></script>
+<script src="/JS/community-auth.js?v=6"></script>
+<script src="/JS/community-chrome.js?v=2"></script>
 <script src="/JS/community-profile.js?v=1"></script>
 </body>
 </html>
