@@ -37,6 +37,10 @@ const RESERVED_FIRST_SEGMENTS = new Set([
   "how-data-works",
   "community-rules",
   "privacy",
+  "evr-id",
+  "welcome",
+  "my",
+  "history",
 ]);
 
 function shouldServeStatic(operatorSlug, slug) {

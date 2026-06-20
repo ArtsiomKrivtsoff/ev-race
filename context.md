@@ -56,12 +56,12 @@
 **Этап 2:** ✅ **V1 user_hash correction** deployed BY (20.06.2026): `009`, functions без salt; smoke HTTP me=401, auth=401. Decision: `docs/COMMUNITY_IDENTITY_USER_HASH_DECISION.md`.  
 **Legacy Cleanup Audit (20.06.2026):** `docs/COMMUNITY_IDENTITY_LEGACY_CLEANUP_AUDIT.md` — полный аудит salt→random перед этапом 3 (только перечисление, без удалений).  
 **Repository Cleanup (20.06.2026):** `docs/COMMUNITY_IDENTITY_REPOSITORY_CLEANUP.md` — STAGE-3 SUPERSEDED, QUEUE/FOUNDATION/deploy hints, stale 007/008, классификация файлов. Prod не трогали.  
-**Сейчас:** этап 3 ✅ frontend cutover (20.06.2026): `/evr-id`, `/welcome`, `/my`, `/history` + BY API в `community-auth.js`. Mock сохранён. Этап 4 не начат.
+**Сейчас:** этап 3 ✅ frontend cutover (20.06.2026). **Acceptance report:** `docs/COMMUNITY_IDENTITY_V1_ACCEPTANCE_REPORT.md`. Этап 4 не начат.
 
 ## Community Layer — production HTML (20.06.2026)
 
 **Файлы (корень):** `evr-id.html`, `welcome.html`, `my.html`, `history.html` — адаптация mock без mock-bar/notes; `data-community-page` на `body`; JS: `community-auth.js?v=3`, `community-chrome.js?v=1`, `community-profile.js?v=1`; `window.__EVRACE__.identityApiUrl` → `https://api.evrace.by/functions/v1`.  
-**Редиректы:** `_redirects` — `/evr-id`, `/welcome`, `/my`, `/history` → соответствующие `.html` (200).  
+**Редиректы:** не нужны — Cloudflare Pages сам отдаёт `evr-id.html` как `/evr-id` (pretty URL). Явные правила в `_redirects` вызывали ERR_TOO_MANY_REDIRECTS (20.06.2026 fix).  
 **Стили:** `arcade.css?v=6`, `site-chrome-v2.css?v=2`, `community-profile.css?v=5` (+ `home-v2.css`, `operator.css`).  
 **Flow prod:** `/evr-id` (Telegram widget `#tg-login-mount`) → `/welcome` → `/my` → `/history`.
 
